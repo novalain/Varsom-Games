@@ -3,6 +3,7 @@ package com.example.xxx_death_lord_1337.kill_them;
 import android.graphics.Canvas;
 
 public class GameLoopThread extends Thread {
+
     static final long FPS = 10;
     private GameView view;
     private boolean running = false;
@@ -26,7 +27,9 @@ public class GameLoopThread extends Thread {
             try {
                 c = view.getHolder().lockCanvas();
                 synchronized (view.getHolder()) {
+
                     view.draw(c);
+
                 }
             } finally {
                 if (c != null) {

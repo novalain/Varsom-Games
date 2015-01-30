@@ -4,20 +4,26 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 public class GameView extends SurfaceView {
+
     private Bitmap bmp;
     private SurfaceHolder holder;
     private GameLoopThread gameLoopThread;
+    private Sprite sprite;
+
     private int x = 0;
     private int xSpeed = 1;
 
+    //Constructor
     public GameView(Context context) {
+
         super(context);
         gameLoopThread = new GameLoopThread(this);
-        holder = getHolder();
+        holder = this.getHolder();
         holder.addCallback(new SurfaceHolder.Callback() {
 
             @Override
@@ -28,7 +34,9 @@ public class GameView extends SurfaceView {
                     try {
                         gameLoopThread.join();
                         retry = false;
-                    } catch (InterruptedException e) {
+                    }
+                    catch (InterruptedException e) {
+
                     }
                 }
             }
@@ -40,22 +48,21 @@ public class GameView extends SurfaceView {
             }
 
             @Override
-            public void surfaceChanged(SurfaceHolder holder, int format,
-                                       int width, int height) {
+            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+
             }
+
         });
-        bmp = BitmapFactory.decodeResource(getResources(), R.drawable.snoop);
+
+        bmp = BitmapFactory.decodeResource(getResources(), R.drawable.lolfigur);
+        sprite = new Sprite(this, bmp);
+
     }
 
-    public void draw(Canvas canvas) {
-        if (x == getWidth() - bmp.getWidth()) {
-            xSpeed = -1;
-        }
-        if (x == 0) {
-            xSpeed = 1;
-        }
-        x = x + xSpeed;
+    public void draw(Canvas canvas){
+
         canvas.drawColor(Color.BLACK);
-        canvas.drawBitmap(bmp, x , 10, null);
+        sprite.draw(canvas);
+
     }
 }
