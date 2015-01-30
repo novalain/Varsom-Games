@@ -5,18 +5,23 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameView extends SurfaceView {
 
     private Bitmap bmp;
     private SurfaceHolder holder;
     private GameLoopThread gameLoopThread;
-    private Sprite sprite;
+    private List<Sprite> sprites = new ArrayList<Sprite>();
 
     private int x = 0;
     private int xSpeed = 1;
+
 
     //Constructor
     public GameView(Context context) {
@@ -24,6 +29,8 @@ public class GameView extends SurfaceView {
         super(context);
         gameLoopThread = new GameLoopThread(this);
         holder = this.getHolder();
+
+
         holder.addCallback(new SurfaceHolder.Callback() {
 
             @Override
@@ -43,6 +50,16 @@ public class GameView extends SurfaceView {
 
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
+
+
+                //sprite = new Sprite(this, bmp);
+
+                for(int i = 0; i < 10; i++){
+
+                    sprites.add(createNewSprite());
+
+                }
+
                 gameLoopThread.setRunning(true);
                 gameLoopThread.start();
             }
@@ -54,15 +71,39 @@ public class GameView extends SurfaceView {
 
         });
 
+    }
+
+    public boolean onTouchEvent(MotionEvent event){
+
+        for(int i = 0; i < sprites.size(); i++){
+
+            if(sprites.get(i).hasCollided(event.getX(), event.getY())){
+
+                sprites.remove(sprites.get(i));
+
+            }
+        }
+
+        return super.onTouchEvent(event);
+    }
+
+    private Sprite createNewSprite(){
+
         bmp = BitmapFactory.decodeResource(getResources(), R.drawable.lolfigur);
-        sprite = new Sprite(this, bmp);
+
+        return new Sprite(this, bmp);
 
     }
 
     public void draw(Canvas canvas){
 
         canvas.drawColor(Color.BLACK);
-        sprite.draw(canvas);
+
+        for(int i = 0; i < sprites.size(); i++){
+
+            sprites.get(i).draw(canvas);
+
+        }
 
     }
 }

@@ -31,6 +31,7 @@ public class GameLoopThread extends Thread {
                     view.draw(c);
 
                 }
+
             } finally {
                 if (c != null) {
                     view.getHolder().unlockCanvasAndPost(c);
