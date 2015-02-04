@@ -1,9 +1,9 @@
 package com.example.xxx_death_lord_1337.kill_them;
 
+
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Point;
-import android.graphics.PointF;
 import android.graphics.Rect;
 import android.util.Log;
 
@@ -60,7 +60,6 @@ public class Sprite {
         currentFrame = ++currentFrame % BMP_COLUMNS;
 
     }
-
 
     public boolean hasCollided(float x2, float y2) {
 
