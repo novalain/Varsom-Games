@@ -5,6 +5,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -13,7 +17,9 @@ import android.view.SurfaceView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameView extends SurfaceView implements SurfaceHolder.Callback{
+//TODO: Gyrot krashar när man vrider åt vänster
+
+public class GameView extends SurfaceView implements SurfaceHolder.Callback, SensorEventListener{
 
 
     private static final String TAG = GameView.class.getSimpleName();
@@ -26,8 +32,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
     private Sprite sprite;
     private int x = 0;
     private int xSpeed = 1;
-
     private Droid droid;
+
+    //Gyro variables
+    private SensorManager accelerometerSensorManager;
+    private Sensor accelerometerSensor;
+    private int currentAngle;
 
 
     //Constructor
@@ -43,10 +53,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
         //Create the game loop thread
         gameLoopThread = new GameLoopThread(this, getHolder());
 
-
         // Make the GameView focusable so it can handle events
         setFocusable(true);
 
+        //get a hook to the sensor service
+        accelerometerSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        accelerometerSensor = accelerometerSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        accelerometerSensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_FASTEST);
 
     }
 
@@ -83,6 +96,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             // delegating event handling to the droid
             droid.handleActionDown((int)event.getX(), (int)event.getY());
@@ -119,6 +133,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
     }
 
     public void update() {
+
+        Log.d("Angle: ", Integer.toString(currentAngle));
+
         // check collision with right wall if heading right
         if (droid.getSpeed().getxDirection() == Speed.DIRECTION_RIGHT
                 && droid.getX() + droid.getBitmap().getWidth() / 2 >= getWidth()) {
@@ -143,4 +160,24 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
         droid.update();
     }
 
+    @Override
+    public void onSensorChanged(SensorEvent event)
+    {
+        //if sensor is unreliable, return void
+        if (event.accuracy == SensorManager.SENSOR_STATUS_UNRELIABLE)
+        {
+            Log.d("Sensor", "The sensor is unreliable, whatever that means!");
+            return;
+        }
+
+        float aX = event.values[0];
+        float aY = event.values[1];
+        currentAngle = (int) Math.round(Math.atan2(aX, aY)/(Math.PI/180));
+
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
 }
