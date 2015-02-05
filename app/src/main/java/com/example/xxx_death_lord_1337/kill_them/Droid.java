@@ -23,23 +23,23 @@ import android.view.WindowManager;
 public class Droid {
 
 	private Bitmap bitmap;	// the actual bitmap
+    private Point windowSize;
 	private float x;			// the X coordinate
 	private float y;			// the Y coordinate
-    private float vy;
+    //private float vy;
     private GameView gameView;
 
 	private boolean touched;	// if droid is touched/picked up
 	private boolean speed;	// the speed with its directions
 	
-	public Droid(Bitmap bitmap, int x, int y) {
+	public Droid(Bitmap bitmap, int x, int y, Point window_size) {
 		this.bitmap = bitmap;
 		this.x = x;
 		this.y = y;
-        //this.vx = 0;
-        this.vy = 0;
 		this.speed = false;
+        windowSize = window_size;
 	}
-	
+
 	public Bitmap getBitmap() {
 		return bitmap;
 	}
@@ -58,11 +58,9 @@ public class Droid {
 	public void setY(int y) {
 		this.y = y;
 	}
-
 	public boolean isTouched() {
 		return touched;
 	}
-
 	public void setTouched(boolean touched) {
 		this.touched = touched;
 	}
@@ -75,27 +73,22 @@ public class Droid {
 	/**
 	 * Method which updates the droid's internal state every tick
 	 */
-    public void update(int angle, Point window_size) {
+    public void update(int angle) {
+        float gx = 90 - angle;
 
-        //Log.d("window_size", Integer.toString(window_size.x));
-        float gx = -(angle - 90);
+        if(x + gx < windowSize.x && x + gx > 0)
+            x +=Math.round(Math.cos(angle*Math.PI/180)*20);
 
-        if(x + gx < window_size.x && x + gx > 0)
-            x = x + gx*0.1f;
-
-        if(speed){
+        /*if(speed){
             vy = 5;
-            Log.d("ACC", "ACC");
-        }
+        }*/
 
-        else
+        /*else
             vy = 0;
 
-        if(y + (9.82f * 0.1f) < window_size.y && y + vy > 0)
+        if(y + (9.82f * 0.1f) < windowSize.y && y + vy > 0)
             y = y + (9.82f * 0.1f) - vy;
-
-        Log.d("y", y + "");
-
+        */
     }
 	
 	
