@@ -1,4 +1,4 @@
-# TNM094
+TNM094
 A project in the course TNM094 at Linkoping University.
 
 Network links: 
