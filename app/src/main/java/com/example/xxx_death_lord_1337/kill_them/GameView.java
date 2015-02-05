@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Point;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -152,8 +153,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Sen
 
     public void render(Canvas canvas){
 
-        canvas.drawColor(Color.BLACK);
-        droid.draw(canvas);
+        canvas.drawColor(Color.DKGRAY);
+
+        Matrix rotMat = new Matrix();
+        rotMat.postRotate(-currentAngle+90, (droid.getBitmap().getWidth() / 2), (droid.getBitmap().getHeight() / 2)); //rotate it
+        rotMat.postTranslate(droid.getX(), droid.getY());
+        canvas.drawBitmap(droid.getBitmap(),rotMat,null);
+
+        //droid.draw(canvas);
 
     }
 
