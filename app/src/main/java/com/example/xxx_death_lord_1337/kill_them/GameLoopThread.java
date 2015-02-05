@@ -25,7 +25,9 @@ public class GameLoopThread extends Thread {
     }
 
     public void setRunning(boolean running) {
+
         this.running = running;
+
     }
 
     @Override

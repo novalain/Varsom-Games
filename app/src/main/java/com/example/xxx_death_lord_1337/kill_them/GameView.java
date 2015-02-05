@@ -5,14 +5,17 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.WindowManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +33,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Sen
     private List<Sprite> sprites = new ArrayList<Sprite>();
     //private Car car;
     private Sprite sprite;
-    private int x = 0;
-    private int xSpeed = 1;
     private Droid droid;
+    private Point window_size;
 
     //Gyro variables
     private SensorManager accelerometerSensorManager;
@@ -44,11 +46,22 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Sen
     public GameView(Context context) {
 
         super(context);
+
+        // Get window inner width and height
+/*
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+
+        Point window_size = new Point();
+        display.getSize(window_size);
+
+        window_size.x = this.getWidth();
+        window_size.y = this.getHeight();
+
+        Log.d("width", window_size.x + "");*/
+
         // Add the callback to the surface holder to intercept events
         getHolder().addCallback(this);
-
-        // create droid and load bitmap
-        droid = new Droid(BitmapFactory.decodeResource(getResources(), R.drawable.droid_1), 50, 50);
 
         //Create the game loop thread
         gameLoopThread = new GameLoopThread(this, getHolder());
@@ -61,6 +74,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Sen
         accelerometerSensor = accelerometerSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         accelerometerSensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_FASTEST);
 
+
+
     }
 
     @Override
@@ -72,6 +87,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Sen
 
     @Override
     public void surfaceCreated(SurfaceHolder holder){
+
+        window_size = new Point(getWidth(), getHeight());
+
+        // create droid and load bitmap
+        droid = new Droid(BitmapFactory.decodeResource(getResources(), R.drawable.droid_1), 50, 50);
 
         gameLoopThread.setRunning(true);
         gameLoopThread.start();
@@ -98,6 +118,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Sen
     public boolean onTouchEvent(MotionEvent event) {
 
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
+
+            droid.toggleSpeed();
+
             // delegating event handling to the droid
             droid.handleActionDown((int)event.getX(), (int)event.getY());
 
@@ -116,6 +139,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Sen
                 droid.setY((int)event.getY());
             }
         } if (event.getAction() == MotionEvent.ACTION_UP) {
+
+            droid.toggleSpeed();
             // touch was released
             if (droid.isTouched()) {
                 droid.setTouched(false);
@@ -134,7 +159,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Sen
 
     public void update() {
 
-        Log.d("Angle: ", Integer.toString(currentAngle));
+        //Log.d("Angle: ", Integer.toString(currentAngle));
+
+        /*
 
         // check collision with right wall if heading right
         if (droid.getSpeed().getxDirection() == Speed.DIRECTION_RIGHT
@@ -157,7 +184,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Sen
             droid.getSpeed().toggleYDirection();
         }
         // Update the lone droid
-        droid.update();
+        */
+        //droid.update();
     }
 
     @Override
@@ -172,7 +200,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Sen
 
         float aX = event.values[0];
         float aY = event.values[1];
+
         currentAngle = (int) Math.round(Math.atan2(aX, aY)/(Math.PI/180));
+
+        droid.update(currentAngle, window_size);
 
     }
 

@@ -18,7 +18,7 @@ public class Sprite {
     private Bitmap bmp;
     private int currentFrame = 0;
     private int width, height;
-    private GameView gameView;
+    private GameView gameView
 
     // Constructor
     public Sprite(GameView gameView, Bitmap bmp){
