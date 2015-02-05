@@ -17,7 +17,7 @@ import android.view.SurfaceView;
 import java.util.ArrayList;
 import java.util.List;
 
-//TODO: Gyrot krashar när man vrider åt vänster
+//TODO: Gyrot krashar ibland
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback, SensorEventListener{
 
