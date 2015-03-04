@@ -204,33 +204,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Sen
 
     public void update() {
 
-        //Log.d("Angle: ", Integer.toString(currentAngle));
-
-        /*
-
-        // check collision with right wall if heading right
-        if (droid.getSpeed().getxDirection() == Speed.DIRECTION_RIGHT
-                && droid.getX() + droid.getBitmap().getWidth() / 2 >= getWidth()) {
-            droid.getSpeed().toggleXDirection();
-        }
-        // check collision with left wall if heading left
-        if (droid.getSpeed().getxDirection() == Speed.DIRECTION_LEFT
-                && droid.getX() - droid.getBitmap().getWidth() / 2 <= 0) {
-            droid.getSpeed().toggleXDirection();
-        }
-        // check collision with bottom wall if heading down
-        if (droid.getSpeed().getyDirection() == Speed.DIRECTION_DOWN
-                && droid.getY() + droid.getBitmap().getHeight() / 2 >= getHeight()) {
-            droid.getSpeed().toggleYDirection();
-        }
-        // check collision with top wall if heading up
-        if (droid.getSpeed().getyDirection() == Speed.DIRECTION_UP
-                && droid.getY() - droid.getBitmap().getHeight() / 2 <= 0) {
-            droid.getSpeed().toggleYDirection();
-        }
-        // Update the lone droid
-        */
-        //droid.update();
     }
 
     @Override
