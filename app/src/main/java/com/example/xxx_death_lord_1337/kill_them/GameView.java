@@ -33,18 +33,18 @@ import java.util.List;
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback, SensorEventListener{
 
-
     private static final String TAG = GameView.class.getSimpleName();
 
     private Bitmap bmp;
     private SurfaceHolder holder;
     private GameLoopThread gameLoopThread;
-    private List<Sprite> sprites = new ArrayList<Sprite>();
+    //private List<Sprite> sprites = new ArrayList<Sprite>();
     //private Car car;
-    private Sprite sprite;
-    private Droid droid;
+    //private Sprite sprite;
+    //private Droid droid;
     private Car car;
-    private Point window_size;
+    private Obstacle obstacle;
+    public static Point window_size;
 
     //Gyro variables
     private SensorManager accelerometerSensorManager;
@@ -55,12 +55,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Sen
     private Bitmap backgroundBMP;
     private BitmapDrawable scrollingBG;
     private int backgroundFarMoveY = 0;
-    private int backgroundNearMoveY = 0;
+   // private int backgroundNearMoveY = 0;
 
     //Car variables
-    private int TOP_SPEED = 20;
-    private int firstCarSpeed = TOP_SPEED;
-
+    private static final int TOP_SPEED = 5;
+    public static int firstCarSpeed = TOP_SPEED;
 
     //Temporary variables only for developing purposes.. NOT to be used in final product
     private Paint paint;
@@ -101,10 +100,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Sen
 
         scrollingBG.setTileModeY(Shader.TileMode.REPEAT);
 
-        // create droid and load bitmap
-        droid = new Droid(BitmapFactory.decodeResource(getResources(), R.drawable.player_car), window_size.x/2, 3*window_size.y/5, window_size);
+        obstacle = new Obstacle(new PointF(0, 0), new PointF(0, 0), BitmapFactory.decodeResource(getResources(), R.drawable.tree_icon), new Rect());
         // Create car and load bitmap
-        car = new Car(new PointF(window_size.x/2, 3*window_size.y/5), new PointF(0, 0), new Rect(), BitmapFactory.decodeResource(getResources(), R.drawable.player_car) );
+        car = new Car(new PointF(window_size.x/2, 3*window_size.y/5), new PointF(0, 0), BitmapFactory.decodeResource(getResources(), R.drawable.player_car) );
 
         gameLoopThread.setRunning(true);
         gameLoopThread.start();
@@ -134,7 +132,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Sen
         }
     }
 
-    @Override
+    //@Override
+    /*
     public boolean onTouchEvent(MotionEvent event) {
 
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -167,7 +166,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Sen
             }
         }
         return true;
-    }
+    }*/
 
     //will draw the tiled background
     public void drawBackground(Canvas canvas){
@@ -186,28 +185,39 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Sen
         }
     }
 
+
+    public void update(){
+
+        //Set obstacle pos var 3:e sekund
+
+
+
+       // if(android.os.SystemClock.uptimeMillis() % 5000 == 0)
+         //   Log.d("TIME", android.os.SystemClock.uptimeMillis() + "");
+
+
+
+        obstacle.update();
+
+    }
+
     public void render(Canvas canvas){
 
         //TODO: Implement a scrolling background
         drawBackground(canvas);
-        //canvas.drawColor(Color.rgb(200,44,0));
 
         //när currentAngle är 180 ska bilen va roterad -90
         Matrix rotMat = new Matrix();
-        rotMat.postRotate(90-currentAngle, (droid.getBitmap().getWidth() / 2), (droid.getBitmap().getHeight() / 2)); //rotate it
-        rotMat.postTranslate(droid.getX(), droid.getY());
-        canvas.drawBitmap(droid.getBitmap(),rotMat,null);
+        rotMat.postRotate(90-currentAngle, (car.getBmp().getWidth() / 2), (car.getBmp().getHeight() / 2)); //rotate it
+        rotMat.postTranslate(car.getPosition().x, car.getPosition().y);
 
-        //droid.draw(canvas);
+        obstacle.draw(canvas);
+
+        canvas.drawBitmap(car.getBmp(), rotMat,null);
 
         //detta är bara för texten i bakgrunden, så man slipper kolla sug-logCat:en
-
         String temp = "Angle: " + currentAngle + "   speed: " + firstCarSpeed;
         canvas.drawText(temp, 0, temp.length(), getWidth()/2-temp.length()*paint.getTextSize()/3, getHeight()/3,paint);
-
-    }
-
-    public void update() {
 
     }
 
@@ -231,12 +241,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Sen
             firstCarSpeed = (int) ((-1)*Math.round(Math.sin(currentAngle*Math.PI/180)*TOP_SPEED));
         }
 
-        droid.update(currentAngle);
+        car.update(currentAngle);
 
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
 
     }
 }

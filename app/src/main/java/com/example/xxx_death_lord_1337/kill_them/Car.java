@@ -9,14 +9,23 @@ import android.graphics.Rect;
  */
 public class Car extends GameObject {
 
+    public Car(PointF position, PointF vel, Bitmap bmp){
 
-
-    public Car(PointF position, PointF vel, Rect objectHitbox, Bitmap bmp){
-
-        super(position, vel, objectHitbox, bmp);
+        super(position, vel, new Rect(), bmp);
 
     }
 
+    /**
+     * Method which updates the droid's internal state every tick
+     */
+    public void update(int angle) {
 
+        float gx = 90 - angle;
+
+        if(position.x + gx < GameView.window_size.x && position.x + gx > 0)
+            position.x +=Math.round(Math.cos(angle*Math.PI/180)*20);
+
+
+    }
 
 }

@@ -1,6 +1,7 @@
 package com.example.xxx_death_lord_1337.kill_them;
 
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
@@ -10,12 +11,12 @@ import java.util.Vector;
 /**
  * Created by Alice on 2015-03-04.
  */
-public class GameObject {
+public abstract class GameObject {
 
-    private PointF position;
-    private PointF vel;
-    private Rect objectHitbox;
-    private Bitmap bmp;
+    protected PointF position;
+    protected PointF vel;
+    protected Rect objectHitbox;
+    protected Bitmap bmp;
 
      /*class Rect incudes intersect (http://developer.android.com/reference/android/graphics/Rect.html)
      */
@@ -52,7 +53,7 @@ public class GameObject {
     // Draws the object into canvas
     public void draw(Canvas canvas){
 
-        canvas.drawBitmap(bitmap, x - (bitmap.getWidth() / 2, y - (bitmap.getHeight() / 2), null);
+        canvas.drawBitmap(bmp, position.x - (bmp.getWidth() / 2), position.y - (bmp.getHeight() / 2), null);
 
     }
 
