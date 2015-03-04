@@ -8,6 +8,8 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.PointF;
+import android.graphics.Rect;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.hardware.Sensor;
@@ -41,6 +43,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Sen
     //private Car car;
     private Sprite sprite;
     private Droid droid;
+    private Car car;
     private Point window_size;
 
     //Gyro variables
@@ -100,11 +103,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Sen
 
         // create droid and load bitmap
         droid = new Droid(BitmapFactory.decodeResource(getResources(), R.drawable.player_car), window_size.x/2, 3*window_size.y/5, window_size);
+        // Create car and load bitmap
+        car = new Car(new PointF(window_size.x/2, 3*window_size.y/5), new PointF(0, 0), new Rect(), BitmapFactory.decodeResource(getResources(), R.drawable.player_car) );
 
         gameLoopThread.setRunning(true);
         gameLoopThread.start();
 
-        //detta är bara för texten i bakgrunden, så man slipper kolla sug-logCat:en
+        // detta är bara för texten i bakgrunden, så man slipper kolla sug-logCat:en
         paint = new Paint();
         paint.setColor(Color.DKGRAY);
         paint.setTextSize(50.0f);
