@@ -8,7 +8,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 public class MainActivity extends Activity{
-
+    // creating a tag to see where the logging comes from
     private static final String TAG = MainActivity.class.getSimpleName();
 
     public void onCreate(Bundle savedInstanceState){
@@ -20,6 +20,7 @@ public class MainActivity extends Activity{
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        // Send content to game view if game should be started
         setContentView(new GameView(this));
 
     }
