@@ -26,6 +26,8 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,6 +58,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Sen
     private BitmapDrawable scrollingBG;
     private int backgroundFarMoveY = 0;
    // private int backgroundNearMoveY = 0;
+
+    public long time = 0;
+    public static final int timeStep = 5;
 
     //Car variables
     private static final int TOP_SPEED = 5;
@@ -188,11 +193,28 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Sen
 
     public void update(){
 
+
         //Set obstacle pos var 3:e sekund
 
+        time += timeStep;
+
+        // Add new obstacle
+        if(time % (300*timeStep) == 0){
+
+            obstacle.setPosition(new PointF((int)(Math.random() * ((window_size.x) + 1)), -300));
 
 
-       // if(android.os.SystemClock.uptimeMillis() % 5000 == 0)
+            time = 0;
+        }
+
+
+
+
+
+
+
+
+        // if(android.os.SystemClock.uptimeMillis() % 5000 == 0)
          //   Log.d("TIME", android.os.SystemClock.uptimeMillis() + "");
 
 
