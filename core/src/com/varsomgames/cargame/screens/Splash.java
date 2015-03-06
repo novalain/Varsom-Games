@@ -20,8 +20,8 @@ public class Splash implements Screen {
     @Override
     public void show() {
          //If your image is not the same size as your screen
-           splashImage.setX(640);
-           splashImage.setY(316);
+        splashImage.setX(640);
+        splashImage.setY(316);
 
         stage.addActor(splashImage); //adds the image as an actor to the stage
         splashImage.addAction(Actions.sequence(Actions.alpha(0), Actions.fadeIn(0.5f), Actions.delay(2), Actions.run(new Runnable() {
@@ -34,7 +34,7 @@ public class Splash implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0,0,0,1); //sets clear color to black
+        Gdx.gl.glClearColor(0.5f,0.3f,0.3f,1); //sets clear color to black
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); //clear the batch
         stage.act(); //update all actors
         stage.draw(); //draw all actors on the Stage.getBatch()
