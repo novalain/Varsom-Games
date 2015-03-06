@@ -1,0 +1,5 @@
+/Users/oskarcarlbaum/Development/Android/Projects/CarGame/android/build/intermediates/classes/debug
+/Users/oskarcarlbaum/Development/Android/Projects/CarGame/android/build/intermediates/pre-dexed/debug/core-1.0-f44d19f2127841cde4160e83b9774034891ff326.jar
+/Users/oskarcarlbaum/Development/Android/Projects/CarGame/android/build/intermediates/pre-dexed/debug/gdx-box2d-1.5.4-57caeb07599616cbdb9a403a3ca636c53e877a79.jar
+/Users/oskarcarlbaum/Development/Android/Projects/CarGame/android/build/intermediates/pre-dexed/debug/gdx-backend-android-1.5.4-488e29f5ac05eb689091185719119789a1847494.jar
+/Users/oskarcarlbaum/Development/Android/Projects/CarGame/android/build/intermediates/pre-dexed/debug/gdx-1.5.4-c6e708bd248cc56445e81ea53575cc35506a3c60.jar
