@@ -2,32 +2,32 @@
 <items version="2" >
 
     <item
-        jar="C:\Users\Alice\.gradle\caches\modules-2\files-2.1\com.badlogicgames.gdx\gdx\1.5.4\c16e1a0088ae7f0cac4a8d6595be32432e6069f4\gdx-1.5.4.jar"
+        jar="/Users/michaelnoven/Varsom-Games/core/build/libs/core-1.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="386b88c393606d0a0adcbc48c9ccc53ea5eca0cc">
+        <dex dex="/Users/michaelnoven/Varsom-Games/android/build/intermediates/pre-dexed/debug/core-1.0-c7214f6c003f640478be2a94dd4e9deb7eeee0ff.jar" />
+    </item>
+    <item
+        jar="/Users/michaelnoven/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx/1.5.4/c16e1a0088ae7f0cac4a8d6595be32432e6069f4/gdx-1.5.4.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="c16e1a0088ae7f0cac4a8d6595be32432e6069f4">
-        <dex dex="C:\Users\Alice\Documents\Varsom-Games\android\build\intermediates\pre-dexed\debug\gdx-1.5.4-5fc488dbedbac236dbb31f4dc6a6d8654c36fd7e.jar" />
+        <dex dex="/Users/michaelnoven/Varsom-Games/android/build/intermediates/pre-dexed/debug/gdx-1.5.4-a57fbea86e7dbc419ed6753b6bf4246dbdeb65dd.jar" />
     </item>
     <item
-        jar="C:\Users\Alice\.gradle\caches\modules-2\files-2.1\com.badlogicgames.gdx\gdx-box2d\1.5.4\6b0e1e0ef1b4ee3010f4e55cceaa22ba9ace5cf2\gdx-box2d-1.5.4.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="6b0e1e0ef1b4ee3010f4e55cceaa22ba9ace5cf2">
-        <dex dex="C:\Users\Alice\Documents\Varsom-Games\android\build\intermediates\pre-dexed\debug\gdx-box2d-1.5.4-d06afd8535197c907b01693a054114ce88d0421f.jar" />
-    </item>
-    <item
-        jar="C:\Users\Alice\Documents\Varsom-Games\core\build\libs\core-1.0.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="5a758a5686a9807f9467ebf25b99aacbe199f0e7">
-        <dex dex="C:\Users\Alice\Documents\Varsom-Games\android\build\intermediates\pre-dexed\debug\core-1.0-4245941fe1c25e1cfae394d633c76ef9e58cf3b7.jar" />
-    </item>
-    <item
-        jar="C:\Users\Alice\.gradle\caches\modules-2\files-2.1\com.badlogicgames.gdx\gdx-backend-android\1.5.4\7b974b501dc92361698a1f6251f9e7b308582c08\gdx-backend-android-1.5.4.jar"
+        jar="/Users/michaelnoven/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx-backend-android/1.5.4/7b974b501dc92361698a1f6251f9e7b308582c08/gdx-backend-android-1.5.4.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="7b974b501dc92361698a1f6251f9e7b308582c08">
-        <dex dex="C:\Users\Alice\Documents\Varsom-Games\android\build\intermediates\pre-dexed\debug\gdx-backend-android-1.5.4-650e8e475e0a04a2a60501d71ca043a6e2605027.jar" />
+        <dex dex="/Users/michaelnoven/Varsom-Games/android/build/intermediates/pre-dexed/debug/gdx-backend-android-1.5.4-a072ca05b54ca02f8532651e8e723fa328759df7.jar" />
+    </item>
+    <item
+        jar="/Users/michaelnoven/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx-box2d/1.5.4/6b0e1e0ef1b4ee3010f4e55cceaa22ba9ace5cf2/gdx-box2d-1.5.4.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="6b0e1e0ef1b4ee3010f4e55cceaa22ba9ace5cf2">
+        <dex dex="/Users/michaelnoven/Varsom-Games/android/build/intermediates/pre-dexed/debug/gdx-box2d-1.5.4-0a83afecaeaaf043c009293c85995767262c2187.jar" />
     </item>
 
 </items>
