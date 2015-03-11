@@ -1,4 +1,4 @@
-package com.varsomgames.cargame.screens;
+package screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -12,6 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+
+import screens.Splash;
 
 /**
  * Created by oskarcarlbaum on 06/03/15.
@@ -36,7 +38,8 @@ public class MainMenu implements Screen {
                 //Same way we moved here from the Splash Screen
                 //We set it to new Splash because we got no other screens
                 //otherwise you put the screen there where you want to go
-                ((Game)Gdx.app.getApplicationListener()).setScreen(new Splash());
+               // ((Game)Gdx.app.getApplicationListener()).setScreen(new Splash());
+                ((Game)Gdx.app.getApplicationListener()).setScreen(new GameScreen());
             }
         });
         buttonExit.addListener(new ClickListener(){

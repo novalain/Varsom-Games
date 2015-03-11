@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/Users/oskarcarlbaum/Development/Android/Projects/TNM094/android/res/values/strings.xml -->
+    <!-- From: file:/C:/Users/Alice/Documents/Varsom-Games/android/res/values/strings.xml -->
     <eat-comment/>
     <string name="app_name">CarGameLibGDX</string>
-    <!-- From: file:/Users/oskarcarlbaum/Development/Android/Projects/TNM094/android/res/values/styles.xml -->
+    <!-- From: file:/C:/Users/Alice/Documents/Varsom-Games/android/res/values/styles.xml -->
     <eat-comment/>
     <style name="GdxTheme" parent="android:Theme">
 		<item name="android:windowBackground">@android:color/transparent</item>

@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="gdx-tools-1.5.4">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx-tools/1.5.4/57cf84f11067bba443fae7f0a9b4ebd7bc97a345/gdx-tools-1.5.4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx-tools/1.5.4/c4a5ecbbd418718ef7004a990b4bf74f985b57e/gdx-tools-1.5.4-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,4 +1,4 @@
-package com.varsomgames.cargame.screens;
+package screens;
 
 /**
  * Created by oskarcarlbaum on 06/03/15.
@@ -20,8 +20,11 @@ public class Splash implements Screen {
     @Override
     public void show() {
          //If your image is not the same size as your screen
-        splashImage.setX(640);
-        splashImage.setY(316);
+        Gdx.app.log("Screen","width"+Gdx.graphics.getWidth());
+        Gdx.app.log("Screen","height"+Gdx.graphics.getHeight());
+        // Set position of splash image
+        splashImage.setX(0);
+        splashImage.setY(0);
 
         stage.addActor(splashImage); //adds the image as an actor to the stage
         splashImage.addAction(Actions.sequence(Actions.alpha(0), Actions.fadeIn(0.5f), Actions.delay(2), Actions.run(new Runnable() {
@@ -38,6 +41,7 @@ public class Splash implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); //clear the batch
         stage.act(); //update all actors
         stage.draw(); //draw all actors on the Stage.getBatch()
+        //Gdx.app.log("Splash", "splashing");
     }
 
     @Override
