@@ -1,5 +1,0 @@
-/Users/michaelnoven/Varsom-Games/android/build/intermediates/classes/debug
-/Users/michaelnoven/Varsom-Games/android/build/intermediates/pre-dexed/debug/core-1.0-c7214f6c003f640478be2a94dd4e9deb7eeee0ff.jar
-/Users/michaelnoven/Varsom-Games/android/build/intermediates/pre-dexed/debug/gdx-box2d-1.5.4-0a83afecaeaaf043c009293c85995767262c2187.jar
-/Users/michaelnoven/Varsom-Games/android/build/intermediates/pre-dexed/debug/gdx-backend-android-1.5.4-a072ca05b54ca02f8532651e8e723fa328759df7.jar
-/Users/michaelnoven/Varsom-Games/android/build/intermediates/pre-dexed/debug/gdx-1.5.4-a57fbea86e7dbc419ed6753b6bf4246dbdeb65dd.jar
