@@ -11,37 +11,32 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  */
 public class AssetLoader {
     public static Texture texture;
+    public static Texture bgTexture;
     public static TextureRegion bg;
-
-    public static Animation carAnimation;
     public static TextureRegion car;
 
 
     public static void load() {
-
+        // loading texture for car
         texture = new Texture(Gdx.files.internal("img/Car.png"));
         texture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
         // Guessing bg is background
-        bg = new TextureRegion(texture, 0, 0, 136, 43);
-        bg.flip(false, true);
-/*
-        grass = new TextureRegion(texture, 0, 43, 143, 11);
-        grass.flip(false, true);
+        bgTexture = new Texture(Gdx.files.internal("img/temp_background.png"));
+        bgTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
-        birdDown = new TextureRegion(texture, 136, 0, 17, 12);
-        birdDown.flip(false, true);
-*/
-        car = new TextureRegion(texture, 153, 0, 17, 12);
+        bg = new TextureRegion(bgTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        bg.flip(false, true); // Flip the sprite vertically to fit coordinate system Y-down
+
+        // Texture size of car.png is 50*74 px
+        car = new TextureRegion(texture, 0, 0, 50, 74);
         car.flip(false, true);
-/*
-        birdUp = new TextureRegion(texture, 170, 0, 17, 12);
-        birdUp.flip(false, true);
-*/
-        //      TextureRegion[] birds = { birdDown, bird, birdUp };
-        carAnimation = new Animation(0.06f, car);
-        carAnimation.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
 
+  //    Animate an array of textureRegions to make the sprite object seem to move
+  //    TextureRegion[] birds = { birdDown, bird, birdUp };
+  /*      carAnimation = new Animation(0.06f, car);
+        carAnimation.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
+*/
     }
 
     public static void dispose() {

@@ -14,6 +14,7 @@ public class GameScreen implements Screen{
     // Class variables
     private GameWorld world;
     private GameRenderer renderer;
+    private float runTime = 0;
 
     public GameScreen(){
         // creating gameRenderer and GameWorld
@@ -24,9 +25,10 @@ public class GameScreen implements Screen{
     }
     @Override
     public void render(float delta) {
+        runTime+=delta;
         // connecting GameWorld and GameRenderer and updating them both
         world.update(delta);
-        renderer.render();
+        renderer.render(runTime);
     }
 
     @Override
