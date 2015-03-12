@@ -1,13 +1,14 @@
 package com.varsom.mpclient;
 
-import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import com.varsom.mpclient.Packet.*;
+import com.varsom.mpclient.Packet.LoginAnswer;
+import com.varsom.mpclient.Packet.LoginRequest;
+import com.varsom.mpclient.Packet.Message;
 
 /**
  * Created by christoffer on 2015-03-06.
@@ -26,10 +27,13 @@ public class NetworkListener extends Listener {
         this.ourIP = ip;
         this.ourMessage = o;
         this.ourOutput = b;
+
+        System.out.println("FUNC: init");
     }
     public void connected(Connection connection) {
+        System.out.println("FUNC: connect");
         client.sendTCP(new LoginRequest());
-        ourOutput.setText("");
+        //ourOutput.setText("");
         ourOutput.append("You have connected.");
 
     }

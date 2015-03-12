@@ -13,8 +13,6 @@ import android.widget.TextView;
 import com.esotericsoftware.minlog.Log;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.util.Scanner;
 
 import static com.varsom.mpclient.R.id.textField;
 
@@ -22,12 +20,11 @@ import static com.varsom.mpclient.R.id.textField;
 public class MainActivity extends ActionBarActivity {
 
     public MPClient client;
-    public Scanner scanner;
+    //public Scanner scanner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-
         StrictMode.setThreadPolicy(policy);
 
         super.onCreate(savedInstanceState);
@@ -51,17 +48,9 @@ public class MainActivity extends ActionBarActivity {
                     //client.stop();
                 }
 
-
-
-
             }
 
-
         });
-
-
-
-
 
     }
 

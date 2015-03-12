@@ -23,9 +23,9 @@ public class MPServer {
         nl.init(b);
         server.addListener(nl);
 
-        server.bind(54555);
+        server.bind(54555, 64555);
         //TCP, UDP
-        //server.bind(54555, 54666);
+
         server.start();
     }
 

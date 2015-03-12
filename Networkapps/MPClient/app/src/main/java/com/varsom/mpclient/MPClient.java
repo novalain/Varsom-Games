@@ -1,6 +1,5 @@
 package com.varsom.mpclient;
 
-import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -9,16 +8,13 @@ import com.esotericsoftware.kryonet.Client;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.util.Scanner;
 
 /**
  * Created by christoffer on 2015-03-06.
  */
 public class MPClient {
     public Client client;
-    public Scanner scanner;
-
-
+    //public Scanner scanner;
 
     public MPClient(EditText ip, EditText o , TextView b) throws IOException {
         client = new Client();
@@ -30,32 +26,41 @@ public class MPClient {
 
         client.addListener(nl);
 
-
         client.start();
 
         try{
-            client.connect(50000,ip.getText().toString(), 54555);
+            b.setText("");
+            b.append("Connected");
+            //InetAddress add = check();
+            //System.out.println(ip.getText().toString());
+            System.out.println("FUNC: MPClinet, try");
+            client.connect(50000,ip.getText().toString(), 54555, 64555);
+
+            //client.connect(50000,"130.236.86.116", 54555, 64555);
+            //client.connect(50000, add, 54555, 54666);
+
+            // 130.236.86.116
         }
         catch(IOException e){
             e.printStackTrace();
+            client.stop();
             b.setText("");
             b.append("Connect doesn't work");
         }
-
-
-
 
     }
 
     /*public void stop() {
         client.stop();
-    }
-    public void check(){
-        InetAddress address = client.discoverHost(54555, 50000);
-        System.out.println(address);
-
-
     }*/
+
+    public InetAddress check(){
+        InetAddress address = client.discoverHost(54666, 50000);
+        System.out.println("HOST: " + address);
+
+        return address;
+
+    }
 
     private void register() {
         Kryo kryo = client.getKryo();
