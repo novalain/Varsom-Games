@@ -8,7 +8,7 @@ import helpers.AssetLoader;
 import screens.Splash;
 
 public class CarGame extends Game {
-    public static final String TITLE="carAce/c'Razee";
+    public static final String TITLE="Untitled Game: The ride to Hell!";
 
     public static final int WIDTH = 800;
     public static final int HEIGHT= 480; // used later to set window size
@@ -19,7 +19,7 @@ public class CarGame extends Game {
 
 	@Override
 	public void create () {
-        // Get size of the screen and display in logcat
+
         int screenWidth = Gdx.graphics.getWidth();
         int screenHeight = Gdx.graphics.getHeight();
         String message = "Widtdh: "+Integer.toString(screenWidth) +"  and Height: "+ Integer.toString(screenHeight);
