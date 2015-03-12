@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 
 import gameworld.GameRenderer;
 import gameworld.GameWorld;
+import helpers.InputHandler;
 
 /**
  * Created by Alice on 2015-03-11.
@@ -18,12 +19,13 @@ public class GameScreen implements Screen{
         // creating gameRenderer and GameWorld
         world = new GameWorld();
         renderer = new GameRenderer(world);
+        // connect world to input handler
+        Gdx.input.setInputProcessor(new InputHandler(world.getCar()));
     }
     @Override
     public void render(float delta) {
         // connecting GameWorld and GameRenderer and updating them both
         world.update(delta);
-
         renderer.render();
     }
 

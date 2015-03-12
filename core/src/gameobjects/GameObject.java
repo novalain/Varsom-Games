@@ -7,16 +7,17 @@ import com.badlogic.gdx.math.Vector2;
  * Created by Alice on 2015-03-11.
  */
 public abstract class GameObject {
-    private Vector2 position;
-    private Vector2 velocity;
-    private Rectangle hitBox;
-//  private Vector2 acceleration;
+    protected Vector2 position;
+    protected Vector2 velocity;
+    protected Rectangle hitBox;
+    protected Vector2 acceleration;
 //  private float rotation;
 //  Add Bitmap ?? Spritebatch or whatever it is called in libgdx?
 
-    public GameObject(Vector2 position, Vector2 velocity, Rectangle hitBox){
+    public GameObject(Vector2 position, Vector2 velocity, Vector2 acceleration, Rectangle hitBox){
         this.position = position;
         this.velocity = velocity;
+        this.acceleration = acceleration;
         this.hitBox = hitBox;
     }
 
@@ -27,6 +28,7 @@ public abstract class GameObject {
     public Vector2 getVelocity(){
         return velocity;
     }
+    public Vector2 getAcceleration(){return acceleration; }
     public Rectangle getObjectHitbox(){
         return hitBox;
     }
@@ -38,14 +40,15 @@ public abstract class GameObject {
     public void setVelocity(Vector2 vel){
         this.velocity = vel;
     }
+    public void setAcceleration(Vector2 acceleration) {this.acceleration = acceleration;}
     public void setObjectHitbow(Rectangle objectHitbox){
         this.hitBox = objectHitbox;
     }
 
     // Draw onto canvas here?
-    public void draw(){
+    /*public void draw(){
 
 
-    }
+    }*/
 
 }

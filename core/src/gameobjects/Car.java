@@ -13,16 +13,17 @@ public class Car extends GameObject{
 
     private Texture carTexture;
 
-    public Car(Vector2 position, Vector2 velocity, Texture texture){
+    public Car(Vector2 position, Vector2 velocity, Vector2 acceleration, Texture texture){
 
-        super(position, velocity, new Rectangle(position.x, position.y, 10, 10)); // Last parameters for width of hitbox
+        super(position, velocity, acceleration, new Rectangle(position.x, position.y, 10, 10)); // Last parameters for width of hitbox
         this.carTexture = texture;
 
     }
 
     // Update car position based on angle of gyro
-    public void update(int angle) {
-
+    public void update(int angle, float delta) {
+        // set velocity of the car according to acceleration
+        velocity.add(acceleration.cpy().scl(delta));
         // From previous version
 
         /*float gx = 90 - angle;
@@ -38,5 +39,11 @@ public class Car extends GameObject{
         return carTexture;
 
     }
+    // If the speed button has been touched, increase velocity
+    public void onTouch(){
+        Gdx.app.log("in Car", "touched!");
+        this.velocity.y += 10;
+    }
+
 
 }
