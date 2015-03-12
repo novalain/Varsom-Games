@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 
+import helpers.AssetLoader;
 import screens.Splash;
 
 public class CarGame extends Game {
@@ -18,10 +19,12 @@ public class CarGame extends Game {
 
 	@Override
 	public void create () {
+        // Get size of the screen
         int screenWidth = Gdx.graphics.getWidth();
         int screenHeight = Gdx.graphics.getHeight();
         String message = "Widtdh: "+Integer.toString(screenWidth) +"  and Height: "+ Integer.toString(screenHeight);
         Gdx.app.log("screen size", message);
+        AssetLoader.load();
         setScreen(new Splash());
         Gdx.app.log("oskfan", "screen is set.. still in CarGame class");
 	}
