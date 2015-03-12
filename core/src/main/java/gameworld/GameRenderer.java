@@ -29,11 +29,12 @@ public class GameRenderer {
 
         myWorld = world;
         cam = new OrthographicCamera();
-        cam.setToOrtho(false, screenWidth, screenHeight);
+        cam.setToOrtho(true, screenWidth, screenHeight);
 
         batcher = new SpriteBatch();
 
         // attach batcher to camera
+
         batcher.setProjectionMatrix(cam.combined);
 
         shapeRenderer = new ShapeRenderer();
@@ -45,8 +46,9 @@ public class GameRenderer {
         Car car = myWorld.getCar();
         cam.position.set(car.getPosition().x,car.getPosition().y, 0);
         cam.update();
-        Gdx.gl.glClearColor(0, 0, 0, 1); // Creating black background
+        Gdx.gl.glClearColor(0, 0, 0.3f, 1); // Creating black background
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
 
 /*      To create background color or "outside the sprite"-color, use this code
         // Begin ShapeRenderer
@@ -66,18 +68,18 @@ public class GameRenderer {
         // This is good for performance when drawing images that do not require
         // transparency.
         batcher.disableBlending();
-        batcher.draw(AssetLoader.bg, screenWidth/2 - 240, 0, screenWidth, screenHeight);
+        batcher.draw(AssetLoader.bg,0, 0, screenWidth, screenHeight);
 
         // The car needs transparency, so we enable that again.
         batcher.enableBlending();
 
         //batcher.draw(AssetLoader.car, screenWidth/2, screenHeight/2, 50, 74);
 
-        // Draw bird at its coordinates. Retrieve the Animation object from
-        // AssetLoader
+        // Draw car at its coordinates, set rotation around middle based on car x-velocity, no scaling.
+        // Retrieve the Animation object from Assetloader
         // Pass in the runTime variable to get the current frame.
         batcher.draw(AssetLoader.carAnimation.getKeyFrame(runTime),
-                car.getPosition().x, car.getPosition().y, car.getWidth(), car.getHeight());
+                car.getPosition().x, car.getPosition().y, car.getWidth()/2, car.getHeight()/2, car.getWidth(), car.getHeight(), 1, 1, car.getVelocity().x/10);
 
         // End SpriteBatch
         batcher.end();

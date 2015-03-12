@@ -27,12 +27,14 @@ public class Car extends GameObject{
         if(position.x > Gdx.graphics.getWidth() - 50){
 
             position.x = Gdx.graphics.getWidth() - 50;
+            velocity.x = -velocity.x*0.3f;
 
         }
 
         else if(position.x < 0){
 
             position.x = 0;
+            velocity.x = -velocity.x*0.3f;
 
         }
         else if(position.y > Gdx.graphics.getHeight() - 74){
@@ -49,10 +51,12 @@ public class Car extends GameObject{
     }
 
     // Update car position based on angle of gyro
-    public void update(int angle, float delta) {
+    public void update(float angle, float delta) {
         // set velocity of the car according to acceleration
         velocity.add(acceleration.cpy().scl(delta));
+        velocity.x = angle*150;
         //Gdx.app.log("in Car", ""+velocity);
+        //Gdx.app.log("posx" , position.x + "");
 
         // Set position to new value
         position.add(velocity.cpy().scl(delta));
