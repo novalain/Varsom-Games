@@ -29,7 +29,7 @@ public class GameRenderer {
 
         myWorld = world;
         cam = new OrthographicCamera();
-        cam.setToOrtho(true, screenWidth, screenHeight);
+        cam.setToOrtho(false, screenWidth, screenHeight);
 
         batcher = new SpriteBatch();
 
@@ -43,7 +43,8 @@ public class GameRenderer {
     public void render(float runTime){
         // We will move these outside of the loop for performance later.
         Car car = myWorld.getCar();
-
+        cam.position.set(car.getPosition().x,car.getPosition().y, 0);
+        cam.update();
         Gdx.gl.glClearColor(0, 0, 0, 1); // Creating black background
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -60,6 +61,7 @@ public class GameRenderer {
 
         // Begin SpriteBatch
         batcher.begin();
+        batcher.setProjectionMatrix(cam.combined);
         // Disable transparency
         // This is good for performance when drawing images that do not require
         // transparency.
@@ -75,7 +77,7 @@ public class GameRenderer {
         // AssetLoader
         // Pass in the runTime variable to get the current frame.
         batcher.draw(AssetLoader.carAnimation.getKeyFrame(runTime),
-                car.getX(), car.getY(), car.getWidth(), car.getHeight());
+                car.getPosition().x, car.getPosition().y, car.getWidth(), car.getHeight());
 
         // End SpriteBatch
         batcher.end();

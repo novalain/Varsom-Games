@@ -55,18 +55,9 @@ public abstract class GameObject {
         this.hitBox = objectHitbox;
     }
 
-
-    public float getX() {
-        return position.x;
-    }
-    public float getY() {
-        return position.y;
-    }
-
     public float getWidth() {
         return width;
     }
-
     public float getHeight() {
         return height;
     }
