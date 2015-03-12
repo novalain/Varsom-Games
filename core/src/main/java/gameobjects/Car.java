@@ -45,7 +45,6 @@ public class Car extends GameObject{
             position.y = 0;
             velocity.y = -velocity.y*0.3f;
         }
-
     }
 
     // Update car position based on angle of gyro
