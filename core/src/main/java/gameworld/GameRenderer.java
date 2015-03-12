@@ -47,15 +47,16 @@ public class GameRenderer {
         Gdx.gl.glClearColor(0, 0, 0, 1); // Creating black background
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+/*      To create background color or "outside the sprite"-color, use this code
         // Begin ShapeRenderer
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
         // Draw Background color
         shapeRenderer.setColor(55 / 255.0f, 80 / 255.0f, 100 / 255.0f, 1);
-        shapeRenderer.rect(0, 0, screenWidth, screenHeight/2 + 66);
+        shapeRenderer.rect(0, 0, screenWidth, screenHeight);
 
         // End ShapeRenderer
-        shapeRenderer.end();
+        shapeRenderer.end(); */
 
         // Begin SpriteBatch
         batcher.begin();
@@ -63,19 +64,19 @@ public class GameRenderer {
         // This is good for performance when drawing images that do not require
         // transparency.
         batcher.disableBlending();
-        batcher.draw(AssetLoader.bg, 0, 0, screenWidth, screenHeight);
+        batcher.draw(AssetLoader.bg, screenWidth/2 - 240, 0, screenWidth, screenHeight);
 
         // The car needs transparency, so we enable that again.
         batcher.enableBlending();
 
-        batcher.draw(AssetLoader.car, screenWidth/2, screenHeight/2, 50, 74);
-/*
+        //batcher.draw(AssetLoader.car, screenWidth/2, screenHeight/2, 50, 74);
+
         // Draw bird at its coordinates. Retrieve the Animation object from
         // AssetLoader
         // Pass in the runTime variable to get the current frame.
-        batcher.draw(AssetLoader.birdAnimation.getKeyFrame(runTime),
-                bird.getX(), bird.getY(), bird.getWidth(), bird.getHeight());
-*/
+        batcher.draw(AssetLoader.carAnimation.getKeyFrame(runTime),
+                car.getX(), car.getY(), car.getWidth(), car.getHeight());
+
         // End SpriteBatch
         batcher.end();
 

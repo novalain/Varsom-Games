@@ -14,6 +14,7 @@ public class AssetLoader {
     public static Texture bgTexture;
     public static TextureRegion bg;
     public static TextureRegion car;
+    public static Animation carAnimation;
 
 
     public static void load() {
@@ -33,10 +34,10 @@ public class AssetLoader {
         car.flip(false, true);
 
   //    Animate an array of textureRegions to make the sprite object seem to move
-  //    TextureRegion[] birds = { birdDown, bird, birdUp };
-  /*      carAnimation = new Animation(0.06f, car);
+        TextureRegion[] cars = { car,car,car };
+        carAnimation = new Animation(0.06f, cars);
         carAnimation.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
-*/
+
     }
 
     public static void dispose() {

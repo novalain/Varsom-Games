@@ -46,7 +46,7 @@ public class InputHandler implements InputProcessor{
     }
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return false;
+      return false;
     }
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {

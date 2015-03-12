@@ -8,11 +8,10 @@ import gameobjects.Car;
 
 public class GameWorld {
     private Car car;
-    private Texture texture;
+   // private Texture texture;
 
     public GameWorld() {
-        texture = new Texture(Gdx.files.internal("img/Car.png"));
-        car = new Car(new Vector2(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2), new Vector2(0,0), new Vector2(0,0), texture);
+        car = new Car();
     }
 
     public void update(float delta) {
@@ -21,6 +20,5 @@ public class GameWorld {
 
     public Car getCar() {
         return car;
-
     }
 }
