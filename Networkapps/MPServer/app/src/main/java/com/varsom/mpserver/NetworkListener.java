@@ -1,15 +1,26 @@
 package com.varsom.mpserver;
 
+import android.widget.TextView;
+
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
+import com.varsom.mpserver.Packet.LoginAnswer;
+import com.varsom.mpserver.Packet.LoginRequest;
 
-import com.varsom.mpserver.Packet.*;
 
 /**
  * Created by christoffer on 2015-03-06.
  */
 public class NetworkListener extends Listener {
+
+
+    //private static final String TAG = NetworkListener.class.getSimpleName();
+    private TextView ourOutput;
+
+    public void init(TextView b) {
+        this.ourOutput = b;
+    }
 
     public void connected(Connection connection) {
         Log.info("[SERVER] Someone has connect.");
@@ -27,9 +38,12 @@ public class NetworkListener extends Listener {
             c.sendTCP(loginaccepted);
         }
         if (o instanceof LoginAnswer) {
-            String message = ((Message) o).message;
-            Log.info(message);
+            ourOutput.setText(((Packet.Message) o).message);
+            //Log.info(message);
+            //android.util.Log.d(TAG, message);
         }
 
     }
+
+
 }
