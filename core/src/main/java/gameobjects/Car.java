@@ -22,14 +22,44 @@ public class Car extends GameObject{
 
     }
 
+    private void checkBoundaries(){
+
+        if(position.x > Gdx.graphics.getWidth() - 50){
+
+            position.x = Gdx.graphics.getWidth() - 50;
+
+        }
+
+        else if(position.x < 0){
+
+            position.x = 0;
+
+        }
+        else if(position.y > Gdx.graphics.getHeight() - 74){
+
+            position.y = Gdx.graphics.getHeight() - 74;
+            velocity.y = -velocity.y*0.3f;
+        }
+
+        else if(position.y < 0){
+            position.y = 0;
+            velocity.y = -velocity.y*0.3f;
+        }
+
+    }
+
     // Update car position based on angle of gyro
     public void update(int angle, float delta) {
         // set velocity of the car according to acceleration
         velocity.add(acceleration.cpy().scl(delta));
-        Gdx.app.log("in Car", ""+velocity);
+        //Gdx.app.log("in Car", ""+velocity);
 
         // Set position to new value
         position.add(velocity.cpy().scl(delta));
+
+        // Check boundaries (Hard coded values for width and height of the sprite)
+        checkBoundaries();
+
     }
 
     // For spritebatch
