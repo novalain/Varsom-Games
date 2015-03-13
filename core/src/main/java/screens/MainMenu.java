@@ -18,8 +18,6 @@ import com.varsomgames.cargame.CarGame;
 
 import java.util.ArrayList;
 
-import screens.Splash;
-
 public class MainMenu implements Screen {
 
     private Stage stage = new Stage();
@@ -56,7 +54,7 @@ public class MainMenu implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.log("clicked", "pressed the PLAY button.");
-                ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen());
+                ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreenWPhysics());
             }
         });
 
