@@ -18,7 +18,7 @@ import com.badlogic.gdx.physics.box2d.World;
 public class Car extends GameObject{
 
     //private Texture carTexture;
-    private Body body;
+    public Body body;
     private Fixture fixture;
 
     //public Car(Vector2 position, Vector2 velocity, Vector2 acceleration, Texture texture){

@@ -15,8 +15,9 @@ import com.badlogic.gdx.physics.box2d.World;
 import gameobjects.Car;
 
 public class GameWorld {
-    private Car car;
+    public Car car;
     World physicsWorld;
+    boolean go;
    // private Texture texture;
 
     public GameWorld() {
@@ -24,6 +25,7 @@ public class GameWorld {
        // Box2D.init();
         physicsWorld = new World(new Vector2(0, 10), true);
         car = new Car(physicsWorld);
+        boolean go = false;
 
     }
 
@@ -31,6 +33,13 @@ public class GameWorld {
 
         physicsWorld.step(delta, 6, 2);
         car.update(Gdx.input.getAccelerometerY(), delta);
+
+        //give more speed
+        if(go) {
+            car.body.applyForceToCenter(0f,-10f,true);
+        }
+        else
+            car.body.applyForceToCenter(0f,10f,true);
 
         //Gdx.app.log("Acc i X:", Gdx.input.getAccelerometerX() + "");
        // Gdx.app.log("Acc i Y:", Gdx.input.getAccelerometerY() + "");
@@ -49,6 +58,13 @@ public class GameWorld {
 
         physicsWorld.dispose();
 
+    }
+
+    public void accelerate(boolean tuching){
+        if(tuching)
+            go = true;
+        else
+            go = false;
     }
 
 }
