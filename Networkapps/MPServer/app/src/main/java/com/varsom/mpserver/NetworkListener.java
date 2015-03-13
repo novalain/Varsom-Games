@@ -14,8 +14,6 @@ import com.varsom.mpserver.Packet.LoginRequest;
  */
 public class NetworkListener extends Listener {
 
-
-    //private static final String TAG = NetworkListener.class.getSimpleName();
     private TextView ourOutput;
 
     public void init(TextView b) {
@@ -37,10 +35,10 @@ public class NetworkListener extends Listener {
             // Send a packet back
             c.sendTCP(loginaccepted);
         }
-        if (o instanceof LoginAnswer) {
-            ourOutput.setText(((Packet.Message) o).message);
+        if (o instanceof Packet.Message) {
+            //ourOutput.setText(((Packet.Message) o).message);
+            String message = ((Packet.Message) o).message;
             //Log.info(message);
-            //android.util.Log.d(TAG, message);
         }
 
     }

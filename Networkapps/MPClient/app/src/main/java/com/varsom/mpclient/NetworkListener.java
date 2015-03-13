@@ -11,7 +11,7 @@ import com.varsom.mpclient.Packet.LoginRequest;
 import com.varsom.mpclient.Packet.Message;
 
 /**
- * Created by christoffer on 2015-03-06.
+ *
  */
 public class NetworkListener extends Listener {
 
@@ -44,26 +44,25 @@ public class NetworkListener extends Listener {
     }
 
     public void received(Connection c, Object o) {
-        if (o instanceof LoginRequest) {
+        // checks for login answers from server
+        if (o instanceof LoginAnswer) {
             Boolean answer = ((LoginAnswer) o).accepted;
-
+            System.out.println("PREANSWER");
 
             if (answer) {
-
+                System.out.println("ANSWER");
                 Message sendMessage = new Message();
-
-                sendMessage.message = ourMessage.getText().toString();
-
-                client.sendTCP(sendMessage);
-
-                ourOutput.append("Hello");
+                //sendMessage.message = ourMessage.getText().toString();
+                sendMessage.message = "YES";
+                c.sendTCP(sendMessage);
 
             }else {
                 c.close();
                 ourOutput.append("Nothing");
             }
-        }
-    }
 
+        }
+
+    }
 
 }

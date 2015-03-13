@@ -18,10 +18,10 @@
     <Button
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:text="Send"
-        android:id="@+id/sendButton"
+        android:text="Connect"
+        android:id="@+id/connect"
         android:onClick="textSetter"
-        android:layout_below="@+id/sendMessage"
+        android:layout_above="@+id/sendmessage"
         android:layout_centerHorizontal="true" />
 
     <EditText
@@ -38,7 +38,16 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text=""
         android:id="@+id/textField"
-        android:layout_below="@+id/sendButton"
+        android:layout_below="@+id/connect"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send message"
+        android:id="@+id/sendmessage"
+        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

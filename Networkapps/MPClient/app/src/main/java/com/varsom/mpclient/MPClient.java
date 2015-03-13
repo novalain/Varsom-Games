@@ -7,14 +7,12 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 
 import java.io.IOException;
-import java.net.InetAddress;
 
 /**
- * Created by christoffer on 2015-03-06.
+ *
  */
 public class MPClient {
     public Client client;
-    //public Scanner scanner;
 
     public MPClient(EditText ip, EditText o , TextView b) throws IOException {
         client = new Client();
@@ -22,6 +20,7 @@ public class MPClient {
 
         NetworkListener nl = new NetworkListener();
 
+        // Initialise variables (not sure if it needs, maybe later)
         nl.init(client, ip, o, b);
 
         client.addListener(nl);
@@ -31,15 +30,13 @@ public class MPClient {
         try{
             b.setText("");
             b.append("Connected");
-            //InetAddress add = check();
+            //check();
+            //InetAddress address = client.discoverHost(54555, 64555);
+            //System.out.println("HOST: " + address);
+
             //System.out.println(ip.getText().toString());
             System.out.println("FUNC: MPClinet, try");
             client.connect(50000,ip.getText().toString(), 54555, 64555);
-
-            //client.connect(50000,"130.236.86.116", 54555, 64555);
-            //client.connect(50000, add, 54555, 54666);
-
-            // 130.236.86.116
         }
         catch(IOException e){
             e.printStackTrace();
@@ -47,21 +44,17 @@ public class MPClient {
             b.setText("");
             b.append("Connect doesn't work");
         }
-
     }
 
-    /*public void stop() {
-        client.stop();
-    }*/
-
-    public InetAddress check(){
+/*
+    // Looks for opened servers within a port. Currently not working.
+    public void check(){
         InetAddress address = client.discoverHost(54666, 50000);
         System.out.println("HOST: " + address);
 
-        return address;
-
     }
-
+*/
+    // Register packets to a kryo
     private void register() {
         Kryo kryo = client.getKryo();
         // Register packets

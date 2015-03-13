@@ -20,23 +20,24 @@ import static com.varsom.mpclient.R.id.textField;
 public class MainActivity extends ActionBarActivity {
 
     public MPClient client;
-    //public Scanner scanner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Make it possible to change network code in other class files
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final Button button = (Button) findViewById(R.id.sendButton);
+        // Connect buttons and textfields from xml file
+        final Button connect = (Button) findViewById(R.id.connect);
         final EditText ipAddress = (EditText)findViewById(R.id.sendIp);
         final EditText textMessage = (EditText)findViewById(R.id.sendMessage);
         final TextView t=(TextView)findViewById(textField);
 
-
-        button.setOnClickListener(new View.OnClickListener() {
+        // Start a client and tries to connect to a server
+        connect.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
 
                 try {
@@ -45,15 +46,11 @@ public class MainActivity extends ActionBarActivity {
 
                 } catch (IOException e) {
                     e.printStackTrace();
-                    //client.stop();
                 }
-
             }
-
         });
 
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
