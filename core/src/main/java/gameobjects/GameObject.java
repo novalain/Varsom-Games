@@ -28,7 +28,7 @@ public abstract class GameObject {
         this.height = height;
         position = new Vector2(x, y);
         velocity = new Vector2(0, 0);
-        acceleration = new Vector2(0, 100);
+        acceleration = new Vector2(0, 0);
     }
 
     // Get functions

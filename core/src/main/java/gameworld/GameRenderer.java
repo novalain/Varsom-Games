@@ -15,7 +15,7 @@ import helpers.AssetLoader;
 public class GameRenderer {
     // get a camera object creating a 2D-field
     private OrthographicCamera cam;
-    private GameWorld myWorld;
+    private GameWorld gameWorld;
     private ShapeRenderer shapeRenderer;
 
     private SpriteBatch batcher;
@@ -27,13 +27,13 @@ public class GameRenderer {
         screenHeight = Gdx.graphics.getHeight();
         screenWidth = Gdx.graphics.getWidth();
 
-        myWorld = world;
+        gameWorld = world;
         cam = new OrthographicCamera();
         cam.setToOrtho(true, screenWidth, screenHeight);
 
         batcher = new SpriteBatch();
 
-        // attach batcher to camera
+        //attach batcher to camera
 
         batcher.setProjectionMatrix(cam.combined);
 
@@ -43,7 +43,7 @@ public class GameRenderer {
     }
     public void render(float runTime){
         // We will move these outside of the loop for performance later.
-        Car car = myWorld.getCar();
+        Car car = gameWorld.getCar();
         cam.position.set(car.getPosition().x,car.getPosition().y, 0);
         cam.update();
         Gdx.gl.glClearColor(0, 0, 0.3f, 1); // Creating black background
