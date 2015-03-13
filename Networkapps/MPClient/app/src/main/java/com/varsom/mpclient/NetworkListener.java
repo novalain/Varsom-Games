@@ -52,8 +52,7 @@ public class NetworkListener extends Listener {
             if (answer) {
                 System.out.println("ANSWER");
                 Message sendMessage = new Message();
-                //sendMessage.message = ourMessage.getText().toString();
-                sendMessage.message = "YES";
+                sendMessage.message = ourMessage.getText().toString();
                 c.sendTCP(sendMessage);
 
             }else {

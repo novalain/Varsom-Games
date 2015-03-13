@@ -15,6 +15,7 @@ public class MPServer {
 
     public MPServer(TextView b) throws IOException {
         server = new Server();
+
         registerPackets();
 
         //server.addListener(new NetworkListener());
@@ -22,9 +23,9 @@ public class MPServer {
         NetworkListener nl = new NetworkListener();
         nl.init(b);
         server.addListener(nl);
+
         //TCP, UDP
         server.bind(54555, 64555);
-
 
         server.start();
     }

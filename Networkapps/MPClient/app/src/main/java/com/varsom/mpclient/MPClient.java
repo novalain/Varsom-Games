@@ -7,6 +7,7 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 
 import java.io.IOException;
+import java.net.InetAddress;
 
 /**
  *
@@ -20,22 +21,23 @@ public class MPClient {
 
         NetworkListener nl = new NetworkListener();
 
-        // Initialise variables (not sure if it needs, maybe later)
+        // Initialise variables (not sure if it needed, maybe later)
         nl.init(client, ip, o, b);
 
         client.addListener(nl);
 
         client.start();
 
+        System.setProperty("java.net.preferIPv4Stack" , "true");
+
         try{
             b.setText("");
             b.append("Connected");
             //check();
-            //InetAddress address = client.discoverHost(54555, 64555);
-            //System.out.println("HOST: " + address);
+            InetAddress address = client.discoverHost(62555, 50000);
+            System.out.println("HOST: " + address);
 
-            //System.out.println(ip.getText().toString());
-            System.out.println("FUNC: MPClinet, try");
+            //System.out.println("FUNC: MPClinet, try");
             client.connect(50000,ip.getText().toString(), 54555, 64555);
         }
         catch(IOException e){
@@ -46,14 +48,14 @@ public class MPClient {
         }
     }
 
-/*
+
     // Looks for opened servers within a port. Currently not working.
     public void check(){
-        InetAddress address = client.discoverHost(54666, 50000);
+        InetAddress address = client.discoverHost(65555, 50000);
         System.out.println("HOST: " + address);
 
     }
-*/
+
     // Register packets to a kryo
     private void register() {
         Kryo kryo = client.getKryo();

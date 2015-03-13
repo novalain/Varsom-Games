@@ -1,7 +1,7 @@
 package com.varsom.mpclient;
 
 /**
- * 
+ *
  */
 public class Packet {
     public static class LoginRequest { }
