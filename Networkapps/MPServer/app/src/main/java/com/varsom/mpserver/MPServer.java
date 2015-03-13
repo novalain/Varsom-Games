@@ -8,7 +8,7 @@ import com.esotericsoftware.kryonet.Server;
 import java.io.IOException;
 
 /**
- * Created by christoffer on 2015-03-06.
+ *
  */
 public class MPServer {
     private Server server;
@@ -22,9 +22,9 @@ public class MPServer {
         NetworkListener nl = new NetworkListener();
         nl.init(b);
         server.addListener(nl);
-
-        server.bind(54555, 64555);
         //TCP, UDP
+        server.bind(54555, 64555);
+
 
         server.start();
     }

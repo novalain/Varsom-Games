@@ -18,38 +18,35 @@ import static com.esotericsoftware.minlog.Log.LEVEL_DEBUG;
 public class MainActivity extends ActionBarActivity {
 
     MPServer server;
-    private static final String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //The buttons and the textviews are imported from the XML-file
         final Button serverStart = (Button) findViewById(R.id.start);
         final Button serverStop = (Button) findViewById(R.id.stop);
         final TextView textElement = (TextView) findViewById(R.id.textView);
         final TextView textMessage = (TextView) findViewById(R.id.textmessage);
 
-
+        //Start a server if the button "Start server" is clicked
         serverStart.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
                 try {
                     server = new MPServer(textMessage);
-                    //new MPServer(textMessage);
-                    //Log.in);
                     textElement.setText("Server is running"); //leave this line to assign a specific text
-                    //android.util.Log.d(TAG, me);
                     Log.set(LEVEL_DEBUG);
 
                 } catch (IOException e) {
                     e.printStackTrace();
                     textElement.setText("Something went wrong");
-                    android.util.Log.d(TAG, "ERROR");
                 }
             }
         });
 
+        //Stop the server if the button "Stop server" is clicked
         serverStop.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 

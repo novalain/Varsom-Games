@@ -8,20 +8,23 @@ import com.esotericsoftware.minlog.Log;
 import com.varsom.mpserver.Packet.LoginAnswer;
 import com.varsom.mpserver.Packet.LoginRequest;
 
+import static com.varsom.mpserver.Packet.Message;
+
 
 /**
- * Created by christoffer on 2015-03-06.
+ *
  */
 public class NetworkListener extends Listener {
 
     private TextView ourOutput;
 
     public void init(TextView b) {
-        this.ourOutput = b;
+        ourOutput = b;
     }
 
     public void connected(Connection connection) {
         Log.info("[SERVER] Someone has connect.");
+
     }
 
     public void disconnected(Connection connection) {
@@ -29,16 +32,24 @@ public class NetworkListener extends Listener {
     }
 
     public void received(Connection c, Object o) {
-        if (o instanceof LoginRequest) {
+        //if a LoginRequest is sent from the client, accept the request
+        if (o instanceof LoginRequest ) {
             LoginAnswer loginaccepted = new LoginAnswer();
             loginaccepted.accepted = true;
-            // Send a packet back
+            // Send the packet back with the variable login.accepted, that is now true
             c.sendTCP(loginaccepted);
+            //Write in the log if login was successful
+            System.out.println("Login is accepted");
         }
-        if (o instanceof Packet.Message) {
+        //Message is received from the client
+        if (o instanceof Message) {
             //ourOutput.setText(((Packet.Message) o).message);
-            String message = ((Packet.Message) o).message;
-            //Log.info(message);
+
+            //The received message is saved in a string
+            String message = ((Message) o).message;
+
+            //Writes the message in the log
+            System.out.println("MESSAGE: " + message);
         }
 
     }
