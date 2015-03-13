@@ -14,11 +14,13 @@ import gameobjects.Car;
  */
 public class InputHandler implements InputProcessor{
     private Car myCar;
+    boolean touchingGas;
 
     // Ask for a reference to the car when InputHandler is created.
     public InputHandler(Car car) {
         // myCar now represents the gameWorld's car.
         myCar = car;
+
     }
 
     // Function to check if screen is touched
@@ -26,6 +28,7 @@ public class InputHandler implements InputProcessor{
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         myCar.onTouch();
         Gdx.app.log("in Handler", "touched true");
+        touchingGas = true;
         return true; // return true to say there's been a touch event
     }
 
@@ -46,7 +49,8 @@ public class InputHandler implements InputProcessor{
     }
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-      return false;
+        touchingGas = false;
+        return false;
     }
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {

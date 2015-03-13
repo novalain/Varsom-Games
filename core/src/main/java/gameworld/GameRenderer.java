@@ -15,7 +15,7 @@ import helpers.AssetLoader;
 public class GameRenderer {
     // get a camera object creating a 2D-field
     private OrthographicCamera cam;
-    private GameWorld myWorld;
+    private GameWorld gameWorld;
     private ShapeRenderer shapeRenderer;
 
     private SpriteBatch batcher;
@@ -27,13 +27,13 @@ public class GameRenderer {
         screenHeight = Gdx.graphics.getHeight();
         screenWidth = Gdx.graphics.getWidth();
 
-        myWorld = world;
+        gameWorld = world;
         cam = new OrthographicCamera();
         cam.setToOrtho(true, screenWidth, screenHeight);
 
         batcher = new SpriteBatch();
 
-        // attach batcher to camera
+        //attach batcher to camera
 
         batcher.setProjectionMatrix(cam.combined);
 
@@ -43,11 +43,24 @@ public class GameRenderer {
     }
     public void render(float runTime){
         // We will move these outside of the loop for performance later.
-        Car car = myWorld.getCar();
+        Car car = gameWorld.getCar();
         cam.position.set(car.getPosition().x,car.getPosition().y, 0);
         cam.update();
         Gdx.gl.glClearColor(0, 0, 0.3f, 1); // Creating black background
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        /*
+        // apply torque generated from input
+        gameWorld.car.body.applyTorque(torque,true);
+
+        // Set the sprite's position from the updated physics body location
+        gameWorld.sprite.setPosition((gameWorld.car.body.getPosition().x * myWorld.PIXELS_TO_METERS) - myWorld.sprite.
+                        getWidth()/2 ,
+                (gameWorld.car.body.getPosition().y * myWorld.PIXELS_TO_METERS) - myWorld.sprite.getHeight()/2 )
+        ;
+        // Ditto for rotation
+        myWorld.sprite.setRotation((float)Math.toDegrees(gameWorld.car.body.getAngle()));
+        */
 
 
 /*      To create background color or "outside the sprite"-color, use this code
@@ -80,6 +93,13 @@ public class GameRenderer {
         // Pass in the runTime variable to get the current frame.
         batcher.draw(AssetLoader.carAnimation.getKeyFrame(runTime),
                 car.getPosition().x, car.getPosition().y, car.getWidth()/2, car.getHeight()/2, car.getWidth(), car.getHeight(), 1, 1, car.getVelocity().x/10);
+
+        /*
+        batch.draw(sprite, sprite.getX(), sprite.getY(),sprite.getOriginX(),
+                       sprite.getOriginY(),
+                sprite.getWidth(),sprite.getHeight(),sprite.getScaleX(),sprite.
+                                getScaleY(),sprite.getRotation());
+         */
 
         // End SpriteBatch
         batcher.end();
