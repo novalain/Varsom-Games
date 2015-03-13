@@ -13,22 +13,21 @@ import gameobjects.Car;
  * Handlig input such as gyro and tough event
  */
 public class InputHandler implements InputProcessor{
-    private Car myCar;
-    boolean touchingGas;
+    private Car car;
+    public boolean touchingGas;
 
     // Ask for a reference to the car when InputHandler is created.
     public InputHandler(Car car) {
         // myCar now represents the gameWorld's car.
-        myCar = car;
+        this.car = car;
 
     }
 
     // Function to check if screen is touched
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        myCar.onTouch();
-        Gdx.app.log("in Handler", "touched true");
-        touchingGas = true;
+        car.onTouchDown();
+        //touchingGas = true;
         return true; // return true to say there's been a touch event
     }
 
@@ -49,8 +48,8 @@ public class InputHandler implements InputProcessor{
     }
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        touchingGas = false;
-        return false;
+        car.onTouchUp();
+        return true;
     }
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
