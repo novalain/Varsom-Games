@@ -15,11 +15,14 @@ import com.badlogic.gdx.physics.box2d.World;
  * Created by Alice on 2015-03-11.
  */
 
+// TODO: Apply force not working..
+
 public class Car extends GameObject{
 
     //private Texture carTexture;
-    public Body body;
+    private Body body;
     private Fixture fixture;
+    private boolean accelerate;
 
     //public Car(Vector2 position, Vector2 velocity, Vector2 acceleration, Texture texture){
     public Car(World physicsWorld){
@@ -107,17 +110,25 @@ public class Car extends GameObject{
 
         // Check boundaries (Hard coded values for width and height of the sprite)
         checkBoundaries();
-        setPosition(new Vector2(body.getPosition().x, body.getPosition().y));
 
+        if(accelerate){
+           // body.applyForceToCenter(0f,-100f,true);
+            body.applyForceToCenter(new Vector2(0, -500), true);
+            Gdx.app.log("in Handler", "touched true");
+        }
+
+        setPosition(new Vector2(body.getPosition().x, body.getPosition().y));
 
     }
 
-    // For spritebatch
-   //public Texture getTexture(){return carTexture;    }
-
     // If the speed button has been touched, increase velocity
-    public void onTouch(){
-        this.velocity.y -= 100;
+    public void onTouchDown(){
+       // this.velocity.y -= 100;
+        accelerate = true;
+    }
+
+    public void onTouchUp(){
+        accelerate = false;
     }
 
     public Body getBody(){
