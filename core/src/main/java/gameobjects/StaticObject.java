@@ -13,11 +13,11 @@ public abstract class StaticObject extends PhysicalGameObject{
 
     public StaticObject(Vector2 position, Shape shape, Sprite sprite, World world){
         super(position, shape, sprite,world);
-        this.bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.type = BodyDef.BodyType.StaticBody;
     }
     public StaticObject(float x, float y, Shape shape, Sprite sprite, World world){
         super(new Vector2(x,y), /*width, height,*/ shape,sprite, world);
-        this.bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.type = BodyDef.BodyType.StaticBody;
     }
 
 }

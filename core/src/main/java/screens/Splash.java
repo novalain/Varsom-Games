@@ -12,22 +12,26 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
+import helpers.AssetLoader;
+
 public class Splash implements Screen {
-    private Texture texture = new Texture(Gdx.files.internal("img/splashscreen.png"));
-    private Image splashImage = new Image(texture);
-    private Stage stage = new Stage();
+    private Texture splashTexture;
+    private Image splashImage;
+    private Stage stage;
 
     @Override
     public void show() {
          //If your image is not the same size as your screen
-        Gdx.app.log("Screen","width"+Gdx.graphics.getWidth());
-        Gdx.app.log("Screen","height"+Gdx.graphics.getHeight());
+        //Gdx.app.log("Screen","width"+Gdx.graphics.getWidth());
+        //Gdx.app.log("Screen","height"+Gdx.graphics.getHeight());
         // Set position of splash image
-        splashImage.setX(0);
-        splashImage.setY(0);
-
+        splashTexture = new Texture(Gdx.files.internal("img/splashscreen.png"));
+        splashImage =  new Image(splashTexture);
+        splashImage.setX( (Gdx.graphics.getWidth()-splashImage.getWidth())/2);
+        splashImage.setY( (Gdx.graphics.getHeight()-splashImage.getHeight())/2);
+        stage = new Stage();
         stage.addActor(splashImage); //adds the image as an actor to the stage
-        splashImage.addAction(Actions.sequence(Actions.alpha(0), Actions.fadeIn(0.5f), Actions.delay(2), Actions.run(new Runnable() {
+        splashImage.addAction(Actions.sequence(Actions.alpha(0), Actions.fadeIn(0.5f), Actions.delay(1), Actions.run(new Runnable() {
             @Override
             public void run() {
                 ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu());
@@ -66,7 +70,7 @@ public class Splash implements Screen {
 
     @Override
     public void dispose() {
-        texture.dispose();
+        splashTexture.dispose();
         stage.dispose();
     }
 }

@@ -6,6 +6,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.World;
 
+import helpers.AssetLoader;
+
 /**
  * Created by oskarcarlbaum on 18/03/15.
  */
@@ -13,7 +15,7 @@ public class TireObstacle extends StaticObject {
     private float radius;
 
     public TireObstacle(Vector2 inPosition, float inRadius,World inWorld){
-        super(inPosition,new CircleShape(),new Sprite(new Texture("img/tire.png")),inWorld);
+        super(inPosition,new CircleShape(),new Sprite(AssetLoader.tireTexture),inWorld);
         radius = inRadius;
         shape.setRadius(radius);
         sprite.setSize(radius * 2, radius * 2);

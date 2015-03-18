@@ -1,10 +1,9 @@
 package com.varsomgames.cargame;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.MathUtils;
 
 import helpers.AssetLoader;
+import Tracks.TestTrack;
 import screens.Splash;
 
 public class CarGame extends Game {
@@ -20,10 +19,10 @@ public class CarGame extends Game {
 	@Override
 	public void create () {
 
-        int screenWidth = Gdx.graphics.getWidth();
-        int screenHeight = Gdx.graphics.getHeight();
-        String message = "Widtdh: "+Integer.toString(screenWidth) +"  and Height: "+ Integer.toString(screenHeight);
-        Gdx.app.log("screen size", message);
+        //int screenWidth = Gdx.graphics.getWidth();
+        //int screenHeight = Gdx.graphics.getHeight();
+        //String message = "Widtdh: "+Integer.toString(screenWidth) +"  and Height: "+ Integer.toString(screenHeight);
+        //Gdx.app.log("screen size", message);
 
         // load assets
         AssetLoader.load();

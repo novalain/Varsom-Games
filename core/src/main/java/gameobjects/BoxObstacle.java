@@ -1,0 +1,37 @@
+package gameobjects;
+
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.Shape;
+import com.badlogic.gdx.physics.box2d.World;
+
+import helpers.AssetLoader;
+
+/**
+ * Created by oskarcarlbaum on 18/03/15.
+ */
+public class BoxObstacle extends StaticObject{
+    private Vector2 size;
+    private float width, height;
+
+    public BoxObstacle(Vector2 inPosition, Vector2 inSize,World inWorld){
+        super(inPosition,new PolygonShape(),new Sprite(AssetLoader.tireTexture),inWorld);
+        size = inSize;
+        width = inSize.x;
+        height = inSize.y;
+
+        //we have to parse the Shape to a PolygonShape in order to access the .setAsBox method
+        ((PolygonShape) shape).setAsBox(width/2f,height/2f);
+
+        sprite.setSize(width, height);
+        sprite.setOriginCenter();
+
+        fixtureDef.shape = shape;
+        fixtureDef.density = 2.0f;
+        fixtureDef.friction = 0.5f;     //value between 0-1
+        fixtureDef.restitution = 0.99f; //value between 0-1
+        addObjectToWorld();
+        shape.dispose();
+    }
+}

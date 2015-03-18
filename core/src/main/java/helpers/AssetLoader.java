@@ -10,7 +10,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  * textureRegions are several
  */
 public class AssetLoader {
-    public static Texture texture;
+    public static Texture carTexture;
+    public static Texture tireTexture;
+    public static Texture testTrackTexture;
     public static Texture bgTexture;
     public static TextureRegion bg;
     public static TextureRegion car;
@@ -19,18 +21,22 @@ public class AssetLoader {
 
     public static void load() {
         // loading texture for car
-        texture = new Texture(Gdx.files.internal("img/Car.png"));
-        texture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        carTexture = new Texture(Gdx.files.internal("img/Car.png"));
+        carTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+
+        tireTexture = new Texture("img/tire.png");
 
         // Guessing bg is background
         bgTexture = new Texture(Gdx.files.internal("img/temp_background.png"));
         bgTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
+        testTrackTexture = new Texture("img/tracks/temptrack.png");
+
         bg = new TextureRegion(bgTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         bg.flip(false, true); // Flip the sprite vertically to fit coordinate system Y-down
 
         // Texture size of car.png is 50*74 px
-        car = new TextureRegion(texture, 0, 0, 50, 74);
+        car = new TextureRegion(carTexture, 0, 0, 50, 74);
         car.flip(false, true);
 
   //    Animate an array of textureRegions to make the sprite object seem to move
@@ -42,6 +48,6 @@ public class AssetLoader {
 
     public static void dispose() {
         // We must dispose of the texture when we are finished.
-        texture.dispose();
+        carTexture.dispose();
     }
 }
