@@ -14,12 +14,14 @@ import static com.varsom.mpserver.Packet.Message;
 /**
  *
  */
-public class NetworkListener extends Listener {
+public class  NetworkListener extends Listener {
 
     private TextView ourOutput;
+    public String message;
 
     public void init(TextView b) {
         ourOutput = b;
+        message = "";
     }
 
     public void connected(Connection connection) {
@@ -46,10 +48,13 @@ public class NetworkListener extends Listener {
             //ourOutput.setText(((Packet.Message) o).message);
 
             //The received message is saved in a string
-            String message = ((Message) o).message;
+            message = ((Message) o).message;
 
             //Writes the message in the log
-            System.out.println("MESSAGE: " + message);
+            //System.out.println("MESSAGE: " + message);
+
+            ourOutput.setText("Hej");
+
         }
 
     }

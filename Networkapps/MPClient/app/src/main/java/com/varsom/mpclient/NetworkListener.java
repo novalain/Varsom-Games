@@ -33,7 +33,7 @@ public class NetworkListener extends Listener {
     public void connected(Connection connection) {
         System.out.println("FUNC: connect");
         client.sendTCP(new LoginRequest());
-        //ourOutput.setText("");
+        ourOutput.setText("");
         ourOutput.append("You have connected.");
 
     }
@@ -52,8 +52,7 @@ public class NetworkListener extends Listener {
             if (answer) {
                 System.out.println("ANSWER");
                 Message sendMessage = new Message();
-                //sendMessage.message = ourMessage.getText().toString();
-                sendMessage.message = "YES";
+                sendMessage.message = ourMessage.getText().toString();
                 c.sendTCP(sendMessage);
 
             }else {

@@ -1,5 +1,8 @@
 package com.varsom.mpserver;
 
+import android.content.Context;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -30,13 +33,24 @@ public class MainActivity extends ActionBarActivity {
         final TextView textElement = (TextView) findViewById(R.id.textView);
         final TextView textMessage = (TextView) findViewById(R.id.textmessage);
 
+        WifiManager wifi = (WifiManager)getSystemService(WIFI_SERVICE);
+        WifiInfo connectionInfo = wifi.getConnectionInfo();
+        int ip = connectionInfo.getIpAddress();
+        final String IP = String.format(
+                "%d.%d.%d.%d",
+                (ip & 0xff),
+                (ip >> 8 & 0xff),
+                (ip >> 16 & 0xff),
+                (ip >> 24 & 0xff));
+
         //Start a server if the button "Start server" is clicked
         serverStart.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
                 try {
                     server = new MPServer(textMessage);
-                    textElement.setText("Server is running"); //leave this line to assign a specific text
+                    textElement.setText("Server is running and your IP Adress is: "); //leave this line to assign a specific text
+                    textElement.append(IP);
                     Log.set(LEVEL_DEBUG);
 
                 } catch (IOException e) {
