@@ -111,9 +111,11 @@ public class Car extends GameObject{
         // Check boundaries (Hard coded values for width and height of the sprite)
         checkBoundaries();
 
+        //Gdx.app.log("body.tye", body.pos);
+
         if(accelerate){
            // body.applyForceToCenter(0f,-100f,true);
-            body.applyForceToCenter(new Vector2(0, -500), true);
+            body.applyForceToCenter(new Vector2(0, -200), true);
             Gdx.app.log("in Handler", "touched true");
         }
 
@@ -128,6 +130,7 @@ public class Car extends GameObject{
     }
 
     public void onTouchUp(){
+
         accelerate = false;
     }
 

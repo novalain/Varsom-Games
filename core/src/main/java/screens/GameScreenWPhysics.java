@@ -15,12 +15,12 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 
-import gameobjects.StaticObstacle;
+import gameobjects.Car;
 import gameobjects.TireObstacle;
+import gameobjects.tempCar;
 
 /**
  * Created by Alice on 2015-03-11.
@@ -28,6 +28,7 @@ import gameobjects.TireObstacle;
 public class GameScreenWPhysics implements Screen{
     // Class variables
     private World world;
+    private tempCar car;
     private Box2DDebugRenderer debugRenderer;
     private OrthographicCamera camera;
 
@@ -51,44 +52,15 @@ public class GameScreenWPhysics implements Screen{
 
         batch = new SpriteBatch();
 
-        //**** Denna car är bara temporär.. smileyn är car ;)
-            //circle shape
-            CircleShape circleShape = new CircleShape();
-            circleShape.setRadius(0.5f);
-
-            //Car Fixture
-            FixtureDef carFixtureDef = new FixtureDef();
-            carFixtureDef.shape = circleShape;
-            carFixtureDef.density = 2.0f;
-            carFixtureDef.friction = 0.5f;     //value between 0-1
-            carFixtureDef.restitution = 0.99f; //value between 0-1
-
-            BodyDef carDef = new BodyDef();
-
-            carDef.type = BodyDef.BodyType.DynamicBody;
-            carDef.position.set(1.0f,-2.0f);
-
-            smileySprite = new Sprite(new Texture("img/smiley.png"));
-            smileySprite.setSize(circleShape.getRadius()*2,circleShape.getRadius()*2);
-            smileySprite.setOriginCenter();
-
-            Body car = world.createBody(carDef);
-            Fixture fixtCar = car.createFixture(carFixtureDef);
-            car.setUserData(smileySprite);
-            car.setTransform(0.0f, 0.0f, 0);
-            car.applyForceToCenter(12.0f,-11.0f,true);
-        ///SLUT PÅ CAR-smiley
+        car = new tempCar(new Vector2(1.f, -2.0f), 0.5f, world);
 
         TireObstacle tire = new TireObstacle(new Vector2(0.0f,-1.6f),1.5f,world);
         TireObstacle tire2= new TireObstacle(new Vector2(0.0f,1.6f),0.5f,world);
         TireObstacle tire3= new TireObstacle(new Vector2(-1.3f,0.20f),0.5f,world);
         TireObstacle tire4= new TireObstacle(new Vector2(1.3f,0.20f),0.5f,world);
-        /*wall.addObjectToWorld(world);
-        wall.getBody().createFixture(wall.getFixtureDef());*/
 
-
-        circleShape.dispose();
     }
+
     @Override
     public void render(float delta) {
        /* runTime+=delta;

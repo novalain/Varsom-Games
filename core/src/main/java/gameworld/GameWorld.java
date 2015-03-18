@@ -23,7 +23,7 @@ public class GameWorld {
     public GameWorld() {
 
        // Box2D.init();
-        physicsWorld = new World(new Vector2(0, 10), true);
+        physicsWorld = new World(new Vector2(0, 0), true);
         car = new Car(physicsWorld);
        // boolean go = false;
 
@@ -31,8 +31,9 @@ public class GameWorld {
 
     public void update(float delta) {
 
-        physicsWorld.step(delta, 6, 2);
-        car.update(Gdx.input.getAccelerometerY(), delta);
+        physicsWorld.step(1/60f, 6, 2);
+
+        car.update(Gdx.input.getAccelerometerY(), 1/60f);
 
         /*//give more speed
         if(go) {

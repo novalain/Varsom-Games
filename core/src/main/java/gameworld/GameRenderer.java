@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 
 import gameobjects.Car;
 import helpers.AssetLoader;
@@ -77,6 +78,7 @@ public class GameRenderer {
         // Begin SpriteBatch
         batcher.begin();
         batcher.setProjectionMatrix(cam.combined);
+
         // Disable transparency
         // This is good for performance when drawing images that do not require
         // transparency.
@@ -91,15 +93,11 @@ public class GameRenderer {
         // Draw car at its coordinates, set rotation around middle based on car x-velocity, no scaling.
         // Retrieve the Animation object from Assetloader
         // Pass in the runTime variable to get the current frame.
+
+
         batcher.draw(AssetLoader.carAnimation.getKeyFrame(runTime),
                 car.getPosition().x, car.getPosition().y, car.getWidth()/2, car.getHeight()/2, car.getWidth(), car.getHeight(), 1, 1, car.getVelocity().x/10);
 
-        /*
-        batch.draw(sprite, sprite.getX(), sprite.getY(),sprite.getOriginX(),
-                       sprite.getOriginY(),
-                sprite.getWidth(),sprite.getHeight(),sprite.getScaleX(),sprite.
-                                getScaleY(),sprite.getRotation());
-         */
 
         // End SpriteBatch
         batcher.end();
