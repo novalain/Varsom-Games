@@ -3,6 +3,7 @@ package helpers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import gameobjects.Car;
+import gameobjects.tempCar;
 /**
  * Created by Alice on 2015-03-12.
  */
@@ -13,19 +14,23 @@ import gameobjects.Car;
  * Handlig input such as gyro and tough event
  */
 public class InputHandler implements InputProcessor{
-    private Car car;
-    public boolean touchingGas;
+    private tempCar car;
 
+    // Ask for a reference to the car when InputHandler is created.
+    public InputHandler(tempCar car) {
+        this.car = car;
+
+    }
     // Ask for a reference to the car when InputHandler is created.
     public InputHandler(Car car) {
         // myCar now represents the gameWorld's car.
-        this.car = car;
 
     }
 
     // Function to check if screen is touched
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+       // Gdx.app.log("inputhandler", "touched");
         car.onTouchDown();
         //touchingGas = true;
         return true; // return true to say there's been a touch event
@@ -48,7 +53,7 @@ public class InputHandler implements InputProcessor{
     }
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        car.onTouchUp();
+       // car.onTouchUp();
         return true;
     }
     @Override

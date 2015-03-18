@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.Array;
 import gameobjects.Car;
 import gameobjects.TireObstacle;
 import gameobjects.tempCar;
+import helpers.InputHandler;
 
 /**
  * Created by Alice on 2015-03-11.
@@ -52,6 +53,10 @@ public class GameScreenWPhysics implements Screen{
         debugRenderer = new Box2DDebugRenderer();
         int SCREEN_WIDTH = Gdx.graphics.getWidth();
         int SCREEN_HEIGHT = Gdx.graphics.getHeight();
+
+        car = new tempCar(new Vector2(0.25f, -2.0f), 0.5f, world);
+        Gdx.input.setInputProcessor(new InputHandler(car));
+
         camera = new OrthographicCamera(SCREEN_WIDTH/100,SCREEN_HEIGHT/100);
 
        // camera.setToOrtho(true, Gdx.graphics.getWidth()/100, Gdx.graphics.getHeight()/100);
@@ -60,8 +65,6 @@ public class GameScreenWPhysics implements Screen{
         batch.setProjectionMatrix(camera.combined);
 
      //   batch.setProjectionMatrix(camera.combined);
-
-        car = new tempCar(new Vector2(0.25f, -2.0f), 0.5f, world);
 
         tire = new TireObstacle(new Vector2(0.0f,-1.6f),1.5f,world);
         tire2 = new TireObstacle(new Vector2(0.0f,1.6f),0.5f,world);
@@ -91,7 +94,6 @@ public class GameScreenWPhysics implements Screen{
 
         batch.end();
 
-        handleInput();
 
         world.step(TIMESTEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 
@@ -137,4 +139,5 @@ public class GameScreenWPhysics implements Screen{
     public void dispose() {
         // Leave blank
     }
+
 }
