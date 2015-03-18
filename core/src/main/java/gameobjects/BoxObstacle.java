@@ -16,7 +16,7 @@ public class BoxObstacle extends StaticObject{
     private float width, height;
 
     public BoxObstacle(Vector2 inPosition, Vector2 inSize,World inWorld){
-        super(inPosition,new PolygonShape(),new Sprite(AssetLoader.tireTexture),inWorld);
+        super(inPosition,new PolygonShape(),new Sprite(AssetLoader.wallTexture),inWorld);
         size = inSize;
         width = inSize.x;
         height = inSize.y;
@@ -29,8 +29,8 @@ public class BoxObstacle extends StaticObject{
 
         fixtureDef.shape = shape;
         fixtureDef.density = 2.0f;
-        fixtureDef.friction = 0.5f;     //value between 0-1
-        fixtureDef.restitution = 0.99f; //value between 0-1
+        fixtureDef.friction = 0.9f;     //value between 0-1
+        fixtureDef.restitution = 0.01f; //value between 0-1
         addObjectToWorld();
         shape.dispose();
     }

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -16,6 +17,7 @@ import com.badlogic.gdx.utils.Array;
 import Tracks.TestTrack;
 import gameobjects.TireObstacle;
 import gameobjects.tempCar;
+import helpers.InputHandler;
 
 /**
  * Created by Alice on 2015-03-11.
@@ -25,6 +27,8 @@ public class GameScreenWPhysics implements Screen{
     private World world;
     private Box2DDebugRenderer debugRenderer;
     private OrthographicCamera camera;
+
+    private ShapeRenderer shapeRenderer;
 
     private final float TIMESTEP = 1/60f;
     private final int   VELOCITY_ITERATIONS = 8,
@@ -38,52 +42,67 @@ public class GameScreenWPhysics implements Screen{
 
     //TEMP VARIABLES
     private tempCar car;
+    private TireObstacle tire, tire2, tire3, tire4;
     private TestTrack testTrack;
 
 
     public GameScreenWPhysics(){
-        world = new World(new Vector2(0,10),true);
+        world = new World(new Vector2(0f,10f),true);
         debugRenderer = new Box2DDebugRenderer();
         int SCREEN_WIDTH = Gdx.graphics.getWidth();
         int SCREEN_HEIGHT = Gdx.graphics.getHeight();
+
         camera = new OrthographicCamera(SCREEN_WIDTH/100,SCREEN_HEIGHT/100);
+        // camera.setToOrtho(true, Gdx.graphics.getWidth()/100, Gdx.graphics.getHeight()/100);
 
         batch = new SpriteBatch();
+        batch.setProjectionMatrix(camera.combined);
 
         // Create objects
         testTrack = new TestTrack(world);
 
-        car = new tempCar(new Vector2(1.f, -2.0f), 0.5f, world);
+        car = new tempCar(new Vector2(0.25f, -2.0f), 0.5f, world);
+        Gdx.input.setInputProcessor(new InputHandler(car));
 
-        TireObstacle tire = new TireObstacle(new Vector2(0.0f,-1.6f),1.5f,world);
-        TireObstacle tire2= new TireObstacle(new Vector2(0.0f,1.6f),0.5f,world);
-        TireObstacle tire3= new TireObstacle(new Vector2(-1.3f,0.20f),0.5f,world);
-        TireObstacle tire4= new TireObstacle(new Vector2(1.3f,0.20f),0.5f,world);
+        tire = new TireObstacle(new Vector2(0.0f,-1.6f),1.5f,world);
+        tire2 = new TireObstacle(new Vector2(0.0f,1.6f),0.5f,world);
+        tire3 = new TireObstacle(new Vector2(-1.3f,0.20f),0.5f,world);
+        tire4 = new TireObstacle(new Vector2(1.3f,0.20f),0.5f,world);
     }
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0.7f,0.2f,0.2f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        batch.setProjectionMatrix(camera.combined);
+
         batch.begin();
         //Draw background, MUST be drawn first!
-        testTrack.backgroundSprite.draw(batch);
+        //testTrack.backgroundSprite.draw(batch);
         //batch.draw(TestTrack.backgroundSprite,0,0);
-        //testTrack.addToRenderBatch(batch);
+        testTrack.addToRenderBatch(batch);
         world.getBodies(tmpBodies);
         for (Body body : tmpBodies) {
             if ( body.getUserData() != null && body.getUserData() instanceof Sprite) {
-                Sprite sprite =(Sprite) body.getUserData();
+
+                Sprite sprite = (Sprite) body.getUserData();
                 sprite.setPosition(body.getPosition().x - sprite.getWidth()/2, body.getPosition().y - sprite.getHeight()/2);
                 sprite.setRotation(body.getAngle() * MathUtils.radiansToDegrees);
                 sprite.draw(batch);
+
             }
         }
+
         batch.end();
-        debugRenderer.render(world, camera.combined);
+
 
         world.step(TIMESTEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
+
+        camera.position.set(car.getBody().getPosition().x, car.getBody().getPosition().y, 0);
+        camera.update();
+
+        batch.setProjectionMatrix(camera.combined);
+
+        debugRenderer.render(world, camera.combined);
     }
 
     @Override
@@ -116,4 +135,5 @@ public class GameScreenWPhysics implements Screen{
     public void dispose() {
         // Leave blank
     }
+
 }

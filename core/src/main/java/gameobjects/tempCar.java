@@ -1,5 +1,6 @@
 package gameobjects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
@@ -25,6 +26,14 @@ public class tempCar extends DynamicObject{
         fixtureDef.restitution = 0.99f; //value between 0-1
         addObjectToWorld();
         shape.dispose();
+    }
+
+    public void onTouchDown(){
+
+        Gdx.app.log("car", "touched");
+
+        body.applyForceToCenter(-10, 10, true);
+
     }
 
 }

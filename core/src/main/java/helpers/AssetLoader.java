@@ -13,6 +13,7 @@ public class AssetLoader {
     public static Texture carTexture;
     public static Texture tireTexture;
     public static Texture testTrackTexture;
+    public static Texture wallTexture;
     public static Texture bgTexture;
     public static TextureRegion bg;
     public static TextureRegion car;
@@ -25,6 +26,7 @@ public class AssetLoader {
         carTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
         tireTexture = new Texture("img/tire.png");
+        wallTexture = new Texture("img/blackbox.jpg");
 
         // Guessing bg is background
         bgTexture = new Texture(Gdx.files.internal("img/temp_background.png"));

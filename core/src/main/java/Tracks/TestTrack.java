@@ -21,7 +21,7 @@ public class TestTrack {
 
     public static Sprite backgroundSprite;
     public Vector<Sprite> sprites;
-    private World world;
+    public World world;
     private Body boxBody;
 
     public TestTrack(World inWorld) {
@@ -34,15 +34,27 @@ public class TestTrack {
         createBackground();
 
     //Static physical objects
-        float wallThickness = 1.0f;
-        BoxObstacle upperWall = new BoxObstacle(new Vector2(-backgroundSprite.getWidth()/2f,backgroundSprite.getHeight()/2f)
-                                                ,new Vector2(backgroundSprite.getWidth(),wallThickness), world);
-        BoxObstacle lowerWall = new BoxObstacle(new Vector2(-backgroundSprite.getWidth()/2f,-backgroundSprite.getHeight()/2f)
-                                                ,new Vector2(backgroundSprite.getWidth(),wallThickness), world);
-        BoxObstacle leftWall = new BoxObstacle(new Vector2(-backgroundSprite.getWidth()/2f,-backgroundSprite.getHeight()/2f)
-                                                ,new Vector2(wallThickness,backgroundSprite.getHeight()), world);
-        BoxObstacle rightWall = new BoxObstacle(new Vector2(backgroundSprite.getWidth()/2f,-backgroundSprite.getHeight()/2f)
-                                                ,new Vector2(wallThickness,backgroundSprite.getHeight()), world);
+        float wallThickness = 4.0f;
+        BoxObstacle upperWall = new BoxObstacle(new Vector2(0,backgroundSprite.getHeight()/2f)
+                ,new Vector2(backgroundSprite.getWidth(),wallThickness), world);
+        BoxObstacle lowerWall = new BoxObstacle(new Vector2(0,-backgroundSprite.getHeight()/2f)
+                ,new Vector2(backgroundSprite.getWidth(),wallThickness), world);
+        BoxObstacle leftWall = new BoxObstacle(new Vector2(-backgroundSprite.getWidth()/2f,0)
+                ,new Vector2(wallThickness,backgroundSprite.getHeight()), world);
+        BoxObstacle rightWall = new BoxObstacle(new Vector2(backgroundSprite.getWidth()/2f,0)
+                ,new Vector2(wallThickness,backgroundSprite.getHeight()), world);
+//        BoxObstacle upperWall = new BoxObstacle(new Vector2(-backgroundSprite.getWidth()/2f,backgroundSprite.getHeight()/2f)
+//                                                ,new Vector2(backgroundSprite.getWidth(),wallThickness), world);
+//        BoxObstacle lowerWall = new BoxObstacle(new Vector2(-backgroundSprite.getWidth()/2f,-backgroundSprite.getHeight()/2f)
+//                                                ,new Vector2(backgroundSprite.getWidth(),wallThickness), world);
+//        BoxObstacle leftWall = new BoxObstacle(new Vector2(-backgroundSprite.getWidth()/2f,-backgroundSprite.getHeight()/2f)
+//                                                ,new Vector2(wallThickness,backgroundSprite.getHeight()), world);
+//        BoxObstacle rightWall = new BoxObstacle(new Vector2(backgroundSprite.getWidth()/2f,-backgroundSprite.getHeight()/2f)
+//                                                ,new Vector2(wallThickness,backgroundSprite.getHeight()), world);
+        /*sprites.addElement(upperWall);
+        sprites.addElement(lowerWall);
+        sprites.addElement(leftWall);
+        sprites.addElement(rightWall);*/
 
     }
 
@@ -51,11 +63,11 @@ public class TestTrack {
         backgroundSprite.setSize(backgroundSprite.getWidth()/10f,backgroundSprite.getHeight()/10f);
         //backgroundSprite.setOriginCenter();
         backgroundSprite.setPosition(-backgroundSprite.getWidth()/2,-backgroundSprite.getHeight()/2);
-        //sprites.addElement(backgroundSprite);
+        sprites.addElement(backgroundSprite);
     }
 
     public void addToRenderBatch(SpriteBatch inBatch) {
+        backgroundSprite.draw(inBatch);
            // inBatch.draw(backgroundSprite,-backgroundSprite.getWidth()/2,-backgroundSprite.get);
-
     }
 }
