@@ -15,13 +15,12 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 
-import gameworld.GameRenderer;
-import gameworld.GameWorld;
-import helpers.InputHandler;
-
+import gameobjects.StaticObstacle;
+import gameobjects.TireObstacle;
 
 /**
  * Created by Alice on 2015-03-11.
@@ -51,46 +50,42 @@ public class GameScreenWPhysics implements Screen{
         camera = new OrthographicCamera(SCREEN_WIDTH/100,SCREEN_HEIGHT/100);
 
         batch = new SpriteBatch();
-        BodyDef obstacleDef = new BodyDef();
-        obstacleDef.type = BodyDef.BodyType.StaticBody;
-        obstacleDef.position.set(0.1f,2.0f);
 
-        //obstacle shape
-        CircleShape circleShape = new CircleShape();
-        circleShape.setRadius(1.0f);
+        //**** Denna car är bara temporär.. smileyn är car ;)
+            //circle shape
+            CircleShape circleShape = new CircleShape();
+            circleShape.setRadius(0.5f);
 
-        //Obstacle Fixture
-        FixtureDef obstacleFixtureDef = new FixtureDef();
-        obstacleFixtureDef.shape = circleShape;
-        obstacleFixtureDef.density = 2.0f;
-        obstacleFixtureDef.friction = 0.5f;     //value between 0-1
-        obstacleFixtureDef.restitution = 0.23f; //value between 0-1
+            //Car Fixture
+            FixtureDef carFixtureDef = new FixtureDef();
+            carFixtureDef.shape = circleShape;
+            carFixtureDef.density = 2.0f;
+            carFixtureDef.friction = 0.5f;     //value between 0-1
+            carFixtureDef.restitution = 0.99f; //value between 0-1
 
-        Body tireObstacle = world.createBody(obstacleDef);
-        Fixture fixtObstacle = tireObstacle.createFixture(obstacleFixtureDef);
+            BodyDef carDef = new BodyDef();
 
-        BodyDef carDef = new BodyDef();
+            carDef.type = BodyDef.BodyType.DynamicBody;
+            carDef.position.set(1.0f,-2.0f);
 
-        carDef.type = BodyDef.BodyType.DynamicBody;
-        carDef.position.set(0.1f,-2f);
+            smileySprite = new Sprite(new Texture("img/smiley.png"));
+            smileySprite.setSize(circleShape.getRadius()*2,circleShape.getRadius()*2);
+            smileySprite.setOriginCenter();
 
-        //Car Fixture
-        FixtureDef carFixtureDef = new FixtureDef();
-        circleShape.setRadius(0.5f);
-        carFixtureDef.shape = circleShape;
-        carFixtureDef.density = 2.0f;
-        carFixtureDef.friction = 0.5f;     //value between 0-1
-        carFixtureDef.restitution = 0.23f; //value between 0-1
+            Body car = world.createBody(carDef);
+            Fixture fixtCar = car.createFixture(carFixtureDef);
+            car.setUserData(smileySprite);
+            car.setTransform(0.0f, 0.0f, 0);
+            car.applyForceToCenter(12.0f,-11.0f,true);
+        ///SLUT PÅ CAR-smiley
 
-        smileySprite = new Sprite(new Texture("img/smiley.png"));
-        smileySprite.setSize(circleShape.getRadius()*2,circleShape.getRadius()*2);
-        smileySprite.setOriginCenter();
+        TireObstacle tire = new TireObstacle(new Vector2(0.0f,-1.6f),1.5f,world);
+        TireObstacle tire2= new TireObstacle(new Vector2(0.0f,1.6f),0.5f,world);
+        TireObstacle tire3= new TireObstacle(new Vector2(-1.3f,0.20f),0.5f,world);
+        TireObstacle tire4= new TireObstacle(new Vector2(1.3f,0.20f),0.5f,world);
+        /*wall.addObjectToWorld(world);
+        wall.getBody().createFixture(wall.getFixtureDef());*/
 
-        Body car = world.createBody(carDef);
-        car.setUserData(smileySprite);
-        car.setTransform(0.0f, 0.0f, 0);
-
-        Fixture fixtCar = car.createFixture(obstacleFixtureDef);
 
         circleShape.dispose();
     }
@@ -106,6 +101,7 @@ public class GameScreenWPhysics implements Screen{
         batch.begin();
         world.getBodies(tmpBodies);
         for (Body body : tmpBodies) {
+            //body.applyForceToCenter(12.0f,-11.0f,true);
             if ( body.getUserData() != null && body.getUserData() instanceof Sprite) {
                 Sprite sprite =(Sprite) body.getUserData();
                 sprite.setPosition(body.getPosition().x - sprite.getWidth()/2, body.getPosition().y - sprite.getHeight()/2);
