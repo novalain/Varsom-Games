@@ -45,7 +45,7 @@ public class GameScreenWPhysics implements Screen{
 
 
     public GameScreenWPhysics(){
-        world = new World(new Vector2(0f,10f),true);
+        world = new World(new Vector2(0f,0f),true);
         debugRenderer = new Box2DDebugRenderer();
         int SCREEN_WIDTH = Gdx.graphics.getWidth();
         int SCREEN_HEIGHT = Gdx.graphics.getHeight();
@@ -59,7 +59,7 @@ public class GameScreenWPhysics implements Screen{
         // Create objects
         testTrack = new TestTrack(world);
 
-        car = new tempCar(new Vector2(0.25f, -2.0f), new Vector2(1.0f,2.0f), world);
+        car = new tempCar(new Vector2(0.0f, -8.2f), new Vector2(1.0f,2.0f), world);
         Gdx.input.setInputProcessor(new InputHandler(car));
 
         tire = new TireObstacle(new Vector2(0.0f,-1.6f),1.5f,world);
@@ -72,9 +72,12 @@ public class GameScreenWPhysics implements Screen{
     public void render(float delta) {
         Gdx.gl.glClearColor(0.7f,0.2f,0.2f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         batch.setProjectionMatrix(camera.combined);
 
         testTrack.addToRenderBatch(batch);
+
+        car.getDeviceAccleration();
 
         debugRenderer.render(world, camera.combined);
         world.step(TIMESTEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);

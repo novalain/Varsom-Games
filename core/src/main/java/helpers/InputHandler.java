@@ -14,6 +14,7 @@ import gameobjects.tempCar;
  * Handlig input such as gyro and tough event
  */
 public class InputHandler implements InputProcessor{
+    float accelY = Gdx.input.getAccelerometerY();
     private tempCar car;
 
     // Ask for a reference to the car when InputHandler is created.
@@ -30,7 +31,8 @@ public class InputHandler implements InputProcessor{
     // Function to check if screen is touched
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-       // Gdx.app.log("inputhandler", "touched");
+        accelY = Gdx.input.getAccelerometerY();
+        //Gdx.app.log("inputhandler", "" + accelY);
         car.onTouchDown();
         //touchingGas = true;
         return true; // return true to say there's been a touch event
