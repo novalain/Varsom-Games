@@ -4,10 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -61,7 +59,7 @@ public class GameScreenWPhysics implements Screen{
         // Create objects
         testTrack = new TestTrack(world);
 
-        car = new tempCar(new Vector2(0.25f, -2.0f), 0.5f, world);
+        car = new tempCar(new Vector2(0.25f, -2.0f), new Vector2(1.0f,2.0f), world);
         Gdx.input.setInputProcessor(new InputHandler(car));
 
         tire = new TireObstacle(new Vector2(0.0f,-1.6f),1.5f,world);
@@ -74,35 +72,14 @@ public class GameScreenWPhysics implements Screen{
     public void render(float delta) {
         Gdx.gl.glClearColor(0.7f,0.2f,0.2f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        batch.begin();
-        //Draw background, MUST be drawn first!
-        //testTrack.backgroundSprite.draw(batch);
-        //batch.draw(TestTrack.backgroundSprite,0,0);
-        testTrack.addToRenderBatch(batch);
-        world.getBodies(tmpBodies);
-        for (Body body : tmpBodies) {
-            if ( body.getUserData() != null && body.getUserData() instanceof Sprite) {
-
-                Sprite sprite = (Sprite) body.getUserData();
-                sprite.setPosition(body.getPosition().x - sprite.getWidth()/2, body.getPosition().y - sprite.getHeight()/2);
-                sprite.setRotation(body.getAngle() * MathUtils.radiansToDegrees);
-                sprite.draw(batch);
-
-            }
-        }
-
-        batch.end();
-
-
-        world.step(TIMESTEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
-
-        camera.position.set(car.getBody().getPosition().x, car.getBody().getPosition().y, 0);
-        camera.update();
-
         batch.setProjectionMatrix(camera.combined);
 
+        testTrack.addToRenderBatch(batch);
+
         debugRenderer.render(world, camera.combined);
+        world.step(TIMESTEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
+        camera.position.set(car.getBody().getPosition().x, car.getBody().getPosition().y, 0);
+        camera.update();
     }
 
     @Override

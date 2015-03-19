@@ -9,7 +9,7 @@ import com.badlogic.gdx.physics.box2d.World;
 /**
  * Created by oskarcarlbaum on 13/03/15.
  */
-public abstract class StaticObject extends PhysicalGameObject{
+public class StaticObject extends PhysicalGameObject{
 
     public StaticObject(Vector2 position, Shape shape, Sprite sprite, World world){
         super(position, shape, sprite,world);
