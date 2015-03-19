@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -70,7 +71,7 @@ public class GameScreenWPhysics implements Screen{
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0.7f,0.2f,0.2f,1);
+        Gdx.gl.glClearColor(0.7f, 0.2f, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.setProjectionMatrix(camera.combined);
@@ -81,8 +82,39 @@ public class GameScreenWPhysics implements Screen{
 
         debugRenderer.render(world, camera.combined);
         world.step(TIMESTEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
+
+        // Set camera position to same as car
         camera.position.set(car.getBody().getPosition().x, car.getBody().getPosition().y, 0);
+
+        // Get current angle from body
+        float playerAngle = constrainAngle(car.getBody().getAngle()*MathUtils.radiansToDegrees);
+
+        // Convert camera angle from [-180, 180] to [0, 360]
+        float camAngle = -getCurrentCameraAngle(camera) + 180;
+
+        camera.rotate((camAngle - playerAngle) + 180);
         camera.update();
+    }
+
+    // For more than 2pi rotation of the car the angle continues to increase, limit it to [0, 2pi].
+    private float constrainAngle(float playerAngle){
+
+        while(playerAngle<=0){
+            playerAngle += 360;
+        }
+        while(playerAngle>360){
+            playerAngle -= 360;
+        }
+
+        return playerAngle;
+
+    }
+
+    private float getCurrentCameraAngle(OrthographicCamera cam)
+    {
+        Gdx.app.log("cam.up.x", cam.up.x + "");
+
+        return (float)Math.atan2(cam.up.x, cam.up.y)*MathUtils.radiansToDegrees;
     }
 
     @Override
