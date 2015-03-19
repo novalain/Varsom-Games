@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import gameobjects.Car;
 import gameobjects.tempCar;
+import screens.GameScreenWPhysics;
 /**
  * Created by Alice on 2015-03-12.
  */
@@ -14,6 +15,7 @@ import gameobjects.tempCar;
  * Handlig input such as gyro and tough event
  */
 public class InputHandler implements InputProcessor{
+
     float accelY = Gdx.input.getAccelerometerY();
     private tempCar car;
 
@@ -25,16 +27,14 @@ public class InputHandler implements InputProcessor{
     // Ask for a reference to the car when InputHandler is created.
     public InputHandler(Car car) {
         // myCar now represents the gameWorld's car.
-
     }
 
     // Function to check if screen is touched
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         accelY = Gdx.input.getAccelerometerY();
-        //Gdx.app.log("inputhandler", "" + accelY);
-        car.onTouchDown();
-        //touchingGas = true;
+
+        car.accelerate = GameScreenWPhysics.ACC_ACCELERATE;
         return true; // return true to say there's been a touch event
     }
 
@@ -56,6 +56,7 @@ public class InputHandler implements InputProcessor{
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
        // car.onTouchUp();
+        car.accelerate = GameScreenWPhysics.ACC_NONE;
         return true;
     }
     @Override

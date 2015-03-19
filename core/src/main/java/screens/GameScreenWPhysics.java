@@ -18,10 +18,18 @@ import gameobjects.TireObstacle;
 import gameobjects.tempCar;
 import helpers.InputHandler;
 
-/**
- * Created by Alice on 2015-03-11.
- */
+
 public class GameScreenWPhysics implements Screen{
+
+    public static final int STEER_NONE=0;
+    public static final int STEER_RIGHT=1;
+    public static final int STEER_LEFT=2;
+
+    public static final int ACC_NONE=0;
+    public static final int ACC_ACCELERATE=1;
+    public static final int ACC_BRAKE=2;
+
+
     // Class variables
     private World world;
     private Box2DDebugRenderer debugRenderer;
@@ -60,7 +68,10 @@ public class GameScreenWPhysics implements Screen{
         // Create objects
         testTrack = new TestTrack(world);
 
-        car = new tempCar(new Vector2(0.0f, -8.2f), new Vector2(1.0f,2.0f), world);
+        //car = new tempCar(new Vector2(0.0f, -8.2f), new Vector2(1.0f,2.0f), world);
+        this.car = new tempCar(world, 1, 2,
+                new Vector2(3.2f, 0), (float) Math.PI, 60, 20, 40);
+
         Gdx.input.setInputProcessor(new InputHandler(car));
 
         tire = new TireObstacle(new Vector2(0.0f,-1.6f),1.5f,world);
@@ -74,25 +85,31 @@ public class GameScreenWPhysics implements Screen{
         Gdx.gl.glClearColor(0.7f, 0.2f, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        camera.update();
+
         batch.setProjectionMatrix(camera.combined);
 
         testTrack.addToRenderBatch(batch);
 
-        car.getDeviceAccleration();
+       // car.getDeviceAccleration();
 
         debugRenderer.render(world, camera.combined);
         world.step(TIMESTEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 
+        car.update(Gdx.app.getGraphics().getDeltaTime());
+
+        camera.position.set(car.body.getPosition().x, car.body.getPosition().y, 0);
+
+        //world.clearForces();
         // Set camera position to same as car
-        camera.position.set(car.getBody().getPosition().x, car.getBody().getPosition().y, 0);
 
         // Get current angle from body
-        float playerAngle = constrainAngle(car.getBody().getAngle()*MathUtils.radiansToDegrees);
+        float playerAngle = constrainAngle(car.body.getAngle()*MathUtils.radiansToDegrees);
 
-        // Convert camera angle from [-180, 180] to [0, 360]
+       // Convert camera angle from [-180, 180] to [0, 360]
         float camAngle = -getCurrentCameraAngle(camera) + 180;
 
-        camera.rotate((camAngle - playerAngle) + 180);
+        camera.rotate((camAngle - playerAngle));
         camera.update();
     }
 

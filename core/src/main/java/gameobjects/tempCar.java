@@ -1,95 +1,174 @@
 package gameobjects;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
+import screens.GameScreenWPhysics;
 
-/**
- * Created by michaelnoven on 15-03-18.
- */
-public class tempCar extends DynamicObject{
+public class tempCar {
+    public Body body;
+    float width, length, angle, maxSteerAngle, maxSpeed, power;
+    float wheelAngle;
+    public int steer, accelerate;
+    public Vector2 position;
+    public List<Wheel> wheels;
 
-    private Vector2 size, direction;
-    private float width, height;
-    private float accelX, accelY, tot;
+    public tempCar(World world, float width, float length, Vector2 position,
+               float angle, float power, float maxSteerAngle, float maxSpeed) {
+        super();
+        this.steer = GameScreenWPhysics.STEER_NONE;
+        this.accelerate = GameScreenWPhysics.ACC_NONE;
 
-    private final float MAX_TURNING_ANGLE = 1.134f;
+        this.width = width;
+        this.length = length;
+        this.angle = angle;
+        this.maxSteerAngle = maxSteerAngle;
+        this.maxSpeed = maxSpeed;
+        this.power = power;
+        this.position = position;
+        this.wheelAngle = 0;
 
-    public tempCar(Vector2 inPosition, Vector2 inSize,World inWorld){
-        super(inPosition,new PolygonShape(),new Sprite(new Texture("img/Car.png")),inWorld);
-        size = inSize;
-        width = inSize.x;
-        height = inSize.y;
+        //init body
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(position);
+        bodyDef.angle = angle;
+        this.body = world.createBody(bodyDef);
 
-        //we have to parse the Shape to a PolygonShape in order to access the .setAsBox method
-        ((PolygonShape) shape).setAsBox(width/2f,height/2f);
+        //init shape
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.density = 1.0f;
+        fixtureDef.friction = 0.6f; //friction when rubbing against other shapes
+        fixtureDef.restitution  = 0.4f; //amount of force feedback when hitting something. >0 makes the car bounce off, it's fun!
+        PolygonShape carShape = new PolygonShape();
+        carShape.setAsBox(this.width / 2, this.length / 2);
+        fixtureDef.shape = carShape;
+        this.body.createFixture(fixtureDef);
 
-        sprite.setSize(width, height);
-        //sprite.setOriginCenter();
-        sprite.setOrigin(width/2,height/4);
-        bodyDef.position.set(width/2,-height/2);
-        fixtureDef.shape = shape;
-        fixtureDef.density = 2.0f;
-        fixtureDef.friction = 0.5f;     //value between 0-1
-        fixtureDef.restitution = 0.2f; //value between 0-1
-        addObjectToWorld();
-        shape.dispose();
+        //initialize wheels
+        this.wheels = new ArrayList<Wheel>();
+        this.wheels.add(new Wheel(world, this, -1f, -1.2f, 0.4f, 0.8f, true,  true)); //top left
+        this.wheels.add(new Wheel(world, this, 1f, -1.2f, 0.4f, 0.8f, true,  true)); //top right
+        this.wheels.add(new Wheel(world, this, -1f, 1.2f, 0.4f, 0.8f, false,  false)); //back left
+        this.wheels.add(new Wheel(world, this, 1f, 1.2f, 0.4f, 0.8f, false,  false)); //back right
     }
 
-    public void onTouchDown(){
-        //body.applyForceToCenter(direction,true);
-/*
-        Gdx.app.log("car", "touched");
-
-
-       // body.getLocalVector()
-       // body.
-       // direction = body.getWorldVector(new Vector2(0, 1));
-        //body.applyForceToCenter(-100, 0, true);
-        int q = 1000;
-        direction.x *= q;
-        direction.y *= q;
-        body.applyForceToCenter(direction,true);
-*/
+    public List<Wheel> getPoweredWheels () {
+        List<Wheel> poweredWheels = new ArrayList<Wheel>();
+        for (Wheel wheel:this.wheels) {
+            if (wheel.powered)
+                poweredWheels.add(wheel);
+        }
+        return poweredWheels;
     }
 
-    public void getDeviceAccleration() {
-        accelX = Gdx.input.getAccelerometerX();
-        accelY = Gdx.input.getAccelerometerY();
-
-        tot = (float) Math.atan2(accelX, accelY);
-        tot -= Math.PI /2;
-        Gdx.app.log("inputhandler", "" + tot);
-        turnCar();
+    public Vector2 getLocalVelocity() {
+	    /*
+	    returns car's velocity vector relative to the car
+	    */
+        return this.body.getLocalVector(this.body.getLinearVelocityFromLocalPoint(new Vector2(0, 0)));
     }
 
-    private void turnCar() {
 
-        float q = 0.1f;
-        Vector2 move = body.getWorldVector(new Vector2(0,0.1f));
-        Vector2 newPos = new Vector2 (body.getPosition().x+move.x,body.getPosition().y+move.y);
-        float turningAngle = Math.abs(tot)*q*(float)Math.sin(tot);
-        if (Math.abs(turningAngle) > MAX_TURNING_ANGLE) {
-            if(turningAngle < 0) {
-                turningAngle = MAX_TURNING_ANGLE;
-            }
-            else {
-                turningAngle = -MAX_TURNING_ANGLE;
-            }
+    public List<Wheel> getRevolvingWheels () {
+        List<Wheel> revolvingWheels = new ArrayList<Wheel>();
+        for (Wheel wheel:this.wheels) {
+            if (wheel.revolving)
+                revolvingWheels.add(wheel);
+        }
+        return revolvingWheels;
+    }
+
+    public float getSpeedKMH(){
+        Vector2 velocity=this.body.getLinearVelocity();
+        float len = velocity.len();
+        return (len/1000)*3600;
+    }
+
+    public void setSpeed (float speed){
+	    /*
+	    speed - speed in kilometers per hour
+	    */
+        Vector2 velocity=this.body.getLinearVelocity();
+        velocity=velocity.nor();
+        velocity=new Vector2(velocity.x*((speed*1000.0f)/3600.0f),
+                velocity.y*((speed*1000.0f)/3600.0f));
+        this.body.setLinearVelocity(velocity);
+    }
+
+    public void update (float deltaTime){
+
+        //1. KILL SIDEWAYS VELOCITY
+
+        for(Wheel wheel:wheels){
+            wheel.killSidewaysVelocity();
         }
 
+        //2. SET WHEEL ANGLE
 
-        body.setTransform(newPos, body.getAngle() + turningAngle);
-        direction = body.getWorldVector(new Vector2( 0, 1));
-        //direction.x *= q;
-        //direction.y *= q;
+        //calculate the change in wheel's angle for this update
+        /*float incr=(this.maxSteerAngle) * deltaTime * 5;
 
-       // Gdx.app.log("inputhandler", "X-led: " + Math.cos(tot) + "    Y-led: " + Math.sin(tot));
+        if(this.steer==GameScreenWPhysics.STEER_LEFT){
+            this.wheelAngle=Math.min(Math.max(this.wheelAngle, 0)+incr, this.maxSteerAngle); //increment angle without going over max steer
+        }else if(this.steer==GameScreenWPhysics.STEER_RIGHT){
+            this.wheelAngle=Math.max(Math.min(this.wheelAngle, 0)-incr, -this.maxSteerAngle); //decrement angle without going over max steer
+        }else{
+            this.wheelAngle=0;
+        }*/
+
+        //update revolving wheels based on angle
+        for(Wheel wheel:this.getRevolvingWheels()) {
+            wheel.setAngle( - Gdx.input.getAccelerometerY()*10);
+        }
+
+        //3. APPLY FORCE TO WHEELS
+        Vector2 baseVector; //vector pointing in the direction force will be applied to a wheel ; relative to the wheel.
+
+        //if accelerator is pressed down and speed limit has not been reached, go forwards
+        if((this.accelerate==GameScreenWPhysics.ACC_ACCELERATE) && (this.getSpeedKMH() < this.maxSpeed)){
+            baseVector= new Vector2(0, -1);
+        }
+        else if(this.accelerate==GameScreenWPhysics.ACC_BRAKE){
+            //braking, but still moving forwards - increased force
+            if(this.getLocalVelocity().y<0)
+                baseVector= new Vector2(0f, 1.3f);
+                //going in reverse - less force
+            else
+                baseVector=new Vector2(0f, 0.7f);
+        }
+        else if (this.accelerate==GameScreenWPhysics.ACC_NONE ) {
+            //slow down if not accelerating
+            baseVector=new Vector2(0, 0);
+            if (this.getSpeedKMH()<7)
+                this.setSpeed(0);
+            else if (this.getLocalVelocity().y<0)
+                baseVector=new Vector2(0, 0.7f);
+            else if (this.getLocalVelocity().y>0)
+                baseVector=new Vector2(0, -0.7f);
+        }
+        else
+            baseVector=new Vector2(0, 0);
+
+        //multiply by engine power, which gives us a force vector relative to the wheel
+        Vector2 forceVector= new Vector2(this.power*baseVector.x, this.power*baseVector.y);
+
+        //apply force to each wheel
+        for(Wheel wheel:this.getPoweredWheels()){
+            Vector2 position= wheel.body.getWorldCenter();
+            wheel.body.applyForce(wheel.body.getWorldVector(new Vector2(forceVector.x, forceVector.y)), position, true );
+        }
+
+        System.out.println("Car Speed: " + this.getSpeedKMH());
+        //if going very slow, stop - to prevent endless sliding
+
     }
-
 }
