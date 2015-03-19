@@ -1,14 +1,15 @@
 package com.varsom.mpserver;
 
-import android.content.Context;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.esotericsoftware.minlog.Log;
@@ -21,17 +22,24 @@ import static com.esotericsoftware.minlog.Log.LEVEL_DEBUG;
 public class MainActivity extends ActionBarActivity {
 
     MPServer server;
+    boolean handledClick = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
         //The buttons and the textviews are imported from the XML-file
         final Button serverStart = (Button) findViewById(R.id.start);
         final Button serverStop = (Button) findViewById(R.id.stop);
+        final Button serverSend = (Button) findViewById(R.id.sendbutton);
         final TextView textElement = (TextView) findViewById(R.id.textView);
-        final TextView textMessage = (TextView) findViewById(R.id.textmessage);
+        final EditText sendMessage = (EditText) findViewById(R.id.sendText);
+
+
 
         WifiManager wifi = (WifiManager)getSystemService(WIFI_SERVICE);
         WifiInfo connectionInfo = wifi.getConnectionInfo();
@@ -47,15 +55,20 @@ public class MainActivity extends ActionBarActivity {
         serverStart.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                try {
-                    server = new MPServer(textMessage);
-                    textElement.setText("Server is running and your IP Adress is: "); //leave this line to assign a specific text
-                    textElement.append(IP);
-                    Log.set(LEVEL_DEBUG);
+                if(!handledClick) {
+                    try {
+                        server = new MPServer(sendMessage);
+                        textElement.setText("Server is running and your IP Adress is: "); //leave this line to assign a specific text
+                        textElement.append(IP);
+                        Log.set(LEVEL_DEBUG);
+                        serverStart.setEnabled(false);
+                        serverStop.setEnabled(true);
 
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    textElement.setText("Something went wrong");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        textElement.setText("Something went wrong");
+                    }
+                    handledClick = true;
                 }
             }
         });
@@ -64,8 +77,21 @@ public class MainActivity extends ActionBarActivity {
         serverStop.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                server.stop();
-                textElement.setText("Server stopped"); //leave this line to assign a specific text
+                if(handledClick) {
+                    server.stop();
+                    textElement.setText("Server stopped"); //leave this line to assign a specific text
+                    handledClick = false;
+                    serverStart.setEnabled(true);
+                    serverStop.setEnabled(false);
+                }
+            }
+        });
+
+        serverSend.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                server.sendMassMessage(sendMessage);
+                sendMessage.setText("");
+
             }
         });
 

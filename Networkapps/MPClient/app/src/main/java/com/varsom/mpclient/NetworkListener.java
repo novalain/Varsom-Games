@@ -8,7 +8,6 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.varsom.mpclient.Packet.LoginAnswer;
 import com.varsom.mpclient.Packet.LoginRequest;
-import com.varsom.mpclient.Packet.Message;
 
 /**
  *
@@ -16,49 +15,51 @@ import com.varsom.mpclient.Packet.Message;
 public class NetworkListener extends Listener {
 
     private Client client;
-    private EditText ourIP;
     private EditText ourMessage;
     private TextView ourOutput;
 
+    public String message;
+
 
     // If you want to send a object, you need to send it with this client variable
-    public void init(Client client, EditText ip, EditText o, TextView b) {
+    public void init(Client client, EditText o, TextView b) {
         this.client = client;
-        this.ourIP = ip;
         this.ourMessage = o;
         this.ourOutput = b;
-
-        System.out.println("FUNC: init");
     }
-    public void connected(Connection connection) {
-        System.out.println("FUNC: connect");
+
+    public void connected(Connection c) {
         client.sendTCP(new LoginRequest());
-        ourOutput.setText("");
-        ourOutput.append("You have connected.");
+        System.out.println("You have connected.");
 
     }
 
-    public void disconnected(Connection connection) {
-        ourOutput.setText("");
-        ourOutput.append("You have disconnected.");
+    public void disconnected(Connection c) {
+        System.out.println("You have disconnected.");
     }
 
     public void received(Connection c, Object o) {
         // checks for login answers from server
         if (o instanceof LoginAnswer) {
             Boolean answer = ((LoginAnswer) o).accepted;
-            System.out.println("PREANSWER");
 
             if (answer) {
-                System.out.println("ANSWER");
-                Message sendMessage = new Message();
-                sendMessage.message = ourMessage.getText().toString();
-                c.sendTCP(sendMessage);
+                String mess = o.toString();
+                System.out.println("Message: " + mess);
 
             }else {
                 c.close();
                 ourOutput.append("Nothing");
             }
+
+        }
+        if (o instanceof Packet.Message) {
+
+            //The received message is saved in a string
+            message = ((Packet.Message) o).message;
+
+            //Writes the message in the log
+            System.out.println("MESSAGE: " + message);
 
         }
 

@@ -1,17 +1,12 @@
 package com.varsom.mpserver;
 
-import android.content.Context;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
-import android.widget.TextView;
+import android.os.NetworkOnMainThreadException;
+import android.widget.EditText;
 
 import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
 import java.io.IOException;
-
-import static com.esotericsoftware.kryonet.Listener.ThreadedListener;
 
 /**
  *
@@ -19,27 +14,32 @@ import static com.esotericsoftware.kryonet.Listener.ThreadedListener;
 public class MPServer {
     private Server server;
 
-    public MPServer(TextView b) throws IOException {
+    public MPServer(EditText b) throws IOException {
         server = new Server();
-
         registerPackets();
-
-
-
-        //b.setText("hej");
-
-        //server.addListener(new NetworkListener());
-
+        server.addListener(new NetworkListener());
+/*
         NetworkListener nl = new NetworkListener();
         nl.init(b);
         server.addListener(nl);
-
+*/
         //TCP, UDP
         server.bind(54555, 64555);
-
         server.start();
+    }
 
+    public void sendMassMessage(EditText m) {
 
+        Packet.Message sendMessage = new Packet.Message();
+        sendMessage.message = m.getText().toString();
+
+        try {
+            // Sends the message to all clients
+            server.sendToAllTCP(sendMessage);
+            server.sendToAllUDP(sendMessage);
+        } catch (NetworkOnMainThreadException e) {
+            e.printStackTrace();
+        }
 
     }
 

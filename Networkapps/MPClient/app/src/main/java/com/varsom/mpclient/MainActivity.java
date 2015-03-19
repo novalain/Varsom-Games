@@ -14,12 +14,11 @@ import com.esotericsoftware.minlog.Log;
 
 import java.io.IOException;
 
-import static com.varsom.mpclient.R.id.textField;
-
 
 public class MainActivity extends ActionBarActivity {
 
     public MPClient client;
+    boolean handledClick = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,21 +31,36 @@ public class MainActivity extends ActionBarActivity {
 
         // Connect buttons and textfields from xml file
         final Button connect = (Button) findViewById(R.id.connect);
-        final EditText ipAddress = (EditText)findViewById(R.id.sendIp);
-        final EditText textMessage = (EditText)findViewById(R.id.sendMessage);
-        final TextView t=(TextView)findViewById(textField);
+        final Button send = (Button) findViewById(R.id.sendmessage);
+        final EditText ipAddress = (EditText)findViewById(R.id.ipadress);
+        final EditText textMessage = (EditText)findViewById(R.id.message);
+        final TextView t = (TextView)findViewById(R.id.state);
+
 
         // Start a client and tries to connect to a server
         connect.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+
+                if (!handledClick) {
+                    try {
+                        client = new MPClient(ipAddress, textMessage, t);
+                        Log.set(Log.LEVEL_DEBUG);
+                        connect.setEnabled(false);
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    handledClick = true;
+                }
+            }
+        });
+
+        send.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
 
-                try {
-                    client = new MPClient(ipAddress, textMessage, t);
-                    Log.set(Log.LEVEL_DEBUG);
+              client.sendMess(textMessage);
+              textMessage.setText("");
 
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             }
         });
 

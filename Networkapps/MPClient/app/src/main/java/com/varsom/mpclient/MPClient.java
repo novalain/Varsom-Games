@@ -22,7 +22,7 @@ public class MPClient {
         NetworkListener nl = new NetworkListener();
 
         // Initialise variables (not sure if it needed, maybe later)
-        nl.init(client, ip, o, b);
+        nl.init(client, o, b);
 
         client.addListener(nl);
 
@@ -33,22 +33,15 @@ public class MPClient {
         try{
             b.setText("");
             b.append("Connected");
-<<<<<<< HEAD
+
             System.out.println("FUNC: MPClinet, try");
-            check();
-            //InetAddress address = client.discoverHost(54555, 64555);
-            //System.out.println("HOST: " + address);
+            //check();
 
             //System.out.println(ip.getText().toString());
 
-=======
-            //check();
-            InetAddress address = client.discoverHost(62555, 50000);
-            System.out.println("HOST: " + address);
-
             //System.out.println("FUNC: MPClinet, try");
->>>>>>> origin/network
-            client.connect(50000,ip.getText().toString(), 54555, 64555);
+
+            client.connect(50000, ip.getText().toString(), 54555, 64555);
         }
         catch(IOException e){
             e.printStackTrace();
@@ -58,16 +51,17 @@ public class MPClient {
         }
     }
 
+    public void sendMess(EditText b) {
+        Packet.Message sendMessage = new Packet.Message();
+        sendMessage.message = b.getText().toString();
+        client.sendUDP(sendMessage);
+        client.sendTCP(sendMessage);
+    }
 
     // Looks for opened servers within a port. Currently not working.
-    public void check(){
-<<<<<<< HEAD
+    private void check(){
         InetAddress address = client.discoverHost(64555, 5000);
-=======
-        InetAddress address = client.discoverHost(65555, 50000);
->>>>>>> origin/network
         System.out.println("HOST: " + address);
-
     }
 
     // Register packets to a kryo
