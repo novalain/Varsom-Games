@@ -1,5 +1,6 @@
 package gameobjects;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -8,6 +9,8 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.joints.PrismaticJointDef;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
+
+import helpers.AssetLoader;
 
 public class Wheel {	
 	/**
@@ -24,6 +27,7 @@ public class Wheel {
 	public boolean revolving; // does this wheel revolve when steering?
 	public boolean powered; // is this wheel powered?
 	public Body body;
+    public Sprite sprite;
 
 	public Wheel(World world, tempCar car, float posX, float posY, float width, float length,
 			boolean revolving, boolean powered) {
@@ -37,8 +41,9 @@ public class Wheel {
 		//init body 
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyDef.BodyType.DynamicBody;
-		bodyDef.position.set(car.body.getWorldPoint(new Vector2(posX, posY)));
-		bodyDef.angle = car.body.getAngle();
+		//bodyDef.position.set(car.body.getWorldPoint(new Vector2(posX, posY)));
+        bodyDef.position.set(car.getBody().getWorldPoint(new Vector2(posX, posY)));
+		bodyDef.angle = car.getAngle();
 		this.body = world.createBody(bodyDef);
 
 		//init shape
@@ -64,19 +69,25 @@ public class Wheel {
 	        jointdef.lowerTranslation=jointdef.upperTranslation=0;
 		    world.createJoint(jointdef);
 	    }
+
+        //SPRITE
+        sprite = new Sprite(AssetLoader.tireTrackTexture);
+        sprite.setSize(width, length);
+        sprite.setOriginCenter();
+        body.setUserData(sprite);
 	}
 	
 	public void setAngle (float angle){
 	    /*
 	    angle - wheel angle relative to car, in degrees
 	    */
-		this.body.setTransform(body.getPosition(), this.car.body.getAngle() + (float) Math.toRadians(angle));
+		this.body.setTransform(body.getPosition(), this.car.getBody().getAngle() + (float) Math.toRadians(angle));
 	};
 
 	public Vector2 getLocalVelocity () {
 	    /*returns get velocity vector relative to car
 	    */
-	    return this.car.body.getLocalVector(this.car.body.getLinearVelocityFromLocalPoint(this.body.getPosition()));
+	    return this.car.getBody().getLocalVector(this.car.getBody().getLinearVelocityFromLocalPoint(this.body.getPosition()));
 	};
 
 	public Vector2 getDirectionVector () {

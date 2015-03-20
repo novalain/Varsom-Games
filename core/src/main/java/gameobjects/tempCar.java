@@ -4,61 +4,65 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
+import helpers.AssetLoader;
 import screens.GameScreenWPhysics;
 
-public class tempCar {
-    public Body body;
-    float width, length, angle, maxSteerAngle, maxSpeed, power;
+public class tempCar extends DynamicObject{
+    //public Body body;
+    float width, length,maxSteerAngle, maxSpeed, power;
     float wheelAngle;
     public int steer, accelerate;
-    public Vector2 position;
+    //public Vector2 position;
     public List<Wheel> wheels;
+    private TextureRegion wheelTexture;
 
-    public tempCar(World world, float width, float length, Vector2 position,
-               float angle, float power, float maxSteerAngle, float maxSpeed) {
-        super();
+    public tempCar(float width, float length, Vector2 position, World world, float angle, float power, float maxSteerAngle, float maxSpeed) {
+        super(position,angle, new PolygonShape(), new Sprite(AssetLoader.carTexture), world);
         this.steer = GameScreenWPhysics.STEER_NONE;
         this.accelerate = GameScreenWPhysics.ACC_NONE;
-
         this.width = width;
         this.length = length;
-        this.angle = angle;
         this.maxSteerAngle = maxSteerAngle;
         this.maxSpeed = maxSpeed;
         this.power = power;
-        this.position = position;
         this.wheelAngle = 0;
 
         //init body
-        BodyDef bodyDef = new BodyDef();
+       /* BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(position);
+        bodyDef.position.set(position);*/
         bodyDef.angle = angle;
-        this.body = world.createBody(bodyDef);
+        //body = world.createBody(bodyDef);
 
         //init shape
-        FixtureDef fixtureDef = new FixtureDef();
+       // FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.density = 1.0f;
         fixtureDef.friction = 0.6f; //friction when rubbing against other shapes
         fixtureDef.restitution  = 0.4f; //amount of force feedback when hitting something. >0 makes the car bounce off, it's fun!
-        PolygonShape carShape = new PolygonShape();
-        carShape.setAsBox(this.width / 2, this.length / 2);
-        fixtureDef.shape = carShape;
-        this.body.createFixture(fixtureDef);
+        //PolygonShape carShape = new PolygonShape();
+        //we have to parse the Shape to a PolygonShape in order to access the .setAsBox method
+        ((PolygonShape) shape).setAsBox(width/2f,length/2f);
+        //carShape.setAsBox(this.width / 2, this.length / 2);
+        //fixtureDef.shape = carShape;
+        fixtureDef.shape = shape;
+        //this.body.createFixture(fixtureDef);
 
+        addObjectToWorld();
         //initialize wheels
+        float wheelWidth = 0.4f, wheelHeight = 0.8f;
         this.wheels = new ArrayList<Wheel>();
-        this.wheels.add(new Wheel(world, this, -1f, -1.2f, 0.4f, 0.8f, true,  true)); //top left
-        this.wheels.add(new Wheel(world, this, 1f, -1.2f, 0.4f, 0.8f, true,  true)); //top right
-        this.wheels.add(new Wheel(world, this, -1f, 1.2f, 0.4f, 0.8f, false,  false)); //back left
-        this.wheels.add(new Wheel(world, this, 1f, 1.2f, 0.4f, 0.8f, false,  false)); //back right
+        this.wheels.add(new Wheel(world, this, -width/2, -length/3, wheelWidth, wheelHeight, true,  true)); //top left
+        this.wheels.add(new Wheel(world, this, width/2, -length/3, wheelWidth, wheelHeight, true,  true)); //top right
+        this.wheels.add(new Wheel(world, this, -width/2, length/3, wheelWidth, wheelHeight, false,  false)); //back left
+        this.wheels.add(new Wheel(world, this, width/2, length/3, wheelWidth, wheelHeight, false,  false)); //back right
+        sprite.setSize(width, length);
+        sprite.setOriginCenter();
     }
 
     public List<Wheel> getPoweredWheels () {
@@ -75,6 +79,7 @@ public class tempCar {
 	    returns car's velocity vector relative to the car
 	    */
         return this.body.getLocalVector(this.body.getLinearVelocityFromLocalPoint(new Vector2(0, 0)));
+
     }
 
 
@@ -110,6 +115,7 @@ public class tempCar {
 
         for(Wheel wheel:wheels){
             wheel.killSidewaysVelocity();
+
         }
 
         //2. SET WHEEL ANGLE
@@ -169,6 +175,36 @@ public class tempCar {
 
         System.out.println("Car Speed: " + this.getSpeedKMH());
         //if going very slow, stop - to prevent endless sliding
-
     }
 }
+
+
+/* ********STASHED********
+
+    private Vector2 getCarDirection() {
+        //Returns the car direction in world coordinates
+        return body.getWorldVector(new Vector2( 0, 1));
+    }
+
+    private Vector2 getDesiredDirection(){
+        Vector2 yN = new Vector2(0,1);
+        //Desired direction in local coordinates
+        Vector2 desiredDirection = yN.rotate(rot);
+        //Return the desired direction in world coordinates
+        return body.getWorldVector(desiredDirection);
+    }
+
+
+    /** Get the device's acceleration in x & y axis,
+     * and return the tilt angle from the horizontal axis*/
+  /*  private void updateDeviceRotation() {
+        accelX = Gdx.input.getAccelerometerX();
+        accelY = Gdx.input.getAccelerometerY();
+
+        rot = (float) Math.atan2(accelX, accelY);
+        rot -= Math.PI /2;
+
+        //Gdx.app.log("inputhandler", "" + rot);
+    }
+
+****************************/

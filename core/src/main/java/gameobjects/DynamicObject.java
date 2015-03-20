@@ -11,12 +11,12 @@ import com.badlogic.gdx.physics.box2d.World;
  */
 public abstract class DynamicObject extends PhysicalGameObject{
 
-    public DynamicObject(Vector2 position, Shape shape, Sprite sprite, World world){
-        super(position, shape, sprite,world);
+    public DynamicObject(Vector2 position, float angle, Shape shape, Sprite sprite, World world){
+        super(position, angle, shape, sprite,world);
         this.bodyDef.type = BodyDef.BodyType.DynamicBody;
     }
-    public DynamicObject(float x, float y, Shape shape, Sprite sprite, World world){
-        super(new Vector2(x,y), /*width, height,*/ shape,sprite, world);
+    public DynamicObject(float x, float y, float angle, Shape shape, Sprite sprite, World world){
+        super(new Vector2(x,y), angle, shape, sprite, world);
         this.bodyDef.type = BodyDef.BodyType.DynamicBody;
     }
 

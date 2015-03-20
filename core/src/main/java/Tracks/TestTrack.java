@@ -38,22 +38,15 @@ public class TestTrack {
 
     //Static physical objects
         float wallThickness = 4.0f;
-        BoxObstacle upperWall = new BoxObstacle(new Vector2(0,backgroundSprite.getHeight()/2f)
+        BoxObstacle upperWall = new BoxObstacle(new Vector2(0,backgroundSprite.getHeight()/2f),0
                                 ,new Vector2(backgroundSprite.getWidth(),wallThickness), world);
-        BoxObstacle lowerWall = new BoxObstacle(new Vector2(0,-backgroundSprite.getHeight()/2f)
+        BoxObstacle lowerWall = new BoxObstacle(new Vector2(0,-backgroundSprite.getHeight()/2f),0
                                 ,new Vector2(backgroundSprite.getWidth(),wallThickness), world);
-        BoxObstacle leftWall = new BoxObstacle(new Vector2(-backgroundSprite.getWidth()/2f,0)
+        BoxObstacle leftWall = new BoxObstacle(new Vector2(-backgroundSprite.getWidth()/2f,0),0
                                 ,new Vector2(wallThickness,backgroundSprite.getHeight()), world);
-        BoxObstacle rightWall = new BoxObstacle(new Vector2(backgroundSprite.getWidth()/2f,0)
+        BoxObstacle rightWall = new BoxObstacle(new Vector2(backgroundSprite.getWidth()/2f,0),0
                                 ,new Vector2(wallThickness,backgroundSprite.getHeight()), world);
-//        BoxObstacle upperWall = new BoxObstacle(new Vector2(-backgroundSprite.getWidth()/2f,backgroundSprite.getHeight()/2f)
-//                                                ,new Vector2(backgroundSprite.getWidth(),wallThickness), world);
-//        BoxObstacle lowerWall = new BoxObstacle(new Vector2(-backgroundSprite.getWidth()/2f,-backgroundSprite.getHeight()/2f)
-//                                                ,new Vector2(backgroundSprite.getWidth(),wallThickness), world);
-//        BoxObstacle leftWall = new BoxObstacle(new Vector2(-backgroundSprite.getWidth()/2f,-backgroundSprite.getHeight()/2f)
-//                                                ,new Vector2(wallThickness,backgroundSprite.getHeight()), world);
-//        BoxObstacle rightWall = new BoxObstacle(new Vector2(backgroundSprite.getWidth()/2f,-backgroundSprite.getHeight()/2f)
-//                                                ,new Vector2(wallThickness,backgroundSprite.getHeight()), world);
+
         /*sprites.addElement(upperWall);
         sprites.addElement(lowerWall);
         sprites.addElement(leftWall);

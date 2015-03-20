@@ -14,6 +14,7 @@ import com.badlogic.gdx.physics.box2d.World;
  */
 public abstract class PhysicalGameObject {
     protected Vector2 position;
+    protected float angle;
     protected BodyDef bodyDef;
     protected Body body;
     protected FixtureDef fixtureDef;
@@ -23,8 +24,9 @@ public abstract class PhysicalGameObject {
     protected Sprite sprite;
 
 
-    public PhysicalGameObject(Vector2 inPosition,/* float width, float height,*/Shape inShape,Sprite inSprite, World inWorld){
-        this.setPosition(inPosition);
+    public PhysicalGameObject(Vector2 inPosition,float inAngle,Shape inShape,Sprite inSprite, World inWorld){
+        position = inPosition;
+        angle = inAngle;
         shape = inShape;
         sprite = inSprite;
         world = inWorld;
@@ -34,12 +36,16 @@ public abstract class PhysicalGameObject {
 
     // Get functions
     public Vector2 getPosition(){
-        return position;
+        //return position;
+        return body.getPosition();
     }
 
-    // Set functions
-    public void setPosition(Vector2 inPosition){
-        this.position = inPosition;
+    public float getAngle(){
+        return body.getAngle();
+    }
+
+    public Vector2 getWorldPoint(Vector2 localPoint) {
+        return body.getWorldPoint(localPoint);
     }
 
     public FixtureDef getFixtureDef() {
@@ -53,7 +59,7 @@ public abstract class PhysicalGameObject {
     protected void addObjectToWorld() {
         body = world.createBody(bodyDef);
         body.setUserData(sprite);
-        body.setTransform(position,0);
+        body.setTransform(position,angle);
         body.createFixture(fixtureDef);
     }
 }

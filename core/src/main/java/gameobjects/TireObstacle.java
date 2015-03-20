@@ -1,6 +1,5 @@
 package gameobjects;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.CircleShape;
@@ -14,8 +13,8 @@ import helpers.AssetLoader;
 public class TireObstacle extends StaticObject {
     private float radius;
 
-    public TireObstacle(Vector2 inPosition, float inRadius,World inWorld){
-        super(inPosition,new CircleShape(),new Sprite(AssetLoader.tireTexture),inWorld);
+    public TireObstacle(Vector2 inPosition,float angle, float inRadius,World inWorld){
+        super(inPosition,angle,new CircleShape(),new Sprite(AssetLoader.tireObstacleTexture),inWorld);
         radius = inRadius;
         shape.setRadius(radius);
         sprite.setSize(radius * 2, radius * 2);

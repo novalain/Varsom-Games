@@ -15,12 +15,21 @@ public class BoxObstacle extends StaticObject{
     private Vector2 size;
     private float width, height;
 
-    public BoxObstacle(Vector2 inPosition, Vector2 inSize,World inWorld){
-        super(inPosition,new PolygonShape(),new Sprite(AssetLoader.wallTexture),inWorld);
-        size = inSize;
+    public BoxObstacle(Vector2 inPosition, float angle, Vector2 inSize,World inWorld) {
+        super(inPosition, angle, new PolygonShape(), new Sprite(AssetLoader.wallTexture), inWorld);
         width = inSize.x;
         height = inSize.y;
+        defineParameters();
+    }
+    public BoxObstacle(Vector2 inPosition, float angle, float inWidth, float inHeight ,World inWorld) {
+        super(inPosition, angle, new PolygonShape(), new Sprite(AssetLoader.wallTexture), inWorld);
+        width = inWidth;
+        height = inHeight;
+        defineParameters();
+    }
 
+    private void defineParameters(){
+        size = new Vector2(width,height);
         //we have to parse the Shape to a PolygonShape in order to access the .setAsBox method
         ((PolygonShape) shape).setAsBox(width/2f,height/2f);
 
