@@ -34,7 +34,7 @@ public class MainActivity extends ActionBarActivity {
         final Button send = (Button) findViewById(R.id.sendmessage);
         final EditText ipAddress = (EditText)findViewById(R.id.ipadress);
         final EditText textMessage = (EditText)findViewById(R.id.message);
-        final TextView t = (TextView)findViewById(R.id.state);
+        final TextView state = (TextView)findViewById(R.id.state);
 
 
         // Start a client and tries to connect to a server
@@ -43,7 +43,7 @@ public class MainActivity extends ActionBarActivity {
 
                 if (!handledClick) {
                     try {
-                        client = new MPClient(ipAddress, textMessage, t);
+                        client = new MPClient(ipAddress, textMessage, state);
                         Log.set(Log.LEVEL_DEBUG);
                         connect.setEnabled(false);
 

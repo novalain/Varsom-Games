@@ -5,6 +5,7 @@ import android.widget.TextView;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.kryonet.KryoNetException;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -30,25 +31,18 @@ public class MPClient {
 
         System.setProperty("java.net.preferIPv4Stack" , "true");
 
+        //hostCheck();
+
         try{
-            b.setText("");
-            b.append("Connected");
-
-            System.out.println("FUNC: MPClinet, try");
-            //check();
-
-            //System.out.println(ip.getText().toString());
-
-            //System.out.println("FUNC: MPClinet, try");
-
             client.connect(50000, ip.getText().toString(), 54555, 64555);
+            b.setText("Connected");
         }
         catch(IOException e){
             e.printStackTrace();
             client.stop();
-            b.setText("");
-            b.append("Connect doesn't work");
+            b.setText("Connect doesn't work");
         }
+
     }
 
     public void sendMess(EditText b) {
@@ -59,9 +53,14 @@ public class MPClient {
     }
 
     // Looks for opened servers within a port. Currently not working.
-    private void check(){
-        InetAddress address = client.discoverHost(64555, 5000);
-        System.out.println("HOST: " + address);
+    private void hostCheck(){
+        try {
+            InetAddress address = client.discoverHost(64555, 5000);
+            System.out.println("HOST: " + address);
+        }catch (KryoNetException e) {
+            e.printStackTrace();
+        }
+
     }
 
     // Register packets to a kryo
