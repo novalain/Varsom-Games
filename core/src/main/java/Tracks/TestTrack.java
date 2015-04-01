@@ -41,7 +41,7 @@ public class TestTrack {
     private ShapeRenderer sr;
     private Sprite carSprite;
     private Array<MoveSprite> moveSprites;
-    MoveSprite moveSprite;
+    public MoveSprite moveSprite;
 
     public TestTrack(World inWorld) {
         scaleBG = 10.0f;
@@ -55,7 +55,7 @@ public class TestTrack {
         createBackground();
         createObstacles();
 
-        // Creaters fake "Car" and waypoints
+        // Creates fake "Car" and waypoints
         createWayPoints();
 
         //create player cars
@@ -65,8 +65,6 @@ public class TestTrack {
         car = new tempCar(carWidth, carLength, spawnPos1,world,
                 (float) -Math.PI/2, 60, 20, 40);
         Gdx.input.setInputProcessor(new InputHandler(car));
-
-
     }
 
     private void createWayPoints(){
@@ -110,7 +108,7 @@ public class TestTrack {
                 560, 249, 581, 387, 1900, 1
         };*/
 
-        float[] waypoints = {   -220,  -160,
+        float[] waypoints = {   -180,  -160,
                                 -255,  -153,
                                 -275,  -115,
                                 -255,   -77,
@@ -129,7 +127,7 @@ public class TestTrack {
                                   73,   -83,
                                  240,    -9,
                                  261,  -147,
-                                -210,  -160};
+                                -170,  -160};
 
 
 

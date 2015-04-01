@@ -93,7 +93,7 @@ public class GameScreenWPhysics implements Screen{
         testTrack.car.update(Gdx.app.getGraphics().getDeltaTime());
 
         //camera.position.set(car.body.getPosition().x, car.body.getPosition().y, 0);
-        camera.position.set(testTrack.car.getPosition(), 0);
+        camera.position.set(new Vector2(testTrack.moveSprite.getX(),testTrack.moveSprite.getY()), 0);
 
         //world.clearForces();
         // Set camera position to same as car
@@ -104,8 +104,12 @@ public class GameScreenWPhysics implements Screen{
 
        // Convert camera angle from [-180, 180] to [0, 360]
         float camAngle = -getCurrentCameraAngle(camera) + 180;
+       // Vector3 camDir = camera.direction;
 
-        camera.rotate((camAngle - playerAngle));
+
+       // camera.rotate((camAngle - playerAngle));
+       camera.rotate((camAngle - testTrack.moveSprite.getRotation()-90));
+        //camera.zoom = 5.0f; // can be used to see the entire track
         camera.update();
     }
 
