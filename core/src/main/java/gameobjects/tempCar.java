@@ -22,6 +22,8 @@ public class tempCar extends DynamicObject{
     public List<Wheel> wheels;
     private TextureRegion wheelTexture;
 
+    private float accelX, accelY, tiltAngle, steeringSensitivity;
+
     public tempCar(float width, float length, Vector2 position, World world, float angle, float power, float maxSteerAngle, float maxSpeed) {
         super(position,angle, new PolygonShape(), new Sprite(AssetLoader.carTexture), world);
         this.steer = GameScreenWPhysics.STEER_NONE;
@@ -32,6 +34,7 @@ public class tempCar extends DynamicObject{
         this.maxSpeed = maxSpeed;
         this.power = power;
         this.wheelAngle = 0;
+        steeringSensitivity = 0.5f; // a value less than 1 makes ta car less sensitive to device rotation
 
         //init body
        /* BodyDef bodyDef = new BodyDef();
@@ -132,8 +135,10 @@ public class tempCar extends DynamicObject{
         }*/
 
         //update revolving wheels based on angle
+        updateDeviceRotation();
         for(Wheel wheel:this.getRevolvingWheels()) {
-            wheel.setAngle( - Gdx.input.getAccelerometerY()*10);
+            //wheel.setAngle( - Gdx.input.getAccelerometerY()*10);
+            wheel.setAngle(tiltAngle);
         }
 
         //3. APPLY FORCE TO WHEELS
@@ -175,6 +180,19 @@ public class tempCar extends DynamicObject{
 
         System.out.println("Car Speed: " + this.getSpeedKMH());
         //if going very slow, stop - to prevent endless sliding
+    }
+
+    /** Get the device's acceleration in x & y axis,
+     * and return the tilt angle from the horizontal axis*/
+    private void updateDeviceRotation() {
+        accelX = Gdx.input.getAccelerometerX();
+        accelY = Gdx.input.getAccelerometerY();
+
+        tiltAngle = (float) Math.atan2(accelX, accelY);
+        tiltAngle -= Math.PI /2;
+        tiltAngle *= steeringSensitivity;
+
+        //Gdx.app.log("inputhandler", "" + rot);
     }
 }
 

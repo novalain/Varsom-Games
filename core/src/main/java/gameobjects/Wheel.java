@@ -81,7 +81,7 @@ public class Wheel {
 	    /*
 	    angle - wheel angle relative to car, in degrees
 	    */
-		this.body.setTransform(body.getPosition(), this.car.getBody().getAngle() + (float) Math.toRadians(angle));
+		this.body.setTransform(body.getPosition(), this.car.getBody().getAngle() + (float) /*Math.toRadians*/(angle));
 	};
 
 	public Vector2 getLocalVelocity () {

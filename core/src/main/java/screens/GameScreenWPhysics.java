@@ -109,7 +109,7 @@ public class GameScreenWPhysics implements Screen{
 
        // camera.rotate((camAngle - playerAngle));
        camera.rotate((camAngle - testTrack.moveSprite.getRotation()-90));
-        //camera.zoom = 5.0f; // can be used to see the entire track
+        camera.zoom = 3.0f; // can be used to see the entire track
         camera.update();
     }
 
