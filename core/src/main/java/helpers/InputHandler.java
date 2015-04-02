@@ -34,7 +34,12 @@ public class InputHandler implements InputProcessor{
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         accelY = Gdx.input.getAccelerometerY();
 
-        car.accelerate = GameScreenWPhysics.ACC_ACCELERATE;
+        if(screenX > Gdx.graphics.getWidth()/2) {
+            car.accelerate = GameScreenWPhysics.ACC_ACCELERATE;
+        }
+        else if(screenX < Gdx.graphics.getWidth()/2) {
+            car.accelerate = GameScreenWPhysics.ACC_BRAKE;
+        }
         return true; // return true to say there's been a touch event
     }
 

@@ -24,8 +24,8 @@ public class tempCar extends DynamicObject{
 
     private float accelX, accelY, tiltAngle, steeringSensitivity;
 
-    public tempCar(float width, float length, Vector2 position, World world, float angle, float power, float maxSteerAngle, float maxSpeed) {
-        super(position,angle, new PolygonShape(), new Sprite(AssetLoader.carTexture), world);
+    public tempCar(float width, float length, Vector2 position, World world,Sprite carSprite, float angle, float power, float maxSteerAngle, float maxSpeed) {
+        super(position,angle, new PolygonShape(), carSprite, world);
         this.steer = GameScreenWPhysics.STEER_NONE;
         this.accelerate = GameScreenWPhysics.ACC_NONE;
         this.width = width;
@@ -58,7 +58,7 @@ public class tempCar extends DynamicObject{
 
         addObjectToWorld();
         //initialize wheels
-        float wheelWidth = 0.4f, wheelHeight = 0.8f;
+        float wheelWidth = width*0.3f, wheelHeight = length*0.3f;
         this.wheels = new ArrayList<Wheel>();
         this.wheels.add(new Wheel(world, this, -width/2, -length/3, wheelWidth, wheelHeight, true,  true)); //top left
         this.wheels.add(new Wheel(world, this, width/2, -length/3, wheelWidth, wheelHeight, true,  true)); //top right
@@ -146,7 +146,7 @@ public class tempCar extends DynamicObject{
 
         //if accelerator is pressed down and speed limit has not been reached, go forwards
         if((this.accelerate==GameScreenWPhysics.ACC_ACCELERATE) && (this.getSpeedKMH() < this.maxSpeed)){
-            baseVector= new Vector2(0, -1);
+            baseVector= new Vector2(0, -1f);
         }
         else if(this.accelerate==GameScreenWPhysics.ACC_BRAKE){
             //braking, but still moving forwards - increased force

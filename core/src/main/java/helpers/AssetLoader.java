@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  */
 public class AssetLoader {
     //car
-    public static Texture carTexture, tireTrackTexture;
+    public static Texture carTexture,carTexture2, tireTrackTexture;
     //obstacles
     public static Texture tireObstacleTexture,wallTexture;
     //backgrounds
@@ -25,6 +25,7 @@ public class AssetLoader {
     public static void load() {
         // loading texture for car
         carTexture = new Texture(Gdx.files.internal("img/car.png"));
+        carTexture2 = new Texture(Gdx.files.internal("img/car2.png"));
         //carTexture = new Texture(Gdx.files.internal("img/car.png"));
         //carTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 

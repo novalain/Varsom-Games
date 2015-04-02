@@ -2,16 +2,12 @@ package Tracks;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 
@@ -19,6 +15,7 @@ import java.util.Vector;
 
 import gameobjects.BoxObstacle;
 import gameobjects.TireObstacle;
+import gameobjects.Wheel;
 import gameobjects.tempCar;
 import helpers.AssetLoader;
 import helpers.InputHandler;
@@ -32,14 +29,16 @@ public class TestTrack {
     public static Sprite backgroundSprite;
     public Vector<Sprite> sprites;
     public World world;
-    public tempCar car;
+    public tempCar car,car2;
     private Body boxBody;
     private Array<Body> tmpBodies = new Array<Body>();
+    private Vector<Body> backLayer;
+    private Vector<Body> frontLayer;
     private float scaleBG;
 
     //For waypoints
     private ShapeRenderer sr;
-    private Sprite carSprite;
+    private Sprite pathSprite;
     private Array<MoveSprite> moveSprites;
     public MoveSprite moveSprite;
 
@@ -47,6 +46,8 @@ public class TestTrack {
         scaleBG = 10.0f;
         world = inWorld;
         sprites = new Vector<Sprite>();
+        frontLayer = new Vector<Body>();
+        backLayer = new Vector<Body>();
         createTestTrack();
     }
 
@@ -60,11 +61,24 @@ public class TestTrack {
 
         //create player cars
         //car = new tempCar(new Vector2(0.0f, -8.2f), new Vector2(1.0f,2.0f), world);
-        float carWidth = 1.0f, carLength = 2.0f;
+        float carWidth = 0.50f, carLength = 1.0f;
         Vector2 spawnPos1 = new Vector2(-16f, -16f);
-        car = new tempCar(carWidth, carLength, spawnPos1,world,
-                (float) -Math.PI/2, 60, 20, 40);
+        Vector2 spawnPos2 = new Vector2(-15f, -17f);
+        float spawnPosRotation = (float) -Math.PI/2;
+        car = new tempCar(carWidth, carLength, spawnPos1,world,new Sprite(AssetLoader.carTexture),
+                spawnPosRotation, 60, 20, 15);
         Gdx.input.setInputProcessor(new InputHandler(car));
+
+        car2 = new tempCar(carWidth, carLength, spawnPos2,world, new Sprite(AssetLoader.carTexture2),
+                spawnPosRotation, 60, 20, 15);
+
+        //add all cars to the frontLayer and all wheels to the backLayer
+        for(Wheel tempWheel : car.wheels) {
+            backLayer.addElement(tempWheel.body);
+        }
+        frontLayer.addElement(car.getBody());
+        frontLayer.addElement(car2.getBody());
+
     }
 
     private void createWayPoints(){
@@ -72,10 +86,10 @@ public class TestTrack {
         // Set up shaperenderer
         sr = new ShapeRenderer();
 
-        carSprite = new Sprite(AssetLoader.wallTexture);
-        carSprite.setSize(1,1);
+        pathSprite = new Sprite(AssetLoader.wallTexture);
+        pathSprite.setSize(1, 1);
 
-        moveSprite = new MoveSprite(carSprite, getChosenPath());
+        moveSprite = new MoveSprite(pathSprite, getChosenPath());
 
     }
     private void createObstacles(){
@@ -94,6 +108,16 @@ public class TestTrack {
         TireObstacle tire2 = new TireObstacle(new Vector2( 0.0f,  1.6f), 0, 0.5f, world);
         TireObstacle tire3 = new TireObstacle(new Vector2(-13f, 0.20f), 0, 0.5f, world);
         TireObstacle tire4 = new TireObstacle(new Vector2( 13f, 0.20f), 0, 0.5f, world);
+
+        //Add all newly made obstacles to the backLayer
+        backLayer.addElement(upperWall.getBody());
+        backLayer.addElement(lowerWall.getBody());
+        backLayer.addElement(leftWall.getBody());
+        backLayer.addElement(rightWall.getBody());
+        backLayer.addElement(tire.getBody());
+        backLayer.addElement(tire2.getBody());
+        backLayer.addElement(tire3.getBody());
+        backLayer.addElement(tire4.getBody());
     }
 
     private Array<Vector2> getChosenPath(){
@@ -171,10 +195,38 @@ public class TestTrack {
 
         Vector2 previous = moveSprite.getPath().first();
 
-
         //Draw physical objects
-        world.getBodies(tmpBodies);
-        for (Body body : tmpBodies) {
+        //world.getBodies(tmpBodies);
+        /*for (Body body : tmpBodies) {
+            if ( body.getUserData() != null && body.getUserData() instanceof Sprite) {
+                Sprite sprite = (Sprite) body.getUserData();
+                sprite.setPosition(body.getPosition().x - sprite.getWidth()/2, body.getPosition().y - sprite.getHeight()/2);
+                sprite.setRotation(body.getAngle() * MathUtils.radiansToDegrees);
+                sprite.draw(inBatch);
+            }
+        }*/
+
+        drawBodySprites(backLayer,inBatch);
+        drawBodySprites(frontLayer,inBatch);
+
+        // Draw all waypoints
+//        for(Vector2 waypoint: moveSprite.getPath()){
+//            sr.begin(ShapeRenderer.ShapeType.Line);
+//            sr.line(previous, waypoint);
+//            sr.end();
+//
+//            sr.begin(ShapeRenderer.ShapeType.Filled);
+//            sr.circle(waypoint.x, waypoint.y, 0.5f);
+//            sr.end();
+//
+//            previous = waypoint;
+//        }
+
+        inBatch.end();
+    }
+
+    private void drawBodySprites(Vector<Body> tempBodies, SpriteBatch inBatch){
+        for (Body body : tempBodies) {
             if ( body.getUserData() != null && body.getUserData() instanceof Sprite) {
                 Sprite sprite = (Sprite) body.getUserData();
                 sprite.setPosition(body.getPosition().x - sprite.getWidth()/2, body.getPosition().y - sprite.getHeight()/2);
@@ -182,20 +234,5 @@ public class TestTrack {
                 sprite.draw(inBatch);
             }
         }
-
-        // Draw all waypoints
-        for(Vector2 waypoint: moveSprite.getPath()){
-            sr.begin(ShapeRenderer.ShapeType.Line);
-            sr.line(previous, waypoint);
-            sr.end();
-
-            sr.begin(ShapeRenderer.ShapeType.Filled);
-            sr.circle(waypoint.x, waypoint.y, 0.5f);
-            sr.end();
-
-            previous = waypoint;
-        }
-
-        inBatch.end();
     }
 }

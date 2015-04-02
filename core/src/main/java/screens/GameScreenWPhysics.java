@@ -67,6 +67,8 @@ public class GameScreenWPhysics implements Screen{
 
         // Create objects
         testTrack = new TestTrack(world);
+        float camAngle = getCurrentCameraAngle(camera);
+        camera.rotate(-camAngle + testTrack.moveSprite.getRotation()-90);
 
        /* //car = new tempCar(new Vector2(0.0f, -8.2f), new Vector2(1.0f,2.0f), world);
         float carWidth = 1.0f, carLength = 2.0f;
@@ -105,11 +107,18 @@ public class GameScreenWPhysics implements Screen{
        // Convert camera angle from [-180, 180] to [0, 360]
         float camAngle = -getCurrentCameraAngle(camera) + 180;
        // Vector3 camDir = camera.direction;
-
+        float desiredCamRotation = (camAngle - testTrack.moveSprite.getRotation()-90);
+        float camRotDeviation = desiredCamRotation - camAngle;
+        if(desiredCamRotation > 180){
+            desiredCamRotation -= 360;
+        }
+        else if(desiredCamRotation < -180) {
+            desiredCamRotation += 360;
+        }
 
        // camera.rotate((camAngle - playerAngle));
-       camera.rotate((camAngle - testTrack.moveSprite.getRotation()-90));
-        camera.zoom = 3.0f; // can be used to see the entire track
+       camera.rotate(desiredCamRotation*0.04f);
+        //camera.zoom = 5.0f; // can be used to see the entire track
         camera.update();
     }
 
