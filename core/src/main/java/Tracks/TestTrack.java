@@ -2,6 +2,7 @@ package Tracks;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -132,6 +133,7 @@ public class TestTrack {
                 560, 249, 581, 387, 1900, 1
         };*/
 
+        // Hardcoded values for this track only
         float[] waypoints = {   -180,  -160,
                                 -255,  -153,
                                 -275,  -115,
@@ -187,13 +189,15 @@ public class TestTrack {
             sprite.draw(inBatch);//backgroundSprite.draw(inBatch);
         }
 
+
+
         // Set shape renderer to be drawn in world, not on screen
         sr.setProjectionMatrix(camera.combined);
 
         // Draw fake car ?
         moveSprite.draw(inBatch);
 
-        Vector2 previous = moveSprite.getPath().first();
+      //  Vector2 previous = moveSprite.getPath().first();
 
         //Draw physical objects
         //world.getBodies(tmpBodies);
@@ -210,17 +214,17 @@ public class TestTrack {
         drawBodySprites(frontLayer,inBatch);
 
         // Draw all waypoints
-//        for(Vector2 waypoint: moveSprite.getPath()){
-//            sr.begin(ShapeRenderer.ShapeType.Line);
-//            sr.line(previous, waypoint);
-//            sr.end();
-//
-//            sr.begin(ShapeRenderer.ShapeType.Filled);
-//            sr.circle(waypoint.x, waypoint.y, 0.5f);
-//            sr.end();
-//
-//            previous = waypoint;
-//        }
+        /*for(Vector2 waypoint: moveSprite.getPath()){
+            sr.begin(ShapeRenderer.ShapeType.Line);
+            sr.line(previous, waypoint);
+            sr.end();
+
+            sr.begin(ShapeRenderer.ShapeType.Filled);
+            sr.circle(waypoint.x, waypoint.y, 0.5f);
+            sr.end();
+
+            previous = waypoint;
+        }*/
 
         inBatch.end();
     }

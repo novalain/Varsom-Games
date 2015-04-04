@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Timer;
 
 import Tracks.TestTrack;
 import gameobjects.TireObstacle;
@@ -29,6 +31,9 @@ public class GameScreenWPhysics implements Screen{
     public static final int ACC_ACCELERATE=1;
     public static final int ACC_BRAKE=2;
 
+    // For countdown
+    private static float countDownTimer = 5.f;
+    private static boolean paused = true;
 
     // Class variables
     private World world;
@@ -59,16 +64,26 @@ public class GameScreenWPhysics implements Screen{
         int SCREEN_WIDTH = Gdx.graphics.getWidth();
         int SCREEN_HEIGHT = Gdx.graphics.getHeight();
 
+        // Create objects
+        testTrack = new TestTrack(world);
+
+        // Init camera
         camera = new OrthographicCamera(SCREEN_WIDTH/100,SCREEN_HEIGHT/100);
+        camera.rotate(-90);
+        camera.position.set(new Vector2(testTrack.moveSprite.getX(),testTrack.moveSprite.getY()), 0);
+        camera.update();
+
         // camera.setToOrtho(true, Gdx.graphics.getWidth()/100, Gdx.graphics.getHeight()/100);
 
         batch = new SpriteBatch();
         batch.setProjectionMatrix(camera.combined);
 
-        // Create objects
-        testTrack = new TestTrack(world);
-        float camAngle = getCurrentCameraAngle(camera);
-        camera.rotate(-camAngle + testTrack.moveSprite.getRotation()-90);
+
+       // float camAngle = getCurrentCameraAngle(camera);
+       // camera.rotate(-camAngle + testTrack.moveSprite.getRotation()-90);
+
+
+
 
        /* //car = new tempCar(new Vector2(0.0f, -8.2f), new Vector2(1.0f,2.0f), world);
         float carWidth = 1.0f, carLength = 2.0f;
@@ -79,36 +94,71 @@ public class GameScreenWPhysics implements Screen{
 
     }
 
+    private void handleCountDownTimer(){
+
+        countDownTimer -= Gdx.graphics.getDeltaTime();
+        float secondsLeft = (int)countDownTimer % 60;
+
+        // Render some kick-ass countdown label
+        if(secondsLeft > 0){
+
+            Gdx.app.log("COUNTDOWN: ", (int)secondsLeft + "");
+
+        }
+
+        if(secondsLeft == 0){
+
+            paused = false;
+
+        }
+
+    }
+
     @Override
     public void render(float delta) {
+
+        handleCountDownTimer();
+
         Gdx.gl.glClearColor(0.2f, 0.7f, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        camera.update();
 
         batch.setProjectionMatrix(camera.combined);
 
         testTrack.addToRenderBatch(batch,camera);
 
         debugRenderer.render(world, camera.combined);
+
         world.step(TIMESTEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
-
-        testTrack.car.update(Gdx.app.getGraphics().getDeltaTime());
-
-        //camera.position.set(car.body.getPosition().x, car.body.getPosition().y, 0);
-        camera.position.set(new Vector2(testTrack.moveSprite.getX(),testTrack.moveSprite.getY()), 0);
 
         //world.clearForces();
         // Set camera position to same as car
 
         // Get current angle from body
         //float playerAngle = constrainAngle(car.body.getAngle()*MathUtils.radiansToDegrees);
-        float playerAngle = constrainAngle(testTrack.car.getAngle()*MathUtils.radiansToDegrees);
 
-       // Convert camera angle from [-180, 180] to [0, 360]
+       // Here goes the all the updating / game logic
+       if(!paused){
+
+           updateCamera();
+           testTrack.moveSprite.update(Gdx.graphics.getDeltaTime());
+           testTrack.car.update(Gdx.app.getGraphics().getDeltaTime());
+
+       }
+
+    }
+
+    private void updateCamera(){
+
+        //float playerAngle = constrainAngle(testTrack.car.getAngle()*MathUtils.radiansToDegrees);
+
+        camera.position.set(new Vector2(testTrack.moveSprite.getX(),testTrack.moveSprite.getY()), 0);
+
+        // Convert camera angle from [-180, 180] to [0, 360]
         float camAngle = -getCurrentCameraAngle(camera) + 180;
-       // Vector3 camDir = camera.direction;
-        float desiredCamRotation = (camAngle - testTrack.moveSprite.getRotation()-90);
+        // Vector3 camDir = camera.direction;
+        float desiredCamRotation = (camAngle - testTrack.moveSprite.getRotation() - 90);
         float camRotDeviation = desiredCamRotation - camAngle;
+
         if(desiredCamRotation > 180){
             desiredCamRotation -= 360;
         }
@@ -116,14 +166,18 @@ public class GameScreenWPhysics implements Screen{
             desiredCamRotation += 360;
         }
 
-       // camera.rotate((camAngle - playerAngle));
-       camera.rotate(desiredCamRotation*0.04f);
+        // camera.rotate((camAngle - playerAngle));
+        camera.rotate(desiredCamRotation*0.04f);
         //camera.zoom = 5.0f; // can be used to see the entire track
+
         camera.update();
+
+
     }
 
     // For more than 2pi rotation of the car the angle continues to increase, limit it to [0, 2pi].
-    private float constrainAngle(float playerAngle){
+    /** Is not used anymore??**/
+   /* private float constrainAngle(float playerAngle){
 
         while(playerAngle<=0){
             playerAngle += 360;
@@ -134,11 +188,11 @@ public class GameScreenWPhysics implements Screen{
 
         return playerAngle;
 
-    }
+    }*/
 
     private float getCurrentCameraAngle(OrthographicCamera cam)
     {
-        Gdx.app.log("cam.up.x", cam.up.x + "");
+        //Gdx.app.log("cam.up.x", cam.up.x + "");
 
         return (float)Math.atan2(cam.up.x, cam.up.y)*MathUtils.radiansToDegrees;
     }

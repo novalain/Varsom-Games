@@ -178,7 +178,7 @@ public class tempCar extends DynamicObject{
             wheel.body.applyForce(wheel.body.getWorldVector(new Vector2(forceVector.x, forceVector.y)), position, true );
         }
 
-        System.out.println("Car Speed: " + this.getSpeedKMH());
+        //System.out.println("Car Speed: " + this.getSpeedKMH());
         //if going very slow, stop - to prevent endless sliding
     }
 
