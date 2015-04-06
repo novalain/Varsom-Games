@@ -2,12 +2,17 @@ package screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -57,7 +62,6 @@ public class GameScreenWPhysics implements Screen{
     //private TireObstacle tire, tire2, tire3, tire4;
     private TestTrack testTrack;
 
-
     public GameScreenWPhysics(){
         world = new World(new Vector2(0f,0f),true);
         debugRenderer = new Box2DDebugRenderer();
@@ -71,6 +75,7 @@ public class GameScreenWPhysics implements Screen{
         camera = new OrthographicCamera(SCREEN_WIDTH/100,SCREEN_HEIGHT/100);
         camera.rotate(-90);
         camera.position.set(new Vector2(testTrack.moveSprite.getX(),testTrack.moveSprite.getY()), 0);
+        //camera.zoom = 5.0f; // can be used to see the entire track
         camera.update();
 
         // camera.setToOrtho(true, Gdx.graphics.getWidth()/100, Gdx.graphics.getHeight()/100);
@@ -81,9 +86,6 @@ public class GameScreenWPhysics implements Screen{
 
        // float camAngle = getCurrentCameraAngle(camera);
        // camera.rotate(-camAngle + testTrack.moveSprite.getRotation()-90);
-
-
-
 
        /* //car = new tempCar(new Vector2(0.0f, -8.2f), new Vector2(1.0f,2.0f), world);
         float carWidth = 1.0f, carLength = 2.0f;
@@ -139,13 +141,40 @@ public class GameScreenWPhysics implements Screen{
        // Here goes the all the updating / game logic
        if(!paused){
 
+           setCarSpeed();
            updateCamera();
            testTrack.moveSprite.update(Gdx.graphics.getDeltaTime());
            testTrack.car.update(Gdx.app.getGraphics().getDeltaTime());
+           //testTrack.car2.update()..
 
        }
 
     }
+
+
+    // Sets speed on car based on value from color on backgroundMask (black or white),
+    public void setCarSpeed(){
+
+        // Gets value from pixmap, cars position in Box2D coord system is mapped onto the coordinate system of the mask (y down , x right).
+        int valueFromMask = testTrack.pixmap.getPixel((int)((32 + testTrack.car.getBody().getPosition().x)*10), (int)((24 - testTrack.car.getBody().getPosition().y)*10));
+
+        // If car is not on track
+        if(valueFromMask != -1){
+            testTrack.car.maxSpeed = 5.f;
+            testTrack.car.setSpeed(testTrack.car.getSpeedKMH()*0.5f);
+        }
+
+        else
+            testTrack.car.maxSpeed = 20.f;
+
+        //Gdx.app.log("carPos x", testTrack.car.getBody().getPosition().x + "");
+        //Gdx.app.log("carPos y", testTrack.car.getBody().getPosition().y + "");
+        //Gdx.app.log("debug", "" + valueFromMask);
+        //Gdx.app.log("carspeed", testTrack.car.getSpeedKMH() + "");
+
+    }
+
+
 
     private void updateCamera(){
 
@@ -168,7 +197,6 @@ public class GameScreenWPhysics implements Screen{
 
         // camera.rotate((camAngle - playerAngle));
         camera.rotate(desiredCamRotation*0.04f);
-        //camera.zoom = 5.0f; // can be used to see the entire track
 
         camera.update();
 

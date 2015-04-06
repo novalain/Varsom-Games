@@ -15,7 +15,7 @@ import screens.GameScreenWPhysics;
 
 public class tempCar extends DynamicObject{
     //public Body body;
-    float width, length,maxSteerAngle, maxSpeed, power;
+    public float width, length,maxSteerAngle, maxSpeed, power;
     float wheelAngle;
     public int steer, accelerate;
     //public Vector2 position;

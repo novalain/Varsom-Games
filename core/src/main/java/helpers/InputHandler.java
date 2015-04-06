@@ -24,9 +24,9 @@ public class InputHandler implements InputProcessor{
         this.car = car;
 
     }
-    // Ask for a reference to the car when InputHandler is created.
+    // Ugly hack for the old GameWorld class to work but obviously isn't used.
     public InputHandler(Car car) {
-        // myCar now represents the gameWorld's car.
+
     }
 
     // Function to check if screen is touched

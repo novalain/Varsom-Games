@@ -15,7 +15,7 @@ public class AssetLoader {
     //obstacles
     public static Texture tireObstacleTexture,wallTexture;
     //backgrounds
-    public static Texture bgTexture, testTrackTexture;
+    public static Texture bgTexture, testTrackTexture, testTrackMask;
 
     public static TextureRegion bg;
     public static TextureRegion car,tracks1,tracks2,tracks3;
@@ -24,7 +24,7 @@ public class AssetLoader {
 
     public static void load() {
         // loading texture for car
-        carTexture = new Texture(Gdx.files.internal("img/car.png"));
+        carTexture = new Texture(Gdx.files.internal("img/Car.png"));
         carTexture2 = new Texture(Gdx.files.internal("img/car2.png"));
         //carTexture = new Texture(Gdx.files.internal("img/car.png"));
         //carTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
@@ -40,6 +40,7 @@ public class AssetLoader {
         bgTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
         testTrackTexture = new Texture("img/tracks/temptrack.png");
+        testTrackMask = new Texture("img/tracks/trackmask.png");
 
         bg = new TextureRegion(bgTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         bg.flip(false, true); // Flip the sprite vertically to fit coordinate system Y-down

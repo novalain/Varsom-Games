@@ -2,6 +2,7 @@ package Tracks;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -36,6 +37,10 @@ public class TestTrack {
     private Vector<Body> backLayer;
     private Vector<Body> frontLayer;
     private float scaleBG;
+
+    //For mask
+    public static Sprite backgroundMask;
+    public Pixmap pixmap;
 
     //For waypoints
     private ShapeRenderer sr;
@@ -96,14 +101,14 @@ public class TestTrack {
     private void createObstacles(){
       //Static physical objects
         float wallThickness = 4.0f;
-        BoxObstacle upperWall = new BoxObstacle(new Vector2(0,backgroundSprite.getHeight()/2f),0
+       /* BoxObstacle upperWall = new BoxObstacle(new Vector2(0,backgroundSprite.getHeight()/2f),0
                 ,new Vector2(backgroundSprite.getWidth(),wallThickness), world);
         BoxObstacle lowerWall = new BoxObstacle(new Vector2(0,-backgroundSprite.getHeight()/2f),0
                 ,new Vector2(backgroundSprite.getWidth(),wallThickness), world);
         BoxObstacle leftWall = new BoxObstacle(new Vector2(-backgroundSprite.getWidth()/2f,0),0
                 ,new Vector2(wallThickness,backgroundSprite.getHeight()), world);
         BoxObstacle rightWall = new BoxObstacle(new Vector2(backgroundSprite.getWidth()/2f,0),0
-                ,new Vector2(wallThickness,backgroundSprite.getHeight()), world);
+                ,new Vector2(wallThickness,backgroundSprite.getHeight()), world);*/
 
         TireObstacle tire  = new TireObstacle(new Vector2( 0.0f, -6f), 0, 1.5f, world);
         TireObstacle tire2 = new TireObstacle(new Vector2( 0.0f,  1.6f), 0, 0.5f, world);
@@ -111,10 +116,10 @@ public class TestTrack {
         TireObstacle tire4 = new TireObstacle(new Vector2( 13f, 0.20f), 0, 0.5f, world);
 
         //Add all newly made obstacles to the backLayer
-        backLayer.addElement(upperWall.getBody());
+      /*  backLayer.addElement(upperWall.getBody());
         backLayer.addElement(lowerWall.getBody());
         backLayer.addElement(leftWall.getBody());
-        backLayer.addElement(rightWall.getBody());
+        backLayer.addElement(rightWall.getBody());*/
         backLayer.addElement(tire.getBody());
         backLayer.addElement(tire2.getBody());
         backLayer.addElement(tire3.getBody());
@@ -176,9 +181,15 @@ public class TestTrack {
         backgroundSprite = new Sprite(AssetLoader.testTrackTexture);
         backgroundSprite.setSize(backgroundSprite.getWidth()/scaleBG,backgroundSprite.getHeight()/scaleBG);
         //backgroundSprite.setOriginCenter();
+
         backgroundSprite.setPosition(-backgroundSprite.getWidth()/2,-backgroundSprite.getHeight()/2);
         sprites.addElement(backgroundSprite);
 
+        // Set up mask
+        backgroundMask = new Sprite(AssetLoader.testTrackMask);
+        backgroundMask.getTexture().getTextureData().prepare();
+        pixmap = backgroundMask.getTexture().getTextureData().consumePixmap();
+        //pixmap.dispose();
     }
 
     public void addToRenderBatch(SpriteBatch inBatch, Camera camera) {
@@ -189,6 +200,7 @@ public class TestTrack {
             sprite.draw(inBatch);//backgroundSprite.draw(inBatch);
         }
 
+       // Gdx.app.log("color:",  inBatch.);
 
 
         // Set shape renderer to be drawn in world, not on screen

@@ -52,6 +52,8 @@ public abstract class PhysicalGameObject {
         return fixtureDef;
     }
 
+    public Sprite getSprite() {return sprite;}
+
     public Body getBody() {
         return body;
     }
