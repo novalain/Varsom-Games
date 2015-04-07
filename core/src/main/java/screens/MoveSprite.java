@@ -20,8 +20,6 @@ public class MoveSprite extends Sprite {
     private int waypoint = 0;
     private tempCar leaderCar;
 
-
-
     public MoveSprite(Sprite sprite, Array<Vector2> path){
         super(sprite);
         this.setOriginCenter();

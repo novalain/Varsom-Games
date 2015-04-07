@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.CatmullRomSpline;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -37,6 +38,12 @@ public class TestTrack {
     private Vector<Body> backLayer;
     private Vector<Body> frontLayer;
     private float scaleBG;
+
+    /** For catmull rom spline**/
+    private CatmullRomSpline<Vector2> myCatmull;
+    private Vector2[] points;
+    // This must be atleast as much as number nr of waypoints. Higher value => smoother curve
+    private static final int NUM_INTERPOLATED_POINTS = 20*3;
 
     //For mask
     public static Sprite backgroundMask;
@@ -101,14 +108,14 @@ public class TestTrack {
     private void createObstacles(){
       //Static physical objects
         float wallThickness = 4.0f;
-       /* BoxObstacle upperWall = new BoxObstacle(new Vector2(0,backgroundSprite.getHeight()/2f),0
+        BoxObstacle upperWall = new BoxObstacle(new Vector2(0,backgroundSprite.getHeight()/2f),0
                 ,new Vector2(backgroundSprite.getWidth(),wallThickness), world);
         BoxObstacle lowerWall = new BoxObstacle(new Vector2(0,-backgroundSprite.getHeight()/2f),0
                 ,new Vector2(backgroundSprite.getWidth(),wallThickness), world);
         BoxObstacle leftWall = new BoxObstacle(new Vector2(-backgroundSprite.getWidth()/2f,0),0
                 ,new Vector2(wallThickness,backgroundSprite.getHeight()), world);
         BoxObstacle rightWall = new BoxObstacle(new Vector2(backgroundSprite.getWidth()/2f,0),0
-                ,new Vector2(wallThickness,backgroundSprite.getHeight()), world);*/
+                ,new Vector2(wallThickness,backgroundSprite.getHeight()), world);
 
         TireObstacle tire  = new TireObstacle(new Vector2( 0.0f, -6f), 0, 1.5f, world);
         TireObstacle tire2 = new TireObstacle(new Vector2( 0.0f,  1.6f), 0, 0.5f, world);
@@ -116,10 +123,10 @@ public class TestTrack {
         TireObstacle tire4 = new TireObstacle(new Vector2( 13f, 0.20f), 0, 0.5f, world);
 
         //Add all newly made obstacles to the backLayer
-      /*  backLayer.addElement(upperWall.getBody());
+        backLayer.addElement(upperWall.getBody());
         backLayer.addElement(lowerWall.getBody());
         backLayer.addElement(leftWall.getBody());
-        backLayer.addElement(rightWall.getBody());*/
+        backLayer.addElement(rightWall.getBody());
         backLayer.addElement(tire.getBody());
         backLayer.addElement(tire2.getBody());
         backLayer.addElement(tire3.getBody());
@@ -127,19 +134,11 @@ public class TestTrack {
     }
 
     private Array<Vector2> getChosenPath(){
+
         Array<Vector2> path = new Array<Vector2>();
 
-        /*float[] waypoints = {
-                100, 400, 45, 355, 100, 300,
-                220, 300, 252, 278, 270, 229,
-                252, 170, 204, 153, 79, 154,
-                43, 116, 93, 70, 504, 70,
-                559, 110, 352, 278, 393, 323,
-                560, 249, 581, 387, 1900, 1
-        };*/
-
         // Hardcoded values for this track only
-        float[] waypoints = {   -180,  -160,
+        /*float[] waypoints = {   -180,  -160,
                                 -255,  -153,
                                 -275,  -115,
                                 -255,   -77,
@@ -158,20 +157,61 @@ public class TestTrack {
                                   73,   -83,
                                  240,    -9,
                                  261,  -147,
-                                -170,  -160};
+                                -170,  -160};*/
+
+        Vector2[] waypoints = { new Vector2(-180,  -160),
+                                new Vector2(-255,  -153),
+                                new Vector2(-275,  -115),
+                                new Vector2(-255,   -77),
+                                new Vector2(-220,   -60),
+                                new Vector2(-100,   -60),
+                                new Vector2(-68,   -38),
+                                new Vector2(-50,    11),
+                                new Vector2(-68,    70),
+                                new Vector2(-116,    87),
+                                new Vector2(-241,    86),
+                                new Vector2(-277,   124),
+                                new Vector2(-227,   170),
+                                new Vector2(184,   170),
+                                new Vector2(239,   130),
+                                new Vector2(32,   -38),
+                                new Vector2(73,   -83),
+                                new Vector2(240,    -9),
+                                new Vector2(261,  -147),
+                                new Vector2(-170,  -160)};
 
 
 
         //scale down with respect to background scale
         for(int i = 0; i < waypoints.length; i++){
-            waypoints[i] /= scaleBG;
+            waypoints[i].x /= scaleBG;
+            waypoints[i].y /= scaleBG;
         }
 
+        // Allocate number of total points
+        points = new Vector2[NUM_INTERPOLATED_POINTS];
 
-        for(int i = 0; (i+1) < waypoints.length; i+=2){
+        // Create Catmull-Rom spline
+        myCatmull = new CatmullRomSpline<Vector2>(waypoints, true);
+
+        // Calculate the new interpolated points
+        for(int i = 0; i < NUM_INTERPOLATED_POINTS; ++i)
+        {
+            points[i] = new Vector2();
+            myCatmull.valueAt(points[i], ((float)i)/((float)NUM_INTERPOLATED_POINTS-1));
+        }
+
+       /* for(int i = 0; (i+1) < waypoints.length; i+=2){
             path.add(new Vector2(waypoints[i], waypoints[i+1]));
             Gdx.app.log("In chosen path", "point : "+waypoints[i] + " and " + waypoints[i+1]);
             Gdx.app.log("In chosen path", "size: "+i);
+        }*/
+
+        // Same as before
+        for(int i = 0 ; i < NUM_INTERPOLATED_POINTS; i++){
+
+            path.add(points[i]);
+
         }
 
         return path;
@@ -200,16 +240,12 @@ public class TestTrack {
             sprite.draw(inBatch);//backgroundSprite.draw(inBatch);
         }
 
-       // Gdx.app.log("color:",  inBatch.);
-
 
         // Set shape renderer to be drawn in world, not on screen
         sr.setProjectionMatrix(camera.combined);
 
         // Draw fake car ?
         moveSprite.draw(inBatch);
-
-      //  Vector2 previous = moveSprite.getPath().first();
 
         //Draw physical objects
         //world.getBodies(tmpBodies);
@@ -225,18 +261,18 @@ public class TestTrack {
         drawBodySprites(backLayer,inBatch);
         drawBodySprites(frontLayer,inBatch);
 
-        // Draw all waypoints
-        /*for(Vector2 waypoint: moveSprite.getPath()){
+        // Draw waypoints
+        for(int i = 0; i < NUM_INTERPOLATED_POINTS - 1; i++){
+
             sr.begin(ShapeRenderer.ShapeType.Line);
-            sr.line(previous, waypoint);
+            sr.line(points[i], points[i+1]);
             sr.end();
 
             sr.begin(ShapeRenderer.ShapeType.Filled);
-            sr.circle(waypoint.x, waypoint.y, 0.5f);
+            sr.circle(points[i+1].x, points[i+1].y, 0.5f);
             sr.end();
 
-            previous = waypoint;
-        }*/
+        }
 
         inBatch.end();
     }

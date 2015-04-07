@@ -75,7 +75,7 @@ public class GameScreenWPhysics implements Screen{
         camera = new OrthographicCamera(SCREEN_WIDTH/100,SCREEN_HEIGHT/100);
         camera.rotate(-90);
         camera.position.set(new Vector2(testTrack.moveSprite.getX(),testTrack.moveSprite.getY()), 0);
-        //camera.zoom = 5.0f; // can be used to see the entire track
+        camera.zoom = 5.0f; // can be used to see the entire track
         camera.update();
 
         // camera.setToOrtho(true, Gdx.graphics.getWidth()/100, Gdx.graphics.getHeight()/100);
@@ -196,7 +196,7 @@ public class GameScreenWPhysics implements Screen{
         }
 
         // camera.rotate((camAngle - playerAngle));
-        camera.rotate(desiredCamRotation*0.04f);
+        camera.rotate(desiredCamRotation*0.02f);
 
         camera.update();
 
