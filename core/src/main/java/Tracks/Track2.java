@@ -27,7 +27,7 @@ import screens.MoveSprite;
 /**
  * Created by oskarcarlbaum on 18/03/15.
  */
-public class TestTrack {
+public class Track2 {
 
     public static Sprite backgroundSprite;
     public Vector<Sprite> sprites;
@@ -55,7 +55,7 @@ public class TestTrack {
     private Array<MoveSprite> moveSprites;
     public MoveSprite moveSprite;
 
-    public TestTrack(World inWorld) {
+    public Track2(World inWorld) {
         scaleBG = 10.0f;
         world = inWorld;
         sprites = new Vector<Sprite>();
@@ -106,7 +106,7 @@ public class TestTrack {
 
     }
     private void createObstacles(){
-      //Static physical objects
+        //Static physical objects
         float wallThickness = 4.0f;
         BoxObstacle upperWall = new BoxObstacle(new Vector2(0,backgroundSprite.getHeight()/2f),0
                 ,new Vector2(backgroundSprite.getWidth(),wallThickness), world);
@@ -132,8 +132,6 @@ public class TestTrack {
         backLayer.addElement(tire3.getBody());
         backLayer.addElement(tire4.getBody());
     }
-
-
 
     private Array<Vector2> getChosenPath(){
 
@@ -162,25 +160,25 @@ public class TestTrack {
                                 -170,  -160};*/
 
         Vector2[] waypoints = { new Vector2(-180,  -160),
-                                new Vector2(-255,  -153),
-                                new Vector2(-275,  -115),
-                                new Vector2(-255,   -77),
-                                new Vector2(-220,   -60),
-                                new Vector2(-100,   -60),
-                                new Vector2(-68,   -38),
-                                new Vector2(-50,    11),
-                                new Vector2(-68,    70),
-                                new Vector2(-116,    87),
-                                new Vector2(-241,    86),
-                                new Vector2(-277,   124),
-                                new Vector2(-227,   170),
-                                new Vector2(184,   170),
-                                new Vector2(239,   130),
-                                new Vector2(32,   -38),
-                                new Vector2(73,   -83),
-                                new Vector2(240,    -9),
-                                new Vector2(261,  -147),
-                                new Vector2(-170,  -160)};
+                new Vector2(-255,  -153),
+                new Vector2(-275,  -115),
+                new Vector2(-255,   -77),
+                new Vector2(-220,   -60),
+                new Vector2(-100,   -60),
+                new Vector2(-68,   -38),
+                new Vector2(-50,    11),
+                new Vector2(-68,    70),
+                new Vector2(-116,    87),
+                new Vector2(-241,    86),
+                new Vector2(-277,   124),
+                new Vector2(-227,   170),
+                new Vector2(184,   170),
+                new Vector2(239,   130),
+                new Vector2(32,   -38),
+                new Vector2(73,   -83),
+                new Vector2(240,    -9),
+                new Vector2(261,  -147),
+                new Vector2(-170,  -160)};
 
 
 
@@ -220,7 +218,7 @@ public class TestTrack {
     }
 
     private void createBackground() {
-        backgroundSprite = new Sprite(AssetLoader.testTrackTexture);
+        backgroundSprite = new Sprite(AssetLoader.track2Texture);
         backgroundSprite.setSize(backgroundSprite.getWidth()/scaleBG,backgroundSprite.getHeight()/scaleBG);
         //backgroundSprite.setOriginCenter();
 
@@ -228,12 +226,11 @@ public class TestTrack {
         sprites.addElement(backgroundSprite);
 
         // Set up mask
-        backgroundMask = new Sprite(AssetLoader.testTrackMask);
+        backgroundMask = new Sprite(AssetLoader.track2Mask);
         backgroundMask.getTexture().getTextureData().prepare();
         pixmap = backgroundMask.getTexture().getTextureData().consumePixmap();
         //pixmap.dispose();
     }
-
 
     public void addToRenderBatch(SpriteBatch inBatch, Camera camera) {
 
