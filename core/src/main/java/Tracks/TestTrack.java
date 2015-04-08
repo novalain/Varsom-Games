@@ -79,11 +79,11 @@ public class TestTrack {
         Vector2 spawnPos2 = new Vector2(-15f, -17f);
         float spawnPosRotation = (float) -Math.PI/2;
         car = new tempCar(carWidth, carLength, spawnPos1,world,new Sprite(AssetLoader.carTexture),
-                spawnPosRotation, 60, 20, 15);
+                spawnPosRotation, 60, 20, 30);
         Gdx.input.setInputProcessor(new InputHandler(car));
 
         car2 = new tempCar(carWidth, carLength, spawnPos2,world, new Sprite(AssetLoader.carTexture2),
-                spawnPosRotation, 60, 20, 15);
+                spawnPosRotation, 60, 20, 30);
 
         //add all cars to the frontLayer and all wheels to the backLayer
         for(Wheel tempWheel : car.wheels) {
@@ -238,11 +238,11 @@ public class TestTrack {
     public void addToRenderBatch(SpriteBatch inBatch, Camera camera) {
 
         inBatch.begin();
+
         // Draw sprites
         for (Sprite sprite : sprites) {
-            sprite.draw(inBatch);//backgroundSprite.draw(inBatch);
+            sprite.draw(inBatch);
         }
-
 
         // Set shape renderer to be drawn in world, not on screen
         sr.setProjectionMatrix(camera.combined);
@@ -251,8 +251,8 @@ public class TestTrack {
         moveSprite.draw(inBatch);
 
         //Draw physical objects
-        //world.getBodies(tmpBodies);
-        /*for (Body body : tmpBodies) {
+        /*world.getBodies(tmpBodies);
+        for (Body body : tmpBodies) {
             if ( body.getUserData() != null && body.getUserData() instanceof Sprite) {
                 Sprite sprite = (Sprite) body.getUserData();
                 sprite.setPosition(body.getPosition().x - sprite.getWidth()/2, body.getPosition().y - sprite.getHeight()/2);

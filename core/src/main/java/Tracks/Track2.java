@@ -79,11 +79,11 @@ public class Track2 {
         Vector2 spawnPos2 = new Vector2(-15f, -17f);
         float spawnPosRotation = (float) -Math.PI/2;
         car = new tempCar(carWidth, carLength, spawnPos1,world,new Sprite(AssetLoader.carTexture),
-                spawnPosRotation, 60, 20, 15);
+                spawnPosRotation, 60, 20, 30);
         Gdx.input.setInputProcessor(new InputHandler(car));
 
         car2 = new tempCar(carWidth, carLength, spawnPos2,world, new Sprite(AssetLoader.carTexture2),
-                spawnPosRotation, 60, 20, 15);
+                spawnPosRotation, 60, 20, 30);
 
         //add all cars to the frontLayer and all wheels to the backLayer
         for(Wheel tempWheel : car.wheels) {

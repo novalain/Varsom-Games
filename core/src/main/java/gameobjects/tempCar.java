@@ -15,7 +15,7 @@ import screens.GameScreenWPhysics;
 
 public class tempCar extends DynamicObject{
     //public Body body;
-    public float width, length,maxSteerAngle, maxSpeed, power;
+    public float width, length, maxSteerAngle, maxSpeed, power;
     float wheelAngle;
     public int steer, accelerate;
     //public Vector2 position;
@@ -34,7 +34,7 @@ public class tempCar extends DynamicObject{
         this.maxSpeed = maxSpeed;
         this.power = power;
         this.wheelAngle = 0;
-        steeringSensitivity = 0.5f; // a value less than 1 makes ta car less sensitive to device rotation
+        this.steeringSensitivity = 0.4f; // a value less than 1 makes ta car less sensitive to device rotation
 
         //init body
        /* BodyDef bodyDef = new BodyDef();
@@ -146,25 +146,26 @@ public class tempCar extends DynamicObject{
 
         //if accelerator is pressed down and speed limit has not been reached, go forwards
         if((this.accelerate==GameScreenWPhysics.ACC_ACCELERATE) && (this.getSpeedKMH() < this.maxSpeed)){
-            baseVector= new Vector2(0, -1f);
+            baseVector= new Vector2(0, -0.05f);
         }
         else if(this.accelerate==GameScreenWPhysics.ACC_BRAKE){
             //braking, but still moving forwards - increased force
             if(this.getLocalVelocity().y<0)
-                baseVector= new Vector2(0f, 1.3f);
+                baseVector= new Vector2(0f, 0.05f);
                 //going in reverse - less force
             else
-                baseVector=new Vector2(0f, 0.7f);
+                baseVector=new Vector2(0f, 0.05f);
         }
         else if (this.accelerate==GameScreenWPhysics.ACC_NONE ) {
+
             //slow down if not accelerating
             baseVector=new Vector2(0, 0);
             if (this.getSpeedKMH()<7)
                 this.setSpeed(0);
             else if (this.getLocalVelocity().y<0)
-                baseVector=new Vector2(0, 0.7f);
+                baseVector=new Vector2(0, 0.05f);
             else if (this.getLocalVelocity().y>0)
-                baseVector=new Vector2(0, -0.7f);
+                baseVector=new Vector2(0, -0.05f);
         }
         else
             baseVector=new Vector2(0, 0);

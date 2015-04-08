@@ -55,14 +55,6 @@ public class GameScreenWPhysics implements Screen{
                         POSITION_ITERATIONS = 3;
 
     private SpriteBatch batch;
-
-    //private Array<Body> tmpBodies = new Array<Body>();
-
-    //private final float pixelsToMeters = 1;
-
-    //TEMP VARIABLES
-    //private tempCar car;
-    //private TireObstacle tire, tire2, tire3, tire4;
     private TestTrack testTrack;
     private Track2 track2;
     private Pixmap pixmap;
@@ -103,7 +95,7 @@ public class GameScreenWPhysics implements Screen{
         camera = new OrthographicCamera(SCREEN_WIDTH/100,SCREEN_HEIGHT/100);
         camera.rotate(-90);
         camera.position.set(new Vector2(moveSprite.getX(),moveSprite.getY()), 0);
-        camera.zoom = 3.0f; // can be used to see the entire track
+        //camera.zoom = 5.0f; // can be used to see the entire track
         camera.update();
 
         batch = new SpriteBatch();
@@ -144,10 +136,10 @@ public class GameScreenWPhysics implements Screen{
     @Override
     public void render(float delta) {
 
-        handleCountDownTimer();
-
         Gdx.gl.glClearColor(0.2f, 0.7f, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        handleCountDownTimer();
 
         batch.setProjectionMatrix(camera.combined);
 
@@ -176,7 +168,6 @@ public class GameScreenWPhysics implements Screen{
            car.update(Gdx.app.getGraphics().getDeltaTime());
            //testTrack.car2.update()..
 
-
        }
 
     }
@@ -190,12 +181,8 @@ public class GameScreenWPhysics implements Screen{
 
         // If car is not on track
         if(valueFromMask != -1){
-            car.maxSpeed = 5.f;
-            car.setSpeed(car.getSpeedKMH()*0.5f);
+            car.setSpeed(car.getSpeedKMH()*0.9f);
         }
-
-        else
-            car.maxSpeed = 20.f;
 
     }
 
