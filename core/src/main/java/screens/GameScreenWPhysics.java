@@ -95,7 +95,7 @@ public class GameScreenWPhysics implements Screen{
         camera = new OrthographicCamera(SCREEN_WIDTH/100,SCREEN_HEIGHT/100);
         camera.rotate(-90);
         camera.position.set(new Vector2(moveSprite.getX(),moveSprite.getY()), 0);
-        //camera.zoom = 5.0f; // can be used to see the entire track
+       // camera.zoom = 5.0f; // can be used to see the entire track
         camera.update();
 
         batch = new SpriteBatch();

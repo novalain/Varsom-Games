@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -49,6 +51,11 @@ public class TestTrack {
     public static Sprite backgroundMask;
     public Pixmap pixmap;
 
+    //Particleeffects
+    public ParticleEffect effect;
+    // This one is needed if we want to access several layers in our particlesystem
+    //public ParticleEmitter emitter;
+
     //For waypoints
     private ShapeRenderer sr;
     private Sprite pathSprite;
@@ -91,6 +98,14 @@ public class TestTrack {
         }
         frontLayer.addElement(car.getBody());
         frontLayer.addElement(car2.getBody());
+
+        // Set up particlesystem, smoke.p is created in i build-in software in libgdx
+        // "Smoke.p" is linked together with a sample particle.png that is found in img folder
+        effect = new ParticleEffect();
+        effect.load(AssetLoader.particleFile, AssetLoader.particleImg);
+        effect.setPosition(car.getBody().getPosition().x, car.getBody().getPosition().y);
+        effect.scaleEffect(0.01f);
+        effect.start();
 
     }
 
@@ -225,7 +240,7 @@ public class TestTrack {
         //backgroundSprite.setOriginCenter();
 
         backgroundSprite.setPosition(-backgroundSprite.getWidth()/2,-backgroundSprite.getHeight()/2);
-        sprites.addElement(backgroundSprite);
+        //sprites.addElement(backgroundSprite);
 
         // Set up mask
         backgroundMask = new Sprite(AssetLoader.testTrackMask);
@@ -238,6 +253,17 @@ public class TestTrack {
     public void addToRenderBatch(SpriteBatch inBatch, Camera camera) {
 
         inBatch.begin();
+
+        backgroundSprite.draw(inBatch);
+
+        effect.setPosition(car.getBody().getPosition().x, car.getBody().getPosition().y);
+        effect.draw(inBatch, Gdx.graphics.getDeltaTime());
+
+        if(car.smoke){
+            if(effect.isComplete()){
+                effect.reset();
+            }
+        }
 
         // Draw sprites
         for (Sprite sprite : sprites) {
@@ -265,7 +291,7 @@ public class TestTrack {
         drawBodySprites(frontLayer,inBatch);
 
         // Draw waypoints
-        for(int i = 0; i < NUM_INTERPOLATED_POINTS - 1; i++){
+       /* for(int i = 0; i < NUM_INTERPOLATED_POINTS - 1; i++){
 
             sr.begin(ShapeRenderer.ShapeType.Line);
             sr.line(points[i], points[i+1]);
@@ -276,8 +302,9 @@ public class TestTrack {
             sr.end();
 
         }
-
+*/
         inBatch.end();
+
     }
 
     private void drawBodySprites(Vector<Body> tempBodies, SpriteBatch inBatch){

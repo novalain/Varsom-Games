@@ -1,6 +1,7 @@
 package helpers;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -20,6 +21,8 @@ public class AssetLoader {
     public static TextureRegion bg;
     public static TextureRegion car,tracks1,tracks2,tracks3;
     public static Animation carAnimation,wheelAnimation;
+
+    public static FileHandle particleFile, particleImg;
 
 
     public static void load() {
@@ -47,6 +50,9 @@ public class AssetLoader {
 
         bg = new TextureRegion(bgTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         bg.flip(false, true); // Flip the sprite vertically to fit coordinate system Y-down
+
+        particleFile = Gdx.files.internal("effects/smoke.p");
+        particleImg = Gdx.files.internal("img");
 
         // Texture size of tire-tracks.jpg is 112*289 px
        /* tracks1 = new TextureRegion(tireTrackTexture, 0,      0, 112, 96f);

@@ -17,6 +17,7 @@ public class tempCar extends DynamicObject{
     //public Body body;
     public float width, length, maxSteerAngle, maxSpeed, power;
     float wheelAngle;
+    public boolean smoke = false;
     public int steer, accelerate;
     //public Vector2 position;
     public List<Wheel> wheels;
@@ -146,12 +147,24 @@ public class tempCar extends DynamicObject{
 
         //if accelerator is pressed down and speed limit has not been reached, go forwards
         if((this.accelerate==GameScreenWPhysics.ACC_ACCELERATE) && (this.getSpeedKMH() < this.maxSpeed)){
+
+            // Add smoke effect for low velocities
+            if(this.getSpeedKMH() < 10.f)
+                smoke = true;
+
+            else
+                smoke = false;
+
             baseVector= new Vector2(0, -0.05f);
         }
         else if(this.accelerate==GameScreenWPhysics.ACC_BRAKE){
             //braking, but still moving forwards - increased force
-            if(this.getLocalVelocity().y<0)
+
+            smoke = true;
+
+            if(this.getLocalVelocity().y<0){
                 baseVector= new Vector2(0f, 0.05f);
+            }
                 //going in reverse - less force
             else
                 baseVector=new Vector2(0f, 0.05f);
@@ -166,9 +179,12 @@ public class tempCar extends DynamicObject{
                 baseVector=new Vector2(0, 0.05f);
             else if (this.getLocalVelocity().y>0)
                 baseVector=new Vector2(0, -0.05f);
+            smoke = false;
         }
-        else
+        else{
             baseVector=new Vector2(0, 0);
+            smoke = false;
+        }
 
         //multiply by engine power, which gives us a force vector relative to the wheel
         Vector2 forceVector= new Vector2(this.power*baseVector.x, this.power*baseVector.y);
