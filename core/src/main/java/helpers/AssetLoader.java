@@ -5,6 +5,8 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
+
 /**
  * Created by Alice on 2015-03-12.
  * Handles all textures such as car texture
@@ -20,14 +22,15 @@ public class AssetLoader {
 
     public static TextureRegion bg;
     public static TextureRegion car,tracks1,tracks2,tracks3;
-    public static Animation carAnimation,wheelAnimation;
+   // public static Animation carAnimation;
+    public static TextureRegion tex1, tex2, tex3;
 
     public static FileHandle particleFile, particleImg;
 
 
     public static void load() {
         // loading texture for car
-        carTexture = new Texture(Gdx.files.internal("img/Car.png"));
+        carTexture = new Texture(Gdx.files.internal("img/ambulance_animation/1c.png"));
         carTexture2 = new Texture(Gdx.files.internal("img/car2.png"));
         //carTexture = new Texture(Gdx.files.internal("img/car.png"));
         //carTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
@@ -54,6 +57,11 @@ public class AssetLoader {
         particleFile = Gdx.files.internal("effects/smoke.p");
         particleImg = Gdx.files.internal("img");
 
+        // For animation on ambulance but should probably use an atlas
+        tex1 = new TextureRegion(new Texture("img/ambulance_animation/1c.png"));
+        tex2 = new TextureRegion(new Texture("img/ambulance_animation/2c.png"));
+        tex3 = new TextureRegion(new Texture("img/ambulance_animation/3c.png"));
+
         // Texture size of tire-tracks.jpg is 112*289 px
        /* tracks1 = new TextureRegion(tireTrackTexture, 0,      0, 112, 96f);
         tracks2 = new TextureRegion(tireTrackTexture, 0, 94f, 112,192);
@@ -73,6 +81,8 @@ public class AssetLoader {
         //TextureRegion[] cars = { car,car,car };
         //carAnimation = new Animation(0.06f, cars);
         //carAnimation.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
+
+
 
     }
 

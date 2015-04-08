@@ -61,12 +61,15 @@ public class tempCar extends DynamicObject{
         //initialize wheels
         float wheelWidth = width*0.3f, wheelHeight = length*0.3f;
         this.wheels = new ArrayList<Wheel>();
-        this.wheels.add(new Wheel(world, this, -width/2, -length/3, wheelWidth, wheelHeight, true,  true)); //top left
-        this.wheels.add(new Wheel(world, this, width/2, -length/3, wheelWidth, wheelHeight, true,  true)); //top right
-        this.wheels.add(new Wheel(world, this, -width/2, length/3, wheelWidth, wheelHeight, false,  false)); //back left
-        this.wheels.add(new Wheel(world, this, width/2, length/3, wheelWidth, wheelHeight, false,  false)); //back right
-        sprite.setSize(width, length);
-        sprite.setOriginCenter();
+        this.wheels.add(new Wheel(world, this, -width/2.5f, -length/3, wheelWidth, wheelHeight, true,  true)); //top left
+        this.wheels.add(new Wheel(world, this, width/2.5f, -length/3, wheelWidth, wheelHeight, true,  true)); //top right
+        this.wheels.add(new Wheel(world, this, -width/2.5f, length/3, wheelWidth, wheelHeight, false,  false)); //back left
+        this.wheels.add(new Wheel(world, this, width/2.5f, length/3, wheelWidth, wheelHeight, false,  false)); //back right
+
+        if(sprite != null){
+            sprite.setSize(width, length);
+            sprite.setOriginCenter();
+        }
     }
 
     public List<Wheel> getPoweredWheels () {

@@ -95,9 +95,9 @@ public class GameRenderer {
         // Pass in the runTime variable to get the current frame.
 
 
-
+/*
         batcher.draw(AssetLoader.carAnimation.getKeyFrame(runTime),
-                car.getPosition().x, car.getPosition().y, car.getWidth()/2, car.getHeight()/2, car.getWidth(), car.getHeight(), 1, 1, car.getVelocity().x/10);
+                car.getPosition().x, car.getPosition().y, car.getWidth()/2, car.getHeight()/2, car.getWidth(), car.getHeight(), 1, 1, car.getVelocity().x/10);*/
 
 
         // End SpriteBatch

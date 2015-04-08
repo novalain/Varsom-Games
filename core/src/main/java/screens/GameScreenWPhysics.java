@@ -95,7 +95,7 @@ public class GameScreenWPhysics implements Screen{
         camera = new OrthographicCamera(SCREEN_WIDTH/100,SCREEN_HEIGHT/100);
         camera.rotate(-90);
         camera.position.set(new Vector2(moveSprite.getX(),moveSprite.getY()), 0);
-       // camera.zoom = 5.0f; // can be used to see the entire track
+       //camera.zoom = 5.0f; // can be used to see the entire track
         camera.update();
 
         batch = new SpriteBatch();
@@ -149,7 +149,7 @@ public class GameScreenWPhysics implements Screen{
         else if (level == 2)
             track2.addToRenderBatch(batch, camera);
 
-        debugRenderer.render(world, camera.combined);
+        //debugRenderer.render(world, camera.combined);
 
         world.step(TIMESTEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 
@@ -163,7 +163,7 @@ public class GameScreenWPhysics implements Screen{
        if(!paused){
 
            setCarSpeed();
-           updateCamera();
+           //updateCamera();
            moveSprite.update(Gdx.graphics.getDeltaTime());
            car.update(Gdx.app.getGraphics().getDeltaTime());
            //testTrack.car2.update()..

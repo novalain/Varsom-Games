@@ -3,11 +3,13 @@ package Tracks;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.CatmullRomSpline;
 import com.badlogic.gdx.math.MathUtils;
@@ -62,6 +64,9 @@ public class TestTrack {
     private Array<MoveSprite> moveSprites;
     public MoveSprite moveSprite;
 
+    public float elapsedTime = 0;
+    private Animation carAnimation;
+
     public TestTrack(World inWorld) {
         scaleBG = 10.0f;
         world = inWorld;
@@ -81,12 +86,26 @@ public class TestTrack {
 
         //create player cars
         //car = new tempCar(new Vector2(0.0f, -8.2f), new Vector2(1.0f,2.0f), world);
-        float carWidth = 0.50f, carLength = 1.0f;
+        //float carWidth = 0.5f, carLength = 1.0f;
+
+        Sprite carSprite = new Sprite(AssetLoader.carTexture);
+        TextureRegion[] frames = {AssetLoader.tex1, AssetLoader.tex2, AssetLoader.tex3};
+
+        carAnimation = new Animation(1/15f, frames);
+        carAnimation.setPlayMode(Animation.PlayMode.LOOP);
+
+        // Car body should be relative to the sprite?
+        float carWidth = carSprite.getWidth()/150;
+        float carLength = carSprite.getHeight()/150;
+
         Vector2 spawnPos1 = new Vector2(-16f, -16f);
         Vector2 spawnPos2 = new Vector2(-15f, -17f);
+
         float spawnPosRotation = (float) -Math.PI/2;
-        car = new tempCar(carWidth, carLength, spawnPos1,world,new Sprite(AssetLoader.carTexture),
-                spawnPosRotation, 60, 20, 30);
+
+        car = new tempCar(carWidth, carLength, spawnPos1, world, null,
+                0, 60, 20, 30);
+
         Gdx.input.setInputProcessor(new InputHandler(car));
 
         car2 = new tempCar(carWidth, carLength, spawnPos2,world, new Sprite(AssetLoader.carTexture2),
@@ -270,6 +289,24 @@ public class TestTrack {
             sprite.draw(inBatch);
         }
 
+        //inBatch.draw(sprite, 0, 0);
+
+        //car.getSpriteAnimation().draw(Gdx.graphics.getDeltaTime(), inBatch, car.getBody().getPosition());
+
+        elapsedTime += Gdx.graphics.getDeltaTime();
+        //inBatch.draw(carAnimation.getKeyFrame(elapsedTime, true), -16f, -16f);
+
+        TextureRegion txtRegion = carAnimation.getKeyFrame(elapsedTime, true);
+
+        Sprite sprite = new Sprite(txtRegion);
+        //sprite.scale(0.00001f);
+        //sprite.setRotation(car.getBody().getAngle() * MathUtils.radiansToDegrees);
+       // inBatch.draw(sprite, car.getBody().getPosition().x, car.getBody().getPosition().y);
+
+
+
+       // AssetLoader.carAnimation.draw(elapsedTime, inBatch, -16f, -16f);
+
         // Set shape renderer to be drawn in world, not on screen
         sr.setProjectionMatrix(camera.combined);
 
@@ -289,6 +326,13 @@ public class TestTrack {
 
         drawBodySprites(backLayer,inBatch);
         drawBodySprites(frontLayer,inBatch);
+
+        // For the animation, could probably be done in a cleaner way
+        sprite.setSize(car.width, car.length);
+        sprite.setOriginCenter();
+        sprite.setPosition(car.getBody().getPosition().x - sprite.getWidth()/2, car.getBody().getPosition().y - sprite.getHeight()/2);
+        sprite.setRotation(car.getBody().getAngle() * MathUtils.radiansToDegrees);
+        sprite.draw(inBatch);
 
         // Draw waypoints
        /* for(int i = 0; i < NUM_INTERPOLATED_POINTS - 1; i++){
