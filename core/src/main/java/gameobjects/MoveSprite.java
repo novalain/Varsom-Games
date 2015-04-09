@@ -1,13 +1,10 @@
-package screens;
+package gameobjects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-
-import gameobjects.tempCar;
 
 /**
  * Created by Alice on 2015-03-18.
@@ -18,7 +15,7 @@ public class MoveSprite extends Sprite {
 
     private Array<Vector2> path;
     private int waypoint = 0;
-    private tempCar leaderCar;
+    private Car leaderCar;
 
     public MoveSprite(Sprite sprite, Array<Vector2> path){
         super(sprite);

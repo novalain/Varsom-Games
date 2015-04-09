@@ -21,7 +21,7 @@ public class Wheel {
 	 */
 	public static final float PIXELS_PER_METER = 60.0f;
 	
-	public tempCar car;//car this wheel belongs to
+	public Car car;//car this wheel belongs to
 	private float width; // width in meters
 	private float length; // length in meters
 	public boolean revolving; // does this wheel revolve when steering?
@@ -29,7 +29,7 @@ public class Wheel {
 	public Body body;
     public Sprite sprite;
 
-	public Wheel(World world, tempCar car, float posX, float posY, float width, float length,
+	public Wheel(World world, Car car, float posX, float posY, float width, float length,
 			boolean revolving, boolean powered) {
 		super();
 		this.car = car;
@@ -59,12 +59,12 @@ public class Wheel {
 	    //create joint to connect wheel to body
 	    if(this.revolving){
 	    	RevoluteJointDef jointdef=new RevoluteJointDef();
-	        jointdef.initialize(this.car.body, this.body, this.body.getWorldCenter());
+	        jointdef.initialize(this.car.getBody(), this.body, this.body.getWorldCenter());
 	        jointdef.enableMotor=false; //we'll be controlling the wheel's angle manually
 		    world.createJoint(jointdef);
 	    }else{
 	    	PrismaticJointDef jointdef=new PrismaticJointDef();
-	        jointdef.initialize(this.car.body, this.body, this.body.getWorldCenter(), new Vector2(1, 0));
+	        jointdef.initialize(this.car.getBody(), this.body, this.body.getWorldCenter(), new Vector2(1, 0));
 	        jointdef.enableLimit=true;
 	        jointdef.lowerTranslation=jointdef.upperTranslation=0;
 		    world.createJoint(jointdef);
@@ -75,6 +75,7 @@ public class Wheel {
         sprite.setSize(width, length);
         sprite.setOriginCenter();
         body.setUserData(sprite);
+
 	}
 	
 	public void setAngle (float angle){

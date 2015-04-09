@@ -2,9 +2,9 @@ package helpers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+
 import gameobjects.Car;
-import gameobjects.tempCar;
-import screens.GameScreenWPhysics;
+import screens.GameScreen;
 /**
  * Created by Alice on 2015-03-12.
  */
@@ -17,15 +17,11 @@ import screens.GameScreenWPhysics;
 public class InputHandler implements InputProcessor{
 
     float accelY = Gdx.input.getAccelerometerY();
-    private tempCar car;
+    private Car car;
 
     // Ask for a reference to the car when InputHandler is created.
-    public InputHandler(tempCar car) {
-        this.car = car;
-
-    }
-    // Ugly hack for the old GameWorld class to work but obviously isn't used.
     public InputHandler(Car car) {
+        this.car = car;
 
     }
 
@@ -35,10 +31,10 @@ public class InputHandler implements InputProcessor{
         accelY = Gdx.input.getAccelerometerY();
 
         if(screenX > Gdx.graphics.getWidth()/2) {
-            car.accelerate = GameScreenWPhysics.ACC_ACCELERATE;
+            car.accelerate = GameScreen.ACC_ACCELERATE;
         }
         else if(screenX < Gdx.graphics.getWidth()/2) {
-            car.accelerate = GameScreenWPhysics.ACC_BRAKE;
+            car.accelerate = GameScreen.ACC_BRAKE;
         }
         return true; // return true to say there's been a touch event
     }
@@ -58,12 +54,13 @@ public class InputHandler implements InputProcessor{
     public boolean keyTyped(char character) {
         return false;
     }
+
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-       // car.onTouchUp();
-        car.accelerate = GameScreenWPhysics.ACC_NONE;
+        car.accelerate = GameScreen.ACC_NONE;
         return true;
     }
+
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         return false;

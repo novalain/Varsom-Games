@@ -3,15 +3,15 @@ package gameobjects;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 
+import abstract_gameobjects.StaticObject;
 import helpers.AssetLoader;
 
 /**
  * Created by oskarcarlbaum on 18/03/15.
  */
-public class BoxObstacle extends StaticObject{
+public class BoxObstacle extends StaticObject {
     private Vector2 size;
     private float width, height;
 

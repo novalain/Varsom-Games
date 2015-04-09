@@ -1,4 +1,4 @@
-package gameobjects;
+package abstract_gameobjects;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.World;
 /**
  * Supposed to store physics objects!
  */
+
 public abstract class PhysicalGameObject {
     protected Vector2 position;
     protected float angle;
@@ -22,7 +23,6 @@ public abstract class PhysicalGameObject {
     protected Shape shape;
     protected World world;
     protected Sprite sprite;
-
 
     public PhysicalGameObject(Vector2 inPosition,float inAngle,Shape inShape,Sprite inSprite, World inWorld){
         position = inPosition;
@@ -36,7 +36,6 @@ public abstract class PhysicalGameObject {
 
     // Get functions
     public Vector2 getPosition(){
-        //return position;
         return body.getPosition();
     }
 

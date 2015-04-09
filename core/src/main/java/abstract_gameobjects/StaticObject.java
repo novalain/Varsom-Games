@@ -1,4 +1,4 @@
-package gameobjects;
+package abstract_gameobjects;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
@@ -6,10 +6,12 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 
+import abstract_gameobjects.PhysicalGameObject;
+
 /**
  * Created by oskarcarlbaum on 13/03/15.
  */
-public class StaticObject extends PhysicalGameObject{
+public class StaticObject extends PhysicalGameObject {
 
     public StaticObject(Vector2 position, float angle,Shape shape, Sprite sprite, World world){
         super(position, angle, shape, sprite,world);

@@ -1,9 +1,8 @@
-package Tracks;
+package tracks;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -17,12 +16,12 @@ import com.badlogic.gdx.utils.Array;
 import java.util.Vector;
 
 import gameobjects.BoxObstacle;
+import gameobjects.Car;
 import gameobjects.TireObstacle;
 import gameobjects.Wheel;
-import gameobjects.tempCar;
 import helpers.AssetLoader;
 import helpers.InputHandler;
-import screens.MoveSprite;
+import gameobjects.MoveSprite;
 
 /**
  * Created by oskarcarlbaum on 18/03/15.
@@ -32,7 +31,7 @@ public class Track2 {
     public static Sprite backgroundSprite;
     public Vector<Sprite> sprites;
     public World world;
-    public tempCar car,car2;
+    public Car car,car2;
     private Body boxBody;
     private Array<Body> tmpBodies = new Array<Body>();
     private Vector<Body> backLayer;
@@ -78,11 +77,11 @@ public class Track2 {
         Vector2 spawnPos1 = new Vector2(-16f, -16f);
         Vector2 spawnPos2 = new Vector2(-15f, -17f);
         float spawnPosRotation = (float) -Math.PI/2;
-        car = new tempCar(carWidth, carLength, spawnPos1,world,new Sprite(AssetLoader.carTexture),
+        car = new Car(carWidth, carLength, spawnPos1,world,new Sprite(AssetLoader.carTexture),
                 spawnPosRotation, 60, 20, 30);
         Gdx.input.setInputProcessor(new InputHandler(car));
 
-        car2 = new tempCar(carWidth, carLength, spawnPos2,world, new Sprite(AssetLoader.carTexture2),
+        car2 = new Car(carWidth, carLength, spawnPos2,world, new Sprite(AssetLoader.carTexture2),
                 spawnPosRotation, 60, 20, 30);
 
         //add all cars to the frontLayer and all wheels to the backLayer
