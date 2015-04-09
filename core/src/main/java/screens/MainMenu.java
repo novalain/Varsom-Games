@@ -18,7 +18,7 @@ import com.varsomgames.cargame.CarGame;
 
 import java.util.ArrayList;
 
-import screens.Splash;
+import gameobjects.BackgroundObject;
 
 public class MainMenu implements Screen {
 
@@ -34,7 +34,8 @@ public class MainMenu implements Screen {
     private Skin skin = new Skin(Gdx.files.internal("skins/menuSkin.json"),
             new TextureAtlas(Gdx.files.internal("skins/menuSkin.pack")));
 
-    private TextButton buttonPlay = new TextButton("Play", skin),
+    private TextButton buttonPlay = new TextButton("Play level 1", skin),
+            buttonPlay2 = new TextButton("Play level 2", skin),
             buttonSettings = new TextButton("Settings", skin),
             buttonAbout = new TextButton("About", skin),
             buttonExit = new TextButton("Exit", skin);
@@ -56,7 +57,15 @@ public class MainMenu implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.log("clicked", "pressed the PLAY button.");
-                ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen());
+                ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(1));
+            }
+        });
+
+        buttonPlay2.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.log("clicked", "pressed the PLAY button.");
+                ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(2));
             }
         });
 
@@ -86,6 +95,7 @@ public class MainMenu implements Screen {
         // Elements are displayed in the order they're added, top to bottom
         table.add(title).padBottom(40).row();
         table.add(buttonPlay).size(400, 50).padBottom(20).row();
+        table.add(buttonPlay2).size(400, 50).padBottom(20).row();
         table.add(buttonSettings).size(400, 50).padBottom(20).row();
         table.add(buttonAbout).size(400, 50).padBottom(20).row();
         table.add(buttonExit).size(400, 50).padBottom(20).row();
