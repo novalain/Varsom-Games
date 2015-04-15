@@ -33,8 +33,6 @@ public class MenuScreen implements Screen{
         viewport.apply();
 
         camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
-        //camera.position.set(0,0,0);
-
 
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
@@ -55,11 +53,10 @@ public class MenuScreen implements Screen{
         button.setPosition(Commons.WORLD_WIDTH/2 , Commons.WORLD_HEIGHT/2);
         //button.setPosition(900,400);
 
+
+        stage.getViewport().setCamera(camera);
+
         stage.addActor(button);
-
-
-
-
     }
 
 
