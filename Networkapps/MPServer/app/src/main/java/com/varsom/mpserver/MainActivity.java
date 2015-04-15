@@ -39,8 +39,6 @@ public class MainActivity extends ActionBarActivity {
         final TextView textElement = (TextView) findViewById(R.id.textView);
         final EditText sendMessage = (EditText) findViewById(R.id.sendText);
 
-
-
         WifiManager wifi = (WifiManager)getSystemService(WIFI_SERVICE);
         WifiInfo connectionInfo = wifi.getConnectionInfo();
         int ip = connectionInfo.getIpAddress();
