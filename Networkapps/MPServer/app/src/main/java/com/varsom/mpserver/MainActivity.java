@@ -36,9 +36,11 @@ public class MainActivity extends ActionBarActivity {
         final Button serverStart = (Button) findViewById(R.id.start);
         final Button serverStop = (Button) findViewById(R.id.stop);
         final Button serverSend = (Button) findViewById(R.id.sendbutton);
+        final Button connectedDevicesBtn = (Button) findViewById(R.id.cnctbutton);
         final TextView textElement = (TextView) findViewById(R.id.textView);
         final EditText sendMessage = (EditText) findViewById(R.id.sendText);
 
+        int connectedDevices;
         WifiManager wifi = (WifiManager)getSystemService(WIFI_SERVICE);
         WifiInfo connectionInfo = wifi.getConnectionInfo();
         int ip = connectionInfo.getIpAddress();
@@ -89,6 +91,15 @@ public class MainActivity extends ActionBarActivity {
             public void onClick(View v) {
                 server.sendMassMessage(sendMessage);
                 sendMessage.setText("");
+
+            }
+        });
+
+        connectedDevicesBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Log.info("TESTAR","No. of connected devices: " + server.getServer().getConnections().length);
+                //server.sendMassMessage(sendMessage);
+                //sendMessage.setText("");
 
             }
         });

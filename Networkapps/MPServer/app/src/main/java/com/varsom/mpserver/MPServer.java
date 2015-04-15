@@ -55,4 +55,8 @@ public class MPServer {
         server.close();
     }
 
+    public Server getServer(){
+        return server;
+    }
+
 }

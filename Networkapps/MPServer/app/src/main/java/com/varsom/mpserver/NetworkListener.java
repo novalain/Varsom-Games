@@ -39,6 +39,7 @@ public class  NetworkListener extends Listener {
             //Write in the log if login was successful
             System.out.println("Login is accepted");
 
+
         }
         //Message is received from the client
         if (o instanceof Message) {

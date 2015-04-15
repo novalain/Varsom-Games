@@ -55,5 +55,14 @@
         android:layout_below="@+id/sendText"
         android:layout_centerHorizontal="true" />
 
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No. of connected devices"
+        android:id="@+id/cnctbutton"
+        android:layout_below="@+id/sendbutton"
+        android:layout_centerHorizontal="true" />
+
 
 </RelativeLayout>
