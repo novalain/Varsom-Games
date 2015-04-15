@@ -14,6 +14,9 @@ public class Main extends ApplicationAdapter {
 	public void create () {
 		batch = new SpriteBatch();
 		img = new Texture("sony.jpg");
+
+
+        // Reiner
 	}
 
 	@Override
