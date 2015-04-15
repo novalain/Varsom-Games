@@ -21,7 +21,7 @@ import gameobjects.TireObstacle;
 import gameobjects.Wheel;
 import helpers.AssetLoader;
 import helpers.InputHandler;
-import gameobjects.MoveSprite;
+//import gameobjects.MoveSprite;
 
 /**
  * Created by oskarcarlbaum on 18/03/15.
@@ -51,8 +51,8 @@ public class Track2 {
     //For waypoints
     private ShapeRenderer sr;
     private Sprite pathSprite;
-    private Array<MoveSprite> moveSprites;
-    public MoveSprite moveSprite;
+   // private Array<MoveSprite> moveSprites;
+    //public MoveSprite moveSprite;
 
     public Track2(World inWorld) {
         scaleBG = 10.0f;
@@ -77,12 +77,12 @@ public class Track2 {
         Vector2 spawnPos1 = new Vector2(-16f, -16f);
         Vector2 spawnPos2 = new Vector2(-15f, -17f);
         float spawnPosRotation = (float) -Math.PI/2;
-        car = new Car(carWidth, carLength, spawnPos1,world,new Sprite(AssetLoader.carTexture),
-                spawnPosRotation, 60, 20, 30);
+        /*car = new Car(carWidth, carLength, spawnPos1,world,new Sprite(AssetLoader.carTexture),
+                spawnPosRotation, 60, 20, 30,this);
         Gdx.input.setInputProcessor(new InputHandler(car));
 
         car2 = new Car(carWidth, carLength, spawnPos2,world, new Sprite(AssetLoader.carTexture2),
-                spawnPosRotation, 60, 20, 30);
+                spawnPosRotation, 60, 20, 30,this);*/
 
         //add all cars to the frontLayer and all wheels to the backLayer
         for(Wheel tempWheel : car.wheels) {
@@ -101,7 +101,7 @@ public class Track2 {
         pathSprite = new Sprite(AssetLoader.wallTexture);
         pathSprite.setSize(1, 1);
 
-        moveSprite = new MoveSprite(pathSprite, getChosenPath());
+        //moveSprite = new MoveSprite(pathSprite, getChosenPath());
 
     }
     private void createObstacles(){
@@ -244,7 +244,7 @@ public class Track2 {
         sr.setProjectionMatrix(camera.combined);
 
         // Draw fake car ?
-        moveSprite.draw(inBatch);
+        //moveSprite.draw(inBatch);
 
         //Draw physical objects
         //world.getBodies(tmpBodies);

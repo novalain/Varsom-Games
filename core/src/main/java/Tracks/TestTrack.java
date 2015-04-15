@@ -24,7 +24,7 @@ import gameobjects.TireObstacle;
 import gameobjects.Wheel;
 import helpers.AssetLoader;
 import helpers.InputHandler;
-import gameobjects.MoveSprite;
+//import gameobjects.MoveSprite;
 
 /**
  * Created by oskarcarlbaum on 18/03/15.
@@ -59,11 +59,17 @@ public class TestTrack {
     //For waypoints
     private ShapeRenderer sr;
     private Sprite pathSprite;
-    private Array<MoveSprite> moveSprites;
-    public MoveSprite moveSprite;
+    //private Array<MoveSprite> moveSprites;
+    //public MoveSprite moveSprite;
 
     public float elapsedTime = 0;
     private Animation carAnimation;
+
+    private Array<Vector2> path;
+
+    //For leader car & camera position
+    //private Vector2 startPoint;
+    private Vector2[] startLine;
 
     public TestTrack(World inWorld) {
         scaleBG = 10.0f;
@@ -81,6 +87,7 @@ public class TestTrack {
 
         // Creates fake "Car" and waypoints
         createWayPoints();
+        startLine = new Vector2[]{getPath().get(0), getPath().get(1)};
 
         //create player cars
         float carWidth = 0.5f, carLength = 1.0f;
@@ -101,10 +108,11 @@ public class TestTrack {
         float spawnPosRotation = (float) -Math.PI/2;
 
         car = new Car(carWidth, carLength, spawnPos1, world, null,
-                spawnPosRotation, 60, 20, 30);
+                spawnPosRotation, 60, 20, 30,this);
+        sprites.addElement(car.pathTrackingSprite);
 
         car2 = new Car(carWidth, carLength, spawnPos2,world, new Sprite(AssetLoader.carTexture2),
-                spawnPosRotation, 60, 20, 30);
+                spawnPosRotation, 60, 20, 30,this);
 
         Gdx.input.setInputProcessor(new InputHandler(car));
 
@@ -127,16 +135,70 @@ public class TestTrack {
     }
 
     private void createWayPoints(){
-
         // Set up shaperenderer
         sr = new ShapeRenderer();
 
         pathSprite = new Sprite(AssetLoader.wallTexture);
         pathSprite.setSize(1, 1);
 
-        moveSprite = new MoveSprite(pathSprite, getChosenPath());
+        path = new Array<Vector2>();
 
+        Vector2[] waypoints = { new Vector2(-170, -131),
+                                new Vector2(-220, -131),
+                                new Vector2(-245, -111),
+                                new Vector2(-220,  -90),
+                                new Vector2(-110,  -30),
+                                new Vector2( -85,   11),
+                                new Vector2(-110,   55),
+                                new Vector2(-226,  114),
+                                new Vector2(-245,  126),
+                                new Vector2(-226,  138),
+                                new Vector2( 169,  138),
+                                new Vector2( 196,  127),
+                                new Vector2( 158,   52),
+                                new Vector2(  73,  -30),
+                                new Vector2(  64,  -43),
+                                new Vector2(  85,  -47),
+                                new Vector2( 216,  -40),
+                                new Vector2( 239,  -60),
+                                new Vector2( 239, -110),
+                                new Vector2( 210, -131)};
+
+        //scale down with respect to background scale
+        for(int i = 0; i < waypoints.length; i++){
+            waypoints[i].x /= scaleBG;
+            waypoints[i].y /= scaleBG;
+        }
+
+        // Allocate number of total points
+        points = new Vector2[NUM_INTERPOLATED_POINTS];
+
+        // Create Catmull-Rom spline
+        //myCatmull = new CatmullRomSpline<Vector2>(waypoints, true);
+
+        // Calculate the new interpolated points
+        for(int i = 0; i < NUM_INTERPOLATED_POINTS; i++)
+        {
+            //points[i] = new Vector2();
+            points[i] = waypoints[i];
+            //myCatmull.valueAt(points[i], ((float)i)/((float)NUM_INTERPOLATED_POINTS-1));
+        }
+
+        /** DEBUG WAYPOINTS **/
+       /* for(int i = 0; (i+1) < waypoints.length; i+=2){
+            path.add(new Vector2(waypoints[i], waypoints[i+1]));
+            Gdx.app.log("In chosen path", "point : "+waypoints[i] + " and " + waypoints[i+1]);
+            Gdx.app.log("In chosen path", "size: "+i);
+        }*/
+
+        // Same as before
+        for(int i = 0 ; i < NUM_INTERPOLATED_POINTS; i++){
+            path.add(points[i]);
+        }
+
+        //moveSprite = new MoveSprite(pathSprite, getPath());
     }
+
     private void createObstacles(){
       //Static physical objects
         float wallThickness = 4.0f;
@@ -149,10 +211,10 @@ public class TestTrack {
         BoxObstacle rightWall = new BoxObstacle(new Vector2(backgroundSprite.getWidth()/2f,0),0
                 ,new Vector2(wallThickness,backgroundSprite.getHeight()), world);
 
-        TireObstacle tire  = new TireObstacle(new Vector2( 0.0f, -6f), 0, 1.5f, world);
-        TireObstacle tire2 = new TireObstacle(new Vector2( 0.0f,  1.6f), 0, 0.5f, world);
-        TireObstacle tire3 = new TireObstacle(new Vector2(-13f, 0.20f), 0, 0.5f, world);
-        TireObstacle tire4 = new TireObstacle(new Vector2( 13f, 0.20f), 0, 0.5f, world);
+        TireObstacle tire  = new TireObstacle(new Vector2(  0.0f, -6.0f), 0, 1.5f, world);
+        TireObstacle tire2 = new TireObstacle(new Vector2(  0.0f,  1.6f), 0, 0.5f, world);
+        TireObstacle tire3 = new TireObstacle(new Vector2(-13.0f,  0.2f), 0, 0.5f, world);
+        TireObstacle tire4 = new TireObstacle(new Vector2( 13.0f,  0.2f), 0, 0.5f, world);
 
         //Add all newly made obstacles to the backLayer
         backLayer.addElement(upperWall.getBody());
@@ -165,68 +227,7 @@ public class TestTrack {
         backLayer.addElement(tire4.getBody());
     }
 
-
-
-    private Array<Vector2> getChosenPath(){
-
-        Array<Vector2> path = new Array<Vector2>();
-
-        Vector2[] waypoints = { new Vector2(-180,  -160),
-                                new Vector2(-255,  -153),
-                                new Vector2(-275,  -115),
-                                new Vector2(-255,   -77),
-                                new Vector2(-220,   -60),
-                                new Vector2(-100,   -60),
-                                new Vector2(-68,   -38),
-                                new Vector2(-50,    11),
-                                new Vector2(-68,    70),
-                                new Vector2(-116,    87),
-                                new Vector2(-241,    86),
-                                new Vector2(-277,   124),
-                                new Vector2(-227,   170),
-                                new Vector2(184,   170),
-                                new Vector2(239,   130),
-                                new Vector2(32,   -38),
-                                new Vector2(73,   -83),
-                                new Vector2(240,    -9),
-                                new Vector2(261,  -147),
-                                new Vector2(-170,  -160)};
-
-
-
-        //scale down with respect to background scale
-        for(int i = 0; i < waypoints.length; i++){
-            waypoints[i].x /= scaleBG;
-            waypoints[i].y /= scaleBG;
-        }
-
-        // Allocate number of total points
-        points = new Vector2[NUM_INTERPOLATED_POINTS];
-
-        // Create Catmull-Rom spline
-        myCatmull = new CatmullRomSpline<Vector2>(waypoints, true);
-
-        // Calculate the new interpolated points
-        for(int i = 0; i < NUM_INTERPOLATED_POINTS; i++)
-        {
-            points[i] = new Vector2();
-            myCatmull.valueAt(points[i], ((float)i)/((float)NUM_INTERPOLATED_POINTS-1));
-        }
-
-        /** DEBUG WAYPOINTS **/
-       /* for(int i = 0; (i+1) < waypoints.length; i+=2){
-            path.add(new Vector2(waypoints[i], waypoints[i+1]));
-            Gdx.app.log("In chosen path", "point : "+waypoints[i] + " and " + waypoints[i+1]);
-            Gdx.app.log("In chosen path", "size: "+i);
-        }*/
-
-        // Same as before
-        for(int i = 0 ; i < NUM_INTERPOLATED_POINTS; i++){
-
-            path.add(points[i]);
-
-        }
-
+    public Array<Vector2> getPath(){
         return path;
     }
 
@@ -272,7 +273,7 @@ public class TestTrack {
         sr.setProjectionMatrix(camera.combined);
 
         // Draw fake car ?
-        moveSprite.draw(inBatch);
+        // moveSprite.draw(inBatch);
 
         drawBodySprites(backLayer,inBatch);
         drawBodySprites(frontLayer,inBatch);
@@ -304,9 +305,7 @@ public class TestTrack {
             sr.begin(ShapeRenderer.ShapeType.Filled);
             sr.circle(points[i+1].x, points[i+1].y, 0.5f);
             sr.end();
-
         }
-
     }
 
     private void drawBodySprites(Vector<Body> tempBodies, SpriteBatch inBatch){
@@ -318,5 +317,9 @@ public class TestTrack {
                 sprite.draw(inBatch);
             }
         }
+    }
+
+    public Vector2[] getStartLine(){
+        return startLine;
     }
 }

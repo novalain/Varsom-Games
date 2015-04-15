@@ -16,7 +16,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import tracks.TestTrack;
 import tracks.Track2;
 import gameobjects.Car;
-import gameobjects.MoveSprite;
+//import gameobjects.MoveSprite;
 
 
 public class GameScreen implements Screen{
@@ -51,7 +51,7 @@ public class GameScreen implements Screen{
     private Track2 track2;
     private Pixmap pixmap;
     private Car car;
-    private MoveSprite moveSprite;
+//    private MoveSprite moveSprite;
     private Sprite bgSprite;
 
     public GameScreen(int level){
@@ -66,14 +66,14 @@ public class GameScreen implements Screen{
         switch(level){
             case 1:
                 testTrack = new TestTrack(world);
-                moveSprite = testTrack.moveSprite;
+//                moveSprite = testTrack.moveSprite;
                 car = testTrack.car;
                 pixmap = testTrack.pixmap;
                 bgSprite = testTrack.backgroundSprite;
                 break;
             case 2:
                 track2 = new Track2(world);
-                moveSprite = track2.moveSprite;
+//                moveSprite = track2.moveSprite;
                 car = track2.car;
                 pixmap = track2.pixmap;
                 bgSprite = track2.backgroundSprite;
@@ -85,9 +85,10 @@ public class GameScreen implements Screen{
 
         // Init camera
         camera = new OrthographicCamera(SCREEN_WIDTH/100,SCREEN_HEIGHT/100);
-        camera.rotate(-90);
-        camera.position.set(new Vector2(moveSprite.getX(),moveSprite.getY()), 0);
-       //camera.zoom = 5.0f; // can be used to see the entire track
+        //camera.rotate(-90);
+//        camera.position.set(new Vector2(moveSprite.getX(),moveSprite.getY()), 0);
+        camera.position.set(car.getPointOnTrack(), 0);
+        camera.zoom = 1.0f; // can be used to see the entire track
         camera.update();
 
         batch = new SpriteBatch();
@@ -131,7 +132,7 @@ public class GameScreen implements Screen{
         else if (level == 2)
             track2.addToRenderBatch(batch, camera);
 
-        //debugRenderer.render(world, camera.combined);
+        debugRenderer.render(world, camera.combined);
 
         world.step(TIMESTEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 
@@ -146,7 +147,10 @@ public class GameScreen implements Screen{
 
            setCarSpeed();
            updateCamera();
-           moveSprite.update(Gdx.graphics.getDeltaTime());
+           //moveSprite.update(Gdx.graphics.getDeltaTime());
+           //moveSprite.update(Gdx.graphics.getDeltaTime());
+           //moveSprite.update(Gdx.graphics.getDeltaTime(),car);
+
            car.update(Gdx.app.getGraphics().getDeltaTime());
            //testTrack.car2.update()..
 
@@ -163,19 +167,21 @@ public class GameScreen implements Screen{
 
         // If car is not on track
         if(valueFromMask != -1){
-            car.setSpeed(car.getSpeedKMH()*0.9f);
+            car.setSpeed(car.getSpeedKMH()*0.97f);
         }
 
     }
 
     private void updateCamera(){
+        Vector2 desiredCamPosition = car.getPointOnTrack();
 
-        camera.position.set(new Vector2(moveSprite.getX(),moveSprite.getY()), 0);
+        camera.position.set(car.getPointOnTrack(),0);
+        //camera.position.set(new Vector2(moveSprite.getX(),moveSprite.getY()), 0);
 
         // Convert camera angle from [-180, 180] to [0, 360]
         float camAngle = -getCurrentCameraAngle(camera) + 180;
 
-        float desiredCamRotation = (camAngle - moveSprite.getRotation() - 90);
+        float desiredCamRotation = (camAngle - /*moveSprite.getRotation()*/(float)Math.toDegrees(car.getRotationTrack())-90);
 
         if(desiredCamRotation > 180){
             desiredCamRotation -= 360;
@@ -187,6 +193,7 @@ public class GameScreen implements Screen{
         camera.rotate(desiredCamRotation*0.02f);
 
         camera.update();
+        //Gdx.app.log("MoveSprite", "MoveSprite: (" + moveSprite.getX() + ", " + moveSprite.getY() +")");
 
     }
 

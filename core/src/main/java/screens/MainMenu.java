@@ -98,11 +98,11 @@ public class MainMenu implements Screen {
 
         // Elements are displayed in the order they're added, top to bottom
         table.add(title).padBottom(40).row();
-        table.add(buttonPlay).size(400, 50).padBottom(20).row();
-        table.add(buttonPlay2).size(400, 50).padBottom(20).row();
-        table.add(buttonSettings).size(400, 50).padBottom(20).row();
-        table.add(buttonAbout).size(400, 50).padBottom(20).row();
-        table.add(buttonExit).size(400, 50).padBottom(20).row();
+        table.add(buttonPlay).size(400, 75).padBottom(20).row();
+        table.add(buttonPlay2).size(400, 75).padBottom(20).row();
+        table.add(buttonSettings).size(400, 75).padBottom(20).row();
+        table.add(buttonAbout).size(400, 75).padBottom(20).row();
+        table.add(buttonExit).size(400, 75).padBottom(20).row();
 
         table.setFillParent(true);
         stage.addActor(table);
