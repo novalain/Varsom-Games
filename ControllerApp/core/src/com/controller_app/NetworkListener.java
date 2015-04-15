@@ -43,7 +43,7 @@ public class NetworkListener extends Listener {
                 String mess = o.toString();
                 System.out.println("Message: " + mess);
 
-            }else {
+            } else {
                 c.close();
                 //ourOutput.append("Nothing");
             }

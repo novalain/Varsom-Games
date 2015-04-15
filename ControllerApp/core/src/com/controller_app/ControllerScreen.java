@@ -39,7 +39,7 @@ public class ControllerScreen implements Screen {
         textButtionStyle.down = skin.getDrawable("down");
         textButtionStyle.checked = skin.getDrawable("up");
         button = new TextButton("drive", textButtionStyle);
-        button.setPosition(Commons.WORLD_HEIGHT/2, Commons.WORLD_WIDTH/2);
+        button.setPosition(Commons.WORLD_HEIGHT / 2, Commons.WORLD_WIDTH / 2);
         button.setHeight(200);
         button.setWidth(400);
 
@@ -89,10 +89,10 @@ public class ControllerScreen implements Screen {
         accelY = Gdx.input.getAccelerometerY();
 
         tiltAngle = (float) Math.atan2(accelX, accelY);
-        tiltAngle -= Math.PI /2;
+        tiltAngle -= Math.PI / 2;
         tiltAngle *= steeringSensitivity;
 
-        return  tiltAngle;
+        return tiltAngle;
 
         //Gdx.app.log("inputhandler", "tiltAngle: " + tiltAngle);
     }

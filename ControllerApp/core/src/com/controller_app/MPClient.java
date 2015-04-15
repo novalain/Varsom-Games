@@ -25,7 +25,7 @@ public class MPClient {
 
         client.start();
 
-        System.setProperty("java.net.preferIPv4Stack" , "true");
+        System.setProperty("java.net.preferIPv4Stack", "true");
 
         //hostCheck();
         /*

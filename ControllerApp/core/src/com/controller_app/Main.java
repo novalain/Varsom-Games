@@ -3,23 +3,24 @@ package com.controller_app;
 import com.badlogic.gdx.Game;
 
 public class Main extends Game {
-/*
-    OrthographicCamera camera;
-    Viewport viewport;
-*/
 
+    private MenuScreen menuScreen = new MenuScreen();
 
-	@Override
-	public void create () {
-/*
-        camera = new OrthographicCamera();
-        viewport = new StretchViewport(Commons.WORLD_WIDTH,Commons.WORLD_HEIGHT, camera);
-        viewport.apply();
+    @Override
+    public void create() {
 
-        camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
-*/
+        setActiveScreen(1);
+    }
 
-
-        setScreen(new MenuScreen());
-	}
+    public void setActiveScreen(int screen) {
+        switch (screen) {
+            case 1:
+                setScreen(menuScreen);
+                break;
+            case 2:
+                break;
+            default:
+                break;
+        }
+    }
 }
