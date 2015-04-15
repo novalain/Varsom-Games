@@ -50,7 +50,7 @@ public class GameScreen implements Screen{
     private TestTrack testTrack;
     private Track2 track2;
     private Pixmap pixmap;
-    private Car car;
+    private Car car,leaderCar;
 //    private MoveSprite moveSprite;
     private Sprite bgSprite;
 
@@ -167,16 +167,17 @@ public class GameScreen implements Screen{
 
         // If car is not on track
         if(valueFromMask != -1){
-            car.setSpeed(car.getSpeedKMH()*0.97f);
+            car.setSpeed(car.getSpeedKMH() * 0.97f);
         }
 
     }
 
     private void updateCamera(){
-        Vector2 desiredCamPosition = car.getPointOnTrack();
-
-        camera.position.set(car.getPointOnTrack(),0);
-        //camera.position.set(new Vector2(moveSprite.getX(),moveSprite.getY()), 0);
+        float smoothCamConst = 0.1f;
+        float newCamPosX = (car.getPointOnTrack().x - camera.position.x);
+        float newCamPosY = (car.getPointOnTrack().y - camera.position.y);
+        Vector2 newPos = new Vector2(camera.position.x+newCamPosX*smoothCamConst,camera.position.y+newCamPosY*smoothCamConst);
+        camera.position.set(newPos,0);
 
         // Convert camera angle from [-180, 180] to [0, 360]
         float camAngle = -getCurrentCameraAngle(camera) + 180;
