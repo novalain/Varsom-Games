@@ -31,6 +31,8 @@ public class MainMenu implements Screen {
     private SpriteBatch spriteBatch = new SpriteBatch();
     private ArrayList<BackgroundObject> objectList;
 
+    //TODO Load files from AssetLoader
+
     private Skin skin = new Skin(Gdx.files.internal("skins/menuSkin.json"),
             new TextureAtlas(Gdx.files.internal("skins/menuSkin.pack")));
 
@@ -91,6 +93,8 @@ public class MainMenu implements Screen {
                 // or System.exit(0);
             }
         });
+
+        //TODO Fix hardcoded values on buttons
 
         // Elements are displayed in the order they're added, top to bottom
         table.add(title).padBottom(40).row();

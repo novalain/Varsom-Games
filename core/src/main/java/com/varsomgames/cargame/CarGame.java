@@ -17,10 +17,11 @@ public class CarGame extends Game {
 
 	@Override
 	public void create () {
-        // load assets
-        AssetLoader.load();
         // start splash screen which will start gamescreen
         setScreen(new Splash());
+
+        // load assets
+        AssetLoader.load();
 	}
 
     @Override

@@ -177,7 +177,7 @@ public class TestTrack {
         //myCatmull = new CatmullRomSpline<Vector2>(waypoints, true);
 
         // Calculate the new interpolated points
-        for(int i = 0; i < NUM_INTERPOLATED_POINTS; ++i)
+        for(int i = 0; i < NUM_INTERPOLATED_POINTS; i++)
         {
             //points[i] = new Vector2();
             points[i] = waypoints[i];
