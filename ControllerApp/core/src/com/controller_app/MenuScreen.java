@@ -50,13 +50,12 @@ public class MenuScreen implements Screen{
         button = new TextButton("Fuck you!" , textButtonStyle);
         button.setWidth(800);
         button.setHeight(200);
-        button.setPosition(Commons.WORLD_WIDTH/2 , Commons.WORLD_HEIGHT/2);
+        button.setPosition(Commons.WORLD_WIDTH/2 - button.getWidth()/2 , Commons.WORLD_HEIGHT/2 - button.getHeight()/2);
         //button.setPosition(900,400);
 
+        stage.addActor(button);
 
         stage.getViewport().setCamera(camera);
-
-        stage.addActor(button);
     }
 
 
