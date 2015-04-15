@@ -2,28 +2,28 @@ package com.controller_app;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class MenuScreen implements Screen{
 
     private Stage stage;
-    TextButton button;
-    TextButtonStyle textButtonStyle;
-    BitmapFont font;
-    Skin skin;
-    TextureAtlas buttonAtlas;
+    private TextButton button;
+    private TextButtonStyle textButtonStyle;
+    private BitmapFont font;
+    private Skin skin;
+    private TextureAtlas buttonAtlas;
+
+    private OrthographicCamera camera;
+    private Viewport viewport;
 
     public MenuScreen(){
         stage = new Stage();
@@ -42,11 +42,19 @@ public class MenuScreen implements Screen{
         button = new TextButton("Fuck you!" , textButtonStyle);
         button.setWidth(800);
         button.setHeight(200);
-        button.setPosition(Commons.WORLD_WIDTH/4 , Commons.WORLD_HEIGHT/4);
+        //button.setPosition(Commons.WORLD_WIDTH/2 , Commons.WORLD_HEIGHT/2);
+        button.setPosition(100,100);
 
         stage.addActor(button);
 
 
+        // The viewport
+        camera = new OrthographicCamera();
+        viewport = new StretchViewport(Commons.WORLD_WIDTH,Commons.WORLD_HEIGHT, camera);
+        viewport.apply();
+
+        camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
+        //camera.position.set(0,0,0);
     }
 
 
