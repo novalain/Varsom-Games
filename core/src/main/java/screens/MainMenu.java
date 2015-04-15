@@ -22,6 +22,9 @@ import gameobjects.BackgroundObject;
 
 public class MainMenu implements Screen {
 
+
+    //TODO: redo everything!
+
     private Stage stage = new Stage();
     private Table table = new Table();
 
@@ -93,6 +96,8 @@ public class MainMenu implements Screen {
         });
 
         // Elements are displayed in the order they're added, top to bottom
+
+        // TODO: Resize the buttons and their bitmap fonts to be size invariant.
         table.add(title).padBottom(40).row();
         table.add(buttonPlay).size(400, 50).padBottom(20).row();
         table.add(buttonPlay2).size(400, 50).padBottom(20).row();
@@ -122,6 +127,8 @@ public class MainMenu implements Screen {
     @Override
     public void resize(int width, int height) {
 
+        // make use of this, buddy
+
     }
 
     @Override
@@ -141,12 +148,16 @@ public class MainMenu implements Screen {
 
     @Override
     public void dispose() {
+
+        // when this instance of MainMenu is disposed, dispose all other
         stage.dispose();
         skin.dispose();
     }
 
     public void updateBackground() {
-        
+        /**
+        A man choose, a slave obeys.
+        **/
         for (int i = 0; i < objectList.size(); i++) {
             BackgroundObject temp = objectList.get(i);
             temp.update();
