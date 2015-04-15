@@ -28,9 +28,9 @@ public class MPClient {
         System.setProperty("java.net.preferIPv4Stack" , "true");
 
         //hostCheck();
-
+        /*
         try{
-            client.connect(50000, "192.168.01.01", 54555, 64555);
+            client.connect(50000, "192.168.1.1", 54555, 64555);
             //b.setText("Connected");
         }
         catch(IOException e){
@@ -38,6 +38,7 @@ public class MPClient {
             client.stop();
             //b.setText("Connect doesn't work");
         }
+        */
 
     }
     /*
