@@ -40,13 +40,13 @@ public class GameScreen implements Screen{
     private Box2DDebugRenderer debugRenderer;
     private OrthographicCamera camera;
 
-    private ShapeRenderer shapeRenderer;
-
     private final float TIMESTEP = 1/60f;
     private final int   VELOCITY_ITERATIONS = 8,
                         POSITION_ITERATIONS = 3;
 
     private SpriteBatch batch;
+
+    // TODO Implement class Track
     private TestTrack testTrack;
     private Track2 track2;
     private Pixmap pixmap;
@@ -92,16 +92,6 @@ public class GameScreen implements Screen{
 
         batch = new SpriteBatch();
         batch.setProjectionMatrix(camera.combined);
-
-       // float camAngle = getCurrentCameraAngle(camera);
-       // camera.rotate(-camAngle + testTrack.moveSprite.getRotation()-90);
-
-       /* //car = new tempCar(new Vector2(0.0f, -8.2f), new Vector2(1.0f,2.0f), world);
-        float carWidth = 1.0f, carLength = 2.0f;
-        this.car = new tempCar(carWidth, carLength, new Vector2(3.2f, 0),world,
-                 (float) Math.PI, 60, 20, 40);*/
-
-        //Gdx.input.setInputProcessor(new InputHandler(car));
 
     }
 
@@ -155,7 +145,7 @@ public class GameScreen implements Screen{
        if(!paused){
 
            setCarSpeed();
-           //updateCamera();
+           updateCamera();
            moveSprite.update(Gdx.graphics.getDeltaTime());
            car.update(Gdx.app.getGraphics().getDeltaTime());
            //testTrack.car2.update()..
@@ -177,8 +167,6 @@ public class GameScreen implements Screen{
         }
 
     }
-
-
 
     private void updateCamera(){
 

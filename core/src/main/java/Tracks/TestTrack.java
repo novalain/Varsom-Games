@@ -207,7 +207,7 @@ public class TestTrack {
         myCatmull = new CatmullRomSpline<Vector2>(waypoints, true);
 
         // Calculate the new interpolated points
-        for(int i = 0; i < NUM_INTERPOLATED_POINTS; ++i)
+        for(int i = 0; i < NUM_INTERPOLATED_POINTS; i++)
         {
             points[i] = new Vector2();
             myCatmull.valueAt(points[i], ((float)i)/((float)NUM_INTERPOLATED_POINTS-1));
