@@ -26,6 +26,16 @@ public class MenuScreen implements Screen{
     private Viewport viewport;
 
     public MenuScreen(){
+
+        // The viewport
+        camera = new OrthographicCamera();
+        viewport = new StretchViewport(Commons.WORLD_WIDTH,Commons.WORLD_HEIGHT, camera);
+        viewport.apply();
+
+        camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
+        //camera.position.set(0,0,0);
+
+
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
         font = new BitmapFont();
@@ -42,19 +52,14 @@ public class MenuScreen implements Screen{
         button = new TextButton("Fuck you!" , textButtonStyle);
         button.setWidth(800);
         button.setHeight(200);
-        //button.setPosition(Commons.WORLD_WIDTH/2 , Commons.WORLD_HEIGHT/2);
-        button.setPosition(100,100);
+        button.setPosition(Commons.WORLD_WIDTH/2 , Commons.WORLD_HEIGHT/2);
+        //button.setPosition(900,400);
 
         stage.addActor(button);
 
 
-        // The viewport
-        camera = new OrthographicCamera();
-        viewport = new StretchViewport(Commons.WORLD_WIDTH,Commons.WORLD_HEIGHT, camera);
-        viewport.apply();
 
-        camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
-        //camera.position.set(0,0,0);
+
     }
 
 
