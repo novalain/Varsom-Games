@@ -1,6 +1,7 @@
 package com.controller_app;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 
 public class Main extends Game {
 
@@ -9,18 +10,6 @@ public class Main extends Game {
     @Override
     public void create() {
 
-        setActiveScreen(1);
-    }
-
-    public void setActiveScreen(int screen) {
-        switch (screen) {
-            case 1:
-                setScreen(menuScreen);
-                break;
-            case 2:
-                break;
-            default:
-                break;
-        }
+        setScreen(menuScreen);
     }
 }
