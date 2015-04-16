@@ -1,50 +1,29 @@
 package com.controller_app;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-
-import static com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 /**
  *
  */
-public class ControllerScreen implements Screen {
+public class ControllerScreen extends ScaledScreen {
 
+    private TextButton drive;
+    private boolean drive_pressed;
+
+    // Gyro
     private float accelX, accelY, tiltAngle;
     static private float steeringSensitivity = 0.4f;
 
-    Stage stage;
-    TextButton button;
-    TextButtonStyle textButtionStyle;
-    BitmapFont font;
-    Skin skin;
-    TextureAtlas buttonAtlas;
+    public ControllerScreen() {
 
-    ControllerScreen() {
+        drive_pressed = false;
 
-        stage = new Stage();
-        Gdx.input.setInputProcessor(stage);
-        font = new BitmapFont();
-        skin = new Skin();
-        buttonAtlas = new TextureAtlas(Gdx.files.internal("skins/menuSkin.json"));
-        skin.addRegions(buttonAtlas);
-        textButtionStyle = new TextButtonStyle();
-        textButtionStyle.font = font;
-        textButtionStyle.up = skin.getDrawable("up");
-        textButtionStyle.down = skin.getDrawable("down");
-        textButtionStyle.checked = skin.getDrawable("up");
-        button = new TextButton("drive", textButtionStyle);
-        button.setPosition(Commons.WORLD_HEIGHT / 2, Commons.WORLD_WIDTH / 2);
-        button.setHeight(200);
-        button.setWidth(400);
-
-        stage.addActor(button);
-
+        generateFonts();
+        generateTextButtonStyle();
+        generateButtons();
 
     }
 
@@ -55,8 +34,7 @@ public class ControllerScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        //super.render();
-        stage.draw();
+
     }
 
     @Override
@@ -84,6 +62,40 @@ public class ControllerScreen implements Screen {
 
     }
 
+    @Override
+    void generateFonts() {
+
+
+    }
+
+    @Override
+    void generateButtons() {
+        drive = new TextButton("Gasa", textButtonStyle);
+        drive.setWidth(400);
+        drive.setHeight(400);
+        drive.setPosition(Commons.WORLD_WIDTH / 2 - drive.getWidth(), Commons.WORLD_HEIGHT / 2 - drive.getHeight());
+
+        drive.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+
+                drive_pressed = true;
+            }
+        });
+
+    }
+
+    
+
+    @Override
+    void generateTextButtonStyle() {
+        textButtonStyle = new TextButton.TextButtonStyle();
+        textButtonStyle.font = font;
+        textButtonStyle.up = skin.getDrawable("up");
+        textButtonStyle.down = skin.getDrawable("down");
+
+    }
+
     protected float updateDeviceRotation() {
         accelX = Gdx.input.getAccelerometerX();
         accelY = Gdx.input.getAccelerometerY();
@@ -96,5 +108,4 @@ public class ControllerScreen implements Screen {
 
         //Gdx.app.log("inputhandler", "tiltAngle: " + tiltAngle);
     }
-
 }
