@@ -4,19 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 
-import tracks.TestTrack;
-import tracks.Track2;
 import gameobjects.Car;
-//import gameobjects.MoveSprite;
+import tracks.Track;
+import tracks.Track1;
+import tracks.Track2;
 
 
 public class GameScreen implements Screen{
@@ -32,7 +29,7 @@ public class GameScreen implements Screen{
     public static int level;
 
     // For countdown
-    private static float countDownTimer = 5.f;
+    private static float countDownTimer = 5.0f;
     private static boolean paused = true;
 
     // Class variables
@@ -47,12 +44,13 @@ public class GameScreen implements Screen{
     private SpriteBatch batch;
 
     // TODO Implement class Track
-    private TestTrack testTrack;
-    private Track2 track2;
-    private Pixmap pixmap;
-    private Car car,leaderCar;
+    //private /*Track*/TestTrack track;
+    private Track track;
+
+//    private Pixmap pixmap;
+    private Car leaderCar;
 //    private MoveSprite moveSprite;
-    private Sprite bgSprite;
+//    private Sprite bgSprite;
 
     public GameScreen(int level){
 
@@ -65,30 +63,34 @@ public class GameScreen implements Screen{
         // Create objects and select level
         switch(level){
             case 1:
-                testTrack = new TestTrack(world);
-//                moveSprite = testTrack.moveSprite;
-                car = testTrack.car;
-                pixmap = testTrack.pixmap;
-                bgSprite = testTrack.backgroundSprite;
+                track = new Track1(world);
+////                moveSprite = testTrack.moveSprite;
+//                car = track.car;
+//                pixmap = track.pixmap;
+//                bgSprite = track.backgroundSprite;
                 break;
             case 2:
-                track2 = new Track2(world);
+                track = new Track2(world);
 //                moveSprite = track2.moveSprite;
-                car = track2.car;
-                pixmap = track2.pixmap;
-                bgSprite = track2.backgroundSprite;
+                //car = track2.car;
+                //pixmap = track2.pixmap;
+                //bgSprite = track2.backgroundSprite;
                 break;
             default:
                 System.out.println("Mega Error");
 
         }
+        leaderCar = track.getCars()[0];
 
         // Init camera
+        //TODO /100 should probably be changed
         camera = new OrthographicCamera(SCREEN_WIDTH/100,SCREEN_HEIGHT/100);
         //camera.rotate(-90);
 //        camera.position.set(new Vector2(moveSprite.getX(),moveSprite.getY()), 0);
-        camera.position.set(car.getPointOnTrack(), 0);
-        camera.zoom = 1.0f; // can be used to see the entire track
+        //TODO camera.position.set(leaderCar.getPointOnTrack(), 0);
+        camera.position.set(track.getCars()[0].getPointOnTrack(), 0);
+        camera.rotate((float)Math.toDegrees(leaderCar.getRotationTrack())-180);
+        camera.zoom = 5.0f; // can be used to see the entire track
         camera.update();
 
         batch = new SpriteBatch();
@@ -119,20 +121,16 @@ public class GameScreen implements Screen{
     @Override
     public void render(float delta) {
 
-        Gdx.gl.glClearColor(0.2f, 0.7f, 0.2f, 1);
+        Gdx.gl.glClearColor(0.7f, 0.2f, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         handleCountDownTimer();
 
         batch.setProjectionMatrix(camera.combined);
 
-        if(level == 1)
-            testTrack.addToRenderBatch(batch,camera);
+        track.addToRenderBatch(batch,camera);
 
-        else if (level == 2)
-            track2.addToRenderBatch(batch, camera);
-
-        debugRenderer.render(world, camera.combined);
+        //debugRenderer.render(world, camera.combined);
 
         world.step(TIMESTEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 
@@ -145,44 +143,38 @@ public class GameScreen implements Screen{
        // Here goes the all the updating / game logic
        if(!paused){
 
-           setCarSpeed();
-           updateCamera();
            //moveSprite.update(Gdx.graphics.getDeltaTime());
            //moveSprite.update(Gdx.graphics.getDeltaTime());
            //moveSprite.update(Gdx.graphics.getDeltaTime(),car);
 
-           car.update(Gdx.app.getGraphics().getDeltaTime());
-           //testTrack.car2.update()..
+           for(Car car : track.getCars()) {
+               car.update(Gdx.app.getGraphics().getDeltaTime());
+           }
 
+           updateCamera();
+
+           Gdx.app.log("CAMERA","Camera position: " + camera.position);
        }
-
-    }
-
-
-    // Sets speed on car based on value from color on backgroundMask (black or white),
-    public void setCarSpeed(){
-
-        // Gets value from pixmap, cars position in Box2D coord system is mapped onto the coordinate system of the mask (y down , x right).
-        int valueFromMask = pixmap.getPixel((int)((bgSprite.getWidth()/2 + car.getBody().getPosition().x)*10), (int)((bgSprite.getHeight()/2 - car.getBody().getPosition().y)*10));
-
-        // If car is not on track
-        if(valueFromMask != -1){
-            car.setSpeed(car.getSpeedKMH() * 0.97f);
-        }
-
     }
 
     private void updateCamera(){
         float smoothCamConst = 0.1f;
-        float newCamPosX = (car.getPointOnTrack().x - camera.position.x);
-        float newCamPosY = (car.getPointOnTrack().y - camera.position.y);
+        // TODO LEADER CAR
+        //leaderCar = track.getLeaderCar();
+        //leaderCar = track.getCars()[0];
+        float newCamPosX = (leaderCar.getPointOnTrack().x - camera.position.x);
+        float newCamPosY = (leaderCar.getPointOnTrack().y - camera.position.y);
         Vector2 newPos = new Vector2(camera.position.x+newCamPosX*smoothCamConst,camera.position.y+newCamPosY*smoothCamConst);
+        //Gdx.app.log("CAMERA","Camera position: " + camera.position);
+        if (newPos.x == Float.NaN || newPos.y == Float.NaN) {
+            Gdx.app.log("FUUUUDGE","ERROR");
+        }
         camera.position.set(newPos,0);
 
         // Convert camera angle from [-180, 180] to [0, 360]
         float camAngle = -getCurrentCameraAngle(camera) + 180;
 
-        float desiredCamRotation = (camAngle - /*moveSprite.getRotation()*/(float)Math.toDegrees(car.getRotationTrack())-90);
+        float desiredCamRotation = (camAngle - (float)Math.toDegrees(leaderCar.getRotationTrack())-90);
 
         if(desiredCamRotation > 180){
             desiredCamRotation -= 360;

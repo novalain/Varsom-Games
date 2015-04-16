@@ -13,7 +13,8 @@ import com.badlogic.gdx.physics.box2d.World;
 import abstract_gameobjects.DynamicObject;
 import helpers.AssetLoader;
 import screens.GameScreen;
-import tracks.TestTrack;
+//import tracks.TestTrack;
+import tracks.Track;
 
 public class Car extends DynamicObject {
     //public Body body;
@@ -28,17 +29,17 @@ public class Car extends DynamicObject {
     private float accelX, accelY, tiltAngle, steeringSensitivity;
 
     //For track tracking ;)
-    private Vector2[] currentLine;
-    private Vector2 pointOnTrack;
+    private Vector2[] currentLinePos;
+    private Vector2 pointOnTrack, currentLineVec;
     private float traveledDistance;
     private float delta; //distance traveled since last frame
     private int waypoint;
-    private TestTrack track;
+    private Track track;
     public Sprite pathTrackingSprite;
     private Vector2 lineToCar, lineToEnd;
     private float angleOfCurrentLine;
 
-    public Car(float width, float length, Vector2 position, World world, Sprite carSprite, float angle, float power, float maxSteerAngle, float maxSpeed,TestTrack inTrack) {
+    public Car(float width, float length, Vector2 position, World world, Sprite carSprite, float angle, float power, float maxSteerAngle, float maxSpeed,Track inTrack) {
         super(position, angle, new PolygonShape(), carSprite, world);
         this.steer = GameScreen.STEER_NONE;
         this.accelerate = GameScreen.ACC_NONE;
@@ -86,15 +87,17 @@ public class Car extends DynamicObject {
 
         //TODO Need to create a Class called Track. shouldn't be TestTrack below, should be something like GameScreen.getTrack().
 
-        currentLine = new Vector2[2];
+        currentLinePos = new Vector2[2];
+        currentLineVec = new Vector2();
         lineToCar = new Vector2();
-        lineToEnd =new Vector2();
-        currentLine = track.getStartLine();
+        lineToEnd = new Vector2();
+        currentLinePos = track.getStartLine();
+        currentLineVec = getVectorBetweenPoints(currentLinePos[0], currentLinePos[1]);
         pointOnTrack = getNewPointOnTrack();
-        traveledDistance = pointOnTrack.sub(currentLine[0]).len();
+        traveledDistance = subtractVector(pointOnTrack,currentLinePos[0]).len();
         waypoint = 1;
-       /* angleOfCurrentLine = (float) Math.atan2(currentLine[1].y - pointOnTrack.y,
-                currentLine[0].x - pointOnTrack.x);
+       /* angleOfCurrentLine = (float) Math.atan2(currentLinePos[1].y - pointOnTrack.y,
+                currentLinePos[0].x - pointOnTrack.x);
 */
         angleOfCurrentLine = -angle;
         pathTrackingSprite = new Sprite(AssetLoader.pathCircleTexture);
@@ -148,6 +151,7 @@ public class Car extends DynamicObject {
         this.body.setLinearVelocity(velocity);
     }
 
+    //TODO THIS FUNCTION HAS TO BE CHECKED
     public void update(float deltaTime) {
 
         //1. KILL SIDEWAYS VELOCITY
@@ -232,38 +236,46 @@ public class Car extends DynamicObject {
         //if going very slow, stop - to prevent endless sliding
 
         //Track point position and traveledDistance
-        //delta = (new Vector2(currentLine[1].x-getNewPointOnTrack().x,currentLine[1].y-getNewPointOnTrack().y)).len();
-        delta = (new Vector2(pointOnTrack.x-getNewPointOnTrack().x,pointOnTrack.y-getNewPointOnTrack().y)).len();
+        //delta = (new Vector2(currentLinePos[1].x-getNewPointOnTrack().x,currentLinePos[1].y-getNewPointOnTrack().y)).len();
+//        delta = (new Vector2(pointOnTrack.x-getNewPointOnTrack().x,pointOnTrack.y-getNewPointOnTrack().y)).len(); //the point's moved distance since last update
+        delta = subtractVector(pointOnTrack,getNewPointOnTrack()).len(); //the point's translated distance since last update
         if(waypointIsReached()){
-            pointOnTrack = currentLine[1];
-            currentLine[0] = currentLine[1];
+            currentLinePos[0] = currentLinePos[1];
+            pointOnTrack = currentLinePos[0];
             if(waypoint + 1 >= track.getPath().size){
                 waypoint = 0;
             }
             else {
                 waypoint++;
             }
-            currentLine[1] = track.getPath().get(waypoint);
-            traveledDistance += delta; //this is probably slightly wrong
+            currentLinePos[1] = track.getPath().get(waypoint);
+            currentLineVec = getVectorBetweenPoints(currentLinePos[0], currentLinePos[1]);
+            traveledDistance += delta; //TODO this is probably slightly wrong
         }
         else{
-            //if the previous pointOnTrack were closer to the end point, delta should be negative. Car is going the wrong way
-            if ((new Vector2(currentLine[1].x-pointOnTrack.x,currentLine[1].y-pointOnTrack.y)).len() < delta) {
+            //if the previous pointOnTrack were closer to the end point, delta should be negative. Car is probably going the wrong way
+            if(getVectorBetweenPoints(pointOnTrack,currentLinePos[1]).len() < delta){
+//            if ((new Vector2(currentLinePos[1].x-pointOnTrack.x,currentLinePos[1].y-pointOnTrack.y)).len() < delta) {
                 delta *= -1;
             }
             pointOnTrack = getNewPointOnTrack();
+            //if the car is further away from the next waypoint than the previous waypoint
+            if((new Vector2(currentLinePos[1].x-pointOnTrack.x, currentLinePos[1].y-pointOnTrack.y).len() > (new Vector2(currentLinePos[1].x-currentLinePos[0].x, currentLinePos[1].y-currentLinePos[0].y)).len())){
+                pointOnTrack = currentLinePos[0];
+            }
             traveledDistance += delta;
         }
-        if((new Vector2(currentLine[1].x-pointOnTrack.x, currentLine[1].y-pointOnTrack.y).len() > (new Vector2(currentLine[1].x-currentLine[0].x, currentLine[1].y-currentLine[0].y)).len())){
-            pointOnTrack = currentLine[0];
-        }
-        angleOfCurrentLine = (float) Math.atan2(currentLine[1].y - pointOnTrack.y,
-                currentLine[1].x - pointOnTrack.x);
+
+
+        angleOfCurrentLine = (float) Math.atan2(currentLinePos[1].y - pointOnTrack.y,
+                currentLinePos[1].x - pointOnTrack.x);
         pathTrackingSprite.setPosition(pointOnTrack.x, pointOnTrack.y);
         pathTrackingSprite.setRotation((float)Math.toDegrees(angleOfCurrentLine));
         pathTrackingSprite.setOriginCenter();
-        //Gdx.app.log("CarUpdate","pointOnTrack = " + pointOnTrack + "\tangleOfCurrentLine = " + angleOfCurrentLine + "\n";
+        //Gdx.app.log("CarUpdate","pointOnTrack = " + pointOnTrack + "\tangleOfCurrentLine = " + angleOfCurrentLine + "\n");
         //Gdx.app.log("CarUpdate","waypoint = " + waypoint + "\tNumOfWPs = " + track.getPath().size + "\n");
+
+        setCarSpeed();
     }
 
     /**
@@ -279,14 +291,47 @@ public class Car extends DynamicObject {
         tiltAngle *= steeringSensitivity;
     }
 
+    /**
+     * Returns a new Vector2
+     */
     private Vector2 getNewPointOnTrack() {
-        lineToCar = new Vector2(getPosition().x-currentLine[0].x,getPosition().y-currentLine[0].y); //Vector from the currentLine's start point to the car's position
-        lineToEnd = new Vector2(currentLine[1].x-currentLine[0].x,currentLine[1].y-currentLine[0].y); // the vector of the currentLine
-        Vector2 temp = new Vector2();
-        temp.x=currentLine[0].x;
-        temp.y=currentLine[0].y;
-        temp.add(lineToEnd.scl(lineToCar.dot(lineToEnd) / lineToEnd.len2()));
-        return temp;
+//        Vector2 lineToCar2 = (new Vector2(getPosition())).sub(currentLinePos[0]);
+//        lineToCar = new Vector2(getPosition().x-currentLinePos[0].x,getPosition().y-currentLinePos[0].y); //Vector from the currentLinePos's start point to the car's position
+//        if(lineToCar.len() != lineToCar2.len()){
+//            Gdx.app.log("NaN","Not the same Vector?!?!");
+//        }
+//        Vector2 lineToEnd2 = (new Vector2(currentLinePos[1])).sub(currentLinePos[0]); // the vector of the currentLinePos
+//        lineToEnd = new Vector2(currentLinePos[1].x-currentLinePos[0].x,currentLinePos[1].y-currentLinePos[0].y); // the vector of the currentLinePos
+//        if(lineToEnd.len() != lineToEnd2.len()){
+//            Gdx.app.log("NaN","Not the same Vector?!?!");
+//        }
+//        /*Vector2 temp2 = new Vector2(currentLinePos[0]);
+//        Vector2 temp = new Vector2();
+//        temp.x=currentLinePos[0].x;
+//        temp.y=currentLinePos[0].y;
+//        if(temp.len() != temp2.len()){
+//            Gdx.app.log("NaN","Not the same Vector?!?!");
+//        }
+//
+//        if(lineToEnd.len2() == 0){
+//            Gdx.app.log("NaN","Will divide by ZERO!!! AMMAGAD ERROROROR");
+//        }
+//        temp.add(lineToEnd.m(lineToCar.dot(lineToEnd) / lineToEnd.len2()));
+//
+//        if(temp.x == Float.NaN || temp.y == Float.NaN || lineToCar.x == Float.NaN || lineToCar.y == Float.NaN){
+//            Gdx.app.log("NaN","NaN ERROR");
+//        }*/
+//        Vector2 temp = new Vector2((new Vector2(lineToEnd2)).scl(lineToCar2.dot(lineToEnd2) / lineToEnd2.dot(lineToCar2)));
+//        if(temp.x == Float.NaN || temp.y == Float.NaN || lineToCar2.x == Float.NaN || lineToCar2.y == Float.NaN || lineToEnd2.dot(lineToCar2) == 0){
+//            Gdx.app.log("NaN","NaN ERROR");
+//        }
+//        return temp;
+        //Vector projection.. project
+        Vector2 vecToCar = getVectorBetweenPoints(currentLinePos[0], getPosition());
+        Vector2 newPoint = new Vector2(scaleVec( currentLineVec, dotProd(vecToCar,currentLineVec)/dotProd(currentLineVec,currentLineVec)) );
+        newPoint.x += currentLinePos[0].x;
+        newPoint.y += currentLinePos[0].y;
+        return newPoint;
     }
 
     public Vector2 getPointOnTrack() {
@@ -297,6 +342,45 @@ public class Car extends DynamicObject {
     }
 
     public boolean waypointIsReached(){
-        return (Math.abs(currentLine[1].x - pointOnTrack.x) <= delta && Math.abs(currentLine[1].y - pointOnTrack.y) <= delta);
+        return (Math.abs(currentLinePos[1].x - pointOnTrack.x) <= delta && Math.abs(currentLinePos[1].y - pointOnTrack.y) <= delta);
     }
+
+    // Sets speed on car based on value from color on backgroundMask (black or white),
+    //TODO THIS FUNCTIONS NEEDS OPTIMIZING
+    public void setCarSpeed(){
+        // Gets value from pixmap, cars position in Box2D coord system is mapped onto the coordinate system of the mask (y down , x right).
+        int valueFromMask = track.getPixmap().getPixel((int) ((track.getPixmap().getWidth() / 2 + this.getBody().getPosition().x) * 10), (int) ((track.getPixmap().getHeight() / 2 - this.getBody().getPosition().y) * 10));
+
+        // If car is not on track
+        if(valueFromMask != -1){
+            this.setSpeed(this.getSpeedKMH() * 0.97f);
+        }
+    }
+
+    public float getTraveledDistance(){
+        return traveledDistance;
+    }
+
+    private Vector2 getVectorBetweenPoints(Vector2 startP, Vector2 endP){
+        Vector2 temp = new Vector2(subtractVector(endP,startP));
+        return temp;
+    }
+
+    private Vector2 subtractVector(Vector2 a, Vector2 b){
+        Vector2 newVec = new Vector2(a.x - b.x, a.y - b.y);
+        return newVec;
+    }
+
+    private Vector2 scaleVec(Vector2 v, float s){
+        Vector2 temp = new Vector2(v);
+        temp.x *= s;
+        temp.y *= s;
+        return temp;
+    }
+
+    private float dotProd(Vector2 a, Vector2 b){
+        float temp = a.x * b.x + a.y * b.y;
+        return temp;
+    }
+
 }
