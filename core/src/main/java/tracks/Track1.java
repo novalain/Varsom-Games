@@ -58,6 +58,8 @@ public class Track1 extends Track{
 
         BoxObstacle bO1 = new BoxObstacle(new Vector2(-8.5f/bgScale,-116.7f/bgScale),0
                 ,new Vector2(445/bgScale,15/bgScale), world);
+        BoxObstacle bO2 = new BoxObstacle(new Vector2(-30.50f/bgScale,124.7f/bgScale),0
+                ,new Vector2(405/bgScale,6/bgScale), world);
 
         //Add all newly made obstacles to a layer
         backLayer.addElement(tire.getBody());
@@ -66,6 +68,7 @@ public class Track1 extends Track{
         backLayer.addElement(tire4.getBody());
 
         backLayer.addElement(bO1.getBody());
+        backLayer.addElement(bO2.getBody());
     }
 
     private void createCars() {

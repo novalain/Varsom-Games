@@ -170,9 +170,9 @@ public abstract class Track {
 
         //Create walls surrounding the background sprite
         BoxObstacle upperWall = new BoxObstacle(new Vector2(0,posVertical),0
-                ,new Vector2(bgSprite.getWidth(),wallThickness), world);
+                ,new Vector2(bgSprite.getWidth()+2*wallThickness,wallThickness), world);
         BoxObstacle lowerWall = new BoxObstacle(new Vector2(0,-posVertical),0
-                ,new Vector2(bgSprite.getWidth(),wallThickness), world);
+                ,new Vector2(bgSprite.getWidth()+2*wallThickness,wallThickness), world);
         BoxObstacle leftWall = new BoxObstacle(new Vector2(-posHorizontal,0),0
                 ,new Vector2(wallThickness,bgSprite.getHeight()), world);
         BoxObstacle rightWall = new BoxObstacle(new Vector2(posHorizontal,0),0
@@ -222,7 +222,7 @@ public abstract class Track {
         sprite.setRotation(cars[0].getBody().getAngle() * MathUtils.radiansToDegrees);
         sprite.draw(inBatch);
 
-        drawWayPoints();
+        //drawWayPoints();
 
         inBatch.end();
     }

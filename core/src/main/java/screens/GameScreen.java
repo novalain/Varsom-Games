@@ -142,19 +142,11 @@ public class GameScreen implements Screen{
 
        // Here goes the all the updating / game logic
        if(!paused){
-
-           //moveSprite.update(Gdx.graphics.getDeltaTime());
-           //moveSprite.update(Gdx.graphics.getDeltaTime());
-           //moveSprite.update(Gdx.graphics.getDeltaTime(),car);
-
            for(Car car : track.getCars()) {
                car.update(Gdx.app.getGraphics().getDeltaTime());
            }
 
-           updateCamera();
-
-           Gdx.app.log("CAMERA","Camera position: " + camera.position);
-       }
+           updateCamera();}
     }
 
     private void updateCamera(){
