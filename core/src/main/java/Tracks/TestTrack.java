@@ -1,12 +1,15 @@
 package tracks;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.CatmullRomSpline;
@@ -14,6 +17,12 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.Vector;
@@ -24,6 +33,7 @@ import gameobjects.TireObstacle;
 import gameobjects.Wheel;
 import helpers.AssetLoader;
 import helpers.InputHandler;
+import screens.GameScreen;
 //import gameobjects.MoveSprite;
 
 /**
@@ -40,6 +50,17 @@ public class TestTrack {
     private Vector<Body> backLayer;
     private Vector<Body> frontLayer;
     private float scaleBG;
+
+    //for pause menu
+    private Stage stage = new Stage();
+    private Table table = new Table();
+
+    //TODO Load files from AssetLoader
+    private Skin skin = new Skin(Gdx.files.internal("skins/menuSkin.json"),
+            new TextureAtlas(Gdx.files.internal("skins/menuSkin.pack")));
+
+    private TextButton buttonLeave = new TextButton("Leave Game", skin);
+    //end for pause menu
 
     /** For catmull rom spline**/
     private CatmullRomSpline<Vector2> myCatmull;
@@ -81,6 +102,22 @@ public class TestTrack {
     }
 
     private void createTestTrack(){
+
+        // pause menu button
+        table.add(buttonLeave).size(400, 75).padBottom(20).row();
+        table.setFillParent(true);
+        stage.addActor(table);
+
+        Gdx.input.setInputProcessor(stage);
+
+        //TODO funkar inte just nu, man gasar istället
+        buttonLeave.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.log("clicked", "pressed the Leave button.");
+            }
+        });
+        //end pause menu button
 
         createBackground();
         createObstacles();
@@ -291,6 +328,9 @@ public class TestTrack {
         //drawWayPoints();
 
         inBatch.end();
+
+        stage.act();
+        stage.draw();
 
     }
 
