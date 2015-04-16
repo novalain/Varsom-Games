@@ -44,19 +44,13 @@ public abstract class ScaledScreen implements Screen {
         font = new BitmapFont();
         skin = new Skin();
 
-        //Gdx.input.setInputProcessor(stage);
         stage.getViewport().setCamera(camera);
 
     }
 
     @Override
     public void render(float delta) {
-       /*
-        Gdx.gl.glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        stage.draw();
-    */
     }
 
     abstract void generateFonts();
@@ -66,9 +60,6 @@ public abstract class ScaledScreen implements Screen {
     abstract void generateTextButtonStyle();
 
     protected Stage getStage() {
-
-
-
         return stage;
     }
 }

@@ -5,7 +5,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 /**
  *
@@ -13,7 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 public class ControllerScreen extends ScaledScreen {
 
     private TextButton drive;
-    private boolean drive_pressed;
+    private boolean drive_pressed = false;
 
     // Gyro
     private float accelX, accelY, tiltAngle;
@@ -22,8 +24,6 @@ public class ControllerScreen extends ScaledScreen {
     public ControllerScreen() {
 
         super();
-
-        //drive_pressed = false;
 
         generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
         backgroundColor = new Color(0.0f, 0.0f, 7.0f, 1.0f);
@@ -80,27 +80,37 @@ public class ControllerScreen extends ScaledScreen {
     @Override
     void generateFonts() {
 
+        parameter.color = Color.WHITE;
+        parameter.size = 100;
+        font = generator.generateFont(parameter);
+
+        generator.dispose();
 
     }
 
     @Override
     void generateButtons() {
         drive = new TextButton("Gasa", textButtonStyle);
-        drive.setWidth(400);
-        drive.setHeight(400);
-        drive.setPosition(Commons.WORLD_WIDTH / 2 - drive.getWidth(), Commons.WORLD_HEIGHT / 2 - drive.getHeight());
-        /*
-        drive.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
+        drive.setWidth(1000);
+        drive.setHeight(1080);
+        drive.setPosition(Commons.WORLD_WIDTH / 2, 0);
 
+        drive.addListener(new ClickListener() {
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 drive_pressed = true;
+                Gdx.app.log("Gasa", "Button is down");
+
+                return drive_pressed;
             }
+
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                drive_pressed = false;
+            }
+
         });
-        */
+
 
     }
-
 
     @Override
     void generateTextButtonStyle() {
@@ -111,7 +121,12 @@ public class ControllerScreen extends ScaledScreen {
 
     }
 
-    protected float updateDeviceRotation() {
+    protected boolean getDrive() {
+
+        return drive_pressed;
+    }
+
+    protected float getRotation() {
         accelX = Gdx.input.getAccelerometerX();
         accelY = Gdx.input.getAccelerometerY();
 

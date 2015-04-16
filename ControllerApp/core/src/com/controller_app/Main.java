@@ -15,8 +15,6 @@ public class Main extends Game {
         menuScreen = new MenuScreen(this);
         controllerScreen = new ControllerScreen();
 
-        //setScreen(menuScreen);
-
         changeScreen(1);
     }
 
