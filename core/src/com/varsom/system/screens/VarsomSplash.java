@@ -23,7 +23,7 @@ public class VarsomSplash implements Screen {
         //Gdx.app.log("Screen","width"+Gdx.graphics.getWidth());
         //Gdx.app.log("Screen","height"+Gdx.graphics.getHeight());
         // Set position of splash image
-        splashTexture = new Texture(Gdx.files.internal("system/skins/varsomsplash.png"));
+        splashTexture = new Texture(Gdx.files.internal("system/img/varsomsplash.png"));
         splashImage =  new Image(splashTexture);
         splashImage.setX( (Gdx.graphics.getWidth()-splashImage.getWidth())/2);
         splashImage.setY( (Gdx.graphics.getHeight()-splashImage.getHeight())/2);
