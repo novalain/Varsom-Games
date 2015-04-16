@@ -1,9 +1,11 @@
 package com.controller_app;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 /**
  *
@@ -19,11 +21,21 @@ public class ControllerScreen extends ScaledScreen {
 
     public ControllerScreen() {
 
-        drive_pressed = false;
+        super();
+
+        //drive_pressed = false;
+
+        generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
+        backgroundColor = new Color(0.0f, 0.0f, 7.0f, 1.0f);
+
+        buttonAtlas = new TextureAtlas(Gdx.files.internal("skins/menuSkin.pack"));
+        skin.addRegions(buttonAtlas);
 
         generateFonts();
         generateTextButtonStyle();
         generateButtons();
+
+        stage.addActor(drive);
 
     }
 
@@ -34,7 +46,10 @@ public class ControllerScreen extends ScaledScreen {
 
     @Override
     public void render(float delta) {
+        Gdx.gl.glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        stage.draw();
     }
 
     @Override
@@ -74,7 +89,7 @@ public class ControllerScreen extends ScaledScreen {
         drive.setWidth(400);
         drive.setHeight(400);
         drive.setPosition(Commons.WORLD_WIDTH / 2 - drive.getWidth(), Commons.WORLD_HEIGHT / 2 - drive.getHeight());
-
+        /*
         drive.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -82,6 +97,7 @@ public class ControllerScreen extends ScaledScreen {
                 drive_pressed = true;
             }
         });
+        */
 
     }
 

@@ -15,17 +15,22 @@ public class Main extends Game {
         menuScreen = new MenuScreen(this);
         controllerScreen = new ControllerScreen();
 
-        setScreen(menuScreen);
+        //setScreen(menuScreen);
+
+        changeScreen(1);
     }
 
     public void changeScreen(int s) {
         switch (s) {
             case 1:
+                Gdx.input.setInputProcessor(menuScreen.getStage());
                 setScreen(menuScreen);
                 break;
             case 2:
+
+                Gdx.input.setInputProcessor(controllerScreen.getStage());
                 Gdx.app.log("olle" , "changed screen");
-                //setScreen(controllerScreen);
+                setScreen(controllerScreen);
                 break;
             default:
                 break;
