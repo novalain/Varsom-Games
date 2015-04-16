@@ -13,7 +13,7 @@ public class Main extends Game {
 
         Gdx.app.log("olle", "created app");
         menuScreen = new MenuScreen(this);
-        controllerScreen = new ControllerScreen();
+        controllerScreen = new ControllerScreen(this);
 
         changeScreen(1);
     }
