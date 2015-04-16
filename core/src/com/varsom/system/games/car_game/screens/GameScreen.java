@@ -10,10 +10,18 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.varsom.system.games.car_game.gameobjects.Car;
 import com.varsom.system.games.car_game.tracks.Track;
 import com.varsom.system.games.car_game.tracks.Track1;
 import com.varsom.system.games.car_game.tracks.Track2;
+
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 
 public class GameScreen implements Screen{
@@ -51,6 +59,17 @@ public class GameScreen implements Screen{
     private Car leaderCar;
 //    private MoveSprite moveSprite;
 //    private Sprite bgSprite;
+
+    //for pause menu
+    private Stage stage = new Stage();
+    private Table table = new Table();
+
+    //TODO Load files from AssetLoader
+    private Skin skin = new Skin(Gdx.files.internal("system/skins/menuSkin.json"),
+            new TextureAtlas(Gdx.files.internal("system/skins/menuSkin.pack")));
+
+    private TextButton buttonLeave = new TextButton("Leave Game", skin);
+    //end for pause menu
 
     public GameScreen(int level){
 
@@ -95,6 +114,22 @@ public class GameScreen implements Screen{
 
         batch = new SpriteBatch();
         batch.setProjectionMatrix(camera.combined);
+
+        // pause menu button
+        table.add(buttonLeave).size(400, 75).padBottom(20).row();
+        table.setFillParent(true);
+        stage.addActor(table);
+
+        //TODO Dena behövs för att man ska kunna klicka på knappen  men gör att vi inte längre kan gasa
+        //Gdx.input.setInputProcessor(stage);
+
+        buttonLeave.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.log("clicked", "pressed the Leave button.");
+            }
+        });
+        //end pause menu button
 
     }
 
@@ -146,7 +181,11 @@ public class GameScreen implements Screen{
                car.update(Gdx.app.getGraphics().getDeltaTime());
            }
 
-           updateCamera();}
+           updateCamera();
+       }
+
+        stage.act();
+        stage.draw();
     }
 
     private void updateCamera(){
