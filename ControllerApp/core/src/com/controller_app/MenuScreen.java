@@ -42,8 +42,10 @@ public class MenuScreen implements Screen {
     Color backgroundColor = new Color(0.9f, 0.6f, 0.7f, 1.0f);
     int clicks = 0;
 
+
     public MenuScreen() {
 
+        Gdx.app.log("olle", "Entered Menuscreen");
         // The viewport
         camera = new OrthographicCamera();
         viewport = new StretchViewport(Commons.WORLD_WIDTH, Commons.WORLD_HEIGHT, camera);
@@ -108,7 +110,7 @@ public class MenuScreen implements Screen {
 
     }
 
-    private void generateFonts(){
+    private void generateFonts() {
         parameter.color = Color.WHITE;
         parameter.size = 12;
         font12pt = generator.generateFont(parameter);
@@ -119,6 +121,10 @@ public class MenuScreen implements Screen {
         parameter.size = 120;
         font120pt = generator.generateFont(parameter);
 
+        generator.dispose();
+
+        Gdx.app.log("olle", "Created fonts");
+
     }
 
     private void generateTextButtonStyle() {
@@ -126,6 +132,8 @@ public class MenuScreen implements Screen {
         textButtonStyle.font = font120pt;
         textButtonStyle.up = skin.getDrawable("up");
         textButtonStyle.down = skin.getDrawable("down");
+
+        Gdx.app.log("olle", "Created button styles");
     }
 
     private void generateButtons() {
@@ -134,20 +142,25 @@ public class MenuScreen implements Screen {
         button.setHeight(200);
         button.setPosition(Commons.WORLD_WIDTH / 2 - button.getWidth() / 2, Commons.WORLD_HEIGHT / 2 - button.getHeight() / 2);
 
+        Gdx.app.log("olle", "Created button");
+
         button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
+                // Random color
                 float rand1 = (float) (255 * Math.random());
                 float rand2 = (float) (255 * Math.random());
                 float rand3 = (float) (255 * Math.random());
 
-                backgroundColor.set(rand1,rand2,rand3,1.0f);
+                backgroundColor.set(rand1, rand2, rand3, 1.0f);
                 clicks++;
                 Gdx.app.log("clicked", "pressed the button " + clicks + " many times, motherfucker.");
 
                 // The million Dollar Question: How do we change the background in the upper class?
             }
         });
+
+        Gdx.app.log("olle", "Created click function");
     }
 }
