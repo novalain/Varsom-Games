@@ -51,7 +51,7 @@ public class MenuScreen extends ScaledScreen {
 
     @Override
     void generateButtons() {
-        button = new TextButton("The Main Menu", textButtonStyle);
+        button = new TextButton("Controller", textButtonStyle);
         button.setWidth(800);
         button.setHeight(200);
         button.setPosition(Commons.WORLD_WIDTH / 2 - button.getWidth() / 2, Commons.WORLD_HEIGHT / 2 - button.getHeight() / 2);

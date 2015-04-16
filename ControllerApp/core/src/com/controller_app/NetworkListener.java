@@ -11,17 +11,12 @@ import com.esotericsoftware.kryonet.Listener;
 public class NetworkListener extends Listener {
 
     private Client client;
-    //private EditText ourMessage;
-    //private TextView ourOutput;
-
-    public String message;
+    private String message;
 
 
     // If you want to send a object, you need to send it with this client variable
     public void init(Client client) {
         this.client = client;
-        //this.ourMessage = o;
-        //this.ourOutput = b;
     }
 
     public void connected(Connection c) {
@@ -45,7 +40,6 @@ public class NetworkListener extends Listener {
 
             } else {
                 c.close();
-                //ourOutput.append("Nothing");
             }
 
         }

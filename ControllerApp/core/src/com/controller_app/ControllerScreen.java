@@ -15,15 +15,18 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 public class ControllerScreen extends ScaledScreen {
 
     private TextButton drive;
+    private TextButton home;
+
     private boolean drive_pressed = false;
 
     // Gyro
-    private float accelX, accelY, tiltAngle;
-    static private float steeringSensitivity = 0.4f;
+    private float Xaxis, Yaxis, tiltAngle;
 
-    public ControllerScreen() {
+    public ControllerScreen(Main m) {
 
         super();
+
+        this.main = m;
 
         generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
         backgroundColor = new Color(0.0f, 0.0f, 7.0f, 1.0f);
@@ -36,6 +39,7 @@ public class ControllerScreen extends ScaledScreen {
         generateButtons();
 
         stage.addActor(drive);
+        stage.addActor(home);
 
     }
 
@@ -90,15 +94,32 @@ public class ControllerScreen extends ScaledScreen {
 
     @Override
     void generateButtons() {
-        drive = new TextButton("Gasa", textButtonStyle);
+        drive = new TextButton("Drive", textButtonStyle);
         drive.setWidth(1000);
         drive.setHeight(1080);
-        drive.setPosition(Commons.WORLD_WIDTH / 2, 0);
+        drive.setPosition(Commons.WORLD_WIDTH * 0.5f, 0);
+
+        home = new TextButton("Menu", textButtonStyle);
+        home.setWidth(300);
+        home.setHeight(300);
+        home.setPosition(Commons.WORLD_WIDTH * 0.2f, Commons.WORLD_HEIGHT * 0.3f);
+
+        home.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+
+                main.changeScreen(1);
+
+            }
+        });
 
         drive.addListener(new ClickListener() {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 drive_pressed = true;
-                Gdx.app.log("Gasa", "Button is down");
+
+                float rot = getRotation();
+
+                Gdx.app.log("Gasa", "Rotations is " + rot);
 
                 return drive_pressed;
             }
@@ -127,12 +148,17 @@ public class ControllerScreen extends ScaledScreen {
     }
 
     protected float getRotation() {
-        accelX = Gdx.input.getAccelerometerX();
-        accelY = Gdx.input.getAccelerometerY();
+        Xaxis = Gdx.input.getAccelerometerX();
+        Yaxis = Gdx.input.getAccelerometerY();
 
-        tiltAngle = (float) Math.atan2(accelX, accelY);
+        tiltAngle = (float) (Math.atan2(Xaxis, Xaxis));
         tiltAngle -= Math.PI / 2;
-        tiltAngle *= steeringSensitivity;
+
+        tiltAngle = (float) Math.toDegrees(tiltAngle);
+
+        if(tiltAngle < -200 && tiltAngle > -270) {
+            tiltAngle += 360;
+        }
 
         return tiltAngle;
 
