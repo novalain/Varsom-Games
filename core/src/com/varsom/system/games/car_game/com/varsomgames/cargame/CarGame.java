@@ -3,10 +3,11 @@ package com.varsom.system.games.car_game.com.varsomgames.cargame;
 import com.badlogic.gdx.Game;
 
 import com.badlogic.gdx.Gdx;
+import com.varsom.system.abstract_gameobjects.VarsomGame;
 import com.varsom.system.games.car_game.helpers.AssetLoader;
 import com.varsom.system.games.car_game.screens.Splash;
 
-public class CarGame /*extends Game */{
+public class CarGame extends VarsomGame {
     public static final String TITLE= "Crapp!";
 
     public static final int WIDTH = 800;
@@ -23,15 +24,15 @@ public class CarGame /*extends Game */{
         AssetLoader.load();
     }
 
-	/*@Override
+	@Override
 	public void create () {
-        Gdx.app.log("CarGame", "Creates cargame");
-        varsomSystem.setScreen(new Splash());
+        //Gdx.app.log("CarGame", "Creates cargame");
+        //varsomSystem.setScreen(new Splash());
 
         // load assets
-        AssetLoader.load();
+        //AssetLoader.load();
 	}
-
+/*
     @Override
     public void dispose() {
         super.dispose();

@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.varsom.system.abstract_gameobjects.VarsomGame;
 import com.varsom.system.games.car_game.com.varsomgames.cargame.CarGame;
 
 /**
@@ -27,7 +28,11 @@ public class VarsomMenu implements Screen {
     //TODO Load files from a SystemAssetLoader. Also, create a folder and skin for the varsom system
     private Skin skin = new Skin(Gdx.files.internal("system/skins/menuSkin.json"), new TextureAtlas(Gdx.files.internal("system/skins/menuSkin.pack")));
 
-    private TextButton buttonPlay = new TextButton("Play level 1", skin);
+    private TextButton buttonPlay = new TextButton("Start CarGame", skin);
+
+    //ta reda på hur många VarsomeGame som finns tillgängliga och deras IDn
+
+    //skap array med alla spel som finns tillgängliga
 
     public VarsomMenu() {
     }
@@ -37,7 +42,7 @@ public class VarsomMenu implements Screen {
         buttonPlay.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                CarGame carGame = new CarGame((Game) Gdx.app.getApplicationListener());
+                VarsomGame carGame = new CarGame((Game) Gdx.app.getApplicationListener());
                 Gdx.app.log("clicked", "pressed the PLAY button.");
                 //((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(1));
                 hide();
