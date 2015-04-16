@@ -16,6 +16,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 public abstract class ScaledScreen implements Screen {
 
+    protected Main main;
+
     protected Stage stage;
     protected TextButton.TextButtonStyle textButtonStyle;
     protected Skin skin;
@@ -33,6 +35,7 @@ public abstract class ScaledScreen implements Screen {
     // The "super"-constructor
 
     public ScaledScreen() {
+
         camera = new OrthographicCamera();
         viewport = new StretchViewport(Commons.WORLD_WIDTH, Commons.WORLD_HEIGHT, camera);
         viewport.apply();
@@ -49,7 +52,7 @@ public abstract class ScaledScreen implements Screen {
     }
 
     @Override
-    public void render(float delta){
+    public void render(float delta) {
         Gdx.gl.glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -57,6 +60,8 @@ public abstract class ScaledScreen implements Screen {
     }
 
     abstract void generateFonts();
+
     abstract void generateButtons();
+
     abstract void generateTextButtonStyle();
 }

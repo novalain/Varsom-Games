@@ -13,8 +13,10 @@ public class MenuScreen extends ScaledScreen {
 
     private TextButton button;
 
-    public MenuScreen() {
+    public MenuScreen(Main m) {
         super();
+
+        this.main = m;
 
         generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
         backgroundColor = new Color(0.7f, 0.0f, 0.0f, 1.0f);
@@ -58,38 +60,40 @@ public class MenuScreen extends ScaledScreen {
             public void clicked(InputEvent event, float x, float y) {
                 // Do many great things...
 
+                main.changeScreen(2);
+
             }
         });
 
     }
 
-        @Override
-        public void show () {
+    @Override
+    public void show() {
 
-        }
-
-        @Override
-        public void resize ( int width, int height){
-
-        }
-
-        @Override
-        public void pause () {
-
-        }
-
-        @Override
-        public void resume () {
-
-        }
-
-        @Override
-        public void hide () {
-
-        }
-
-        @Override
-        public void dispose () {
-
-        }
     }
+
+    @Override
+    public void resize(int width, int height) {
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void hide() {
+
+    }
+
+    @Override
+    public void dispose() {
+
+    }
+}
