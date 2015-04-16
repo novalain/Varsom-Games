@@ -85,7 +85,7 @@ public class ControllerScreen extends ScaledScreen {
 
     }
 
-    
+
 
     @Override
     void generateTextButtonStyle() {
