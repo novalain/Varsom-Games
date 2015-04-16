@@ -3,6 +3,7 @@ package com.controller_app;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -31,7 +32,7 @@ public abstract class ScaledScreen implements Screen {
 
     // The "super"-constructor
 
-    public ScaledScreen(){
+    public ScaledScreen() {
         camera = new OrthographicCamera();
         viewport = new StretchViewport(Commons.WORLD_WIDTH, Commons.WORLD_HEIGHT, camera);
         viewport.apply();
@@ -39,16 +40,23 @@ public abstract class ScaledScreen implements Screen {
         camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
 
         stage = new Stage();
-
         font = new BitmapFont();
+        skin = new Skin();
 
         Gdx.input.setInputProcessor(stage);
         stage.getViewport().setCamera(camera);
+
+    }
+
+    @Override
+    public void render(float delta){
+        Gdx.gl.glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        stage.draw();
     }
 
     abstract void generateFonts();
     abstract void generateButtons();
     abstract void generateTextButtonStyle();
-
-
 }
