@@ -118,12 +118,13 @@ public class GameScreen implements Screen{
         batch.setProjectionMatrix(camera.combined);
 
         // pause menu button
-        table.add(buttonLeave).size(400, 75).padBottom(20).row();
+        table.bottom().left();
+        table.add(buttonLeave).size(400, 75).row();
         table.setFillParent(true);
         stage.addActor(table);
 
         //TODO Dena behövs för att man ska kunna klicka på knappen  men gör att vi inte längre kan gasa
-        //Gdx.input.setInputProcessor(stage);
+        Gdx.input.setInputProcessor(stage);
 
         buttonLeave.addListener(new ClickListener() {
             @Override
@@ -143,12 +144,11 @@ public class GameScreen implements Screen{
         // Render some kick-ass countdown label
         if(secondsLeft > 0){
 
-            Gdx.app.log("COUNTDOWN: ", (int)secondsLeft + "");
+           //Gdx.app.log("COUNTDOWN: ", (int)secondsLeft + "");
 
         }
 
         if(secondsLeft == 0){
-
             paused = false;
 
         }
