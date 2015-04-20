@@ -28,7 +28,8 @@ public class VarsomMenu implements Screen {
     //TODO Load files from a SystemAssetLoader. Also, create a folder and skin for the varsom system
     private Skin skin = new Skin(Gdx.files.internal("system/skins/menuSkin.json"), new TextureAtlas(Gdx.files.internal("system/skins/menuSkin.pack")));
 
-    private TextButton buttonPlay = new TextButton("Start CarGame", skin);
+    private TextButton buttonPlay = new TextButton("Start CarGame", skin),
+            buttonExit = new TextButton("Exit system", skin);
 
     //ta reda på hur många VarsomeGame som finns tillgängliga och deras IDn
 
@@ -43,13 +44,22 @@ public class VarsomMenu implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 VarsomGame carGame = new CarGame((Game) Gdx.app.getApplicationListener());
-                Gdx.app.log("clicked", "pressed the PLAY button.");
+                Gdx.app.log("clicked", "pressed the PLAY CARGAME button.");
                 //((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(1));
                 hide();
             }
         });
+        buttonExit.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.log("clicked", "pressed the EXIT SYSTEM button.");
+                Gdx.app.exit();
+                dispose();
+            }
+        });
 
         table.add(buttonPlay).size(400, 75).padBottom(20).row();
+        table.add(buttonExit).size(400, 75).padBottom(20).row();
         table.setFillParent(true);
         stage.addActor(table);
         Gdx.input.setInputProcessor(stage);
