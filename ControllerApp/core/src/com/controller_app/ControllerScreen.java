@@ -23,10 +23,7 @@ public class ControllerScreen extends ScaledScreen {
     private float Xaxis, Yaxis, tiltAngle;
 
     public ControllerScreen(Main m) {
-
-        super();
-
-        this.main = m;
+        super(m);
 
         generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
         backgroundColor = new Color(0.0f, 0.0f, 7.0f, 1.0f);
@@ -36,16 +33,14 @@ public class ControllerScreen extends ScaledScreen {
 
         generateFonts();
         generateTextButtonStyle();
-        generateButtons();
+        generateUI();
 
         stage.addActor(drive);
         stage.addActor(home);
-
     }
 
     @Override
     public void show() {
-
     }
 
     @Override
@@ -93,7 +88,7 @@ public class ControllerScreen extends ScaledScreen {
     }
 
     @Override
-    void generateButtons() {
+    void generateUI() {
         drive = new TextButton("Drive", textButtonStyle);
         drive.setWidth(1000);
         drive.setHeight(1080);
@@ -114,7 +109,7 @@ public class ControllerScreen extends ScaledScreen {
         });
 
         drive.addListener(new ClickListener() {
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 drive_pressed = true;
 
                 float rot = getRotation();
@@ -124,7 +119,7 @@ public class ControllerScreen extends ScaledScreen {
                 return drive_pressed;
             }
 
-            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 drive_pressed = false;
             }
 
@@ -156,7 +151,7 @@ public class ControllerScreen extends ScaledScreen {
 
         tiltAngle = (float) Math.toDegrees(tiltAngle);
 
-        if(tiltAngle < -200 && tiltAngle > -270) {
+        if (tiltAngle < -200 && tiltAngle > -270) {
             tiltAngle += 360;
         }
 

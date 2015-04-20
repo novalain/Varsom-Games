@@ -27,7 +27,7 @@ public class Main extends Game {
             case 2:
 
                 Gdx.input.setInputProcessor(controllerScreen.getStage());
-                Gdx.app.log("olle" , "changed screen");
+                Gdx.app.log("olle", "changed screen");
                 setScreen(controllerScreen);
                 break;
             default:
