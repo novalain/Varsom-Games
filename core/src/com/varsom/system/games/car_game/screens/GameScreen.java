@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.varsom.system.screens.VarsomMenu;
 
 
 public class GameScreen implements Screen{
@@ -130,6 +131,7 @@ public class GameScreen implements Screen{
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.log("clicked", "pressed the Leave button.");
+                ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu());
             }
         });
         //end pause menu button

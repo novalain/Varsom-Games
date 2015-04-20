@@ -33,9 +33,6 @@ public class VarsomMenu implements Screen {
 
     private TextButton buttonExit = new TextButton("Exit system", skin);
 
-    public VarsomMenu() {
-    }
-
     @Override
     public void show() {
         //For every VarsomeGame in the game array create a button
