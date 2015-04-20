@@ -13,6 +13,7 @@ public class CarGame extends VarsomGame {
     public static final int WIDTH = 800;
     public static final int HEIGHT= 480; // used later to set window size
     protected Game varsomSystem;
+    public static int ID = 1;
 
     public CarGame(Game varsomSystem){
         Gdx.app.log("CarGame", "Creates cargame");

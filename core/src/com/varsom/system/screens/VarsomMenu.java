@@ -11,8 +11,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.varsom.system.VarsomSystem;
 import com.varsom.system.abstract_gameobjects.VarsomGame;
 import com.varsom.system.games.car_game.com.varsomgames.cargame.CarGame;
+import com.varsom.system.games.other_game.OtherGame;
 
 /**
  * Created by oskarcarlbaum on 16/04/15.
@@ -28,28 +30,56 @@ public class VarsomMenu implements Screen {
     //TODO Load files from a SystemAssetLoader. Also, create a folder and skin for the varsom system
     private Skin skin = new Skin(Gdx.files.internal("system/skins/menuSkin.json"), new TextureAtlas(Gdx.files.internal("system/skins/menuSkin.pack")));
 
-    private TextButton buttonPlay = new TextButton("Start CarGame", skin);
-
-    //ta reda på hur många VarsomeGame som finns tillgängliga och deras IDn
-
-    //skap array med alla spel som finns tillgängliga
-
     public VarsomMenu() {
     }
 
     @Override
     public void show() {
-        buttonPlay.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                VarsomGame carGame = new CarGame((Game) Gdx.app.getApplicationListener());
-                Gdx.app.log("clicked", "pressed the PLAY button.");
-                //((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(1));
-                hide();
-            }
-        });
+        //For every VarsomeGame in the game array create a button
+        for(int i = 0; i < VarsomSystem.SIZE; i++) {
+            switch (VarsomSystem.games[i]){
 
-        table.add(buttonPlay).size(400, 75).padBottom(20).row();
+                //Cargame
+                case 1:
+                    TextButton buttonPlayCarGame = new TextButton("Start CarGame", skin);
+
+                    buttonPlayCarGame.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            VarsomGame carGame = new CarGame((Game) Gdx.app.getApplicationListener());
+                            Gdx.app.log("clicked", "pressed CarGame");
+                            //((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(1));
+                            hide();
+                        }
+                    });
+                    table.add(buttonPlayCarGame).size(400, 75).padBottom(20).row();
+                    break;
+
+                //OtherGame
+                case 2:
+                    TextButton buttonPlayOtherGame = new TextButton("Start OtherGame", skin);
+
+                    buttonPlayOtherGame.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            VarsomGame OtherGame = new OtherGame((Game) Gdx.app.getApplicationListener());
+                            Gdx.app.log("clicked", "pressed OtherGame.");
+                            hide();
+                        }
+                    });
+                    table.add(buttonPlayOtherGame).size(400, 75).padBottom(20).row();
+                    break;
+
+                //If something goes wrong
+                default:
+                    Gdx.app.log("in game array", "wrong game ID");
+
+            }
+        }
+
+
+
+
         table.setFillParent(true);
         stage.addActor(table);
         Gdx.input.setInputProcessor(stage);
