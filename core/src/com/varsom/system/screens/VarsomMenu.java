@@ -77,9 +77,6 @@ public class VarsomMenu implements Screen {
             }
         }
 
-
-
-
         table.setFillParent(true);
         stage.addActor(table);
         Gdx.input.setInputProcessor(stage);

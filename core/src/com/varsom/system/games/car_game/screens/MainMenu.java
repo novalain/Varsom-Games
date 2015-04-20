@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 import com.varsom.system.games.car_game.com.varsomgames.cargame.CarGame;
 import com.varsom.system.games.car_game.gameobjects.BackgroundObject;
+import com.varsom.system.screens.VarsomMenu;
 
 public class MainMenu implements Screen {
 
@@ -55,6 +56,7 @@ public class MainMenu implements Screen {
 
     @Override
     public void show() {
+        Gdx.input.setCatchBackKey(false);
         buttonPlay.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -66,7 +68,7 @@ public class MainMenu implements Screen {
         buttonPlay2.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.log("clicked", "pressed the PLAY button.");
+                Gdx.app.log("clicked", "pressed the PLAY 2 button.");
                 ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(2));
             }
         });
@@ -74,22 +76,23 @@ public class MainMenu implements Screen {
         buttonSettings.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.log("clicked", "pressed the SETTINGS button.");
+                Gdx.app.log("clicked", "pressed the SETTINGS CARGAME button.");
             }
         });
 
         buttonAbout.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.log("clicked", "pressed the ABOUT button.");
+                Gdx.app.log("clicked", "pressed the ABOUT CARGAME button.");
             }
         });
 
         buttonExit.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.log("clicked", "pressed the EXIT button.");
-                Gdx.app.exit();
+             //   Boolean isKeyPressed = true;
+                Gdx.app.log("clicked", "pressed the EXIT CARGAME button.");
+                ((Game) Gdx.app.getApplicationListener()).setScreen(new VarsomMenu());
                 // or System.exit(0);
             }
         });
