@@ -7,13 +7,14 @@ public class Main extends Game {
 
     private MenuScreen menuScreen;
     private ControllerScreen controllerScreen;
+    private MPClient mpClient;
 
     @Override
     public void create() {
 
-        Gdx.app.log("olle", "created app");
-        menuScreen = new MenuScreen(this);
-        controllerScreen = new ControllerScreen(this);
+        Gdx.app.log("check", "created app");
+        menuScreen = new MenuScreen(this, mpClient);
+        controllerScreen = new ControllerScreen(this, mpClient);
 
         changeScreen(1);
     }

@@ -14,10 +14,13 @@ public class MenuScreen extends ScaledScreen {
 
     private TextButton button;
 
-    public MenuScreen(Main m) {
+    private MPClient mpClient;
+
+    public MenuScreen(Main m, MPClient mpc) {
         super();
 
         this.main = m;
+        mpClient = mpc;
 
         generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
         backgroundColor = new Color(0.7f, 0.0f, 0.0f, 1.0f);
@@ -104,5 +107,11 @@ public class MenuScreen extends ScaledScreen {
     @Override
     public void dispose() {
 
+    }
+
+    // Connect to server
+    public void connect() {
+
+        mpClient.connectToServer();
     }
 }

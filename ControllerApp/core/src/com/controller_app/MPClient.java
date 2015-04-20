@@ -13,6 +13,9 @@ public class MPClient {
     public Client client;
 
     public MPClient() throws IOException {
+
+
+
         client = new Client();
         register();
 
@@ -27,41 +30,33 @@ public class MPClient {
 
         System.setProperty("java.net.preferIPv4Stack", "true");
 
-        //hostCheck();
-        /*
+
+
+    }
+
+    //TODO: get IP from user
+    public void connectToServer() {
+
         try{
             client.connect(50000, "192.168.1.1", 54555, 64555);
-            //b.setText("Connected");
         }
         catch(IOException e){
             e.printStackTrace();
             client.stop();
-            //b.setText("Connect doesn't work");
         }
-        */
 
     }
-    /*
-    public void sendMess(EditText b) {
+
+    // Sends a string with drive-state and rotation
+    public void sendPacket(String p) {
+
         Packet.Message sendMessage = new Packet.Message();
-        sendMessage.message = b.getText().toString();
+        sendMessage.message = p;
         client.sendUDP(sendMessage);
-        client.sendTCP(sendMessage);
+        //client.sendTCP(sendMessage);
     }
-    */
 
-    // Looks for opened servers within a port. Currently not working.
-    /*
-    private void hostCheck(){
-        try {
-            InetAddress address = client.discoverHost(64555, 5000);
-            System.out.println("HOST: " + address);
-        }catch (KryoNetException e) {
-            e.printStackTrace();
-        }
 
-    }
-    */
 
     // Register packets to a kryo
     private void register() {
