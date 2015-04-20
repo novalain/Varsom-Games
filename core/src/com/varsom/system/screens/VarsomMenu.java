@@ -30,6 +30,9 @@ public class VarsomMenu implements Screen {
     //TODO Load files from a SystemAssetLoader. Also, create a folder and skin for the varsom system
     private Skin skin = new Skin(Gdx.files.internal("system/skins/menuSkin.json"), new TextureAtlas(Gdx.files.internal("system/skins/menuSkin.pack")));
 
+
+    private TextButton buttonExit = new TextButton("Exit system", skin);
+
     public VarsomMenu() {
     }
 
@@ -76,6 +79,17 @@ public class VarsomMenu implements Screen {
 
             }
         }
+
+        buttonExit.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.log("clicked", "pressed the EXIT SYSTEM button.");
+                Gdx.app.exit();
+                dispose();
+            }
+        });
+
+        table.add(buttonExit).size(400, 75).padBottom(20).row();
 
         table.setFillParent(true);
         stage.addActor(table);
