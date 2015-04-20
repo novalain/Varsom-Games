@@ -16,6 +16,7 @@ public class ControllerScreen extends ScaledScreen {
 
     private TextButton drive;
     private TextButton home;
+    private TextButton buttonExit;
 
     private boolean drive_pressed = false;
 
@@ -44,6 +45,7 @@ public class ControllerScreen extends ScaledScreen {
 
         stage.addActor(drive);
         stage.addActor(home);
+        stage.addActor(buttonExit);
     }
 
     @Override
@@ -106,11 +108,26 @@ public class ControllerScreen extends ScaledScreen {
         home.setHeight(300);
         home.setPosition(Commons.WORLD_WIDTH * 0.2f, Commons.WORLD_HEIGHT * 0.3f);
 
+        buttonExit = new TextButton("Exit", textButtonStyle);
+        buttonExit.setWidth(300);
+        buttonExit.setHeight(300);
+        buttonExit.setPosition(Commons.WORLD_WIDTH * 0.5f - 150f, Commons.WORLD_HEIGHT - 300f);
+
         home.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
                 main.changeScreen(1);
+
+            }
+        });
+
+        buttonExit.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+
+                Gdx.app.log("in ControllerScreen", "pressed Exit");
+                //Go back to main menu on the server
 
             }
         });
