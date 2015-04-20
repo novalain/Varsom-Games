@@ -19,11 +19,18 @@ public class ControllerScreen extends ScaledScreen {
 
     private boolean drive_pressed = false;
 
-    // Gyro
-    private float Xaxis, Yaxis, tiltAngle;
+    private String packet;
 
-    public ControllerScreen(Main m) {
-        super(m);
+    private MPClient mpClient;
+
+    private float tiltAngle;
+
+    public ControllerScreen(Main m, MPClient mpc) {
+
+        super();
+
+        this.main = m;
+        mpClient = mpc;
 
         generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
         backgroundColor = new Color(0.0f, 0.0f, 7.0f, 1.0f);
@@ -108,13 +115,12 @@ public class ControllerScreen extends ScaledScreen {
             }
         });
 
+
         drive.addListener(new ClickListener() {
+
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+
                 drive_pressed = true;
-
-                float rot = getRotation();
-
-                Gdx.app.log("Gasa", "Rotations is " + rot);
 
                 return drive_pressed;
             }
@@ -137,16 +143,23 @@ public class ControllerScreen extends ScaledScreen {
 
     }
 
+    // Sends a boolean of the state of the variable drive
+
     protected boolean getDrive() {
 
         return drive_pressed;
     }
 
+
+    // Calculates the rotation of the phone
     protected float getRotation() {
+
+        float Xaxis, Yaxis;
+
         Xaxis = Gdx.input.getAccelerometerX();
         Yaxis = Gdx.input.getAccelerometerY();
 
-        tiltAngle = (float) (Math.atan2(Xaxis, Xaxis));
+        tiltAngle = (float) (Math.atan2(Yaxis, Xaxis));
         tiltAngle -= Math.PI / 2;
 
         tiltAngle = (float) Math.toDegrees(tiltAngle);
@@ -159,4 +172,14 @@ public class ControllerScreen extends ScaledScreen {
 
         //Gdx.app.log("inputhandler", "tiltAngle: " + tiltAngle);
     }
+
+    // Converts boolean drive and float rotation to one sting and calls upon a function to send the packet to the server
+    private void send() {
+
+        packet = Boolean.toString(getDrive()) + " " + Float.toString(getRotation());
+
+        mpClient.sendPacket(packet);
+
+    }
+
 }

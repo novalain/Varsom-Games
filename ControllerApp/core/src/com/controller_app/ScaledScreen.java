@@ -35,9 +35,7 @@ public abstract class ScaledScreen implements Screen {
 
     // The "super"-constructor
 
-    public ScaledScreen(Main m) {
-
-        main = m;
+    public ScaledScreen() {
 
         spriteBatch = new SpriteBatch();
 

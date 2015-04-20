@@ -31,10 +31,17 @@ public class MenuScreen extends ScaledScreen {
 
     private Texture logo;
 
+    private MPClient mpClient;
+
+
     private ArrayList<String> serverList;
 
-    public MenuScreen(Main m) {
-        super(m);
+    public MenuScreen(Main m, MPClient mpc) {
+        super();
+
+        this.main = m;
+        mpClient = mpc;
+
 
         serverList = new ArrayList<String>();
 
@@ -61,7 +68,8 @@ public class MenuScreen extends ScaledScreen {
 
         stage.addActor(button);
 
-        stage.addActor(selectBox);
+        // When the selectBox is working, add this line.
+       // stage.addActor(selectBox);
         Gdx.app.log("fel", "placed selectbox ");
     }
 
@@ -99,21 +107,23 @@ public class MenuScreen extends ScaledScreen {
 
         Gdx.app.log("fel", "inside generateUI");
 
-        selectBox = new SelectBox(skin);
+   //     selectBox = new SelectBox(skin);
 
         Gdx.app.log("fel" , "set skin");
 
 
-        selectBox.addListener(new ChangeListener() {
+ /*       selectBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 Gdx.app.log("ui", selectBox.getSelected().toString());
             }
         });
 
+  */
+
         Gdx.app.log("fel" , "added change listener");
 
-        selectBox.setItems(serverList);
+   /*     selectBox.setItems(serverList);
         selectBox.setSelected(serverList.get(0));
 
         Gdx.app.log("fel" , "set items");
@@ -122,6 +132,7 @@ public class MenuScreen extends ScaledScreen {
 
         Gdx.app.log("fel" , "set position");
 
+   */
         button.setWidth(800);
         button.setHeight(200);
         button.setPosition(Commons.WORLD_WIDTH / 2 - button.getWidth() / 2, Commons.WORLD_HEIGHT / 3 - button.getHeight() / 2);
@@ -185,5 +196,11 @@ public class MenuScreen extends ScaledScreen {
     @Override
     public void dispose() {
 
+    }
+
+    // Connect to server
+    public void connect() {
+
+        mpClient.connectToServer();
     }
 }
