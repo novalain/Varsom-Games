@@ -4,6 +4,7 @@ package com.controller_app;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -16,14 +17,21 @@ public class MenuScreen extends ScaledScreen {
 
     private MPClient mpClient;
 
+    private Texture logo;
+
     public MenuScreen(Main m, MPClient mpc) {
+
         super();
 
         this.main = m;
         mpClient = mpc;
 
+        //logo
+        logo = new Texture(Gdx.files.internal("images/logo.png"));
+
+        // font generator
         generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
-        backgroundColor = new Color(0.7f, 0.0f, 0.0f, 1.0f);
+        backgroundColor = Color.BLACK;
 
         buttonAtlas = new TextureAtlas(Gdx.files.internal("skins/menuSkin.pack"));
         skin.addRegions(buttonAtlas);
@@ -65,10 +73,8 @@ public class MenuScreen extends ScaledScreen {
                 // Do many great things...
 
                 main.changeScreen(2);
-
             }
         });
-
     }
 
     @Override
@@ -80,6 +86,11 @@ public class MenuScreen extends ScaledScreen {
     public void render(float delta) {
         Gdx.gl.glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        spriteBatch.setProjectionMatrix(camera.combined);
+        spriteBatch.begin();
+        spriteBatch.draw(logo , Commons.WORLD_WIDTH/2-logo.getWidth()/2 , Commons.WORLD_HEIGHT - logo.getHeight() - 40 );
+        spriteBatch.end();
 
         stage.draw();
     }

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -15,6 +16,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 public abstract class ScaledScreen implements Screen {
 
     protected Main main;
+
+    protected SpriteBatch spriteBatch;
 
     protected Stage stage;
     protected TextButton.TextButtonStyle textButtonStyle;
@@ -33,6 +36,8 @@ public abstract class ScaledScreen implements Screen {
     // The "super"-constructor
 
     public ScaledScreen() {
+
+        spriteBatch = new SpriteBatch();
 
         camera = new OrthographicCamera();
         viewport = new StretchViewport(Commons.WORLD_WIDTH, Commons.WORLD_HEIGHT, camera);
