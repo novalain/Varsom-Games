@@ -14,17 +14,16 @@ public class MPClient {
 
     public MPClient() throws IOException {
 
-
-
         client = new Client();
         register();
 
-        NetworkListener nl = new NetworkListener();
+        client.addListener(new NetworkListener());
+
+        //NetworkListener nl = new NetworkListener();
 
         // Initialise variables (not sure if it needed, maybe later)
-        nl.init(client);
-
-        client.addListener(nl);
+        //nl.init(client);
+        //client.addListener(nl);
 
         client.start();
 

@@ -11,18 +11,21 @@ public class Main extends Game {
     private ControllerScreen controllerScreen;
     private MPClient mpClient;
 
-    private boolean connected = false;
-
     @Override
     public void create() {
 
-        try {
-            mpClient = new MPClient();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        //new Thread(new Runnable() {
 
-        thread.start();
+            //@Override
+            //public void run() {
+                try {
+                    mpClient = new MPClient();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+          //  }
+        //}).start(); // And, start the thread running
+
 
         Gdx.app.log("check", "created app");
         menuScreen = new MenuScreen(this, mpClient);
@@ -38,7 +41,6 @@ public class Main extends Game {
                 setScreen(menuScreen);
                 break;
             case 2:
-
                 Gdx.input.setInputProcessor(controllerScreen.getStage());
                 Gdx.app.log("check", "changed screen");
                 setScreen(controllerScreen);
@@ -48,13 +50,12 @@ public class Main extends Game {
         }
     }
 
-    Thread thread = new Thread(new Runnable(){
-        public void run(){
+    public void network() {
+        new Thread(new Runnable() {
+            public void run() {
 
-            while (connected) {
-                controllerScreen.sendPacket();
+
             }
-
-        }
-    } );
+        }).start();
+    }
 }
