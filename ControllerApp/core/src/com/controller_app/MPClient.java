@@ -34,7 +34,8 @@ public class MPClient {
 
     }
 
-    //TODO: get IP from user
+    // TODO temp: get IP from user input
+    // TODO: Get list if servers
     public void connectToServer() {
 
         try{

@@ -3,14 +3,26 @@ package com.controller_app;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 
+import java.io.IOException;
+
 public class Main extends Game {
 
     private MenuScreen menuScreen;
     private ControllerScreen controllerScreen;
     private MPClient mpClient;
 
+    private boolean connected = false;
+
     @Override
     public void create() {
+
+        try {
+            mpClient = new MPClient();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        thread.start();
 
         Gdx.app.log("check", "created app");
         menuScreen = new MenuScreen(this, mpClient);
@@ -28,11 +40,21 @@ public class Main extends Game {
             case 2:
 
                 Gdx.input.setInputProcessor(controllerScreen.getStage());
-                Gdx.app.log("olle", "changed screen");
+                Gdx.app.log("check", "changed screen");
                 setScreen(controllerScreen);
                 break;
             default:
                 break;
         }
     }
+
+    Thread thread = new Thread(new Runnable(){
+        public void run(){
+
+            while (connected) {
+                controllerScreen.sendPacket();
+            }
+
+        }
+    } );
 }
