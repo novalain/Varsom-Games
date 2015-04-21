@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
@@ -93,7 +94,6 @@ public class ControllerScreen extends ScaledScreen {
         font = generator.generateFont(parameter);
 
         generator.dispose();
-
     }
 
     @Override
@@ -145,10 +145,7 @@ public class ControllerScreen extends ScaledScreen {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 drive_pressed = false;
             }
-
         });
-
-
     }
 
     @Override
@@ -157,7 +154,6 @@ public class ControllerScreen extends ScaledScreen {
         textButtonStyle.font = font;
         textButtonStyle.up = skin.getDrawable("up");
         textButtonStyle.down = skin.getDrawable("down");
-
     }
 
     // Sends a boolean of the state of the variable drive

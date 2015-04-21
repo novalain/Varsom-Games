@@ -33,8 +33,6 @@ public abstract class ScaledScreen implements Screen {
     protected FreeTypeFontGenerator generator;
     protected FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
-    // The "super"-constructor
-
     public ScaledScreen() {
 
         spriteBatch = new SpriteBatch();
@@ -47,10 +45,8 @@ public abstract class ScaledScreen implements Screen {
 
         stage = new Stage();
         font = new BitmapFont();
-        skin = new Skin();
 
         stage.getViewport().setCamera(camera);
-
     }
 
     @Override
