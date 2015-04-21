@@ -42,7 +42,7 @@ public class VarsomSystem extends /*ApplicationAdapter*/Game {
     public static final int SIZE = 2;
     public static int[] games = new int[SIZE];
 
-    MPServer mpServer;
+    static protected MPServer mpServer;
     static protected Server server;
 
     private String serverIPAddress;
@@ -68,10 +68,53 @@ public class VarsomSystem extends /*ApplicationAdapter*/Game {
 
     @Override
     public void dispose() {
+        mpServer.stop();
         super.dispose();
     }
 
     private void startServer(){
+        // The following code loops through the available network interfaces
+        // Keep in mind, there can be multiple interfaces per device, for example
+        // one per NIC, one per active wireless and the loopback
+        // In this case we only care about IPv4 address ( x.x.x.x format )
+        List<String> addresses = new ArrayList<String>();
+        try {
+            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+            for(NetworkInterface ni : Collections.list(interfaces)){
+                for(InetAddress address : Collections.list(ni.getInetAddresses()))
+                {
+                    if(address instanceof Inet4Address){
+                        addresses.add(address.getHostAddress());
+                    }
+                }
+            }
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
+
+        // Print the contents of our array to a string.  Yeah, should have used StringBuilder
+        String ipAddress = new String("");
+        for(String str:addresses)
+        {
+            ipAddress = ipAddress + str + "\n";
+        }
+        serverIPAddress = addresses.get(1);
+        Gdx.app.log("NETWORK", "NETWORK: IP-address is " + ipAddress);
+        try {
+            mpServer = new MPServer();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String getServerIP(){
+        return serverIPAddress;
+    }
+
+    // this function implements the pure libGDX network tutorial found at:
+    // http://www.gamefromscratch.com/post/2014/03/11/LibGDX-Tutorial-10-Basic-networking.aspx
+    // save for now.. can probably be deleted soon
+    private void startServer1(){
         int TCP = 54555, UDP = 54777;
         String labelMessage = "Hello world!!!!!";
 
@@ -134,61 +177,5 @@ public class VarsomSystem extends /*ApplicationAdapter*/Game {
                 }
             }
         }).start(); // And, start the thread running
-    }
-
-    private void startServer2() {
-        int TCP = 54555, UDP = 54777;
-        server = new Server();
-        registerPackets();
-        server.addListener(new NetworkListener());
-/*
-        NetworkListener nl = new NetworkListener();
-        nl.init(b);
-        server.addListener(nl);
-*/
-        //TCP, UDP
-        //server.bind(54555, 64555);
-       // server.start();
-
-
-    }
-
-    private void startServer3(){
-        // Now we create a thread that will listen for incoming socket connections
-        new Thread(new Runnable(){
-
-            @Override
-            public void run() {
-                try {
-                    mpServer = new MPServer();
-                    Log.set(LEVEL_DEBUG);;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Gdx.app.log("NETWORK","NETWORK: Something went wrong, couldn't create server");
-                }
-                // Loop forever
-                while(true){
-
-                   /* try {
-                        // Read to the next newline (\n) and display that text on labelMessage
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }*/
-                }
-            }
-        }).start(); // And, start the thread running
-
-    }
-
-    private void registerPackets() {
-        Kryo kryo = server.getKryo();
-        // Register packets
-        kryo.register(Packet.LoginRequest.class);
-        kryo.register(Packet.LoginAnswer.class);
-        kryo.register(Packet.Message.class);
-    }
-
-    public String getServerIP(){
-        return serverIPAddress;
     }
 }

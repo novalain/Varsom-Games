@@ -38,8 +38,6 @@ public class  NetworkListener extends Listener {
             c.sendTCP(loginaccepted);
             //Write in the log if login was successful
             System.out.println("Login is accepted");
-
-
         }
         //Message is received from the client
         if (o instanceof Message) {

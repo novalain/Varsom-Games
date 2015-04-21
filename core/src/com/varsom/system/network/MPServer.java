@@ -16,11 +16,7 @@ public class MPServer {
         server = new Server();
         registerPackets();
         server.addListener(new NetworkListener());
-/*
-        NetworkListener nl = new NetworkListener();
-        nl.init(b);
-        server.addListener(nl);
-*/
+
         //TCP, UDP
         server.bind(TCP, UDP);
         server.start();
