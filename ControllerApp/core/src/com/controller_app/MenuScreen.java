@@ -17,7 +17,8 @@ import java.util.ArrayList;
 
 public class MenuScreen extends ScaledScreen {
 
-    private TextButton button;
+    private TextButton buttonController;
+    private TextButton buttonExit;
 
     //new
     private Label lblLogo;
@@ -64,7 +65,8 @@ public class MenuScreen extends ScaledScreen {
         Gdx.app.log("fel", "outside generateUI");
         generateUI();
 
-        stage.addActor(button);
+        stage.addActor(buttonController);
+        stage.addActor(buttonExit);
 
         // When the selectBox is working, add this line.
        // stage.addActor(selectBox);
@@ -100,8 +102,10 @@ public class MenuScreen extends ScaledScreen {
     }
 
     void generateUI() {
-        button = new TextButton("Controller", textButtonStyle);
-        //lblFPS = new Label("kokoko" , skin);
+
+        buttonController = new TextButton("Controller", textButtonStyle);
+        buttonExit = new TextButton("Exit", textButtonStyle);
+        // lblFPS = new Label("kokoko" , skin);
 
         Gdx.app.log("fel", "inside generateUI");
 
@@ -131,16 +135,28 @@ public class MenuScreen extends ScaledScreen {
         Gdx.app.log("fel" , "set position");
 
    */
-        button.setWidth(800);
-        button.setHeight(200);
-        button.setPosition(Commons.WORLD_WIDTH / 2 - button.getWidth() / 2, Commons.WORLD_HEIGHT / 3 - button.getHeight() / 2);
+        buttonController.setWidth(800);
+        buttonController.setHeight(200);
+        buttonController.setPosition(Commons.WORLD_WIDTH / 2 - buttonController.getWidth() / 2, Commons.WORLD_HEIGHT / 3 - buttonController.getHeight() / 2);
 
-        button.addListener(new ClickListener() {
+        buttonExit.setWidth(300);
+        buttonExit.setHeight(300);
+        buttonExit.setPosition(Commons.WORLD_WIDTH / 2 -  buttonExit.getWidth() / 2, 0);//Commons.WORLD_HEIGHT  - buttonExit.getHeight());
+
+        buttonController.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 // Do many great things...
 
                 main.changeScreen(2);
+            }
+        });
+
+        buttonExit.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.exit();
+                dispose();
             }
         });
 
