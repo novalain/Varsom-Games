@@ -192,5 +192,3 @@ public class VarsomSystem extends /*ApplicationAdapter*/Game {
         return serverIPAddress;
     }
 }
-
-
