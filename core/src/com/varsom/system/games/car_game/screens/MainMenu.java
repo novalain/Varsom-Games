@@ -17,8 +17,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import java.util.ArrayList;
 
+import com.varsom.system.VarsomSystem;
 import com.varsom.system.games.car_game.com.varsomgames.cargame.CarGame;
 import com.varsom.system.games.car_game.gameobjects.BackgroundObject;
+import com.varsom.system.screens.VarsomMenu;
 
 public class MainMenu implements Screen {
 
@@ -31,6 +33,8 @@ public class MainMenu implements Screen {
     private SpriteBatch spriteBatch = new SpriteBatch();
     private ArrayList<BackgroundObject> objectList;
 
+    protected VarsomSystem varsomSystem;
+
     //TODO Load files from AssetLoader
 
     private Skin skin = new Skin(Gdx.files.internal("car_game_assets/skins/menuSkin.json"),
@@ -41,12 +45,11 @@ public class MainMenu implements Screen {
             buttonSettings = new TextButton("Settings", skin),
             buttonAbout = new TextButton("About", skin),
             buttonExit = new TextButton("Exit", skin);
-
     private Label title = new Label(CarGame.TITLE, skin);
 
-    public MainMenu() {
+    public MainMenu(VarsomSystem varsomSystem) {
+        this.varsomSystem = varsomSystem;
         objectList = new ArrayList<BackgroundObject>();
-
         for (int i = 0; i < 10; i++) {
             Vector2 temp = new Vector2( (float) ( Math.random()*WIDTH), (float) ( Math.random()*HEIGHT) );
             objectList.add(new BackgroundObject(temp, "car_game_assets/img/cloud.png"));
@@ -55,41 +58,43 @@ public class MainMenu implements Screen {
 
     @Override
     public void show() {
+        Gdx.input.setCatchBackKey(false);
         buttonPlay.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.log("clicked", "pressed the PLAY button.");
-                ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(1));
+                ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(1,varsomSystem));
             }
         });
 
         buttonPlay2.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.log("clicked", "pressed the PLAY button.");
-                ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(2));
+                Gdx.app.log("clicked", "pressed the PLAY 2 button.");
+                ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(2,varsomSystem));
             }
         });
 
         buttonSettings.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.log("clicked", "pressed the SETTINGS button.");
+                Gdx.app.log("clicked", "pressed the SETTINGS CARGAME button.");
             }
         });
 
         buttonAbout.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.log("clicked", "pressed the ABOUT button.");
+                Gdx.app.log("clicked", "pressed the ABOUT CARGAME button.");
             }
         });
 
         buttonExit.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.log("clicked", "pressed the EXIT button.");
-                Gdx.app.exit();
+             //   Boolean isKeyPressed = true;
+                Gdx.app.log("clicked", "pressed the EXIT CARGAME button.");
+                ((Game) Gdx.app.getApplicationListener()).setScreen(new VarsomMenu(varsomSystem));
                 // or System.exit(0);
             }
         });

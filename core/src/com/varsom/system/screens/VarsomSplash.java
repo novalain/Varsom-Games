@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.varsom.system.VarsomSystem;
 
 /**
  * Created by oskarcarlbaum on 16/04/15.
@@ -16,7 +17,11 @@ public class VarsomSplash implements Screen {
     private Texture splashTexture;
     private Image splashImage;
     private Stage stage;
+    protected VarsomSystem varsomSystem;
 
+    public VarsomSplash(VarsomSystem varsomSystem){
+        this.varsomSystem = varsomSystem;
+    }
     @Override
     public void show() {
         //If your image is not the same size as your screen
@@ -32,7 +37,7 @@ public class VarsomSplash implements Screen {
         splashImage.addAction(Actions.sequence(Actions.alpha(0), Actions.fadeIn(0.5f), Actions.delay(1), Actions.run(new Runnable() {
             @Override
             public void run() {
-                ((Game) Gdx.app.getApplicationListener()).setScreen(new VarsomMenu());
+                ((Game) Gdx.app.getApplicationListener()).setScreen(new VarsomMenu(varsomSystem));
             }
         })));
 
@@ -40,7 +45,7 @@ public class VarsomSplash implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0.5f,0.3f,0.3f,1); //sets clear color to black
+        Gdx.gl.glClearColor(0.137f,0.121f,0.125f,1); //sets clear color to black
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); //clear the batch
         stage.act(); //update all actors
         stage.draw();
