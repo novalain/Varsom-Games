@@ -35,10 +35,10 @@ public class MPClient {
 
     // TODO temp: get IP from user input
     // TODO: Get list if servers
-    public void connectToServer() {
+    public void connectToServer(String ip) {
 
         try{
-            client.connect(50000, "192.168.1.1", 54555, 64555);
+            client.connect(50000, ip, 54555, 64555);
         }
         catch(IOException e){
             e.printStackTrace();

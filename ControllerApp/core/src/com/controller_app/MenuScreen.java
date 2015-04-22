@@ -9,12 +9,15 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class MenuScreen extends ScaledScreen {
 
     private TextButton buttonController;
     private TextButton buttonExit;
+
+    private TextField textField;
 
     private Texture logo;
     private MPClient mpClient;
@@ -36,8 +39,9 @@ public class MenuScreen extends ScaledScreen {
         //buttonAtlas = new TextureAtlas(Gdx.files.internal("uiskin/uiskin.json"));
         //skin.addRegions(buttonAtlas);
         Gdx.app.log("fan" , "first");
-        skin = new Skin(Gdx.files.internal("data/uiskin.json"));
+        skin = new Skin(Gdx.files.internal("uiskin/uiskin.json"));
         Gdx.app.log("fan" , "second");
+
         Gdx.input.setInputProcessor(stage);
 
         generateFonts();
@@ -71,6 +75,13 @@ public class MenuScreen extends ScaledScreen {
         buttonController = new TextButton("Controller", skin);
         buttonExit = new TextButton("Exit", skin);
 
+
+        textField = new TextField("Enter ip: " , skin);
+        textField.setWidth(800);
+        textField.setHeight(200);
+        textField.setPosition(Commons.WORLD_WIDTH / 2 - textField.getWidth() , Commons.WORLD_WIDTH / 2 - textField.getWidth());
+
+
         buttonController.setWidth(800);
         buttonController.setHeight(200);
         buttonController.setPosition(Commons.WORLD_WIDTH / 2 - buttonController.getWidth() / 2, Commons.WORLD_HEIGHT / 3 - buttonController.getHeight() / 2);
@@ -94,6 +105,7 @@ public class MenuScreen extends ScaledScreen {
             }
         });
 
+        stage.addActor(textField);
         stage.addActor(buttonController);
         stage.addActor(buttonExit);
     }
@@ -110,7 +122,9 @@ public class MenuScreen extends ScaledScreen {
         // Sprite renders
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin();
+
         spriteBatch.draw(logo, Commons.WORLD_WIDTH / 2 - logo.getWidth() / 2, Commons.WORLD_HEIGHT - logo.getHeight());
+
         spriteBatch.end();
 
         stage.draw();
@@ -143,6 +157,7 @@ public class MenuScreen extends ScaledScreen {
     // Connect to server
     public void connect() {
 
-        mpClient.connectToServer();
+        mpClient.connectToServer(textField.getText());
+        Gdx.app.log("ipadress", textField.getText());
     }
 }

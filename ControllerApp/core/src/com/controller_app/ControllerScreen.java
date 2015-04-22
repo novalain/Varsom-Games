@@ -34,6 +34,8 @@ public class ControllerScreen extends ScaledScreen {
         this.main = m;
         mpClient = mpc;
 
+        skin = new Skin();
+
         generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
         backgroundColor = new Color(0.0f, 0.0f, 7.0f, 1.0f);
 
@@ -190,6 +192,8 @@ public class ControllerScreen extends ScaledScreen {
     public void sendPacket() {
 
         packet = Boolean.toString(getDrive()) + " " + Float.toString(getRotation());
+
+        Gdx.app.log("send", packet);
 
         mpClient.sendPacket(packet);
 

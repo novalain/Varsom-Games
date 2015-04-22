@@ -39,18 +39,25 @@ public class Main extends Game {
             case 1:
                 Gdx.input.setInputProcessor(menuScreen.getStage());
                 setScreen(menuScreen);
+
                 break;
             case 2:
                 Gdx.input.setInputProcessor(controllerScreen.getStage());
                 Gdx.app.log("check", "changed screen");
                 setScreen(controllerScreen);
+                menuScreen.connect();
+
+                for(int i = 0; i < 10; i++){
+                    controllerScreen.sendPacket();
+                }
+
                 break;
             default:
                 break;
         }
     }
 
-    public void network() {
+    public void networkThread() {
         new Thread(new Runnable() {
             public void run() {
 
