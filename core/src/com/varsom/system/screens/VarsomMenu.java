@@ -3,6 +3,7 @@ package com.varsom.system.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -16,12 +17,10 @@ import com.varsom.system.VarsomSystem;
 import com.varsom.system.abstract_gameobjects.VarsomGame;
 import com.varsom.system.games.car_game.com.varsomgames.cargame.CarGame;
 import com.varsom.system.games.other_game.OtherGame;
-import com.varsom.system.network.MPServer;
+import com.varsom.system.screens.ScaledScreen;
+import com.varsom.system.Commons;
 
-/**
- * Created by oskarcarlbaum on 16/04/15.
- */
-public class VarsomMenu implements Screen {
+public class VarsomMenu extends ScaledScreen {
 
     private Stage stage = new Stage();
     private Table table = new Table();
@@ -173,5 +172,28 @@ public class VarsomMenu implements Screen {
             clientNames += "\n" + varsomSystem.getServer().getConnections()[i].getRemoteAddressTCP().toString();
         }
         connectedClientNames.setText(clientNames);
+    }
+
+    @Override
+    void generateFonts() {
+
+        parameter.color = Color.WHITE;
+        parameter.size = 100;
+        font = generator.generateFont(parameter);
+
+        generator.dispose();
+    }
+
+    @Override
+    void generateUI() {
+
+    }
+
+    @Override
+    void generateTextButtonStyle() {
+        textButtonStyle = new TextButton.TextButtonStyle();
+        textButtonStyle.font = font;
+        textButtonStyle.up = skin.getDrawable("up");
+        textButtonStyle.down = skin.getDrawable("down");
     }
 }
