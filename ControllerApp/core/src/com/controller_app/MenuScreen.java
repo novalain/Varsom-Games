@@ -76,7 +76,7 @@ public class MenuScreen extends ScaledScreen {
         buttonExit = new TextButton("Exit", skin);
 
 
-        textField = new TextField("Enter ip: " , skin);
+        textField = new TextField("" , skin);
         textField.setWidth(800);
         textField.setHeight(200);
         textField.setPosition(Commons.WORLD_WIDTH / 2 - textField.getWidth() , Commons.WORLD_WIDTH / 2 - textField.getWidth());

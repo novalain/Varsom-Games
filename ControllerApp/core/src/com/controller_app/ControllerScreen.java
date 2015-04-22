@@ -22,6 +22,7 @@ public class ControllerScreen extends ScaledScreen {
     private boolean drive_pressed = false;
 
     private String packet;
+    private Boolean send = false;
 
     private MPClient mpClient;
 
@@ -189,13 +190,12 @@ public class ControllerScreen extends ScaledScreen {
     }
 
     // Converts boolean drive and float rotation to one sting and calls upon a function to send the packet to the server
-    public void sendPacket() {
+    public void sendPacket(Boolean send) {
 
-        packet = Boolean.toString(getDrive()) + " " + Float.toString(getRotation());
-
-        Gdx.app.log("send", packet);
-
-        mpClient.sendPacket(packet);
+        while (send) {
+            packet = Boolean.toString(getDrive()) + " " + Float.toString(getRotation());
+            mpClient.sendPacket(packet);
+        }
 
     }
 

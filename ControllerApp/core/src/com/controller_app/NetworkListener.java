@@ -5,6 +5,8 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
+import static com.controller_app.Packet.*;
+
 /**
  *
  */
@@ -20,7 +22,7 @@ public class NetworkListener extends Listener {
     }
 
     public void connected(Connection c) {
-        client.sendTCP(new Packet.LoginRequest());
+        client.sendTCP(new LoginRequest());
         System.out.println("You have connected.");
 
     }
@@ -31,8 +33,8 @@ public class NetworkListener extends Listener {
 
     public void received(Connection c, Object o) {
         // checks for login answers from server
-        if (o instanceof Packet.LoginAnswer) {
-            Boolean answer = ((Packet.LoginAnswer) o).accepted;
+        if (o instanceof LoginAnswer) {
+            Boolean answer = ((LoginAnswer) o).accepted;
 
             if (answer) {
                 String mess = o.toString();
@@ -43,13 +45,18 @@ public class NetworkListener extends Listener {
             }
 
         }
-        if (o instanceof Packet.Message) {
+        if (o instanceof Message) {
 
             //The received message is saved in a string
-            message = ((Packet.Message) o).message;
+            message = ((Message) o).message;
 
             //Writes the message in the log
             System.out.println("MESSAGE: " + message);
+
+        }
+        if (o instanceof SendGameData) {
+
+            Boolean start = ((SendGameData) o).start;
 
         }
 

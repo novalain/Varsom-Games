@@ -17,13 +17,13 @@ public class MPClient {
         client = new Client();
         register();
 
-        client.addListener(new NetworkListener());
+        //client.addListener(new NetworkListener());
 
-        //NetworkListener nl = new NetworkListener();
+        NetworkListener nl = new NetworkListener();
 
         // Initialise variables (not sure if it needed, maybe later)
-        //nl.init(client);
-        //client.addListener(nl);
+        nl.init(client);
+        client.addListener(nl);
 
         client.start();
 

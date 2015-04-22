@@ -14,4 +14,12 @@ public class Packet {
     public static class Message {
         String message;
     }
+
+    public static class GamePacket {
+        String message;
+    }
+
+    public static class SendGameData {
+        Boolean start;
+    }
 }

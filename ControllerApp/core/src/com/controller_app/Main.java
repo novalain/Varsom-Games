@@ -14,18 +14,12 @@ public class Main extends Game {
     @Override
     public void create() {
 
-        //new Thread(new Runnable() {
 
-            //@Override
-            //public void run() {
-                try {
-                    mpClient = new MPClient();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-          //  }
-        //}).start(); // And, start the thread running
-
+        try {
+            mpClient = new MPClient();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         Gdx.app.log("check", "created app");
         menuScreen = new MenuScreen(this, mpClient);
@@ -46,23 +40,10 @@ public class Main extends Game {
                 Gdx.app.log("check", "changed screen");
                 setScreen(controllerScreen);
                 menuScreen.connect();
-
-                for(int i = 0; i < 10; i++){
-                    controllerScreen.sendPacket();
-                }
-
                 break;
             default:
                 break;
         }
     }
 
-    public void networkThread() {
-        new Thread(new Runnable() {
-            public void run() {
-
-
-            }
-        }).start();
-    }
 }
