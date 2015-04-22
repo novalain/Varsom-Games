@@ -229,6 +229,10 @@ public class VarsomMenu extends ScaledScreen {
       //  table.setDebug(true);
 
         stage.addActor(table);
+
+        table.addAction(Actions.sequence(Actions.alpha(0), Actions.fadeIn(1.2f)));
+
+
         stage.addActor(connectedClientNames);
 
         Gdx.input.setInputProcessor(stage);
