@@ -1,13 +1,16 @@
 package com.controller_app;
 
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -16,8 +19,11 @@ public class MenuScreen extends ScaledScreen {
 
     private TextButton buttonController;
     private TextButton buttonExit;
-
     private TextField textField;
+
+    private Table table;
+
+    private TextureAtlas atlas;
 
     private Texture logo;
     private MPClient mpClient;
@@ -32,30 +38,39 @@ public class MenuScreen extends ScaledScreen {
         logo = new Texture(Gdx.files.internal("images/logo.png"));
 
         // font generator
-        generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
-        backgroundColor = Color.BLACK;
-
-        //buttonAtlas = new TextureAtlas(Gdx.files.internal("skins/menuSkin.pack"));
-        //buttonAtlas = new TextureAtlas(Gdx.files.internal("uiskin/uiskin.json"));
-        //skin.addRegions(buttonAtlas);
-        Gdx.app.log("fan" , "first");
-        skin = new Skin(Gdx.files.internal("uiskin/uiskin.json"));
-        Gdx.app.log("fan" , "second");
-
-        Gdx.input.setInputProcessor(stage);
 
         generateFonts();
-        generateTextButtonStyle();
+        // skin = new Skin(Gdx.files.internal("uiskin/uiskin.json"));
+        try {
+            //skin = new Skin();
+            //skin.addRegions(new TextureAtlas(Gdx.files.internal("uiskin/uiskin.atlas")));
+            atlas = new TextureAtlas(Gdx.files.internal("uiskin/uiskin.atlas"));
+            skin = new Skin();
+            skin.addRegions(atlas);
+            skin.add("default-font", font, BitmapFont.class);
+            skin.load(Gdx.files.internal("uiskin/uiskin.json"));
+            //skin = new Skin(Gdx.files.internal("uiskin/uiskin.json"), atlas);
+        } catch (Exception E) {
+            Gdx.app.log("fan", "failed reading it");
+        }
+        Gdx.input.setInputProcessor(stage);
+        //generateTextButtonStyle();
 
         generateUI();
     }
 
     @Override
     void generateFonts() {
+        generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
         parameter.color = Color.WHITE;
         parameter.size = 100;
         font = generator.generateFont(parameter);
 
+        try {
+            skin.add("default-font", font);
+        } catch (Exception e) {
+            Gdx.app.log("fail", "failed adding font");
+        }
         generator.dispose();
     }
 
@@ -72,23 +87,13 @@ public class MenuScreen extends ScaledScreen {
 
     void generateUI() {
 
-        buttonController = new TextButton("Controller", skin);
+        skin.getFont("default-font").scale(4f);
+        table = new Table(skin);
+
+        Image image = new Image(logo);
+        buttonController = new TextButton("Connect Controller", skin);
         buttonExit = new TextButton("Exit", skin);
-
-
-        textField = new TextField("" , skin);
-        textField.setWidth(800);
-        textField.setHeight(200);
-        textField.setPosition(Commons.WORLD_WIDTH / 2 - textField.getWidth() , Commons.WORLD_WIDTH / 2 - textField.getWidth());
-
-
-        buttonController.setWidth(800);
-        buttonController.setHeight(200);
-        buttonController.setPosition(Commons.WORLD_WIDTH / 2 - buttonController.getWidth() / 2, Commons.WORLD_HEIGHT / 3 - buttonController.getHeight() / 2);
-
-        buttonExit.setWidth(400);
-        buttonExit.setHeight(100);
-        buttonExit.setPosition(Commons.WORLD_WIDTH / 2 - buttonExit.getWidth() / 2, 0);
+        textField = new TextField("ip:", skin);
 
         buttonController.addListener(new ClickListener() {
             @Override
@@ -105,9 +110,14 @@ public class MenuScreen extends ScaledScreen {
             }
         });
 
-        stage.addActor(textField);
-        stage.addActor(buttonController);
-        stage.addActor(buttonExit);
+        // Add everything to the table
+        table.add(image).padTop(10).padBottom(40).row();
+        table.add(textField).size(800, 200).padBottom(20).row();
+        table.add(buttonController).size(800, 200).padBottom(100).row();
+        table.add(buttonExit).size(800, 200).row();
+
+        table.setFillParent(true);
+        stage.addActor(table);
     }
 
     @Override
@@ -116,14 +126,12 @@ public class MenuScreen extends ScaledScreen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
+        Gdx.gl.glClearColor(0f, 0f, 0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         // Sprite renders
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin();
-
-        spriteBatch.draw(logo, Commons.WORLD_WIDTH / 2 - logo.getWidth() / 2, Commons.WORLD_HEIGHT - logo.getHeight());
 
         spriteBatch.end();
 
