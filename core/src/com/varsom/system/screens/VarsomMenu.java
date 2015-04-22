@@ -2,12 +2,23 @@ package com.varsom.system.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -17,6 +28,8 @@ import com.varsom.system.abstract_gameobjects.VarsomGame;
 import com.varsom.system.games.car_game.com.varsomgames.cargame.CarGame;
 import com.varsom.system.games.other_game.OtherGame;
 
+import java.util.Vector;
+
 /**
  * Created by oskarcarlbaum on 16/04/15.
  */
@@ -24,61 +37,118 @@ public class VarsomMenu implements Screen {
 
     private Stage stage = new Stage();
     private Table table = new Table();
-
-    private final int WIDTH = Gdx.graphics.getWidth();
-    private final int HEIGHT = Gdx.graphics.getHeight();
+    private Vector2 lastTouch = new Vector2();
+    private Camera camera;
+    private int currentButton = 1;
+    private boolean left = false, right = false;
 
     //TODO Load files from a SystemAssetLoader. Also, create a folder and skin for the varsom system
     private Skin skin = new Skin(Gdx.files.internal("system/skins/menuSkin.json"), new TextureAtlas(Gdx.files.internal("system/skins/menuSkin.pack")));
     //private Skin skin2 = new Skin(Gdx.files.internal("data/uiskin.json"));
 
-    private TextButton buttonExit = new TextButton("Exit system", skin);
+    /*private TextButton buttonExit;
+    private TextButton buttonPlayOtherGame;
+    private TextButton buttonPlayCarGame;*/
+    private Image imagePlayCarGame;
+    private Image imagePlayOtherGame;
+    private Image imageExit;
+    private Vector<Image> images;
     private Label ips;
 
     protected VarsomSystem varsomSystem;
 
     public VarsomMenu(VarsomSystem varsomSystem){
+
         this.varsomSystem = varsomSystem;
 
     }
 
     @Override
     public void show() {
-        //For every VarsomeGame in the game array create a button
-        ips = new Label("Server IP: " + this.varsomSystem.getServerIP(),skin);
-        table.add(ips).size(600,90).padBottom(80).row();
+
+        BitmapFont fontType = new BitmapFont();
+        fontType.scale(2.f);
+
+        Label.LabelStyle style = new Label.LabelStyle(fontType, Color.WHITE);
+
+        ips = new Label("IP: " + this.varsomSystem.getServerIP(), style);
+
+        //Position IP at middle top of the screen
+        ips.setPosition(Gdx.graphics.getWidth()/2 - ips.getWidth()/2, Gdx.graphics.getHeight()-200);
+        stage.addActor(ips);
+
+        //For every VarsomeGame in the game array create an image
         for(int i = 0; i < VarsomSystem.SIZE; i++) {
+
             switch (VarsomSystem.games[i]){
 
                 //Cargame
                 case 1:
-                    TextButton buttonPlayCarGame = new TextButton("Start CarGame", skin);
+                    //buttonPlayCarGame = new TextButton(" CarGame", skin);
+                    imagePlayCarGame = new Image(new Texture(Gdx.files.internal("system/img/varsomful.png")));
 
-                    buttonPlayCarGame.addListener(new ClickListener() {
+                    imagePlayCarGame.addListener(new ClickListener() {
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
-                            VarsomGame carGame = new CarGame((VarsomSystem) Gdx.app.getApplicationListener());
-                            Gdx.app.log("clicked", "pressed CarGame");
-                            //((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(1));
-                            hide();
+
+                            if(currentButton == 0 && !left && !right){
+
+                                Gdx.app.log("clicked", "pressed CarGame");
+                                //((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(1));
+
+                                images.elementAt(currentButton).addAction(Actions.sequence(Actions.scaleBy(2.f, 2.f, 0.6f), Actions.alpha(0.0f, 0.6f), Actions.run(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                       // ((Game) Gdx.app.getApplicationListener()).setScreen(new VarsomMenu(varsomSystem));
+                                        VarsomGame carGame = new CarGame((VarsomSystem) Gdx.app.getApplicationListener());
+                                    }
+                                })));
+
+                                hide();
+                            }
+
+                            //To go directly to touched button.
+                           /* else if (!right){
+
+                                right = true;
+                                currentButton--;
+                                stage.cancelTouchFocus();
+
+                            }*/
+
                         }
                     });
-                    table.add(buttonPlayCarGame).size(450, 90).padBottom(10).row();
+
+                    table.add(imagePlayCarGame).size(300, 300).padRight(200);
                     break;
 
                 //OtherGame
                 case 2:
-                    TextButton buttonPlayOtherGame = new TextButton("Start OtherGame", skin);
+                    //buttonPlayOtherGame = new TextButton(" OtherGame", skin);
+                    imagePlayOtherGame = new Image(new Texture(Gdx.files.internal("system/img/varsomful.png")));
 
-                    buttonPlayOtherGame.addListener(new ClickListener() {
+                    imagePlayOtherGame.addListener(new ClickListener() {
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
-                            VarsomGame OtherGame = new OtherGame((Game) Gdx.app.getApplicationListener());
-                            Gdx.app.log("clicked", "pressed OtherGame.");
-                            hide();
+
+                            if(currentButton == 1 && !left && !right){
+
+                                images.elementAt(currentButton).addAction(Actions.sequence(Actions.scaleBy(2.f, 2.f, 0.6f), Actions.alpha(0.0f, 0.6f), Actions.run(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        // ((Game) Gdx.app.getApplicationListener()).setScreen(new VarsomMenu(varsomSystem));
+                                        VarsomGame OtherGame = new OtherGame((Game) Gdx.app.getApplicationListener());
+                                        Gdx.app.log("clicked", "pressed OtherGame.");
+                                        hide();
+                                    }
+                                })));
+
+                            }
                         }
                     });
-                    table.add(buttonPlayOtherGame).size(450, 90).padBottom(80).row();
+                    table.add(imagePlayOtherGame).size(300, 300).padRight(200);
+                  //  imagePlayOtherGame.setWidth(350);
+                   // imagePlayOtherGame.setHeight(350);
                     break;
 
                 //If something goes wrong
@@ -87,28 +157,161 @@ public class VarsomMenu implements Screen {
 
             }
 
+            imageExit = new Image(new Texture(Gdx.files.internal("system/img/varsomful.png")));
+
+            // Add all images into array
+            images = new Vector();
+            images.add(imagePlayCarGame);
+            images.add(imagePlayOtherGame);
+            images.add(imageExit);
+
+            imageExit.addListener(new ClickListener() {
+
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+
+                    if(currentButton == 2 && !left && !right){
+                        Gdx.app.log("clicked", "pressed the EXIT SYSTEM button.");
+                        Gdx.app.exit();
+                        dispose();
+                    }
+                }
+            });
+
+            stage.addListener(new ClickListener(){
+
+                @Override
+                public void touchDragged(InputEvent event, float x, float y, int pointer) {
+
+                    Vector2 newTouch = new Vector2(x, y);
+                    // delta holds the difference between the last and current touch position
+                    // delta.x > 0 means the touch moved to the right, delta.x < 0 to the left
+                    Vector2 delta = newTouch.cpy().sub(lastTouch);
+                    lastTouch = newTouch;
+
+                    if(delta.x > 50 && currentButton > 0 && !right){
+
+                        right = true;
+                        currentButton--;
+                        stage.cancelTouchFocus();
+
+                    }
+                    else if (delta.x < -50 && currentButton < 2 && !left){
+                        left = true;
+                        currentButton++;
+                        stage.cancelTouchFocus();
+
+                    }
+
+                }
+
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button){
+                    lastTouch.set(x, y);
+                    return true;
+                }
+
+            });
         }
 
-        buttonExit.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.log("clicked", "pressed the EXIT SYSTEM button.");
-                Gdx.app.exit();
-                dispose();
-            }
-        });
-
-        table.add(buttonExit).size(450, 90).padBottom(20).row();
+        table.add(imageExit).size(300, 300);
 
         table.setFillParent(true);
+      //  table.setDebug(true);
+
         stage.addActor(table);
+
         Gdx.input.setInputProcessor(stage);
+
+        //Move origin to scale from middle
+        imagePlayOtherGame.setOrigin(150, 150);
+        imagePlayCarGame.setOrigin(150, 150);
+        imageExit.setOrigin(150, 150);
+
+        imagePlayOtherGame.setScale(1.52f);
+
+        images.elementAt(currentButton-1).addAction(Actions.sequence(Actions.alpha(0.3f, 0.2f)));
+        images.elementAt(currentButton+1).addAction(Actions.sequence(Actions.alpha(0.3f, 0.2f)));
+
+    }
+
+    public void handleSwipedImages(){
+
+        // Move to the left
+        if(right && currentButton < 2){
+
+            //Fade down
+            images.elementAt(currentButton+1).addAction(Actions.sequence(Actions.alpha(0.3f, 1.f)));
+            images.elementAt(currentButton).addAction(Actions.sequence(Actions.alpha(1.f, 1.f)));
+
+            //If position reached middle, set swipe right to false (810 is original pos for the middle image)
+            if(images.elementAt(currentButton).getX() >= 810){
+                right = false;
+            }
+
+            else{
+
+                //Translate all images
+                for(int i = 0; i < images.size(); i++){
+
+                    images.elementAt(i).setPosition(images.elementAt(i).getX() + 10, images.elementAt(i).getY());
+
+                }
+
+                //Scale up current image and scale down previous image
+                images.elementAt(currentButton).scaleBy(0.01f);
+                images.elementAt(currentButton+1).scaleBy(-0.01f);
+
+            }
+
+        }
+        //Same but the other way
+        else if (left && currentButton > 0){
+
+            images.elementAt(currentButton-1).addAction(Actions.sequence(Actions.alpha(0.3f, 1.f)));
+            images.elementAt(currentButton).addAction(Actions.sequence(Actions.alpha(1.f, 1.f)));
+
+            if(images.elementAt(currentButton).getX() <= 810){
+                left = false;
+
+            }
+
+            else{
+
+                for(int i = 0; i < images.size(); i++){
+
+                    images.elementAt(i).setPosition(images.elementAt(i).getX() - 10, images.elementAt(i).getY());
+
+                }
+
+                images.elementAt(currentButton).scaleBy(0.01f);
+                images.elementAt(currentButton-1).scaleBy(-0.01f);
+
+            }
+
+        }
+
+
     }
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0.12f, 0.12f, 0.12f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+       // System.out.println(currentButton + "currentbtn");
+      //  System.out.println("camera pos x " + camera.position.x);
+       // System.out.println("camera pos" +  camera.position.x);
+       /* System.out.println("0" + images.elementAt(0).getX());
+        System.out.println(images.elementAt(1).getX());
+        System.out.println(images.elementAt(2).getX());
+        System.out.println("currentBUTTON" + currentButton);*/
+/*
+        System.out.println("HEIGHT" +  images.elementAt(currentButton).getHeight());
+        System.out.println("WIDTH" +  images.elementAt(currentButton).getWidth());*/
+       // System.out.println("POS"  + images.elementAt(currentButton).getX());
+
+        handleSwipedImages();
 
         stage.act();
         stage.draw();
@@ -139,4 +342,5 @@ public class VarsomMenu implements Screen {
         stage.dispose();
         skin.dispose();
     }
+
 }
