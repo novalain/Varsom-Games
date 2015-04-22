@@ -178,4 +178,8 @@ public class VarsomSystem extends /*ApplicationAdapter*/Game {
             }
         }).start(); // And, start the thread running
     }
+
+    public Server getServer(){
+        return mpServer.getServer();
+    }
 }

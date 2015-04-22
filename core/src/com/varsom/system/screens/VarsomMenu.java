@@ -4,7 +4,6 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -27,25 +26,25 @@ import com.varsom.system.VarsomSystem;
 import com.varsom.system.abstract_gameobjects.VarsomGame;
 import com.varsom.system.games.car_game.com.varsomgames.cargame.CarGame;
 import com.varsom.system.games.other_game.OtherGame;
-
+import com.varsom.system.screens.ScaledScreen;
+import com.varsom.system.Commons;
 import java.util.Vector;
 
 /**
  * Created by oskarcarlbaum on 16/04/15.
  */
-public class VarsomMenu implements Screen {
+
+public class VarsomMenu extends ScaledScreen {
 
     private Stage stage = new Stage();
     private Table table = new Table();
     private Vector2 lastTouch = new Vector2();
-    private Camera camera;
     private int currentButton = 1;
     private boolean left = false, right = false;
 
     //TODO Load files from a SystemAssetLoader. Also, create a folder and skin for the varsom system
     private Skin skin = new Skin(Gdx.files.internal("system/skins/menuSkin.json"), new TextureAtlas(Gdx.files.internal("system/skins/menuSkin.pack")));
     //private Skin skin2 = new Skin(Gdx.files.internal("data/uiskin.json"));
-
     /*private TextButton buttonExit;
     private TextButton buttonPlayOtherGame;
     private TextButton buttonPlayCarGame;*/
@@ -53,9 +52,14 @@ public class VarsomMenu implements Screen {
     private Image imagePlayOtherGame;
     private Image imageExit;
     private Vector<Image> images;
+    private Label connectedClientNames;
     private Label ips;
 
+    private String clientNames;
+
     protected VarsomSystem varsomSystem;
+
+    private int addedClients = 0;
 
     public VarsomMenu(VarsomSystem varsomSystem){
 
@@ -216,10 +220,16 @@ public class VarsomMenu implements Screen {
 
         table.add(imageExit).size(300, 300);
 
+        //label that shows all connected players
+        clientNames = "Connected players:";
+        connectedClientNames = new Label(clientNames,style);
+        connectedClientNames.setPosition(0, 0);
+
         table.setFillParent(true);
       //  table.setDebug(true);
 
         stage.addActor(table);
+        stage.addActor(connectedClientNames);
 
         Gdx.input.setInputProcessor(stage);
 
@@ -312,6 +322,7 @@ public class VarsomMenu implements Screen {
        // System.out.println("POS"  + images.elementAt(currentButton).getX());
 
         handleSwipedImages();
+        handleClients();
 
         stage.act();
         stage.draw();
@@ -343,4 +354,40 @@ public class VarsomMenu implements Screen {
         skin.dispose();
     }
 
+    //make sure that all connected clients are displayed in a label
+    //if a new client is connected add it
+    //if a client is disconnected remove it
+    public void handleClients(){
+        clientNames = "Connected players:";
+
+        //update the client names label with clients connected at the moment
+        for(int i = 0; i < varsomSystem.getServer().getConnections().length; i++){
+            //TODO right now the IP is displayed, it should be the name chosen by the player
+            clientNames += "\n" + varsomSystem.getServer().getConnections()[i].getRemoteAddressTCP().toString();
+        }
+        connectedClientNames.setText(clientNames);
+    }
+
+    @Override
+    void generateFonts() {
+
+        parameter.color = Color.WHITE;
+        parameter.size = 100;
+        font = generator.generateFont(parameter);
+
+        generator.dispose();
+    }
+
+    @Override
+    void generateUI() {
+
+    }
+
+    @Override
+    void generateTextButtonStyle() {
+        textButtonStyle = new TextButton.TextButtonStyle();
+        textButtonStyle.font = font;
+        textButtonStyle.up = skin.getDrawable("up");
+        textButtonStyle.down = skin.getDrawable("down");
+    }
 }
