@@ -16,6 +16,7 @@ import com.varsom.system.VarsomSystem;
 import com.varsom.system.abstract_gameobjects.VarsomGame;
 import com.varsom.system.games.car_game.com.varsomgames.cargame.CarGame;
 import com.varsom.system.games.other_game.OtherGame;
+import com.varsom.system.network.MPServer;
 
 /**
  * Created by oskarcarlbaum on 16/04/15.
@@ -32,10 +33,14 @@ public class VarsomMenu implements Screen {
     private Skin skin = new Skin(Gdx.files.internal("system/skins/menuSkin.json"), new TextureAtlas(Gdx.files.internal("system/skins/menuSkin.pack")));
     //private Skin skin2 = new Skin(Gdx.files.internal("data/uiskin.json"));
 
-    private TextButton buttonExit = new TextButton("Exit system", skin);
+    private Label connectedClientNames;
     private Label ips;
 
+    private String clientNames;
+
     protected VarsomSystem varsomSystem;
+
+    private int addedClients = 0;
 
     public VarsomMenu(VarsomSystem varsomSystem){
         this.varsomSystem = varsomSystem;
@@ -47,6 +52,7 @@ public class VarsomMenu implements Screen {
         //For every VarsomeGame in the game array create a button
         ips = new Label("Server IP: " + this.varsomSystem.getServerIP(),skin);
         table.add(ips).size(600,90).padBottom(80).row();
+
         for(int i = 0; i < VarsomSystem.SIZE; i++) {
             switch (VarsomSystem.games[i]){
 
@@ -89,6 +95,8 @@ public class VarsomMenu implements Screen {
 
         }
 
+        //Exit button
+        TextButton buttonExit = new TextButton("Exit system", skin);
         buttonExit.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -100,8 +108,19 @@ public class VarsomMenu implements Screen {
 
         table.add(buttonExit).size(450, 90).padBottom(20).row();
 
+        //label that shows all connected players
+        clientNames = "Connected players:";
+        connectedClientNames = new Label(clientNames,skin);
+        connectedClientNames.setWidth(600);
+        connectedClientNames.setHeight(90);
+        connectedClientNames.setPosition(0, 0);
+
         table.setFillParent(true);
         stage.addActor(table);
+        stage.addActor(connectedClientNames);
+
+
+
         Gdx.input.setInputProcessor(stage);
     }
 
@@ -109,6 +128,8 @@ public class VarsomMenu implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0.12f, 0.12f, 0.12f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        handleClients();
 
         stage.act();
         stage.draw();
@@ -138,5 +159,19 @@ public class VarsomMenu implements Screen {
     public void dispose() {
         stage.dispose();
         skin.dispose();
+    }
+
+    //make sure that all connected clients are displayed in a label
+    //if a new client is connected add it
+    //if a client is disconnected remove it
+    public void handleClients(){
+        clientNames = "Connected players:";
+
+        //update the client names label with clients connected at the moment
+        for(int i = 0; i < varsomSystem.getServer().getConnections().length; i++){
+            //TODO right now the IP is displayed, it should be the name chosen by the player
+            clientNames += "\n" + varsomSystem.getServer().getConnections()[i].getRemoteAddressTCP().toString();
+        }
+        connectedClientNames.setText(clientNames);
     }
 }
