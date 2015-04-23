@@ -64,6 +64,7 @@ public class  NetworkListener extends Listener {
         else if (o instanceof PauseRequest) {
             //saves the received bool
             pause = ((PauseRequest) o).pause;
+            System.out.println("Paused");
         }
 
         else if (o instanceof ExitRequest) {
@@ -78,6 +79,8 @@ public class  NetworkListener extends Listener {
             varsomSystem.getActiveGame().handleDataFromClients(c, toDeCode);
             //varsomGame.handleDataFromClients();
         }
+
+
 
     }
 

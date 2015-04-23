@@ -35,7 +35,7 @@ public class MPServer {
         try {
             // Sends the message to all clients
             server.sendToAllTCP(sGD);
-
+            System.out.println("Sent package");
         } catch (Exception e)
         {
             e.printStackTrace();

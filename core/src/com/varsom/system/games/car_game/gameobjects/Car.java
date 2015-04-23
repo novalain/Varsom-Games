@@ -21,6 +21,7 @@ public class Car extends DynamicObject {
     //public Body body;
     public float width, length, maxSteerAngle, maxSpeed, power;
     float wheelAngle;
+    private boolean userAccelerate = false;
     public boolean smoke = false;
     public int steer, accelerate;
     //public Vector2 position;
@@ -150,6 +151,14 @@ public class Car extends DynamicObject {
         this.body.setLinearVelocity(velocity);
     }
 
+
+    public void handleDataFromClients(boolean isDriving, float angle){
+
+       userAccelerate = isDriving;
+       tiltAngle = angle;
+
+    }
+
     //TODO THIS FUNCTION HAS TO BE CHECKED
     public void update(float deltaTime) {
 
@@ -175,7 +184,8 @@ public class Car extends DynamicObject {
 
         //update revolving wheels based on angle
         //TODO this should be implemented/uncommented when we can start the game with controllers
-        updateDeviceRotation();
+
+        //updateDeviceRotation();
 
         for (Wheel wheel : this.getRevolvingWheels()) {
             //wheel.setAngle( - Gdx.input.getAccelerometerY()*10);
@@ -188,7 +198,7 @@ public class Car extends DynamicObject {
         Vector2 baseVector; //vector pointing in the direction force will be applied to a wheel ; relative to the wheel.
 
         //if accelerator is pressed down and speed limit has not been reached, go forwards
-        if ((this.accelerate == GameScreen.ACC_ACCELERATE) && (this.getSpeedKMH() < this.maxSpeed)) {
+        if ((userAccelerate == true) && (this.getSpeedKMH() < this.maxSpeed)) {
 
             // Add smoke effect for low velocities
             if (this.getSpeedKMH() < 10.f)
@@ -198,7 +208,9 @@ public class Car extends DynamicObject {
                 smoke = false;
 
             baseVector = new Vector2(0, -0.05f);
-        } else if (this.accelerate == GameScreen.ACC_BRAKE) {
+        }
+        /*
+        else if (this.accelerate == GameScreen.ACC_BRAKE) {
             //braking, but still moving forwards - increased force
 
             smoke = true;
@@ -225,6 +237,26 @@ public class Car extends DynamicObject {
             baseVector = new Vector2(0, 0);
             smoke = false;
         }
+
+*/
+        else if (!userAccelerate) {
+
+            //slow down if not accelerating
+            baseVector = new Vector2(0, 0);
+            if (this.getSpeedKMH() < 7)
+                this.setSpeed(0);
+            else if (this.getLocalVelocity().y < 0)
+                baseVector = new Vector2(0, 0.05f);
+            else if (this.getLocalVelocity().y > 0)
+                baseVector = new Vector2(0, -0.05f);
+            smoke = false;
+        }
+
+        else {
+            baseVector = new Vector2(0, 0);
+            smoke = false;
+        }
+
 
         //multiply by engine power, which gives us a force vector relative to the wheel
         Vector2 forceVector = new Vector2(this.power * baseVector.x, this.power * baseVector.y);

@@ -109,6 +109,8 @@ public class GameScreen implements Screen{
                 System.out.println("Mega Error");
 
         }
+        varsomSystem.getActiveGame().setGameScreen(this);
+        varsomSystem.getMPServer().gameRunning(true);
         leaderCar = track.getCars()[0];
 
         // Init camera
@@ -210,7 +212,7 @@ public class GameScreen implements Screen{
         //float playerAngle = constrainAngle(car.body.getAngle()*MathUtils.radiansToDegrees);
 
        // Here goes the all the updating / game logic
-       if(!paused){
+        if(!paused){
            String temp = "CarDist:\n";
            for(Car car : track.getCars()) {
                car.update(Gdx.app.getGraphics().getDeltaTime());
@@ -221,7 +223,7 @@ public class GameScreen implements Screen{
            carsTraveled.setText(temp);
 
            updateCamera();
-       }
+        }
 
         //If paused pause menu is displayed, else it is not
         displayPauseMenu(paused);
@@ -304,5 +306,9 @@ public class GameScreen implements Screen{
         labelPause.setVisible(pause);
         buttonLeave.setVisible(pause);
 
+    }
+
+    public Track getTrack(){
+        return track;
     }
 }
