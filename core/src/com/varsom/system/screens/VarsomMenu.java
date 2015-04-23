@@ -2,8 +2,6 @@ package com.varsom.system.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -11,16 +9,12 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.List;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.varsom.system.VarsomSystem;
 import com.varsom.system.abstract_gameobjects.VarsomGame;
@@ -29,15 +23,12 @@ import com.varsom.system.games.other_game.OtherGame;
 import com.varsom.system.network.NetworkListener;
 import com.varsom.system.screens.ScaledScreen;
 import com.varsom.system.Commons;
-import java.util.Vector;
 
-/**
- * Created by oskarcarlbaum on 16/04/15.
- */
+import java.util.Vector;
 
 public class VarsomMenu extends ScaledScreen {
 
-    private Stage stage = new Stage();
+    // private Stage stage = new Stage();
     private Table table = new Table();
     private Vector2 lastTouch = new Vector2();
     private int currentButton = 1;
@@ -45,7 +36,7 @@ public class VarsomMenu extends ScaledScreen {
 
     //TODO Load files from a SystemAssetLoader. Also, create a folder and skin for the varsom system
     private Skin skin = new Skin(Gdx.files.internal("system/skins/menuSkin.json"), new TextureAtlas(Gdx.files.internal("system/skins/menuSkin.pack")));
-    //private Skin skin2 = new Skin(Gdx.files.internal("data/uiskin.json"));
+    private Skin skin2 = new Skin(Gdx.files.internal("data/uiskin.json"));
     /*private TextButton buttonExit;
     private TextButton buttonPlayOtherGame;
     private TextButton buttonPlayCarGame;*/
@@ -54,7 +45,7 @@ public class VarsomMenu extends ScaledScreen {
     private Image imageExit;
     private Vector<Image> images;
     private Label connectedClientNames;
-    private Label ips;
+    private Label ips; //temp
 
     private String clientNames;
 
@@ -62,15 +53,16 @@ public class VarsomMenu extends ScaledScreen {
 
     private int addedClients = 0;
 
-    public VarsomMenu(VarsomSystem varsomSystem){
+
+    private int middleImageX = -150;
+
+    public VarsomMenu(VarsomSystem varsomSystem) {
 
         this.varsomSystem = varsomSystem;
-
     }
 
     @Override
     public void show() {
-
         BitmapFont fontType = new BitmapFont();
         fontType.scale(2.f);
 
@@ -79,13 +71,13 @@ public class VarsomMenu extends ScaledScreen {
         ips = new Label("IP: " + this.varsomSystem.getServerIP(), style);
 
         //Position IP at middle top of the screen
-        ips.setPosition(Gdx.graphics.getWidth()/2 - ips.getWidth()/2, Gdx.graphics.getHeight()-200);
+        ips.setPosition(Commons.WORLD_WIDTH / 2 - ips.getWidth() / 2, Commons.WORLD_HEIGHT - 200);
         stage.addActor(ips);
 
         //For every VarsomeGame in the game array create an image
-        for(int i = 0; i < VarsomSystem.SIZE; i++) {
+        for (int i = 0; i < VarsomSystem.SIZE; i++) {
 
-            switch (VarsomSystem.games[i]){
+            switch (VarsomSystem.games[i]) {
 
                 //Cargame
                 case 1:
@@ -96,7 +88,7 @@ public class VarsomMenu extends ScaledScreen {
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
 
-                            if(currentButton == 0 && !left && !right){
+                            if (currentButton == 0 && !left && !right) {
 
                                 Gdx.app.log("clicked", "pressed CarGame");
                                 //((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(1));
@@ -104,8 +96,17 @@ public class VarsomMenu extends ScaledScreen {
                                 images.elementAt(currentButton).addAction(Actions.sequence(Actions.scaleBy(2.f, 2.f, 0.6f), Actions.alpha(0.0f, 0.6f), Actions.run(new Runnable() {
                                     @Override
                                     public void run() {
-                                       // ((Game) Gdx.app.getApplicationListener()).setScreen(new VarsomMenu(varsomSystem));
+                                        // ((Game) Gdx.app.getApplicationListener()).setScreen(new VarsomMenu(varsomSystem));
                                         VarsomGame carGame = new CarGame((VarsomSystem) Gdx.app.getApplicationListener());
+
+                                        // if(varsomSystem.getServer().getConnections().length != 0) {
+                                        /*VarsomGame carGame = new CarGame((VarsomSystem) Gdx.app.getApplicationListener());
+                                        hide();
+                                        }
+                                        else{
+                                            AlertDialog aD = new AlertDialog("Too few players", skin2);
+                                            aD.show(stage);
+                                        }*/
                                     }
                                 })));
 
@@ -120,11 +121,11 @@ public class VarsomMenu extends ScaledScreen {
                                 stage.cancelTouchFocus();
 
                             }*/
-
                         }
                     });
 
                     table.add(imagePlayCarGame).size(300, 300).padRight(200);
+
                     break;
 
                 //OtherGame
@@ -136,7 +137,7 @@ public class VarsomMenu extends ScaledScreen {
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
 
-                            if(currentButton == 1 && !left && !right){
+                            if (currentButton == 1 && !left && !right) {
 
                                 images.elementAt(currentButton).addAction(Actions.sequence(Actions.scaleBy(2.f, 2.f, 0.6f), Actions.alpha(0.0f, 0.6f), Actions.run(new Runnable() {
                                     @Override
@@ -152,14 +153,13 @@ public class VarsomMenu extends ScaledScreen {
                         }
                     });
                     table.add(imagePlayOtherGame).size(300, 300).padRight(200);
-                  //  imagePlayOtherGame.setWidth(350);
-                   // imagePlayOtherGame.setHeight(350);
+                    //  imagePlayOtherGame.setWidth(350);
+                    // imagePlayOtherGame.setHeight(350);
                     break;
 
                 //If something goes wrong
                 default:
                     Gdx.app.log("in game array", "wrong game ID");
-
             }
 
             imageExit = new Image(new Texture(Gdx.files.internal("system/img/varsomful.png")));
@@ -175,7 +175,7 @@ public class VarsomMenu extends ScaledScreen {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
 
-                    if(currentButton == 2 && !left && !right){
+                    if (currentButton == 2 && !left && !right) {
                         Gdx.app.log("clicked", "pressed the EXIT SYSTEM button.");
                         Gdx.app.exit();
                         dispose();
@@ -183,7 +183,7 @@ public class VarsomMenu extends ScaledScreen {
                 }
             });
 
-            stage.addListener(new ClickListener(){
+            stage.addListener(new ClickListener() {
 
                 @Override
                 public void touchDragged(InputEvent event, float x, float y, int pointer) {
@@ -194,24 +194,21 @@ public class VarsomMenu extends ScaledScreen {
                     Vector2 delta = newTouch.cpy().sub(lastTouch);
                     lastTouch = newTouch;
 
-                    if(delta.x > 50 && currentButton > 0 && !right){
+                    if (delta.x > 50 && currentButton > 0 && !right) {
 
                         right = true;
                         currentButton--;
                         stage.cancelTouchFocus();
 
-                    }
-                    else if (delta.x < -50 && currentButton < 2 && !left){
+                    } else if (delta.x < -50 && currentButton < 2 && !left) {
                         left = true;
                         currentButton++;
                         stage.cancelTouchFocus();
-
                     }
-
                 }
 
                 @Override
-                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button){
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     lastTouch.set(x, y);
                     return true;
                 }
@@ -223,16 +220,14 @@ public class VarsomMenu extends ScaledScreen {
 
         //label that shows all connected players
         clientNames = "Connected players:";
-        connectedClientNames = new Label(clientNames,style);
+        connectedClientNames = new Label(clientNames, style);
         connectedClientNames.setPosition(0, 0);
 
-        table.setFillParent(true);
-      //  table.setDebug(true);
-
+        // place the table in the middle of the screen.
+        table.setPosition(Commons.WORLD_WIDTH / 2 - table.getWidth() / 2, Commons.WORLD_HEIGHT / 2 - table.getHeight() / 2);
         stage.addActor(table);
 
         table.addAction(Actions.sequence(Actions.alpha(0), Actions.fadeIn(1.2f)));
-
 
         stage.addActor(connectedClientNames);
 
@@ -245,68 +240,54 @@ public class VarsomMenu extends ScaledScreen {
 
         imagePlayOtherGame.setScale(1.52f);
 
-        images.elementAt(currentButton-1).addAction(Actions.sequence(Actions.alpha(0.3f, 0.2f)));
-        images.elementAt(currentButton+1).addAction(Actions.sequence(Actions.alpha(0.3f, 0.2f)));
+        images.elementAt(currentButton - 1).addAction(Actions.sequence(Actions.alpha(0.3f, 0.2f)));
+        images.elementAt(currentButton + 1).addAction(Actions.sequence(Actions.alpha(0.3f, 0.2f)));
 
     }
 
-    public void handleSwipedImages(){
+    public void handleSwipedImages() {
 
         // Move to the left
-        if(right && currentButton < 2){
+        if (right && currentButton < 2) {
 
             //Fade down
-            images.elementAt(currentButton+1).addAction(Actions.sequence(Actions.alpha(0.3f, 1.f)));
+            images.elementAt(currentButton + 1).addAction(Actions.sequence(Actions.alpha(0.3f, 1.f)));
             images.elementAt(currentButton).addAction(Actions.sequence(Actions.alpha(1.f, 1.f)));
 
             //If position reached middle, set swipe right to false (810 is original pos for the middle image)
-            if(images.elementAt(currentButton).getX() >= 810){
+            if (images.elementAt(currentButton).getX() >= middleImageX) {
                 right = false;
-            }
-
-            else{
+            } else {
 
                 //Translate all images
-                for(int i = 0; i < images.size(); i++){
-
+                for (int i = 0; i < images.size(); i++) {
                     images.elementAt(i).setPosition(images.elementAt(i).getX() + 10, images.elementAt(i).getY());
-
                 }
 
                 //Scale up current image and scale down previous image
                 images.elementAt(currentButton).scaleBy(0.01f);
-                images.elementAt(currentButton+1).scaleBy(-0.01f);
-
+                images.elementAt(currentButton + 1).scaleBy(-0.01f);
             }
 
         }
         //Same but the other way
-        else if (left && currentButton > 0){
+        else if (left && currentButton > 0) {
 
-            images.elementAt(currentButton-1).addAction(Actions.sequence(Actions.alpha(0.3f, 1.f)));
+            images.elementAt(currentButton - 1).addAction(Actions.sequence(Actions.alpha(0.3f, 1.f)));
             images.elementAt(currentButton).addAction(Actions.sequence(Actions.alpha(1.f, 1.f)));
 
-            if(images.elementAt(currentButton).getX() <= 810){
+            if (images.elementAt(currentButton).getX() <= middleImageX) {
                 left = false;
+            } else {
 
-            }
-
-            else{
-
-                for(int i = 0; i < images.size(); i++){
-
+                for (int i = 0; i < images.size(); i++) {
                     images.elementAt(i).setPosition(images.elementAt(i).getX() - 10, images.elementAt(i).getY());
-
                 }
 
                 images.elementAt(currentButton).scaleBy(0.01f);
-                images.elementAt(currentButton-1).scaleBy(-0.01f);
-
+                images.elementAt(currentButton - 1).scaleBy(-0.01f);
             }
-
         }
-
-
     }
 
     @Override
@@ -321,18 +302,6 @@ public class VarsomMenu extends ScaledScreen {
 
         Gdx.gl.glClearColor(0.12f, 0.12f, 0.12f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-       // System.out.println(currentButton + "currentbtn");
-      //  System.out.println("camera pos x " + camera.position.x);
-       // System.out.println("camera pos" +  camera.position.x);
-       /* System.out.println("0" + images.elementAt(0).getX());
-        System.out.println(images.elementAt(1).getX());
-        System.out.println(images.elementAt(2).getX());
-        System.out.println("currentBUTTON" + currentButton);*/
-/*
-        System.out.println("HEIGHT" +  images.elementAt(currentButton).getHeight());
-        System.out.println("WIDTH" +  images.elementAt(currentButton).getWidth());*/
-       // System.out.println("POS"  + images.elementAt(currentButton).getX());
 
         handleSwipedImages();
         handleClients();
@@ -367,40 +336,42 @@ public class VarsomMenu extends ScaledScreen {
         skin.dispose();
     }
 
+    public static class AlertDialog extends Dialog {
+
+        public AlertDialog(String title, Skin skin, String windowStyleName) {
+            super(title, skin, windowStyleName);
+        }
+
+        public AlertDialog(String title, Skin skin) {
+            super(title, skin);
+        }
+
+        public AlertDialog(String title, WindowStyle windowStyle) {
+            super(title, windowStyle);
+        }
+
+        {
+            text("CarGame requiers at least two connected players");
+            button("OK");
+        }
+
+        @Override
+        protected void result(Object object) {
+
+        }
+    }
+
     //make sure that all connected clients are displayed in a label
     //if a new client is connected add it
     //if a client is disconnected remove it
-    public void handleClients(){
+    public void handleClients() {
         clientNames = "Connected players:";
 
         //update the client names label with clients connected at the moment
-        for(int i = 0; i < varsomSystem.getServer().getConnections().length; i++){
+        for (int i = 0; i < varsomSystem.getServer().getConnections().length; i++) {
             //TODO right now the IP is displayed, it should be the name chosen by the player
             clientNames += "\n" + varsomSystem.getServer().getConnections()[i].getRemoteAddressTCP().toString();
         }
         connectedClientNames.setText(clientNames);
-    }
-
-    @Override
-    void generateFonts() {
-
-        parameter.color = Color.WHITE;
-        parameter.size = 100;
-        font = generator.generateFont(parameter);
-
-        generator.dispose();
-    }
-
-    @Override
-    void generateUI() {
-
-    }
-
-    @Override
-    void generateTextButtonStyle() {
-        textButtonStyle = new TextButton.TextButtonStyle();
-        textButtonStyle.font = font;
-        textButtonStyle.up = skin.getDrawable("up");
-        textButtonStyle.down = skin.getDrawable("down");
     }
 }

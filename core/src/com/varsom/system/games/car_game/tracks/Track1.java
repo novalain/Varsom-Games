@@ -37,8 +37,8 @@ public class Track1 extends Track{
     // This one is needed if we want to access several layers in our particlesystem
     //public ParticleEmitter emitter;
 
-    public Track1(World inWorld) {
-        super(inWorld,new Sprite(AssetLoader.testTrackTexture),new Sprite(AssetLoader.testTrackMask),10f);
+    public Track1(World inWorld,int NUMBER_OF_PLAYERS) {
+        super(inWorld,new Sprite(AssetLoader.testTrackTexture),new Sprite(AssetLoader.testTrackMask),10f,NUMBER_OF_PLAYERS);
         createTestTrack();
     }
 
@@ -67,7 +67,7 @@ public class Track1 extends Track{
         backLayer.addElement(tire3.getBody());
         backLayer.addElement(tire4.getBody());
 
-        backLayer.addElement(bO1.getBody());
+        frontLayer.addElement(bO1.getBody());
         backLayer.addElement(bO2.getBody());
     }
 
@@ -77,23 +77,55 @@ public class Track1 extends Track{
         float carPower = 60, maxSteerAngle = 20, maxSpeed = 30;
 
         //TODO. Fix when the game can be started from the server, DO NOT REMOVE THE COMMENTED FUNCTION
-        /*
-        cars = new Car[AMOUNT_OF_PLAYERS];
-        for(int i = 0; i < AMOUNT_OF_PLAYERS; i++) {
-            cars[i] = new Car(carWidth, carLength, hardcodedSpawnPoints()[i], world, null,
-                spawnPosRotation, carPower, maxSteerAngle, maxSpeed,this);
-                Gdx.input.setInputProcessor(new InputHandler(cars[i]));
+        cars = new Car[NUMBER_OF_PLAYERS];
+        for(int i = 0; i < NUMBER_OF_PLAYERS; i++) {
+            Sprite carSprite;
+            switch(i){
+                case 0:
+                    carSprite = new Sprite(AssetLoader.carTexture1);
+                    break;
+                case 1:
+                    carSprite = new Sprite(AssetLoader.carTexture2);
+                    break;
+                case 2:
+                    carSprite = new Sprite(AssetLoader.carTexture);
+                    break;
+                case 3:
+                    carSprite = new Sprite(AssetLoader.carTexture1);
+                    break;
+                case 4:
+                    carSprite = new Sprite(AssetLoader.carTexture2);
+                    break;
+                case 5:
+                    carSprite = new Sprite(AssetLoader.carTexture);
+                    break;
+                case 6:
+                    carSprite = new Sprite(AssetLoader.carTexture1);
+                    break;
+                case 7:
+                    carSprite = new Sprite(AssetLoader.carTexture2);
+                    break;
+                default:
+                    System.out.println("Mega Error");
+                    carSprite = new Sprite(AssetLoader.carTexture2);
+            }
 
-                //add car to the frontLayer and all its wheels to the backLayer
-                for(Wheel tempWheel : cars[i].wheels) {
-                    backLayer.addElement(tempWheel.body);
-                }
-                frontLayer.addElement(cars[i].getBody());
+            cars[i] = new Car(carWidth, carLength, hardcodedSpawnPoints()[i], world, carSprite,
+                spawnPosRotation, carPower, maxSteerAngle, maxSpeed,this,i);
+            sprites.addElement(cars[i].pathTrackingSprite);
+
+            //TODO fix input
+             Gdx.input.setInputProcessor(new InputHandler(cars[i]));
+
+            //add car to the frontLayer and all its wheels to the backLayer
+            for(Wheel tempWheel : cars[i].wheels) {
+                backLayer.addElement(tempWheel.body);
+            }
+            frontLayer.addElement(cars[i].getBody());
         }
-        */
 
         //TODO Everything in this following block should be deleted/moved/changed when game can be started from the server
-            cars = new Car[2];
+        /*    cars = new Car[2];
             TextureRegion[] frames = {AssetLoader.tex1, AssetLoader.tex2, AssetLoader.tex3};
             carAnimation = new Animation(1/15f, frames);
             carAnimation.setPlayMode(Animation.PlayMode.LOOP);
@@ -114,23 +146,25 @@ public class Track1 extends Track{
             effect.setPosition(cars[0].getBody().getPosition().x, cars[0].getBody().getPosition().y);
             effect.scaleEffect(0.01f);
             effect.start();
+            */
     }
 
     private Vector2[] hardcodedSpawnPoints() {
         Vector2[] sPs = {
-                new Vector2(-16.0f, -16.00f),
-                new Vector2(-16.0f, -17.50f),
-                new Vector2(-16.0f, -19.00f),
-                new Vector2(-14.0f, -16.75f),
-                new Vector2(-14.0f, -18.25f),
-                new Vector2(-12.0f, -16.00f),
-                new Vector2(-12.0f, -17.50f),
-                new Vector2(-12.0f, -19.00f)};
+                new Vector2(-17.0f, -14.00f),
+                new Vector2(-17.0f, -16.00f),
+                new Vector2(-17.0f, -18.00f),
+                new Vector2(-16.0f, -15.00f),
+                new Vector2(-16.0f, -17.00f),
+                new Vector2(-15.0f, -14.00f),
+                new Vector2(-15.0f, -16.00f),
+                new Vector2(-15.0f, -18.00f)};
         return sPs;
     }
     private Vector2[] hardcodedWayPoints() {
         Vector2[] wPs = {
-            new Vector2(-170, -131),
+            new Vector2( -95, -131),
+            new Vector2(-180, -131),
             new Vector2(-220, -131),
             new Vector2(-245, -111),
             new Vector2(-220,  -90),

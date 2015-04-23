@@ -3,6 +3,7 @@ package com.varsom.system.games.car_game.com.varsomgames.cargame;
 import com.badlogic.gdx.Game;
 
 import com.badlogic.gdx.Gdx;
+import com.esotericsoftware.kryonet.Connection;
 import com.varsom.system.VarsomSystem;
 import com.varsom.system.abstract_gameobjects.VarsomGame;
 import com.varsom.system.games.car_game.helpers.AssetLoader;
@@ -40,4 +41,10 @@ public class CarGame extends VarsomGame {
         super.dispose();
         AssetLoader.dispose();
     }*/
+
+    @Override
+    public void handleDataFromClients(Connection c, String s) {
+        int carNumber = c.getID();
+
+    }
 }

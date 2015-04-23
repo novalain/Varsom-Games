@@ -18,8 +18,6 @@ public abstract class ScaledScreen implements Screen {
 
     //protected Main main;
 
-    protected SpriteBatch spriteBatch;
-
     protected Stage stage;
     protected TextButton.TextButtonStyle textButtonStyle;
     protected Skin skin;
@@ -36,17 +34,16 @@ public abstract class ScaledScreen implements Screen {
 
     public ScaledScreen() {
 
-        spriteBatch = new SpriteBatch();
-
         camera = new OrthographicCamera();
         viewport = new StretchViewport(Commons.WORLD_WIDTH, Commons.WORLD_HEIGHT, camera);
         viewport.apply();
 
-        camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
 
         stage = new Stage();
         font = new BitmapFont();
 
+        // position camera in the middle of the screen.
+        camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
         stage.getViewport().setCamera(camera);
     }
 
@@ -54,12 +51,6 @@ public abstract class ScaledScreen implements Screen {
     public void render(float delta) {
 
     }
-
-    abstract void generateFonts();
-
-    abstract void generateUI();
-
-    abstract void generateTextButtonStyle();
 
     protected Stage getStage() {
         return stage;
