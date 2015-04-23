@@ -9,6 +9,8 @@ import com.varsom.system.abstract_gameobjects.VarsomGame;
 import com.varsom.system.games.car_game.helpers.AssetLoader;
 import com.varsom.system.games.car_game.screens.Splash;
 
+import java.util.StringTokenizer;
+
 public class CarGame extends VarsomGame {
     public static final String TITLE= "Crapp!";
 
@@ -44,7 +46,16 @@ public class CarGame extends VarsomGame {
 
     @Override
     public void handleDataFromClients(Connection c, String s) {
+
         int carNumber = c.getID();
+        StringTokenizer st = new StringTokenizer(s, " ");
+        //while (st.hasMoreTokens()) {
+        Boolean is_driving = st.nextToken().equalsIgnoreCase("true");
+        Float angle = Float.parseFloat(st.nextToken());
+        System.out.println("Player " + carNumber + " has the angle: " + angle);
+        System.out.println("Does player " + carNumber + " accelerate: " + is_driving);
+        //}
+
 
     }
 }

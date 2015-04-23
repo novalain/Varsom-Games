@@ -28,14 +28,20 @@ public class MPServer {
         server.start();
     }
 
-    public void gameRunning(boolean b) {
+    public void gameRunning(Boolean b) {
+        Packet.Message msg = new Packet.Message();
+
         Packet.SendGameData sGD = new Packet.SendGameData();
+
+        //msg.message = b;
         sGD.send = b;
 
         try {
             // Sends the message to all clients
             server.sendToAllTCP(sGD);
-        } catch (Exception e) {
+
+        } catch (Exception e)
+        {
             e.printStackTrace();
         }
     }
@@ -54,10 +60,13 @@ public class MPServer {
 
     private void registerPackets() {
         Kryo kryo = server.getKryo();
-        // Register packets
+        // Register packets in the same order as in Packet.java
         kryo.register(Packet.LoginRequest.class);
         kryo.register(Packet.LoginAnswer.class);
         kryo.register(Packet.Message.class);
+        kryo.register(Packet.GamePacket.class);
+        kryo.register(Packet.SendGameData.class);
+
     }
 
     public void stop() {

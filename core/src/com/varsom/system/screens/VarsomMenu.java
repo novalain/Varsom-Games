@@ -105,6 +105,7 @@ public class VarsomMenu extends ScaledScreen {
                                     public void run() {
                                        // ((Game) Gdx.app.getApplicationListener()).setScreen(new VarsomMenu(varsomSystem));
                                         VarsomGame carGame = new CarGame((VarsomSystem) Gdx.app.getApplicationListener());
+                                        varsomSystem.setActiveGame(carGame);
 
                                         // if(varsomSystem.getServer().getConnections().length != 0) {
                                         /*VarsomGame carGame = new CarGame((VarsomSystem) Gdx.app.getApplicationListener());

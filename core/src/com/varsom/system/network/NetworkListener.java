@@ -53,16 +53,17 @@ public class  NetworkListener extends Listener {
         if (o instanceof Message) {
 
             //The received message is saved in a string
-            message = ((Message) o).message;
+            //message = ((Message) o).message;
 
             //Writes the message in the log
-            System.out.println("MESSAGE: " + message);
+            //System.out.println("MESSAGE: " + message);
 
         }
 
         if (o instanceof GamePacket) {
             System.out.println("NETWORK: " + "Recieved GamePacket");
             String toDeCode = ((GamePacket) o).message;
+            //System.out.println("Connection " + c.getID() + " says " + toDeCode);
             varsomSystem.getActiveGame().handleDataFromClients(c, toDeCode);
             //varsomGame.handleDataFromClients();
 
