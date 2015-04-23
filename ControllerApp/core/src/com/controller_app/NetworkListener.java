@@ -16,7 +16,7 @@ public class NetworkListener extends Listener {
     private String message;
     private MPClient mpClient;
 
-    private Boolean start;
+    private boolean start;
 
 
     // If you want to send a object, you need to send it with this client variable
@@ -38,7 +38,7 @@ public class NetworkListener extends Listener {
     public void received(Connection c, Object o) {
         // checks for login answers from server
         if (o instanceof LoginAnswer) {
-            Boolean answer = ((LoginAnswer) o).accepted;
+            boolean answer = ((LoginAnswer) o).accepted;
 
             if (answer) {
                 String mess = o.toString();
