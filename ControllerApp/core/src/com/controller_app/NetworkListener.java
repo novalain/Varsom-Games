@@ -13,13 +13,16 @@ import static com.controller_app.Packet.*;
 public class NetworkListener extends Listener {
 
     private Client client;
-    private ControllerScreen controllerScreen;
     private String message;
+    private MPClient mpClient;
+
+    private Boolean start;
 
 
     // If you want to send a object, you need to send it with this client variable
-    public void init(Client client) {
+    public void init(Client client, MPClient mpClient) {
         this.client = client;
+        this.mpClient = mpClient;
     }
 
     public void connected(Connection c) {
@@ -57,8 +60,12 @@ public class NetworkListener extends Listener {
         }
         if (o instanceof SendGameData) {
 
-            Boolean start = ((SendGameData) o).start;
-            controllerScreen.sendPacket(start);
+            start = ((SendGameData) o).send;
+            new Thread() {
+                public void run() {
+                    mpClient.sendPacket(start);
+                }
+            }.start();
 
         }
 

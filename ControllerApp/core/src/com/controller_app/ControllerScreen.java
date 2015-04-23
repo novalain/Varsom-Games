@@ -22,7 +22,6 @@ public class ControllerScreen extends ScaledScreen {
     private boolean drive_pressed = false;
 
     private String packet;
-    private Boolean send = false;
 
     private MPClient mpClient;
 
@@ -50,6 +49,8 @@ public class ControllerScreen extends ScaledScreen {
         stage.addActor(drive);
         stage.addActor(home);
         stage.addActor(buttonExit);
+
+        mpc.controllerScreen = this;
     }
 
     @Override
@@ -142,7 +143,7 @@ public class ControllerScreen extends ScaledScreen {
 
                 drive_pressed = true;
 
-                return drive_pressed;
+                return true;
             }
 
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
@@ -187,25 +188,6 @@ public class ControllerScreen extends ScaledScreen {
         return tiltAngle;
 
         //Gdx.app.log("inputhandler", "tiltAngle: " + tiltAngle);
-    }
-
-    // Converts boolean drive and float rotation to one sting and calls upon a function to send the packet to the server
-    public void sendPacket(Boolean send) {
-
-        final int TICKS_PER_SECOND = 40;
-
-        while (send) {
-
-            packet = Boolean.toString(getDrive()) + " " + Float.toString(getRotation());
-            mpClient.sendPacket(packet);
-
-            try {
-                Thread.sleep(1000 / TICKS_PER_SECOND);
-            } catch(InterruptedException ex) {
-                Thread.currentThread().interrupt();
-            }
-        }
-
     }
 
 }

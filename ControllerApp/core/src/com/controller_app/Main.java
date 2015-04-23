@@ -14,7 +14,6 @@ public class Main extends Game {
     @Override
     public void create() {
 
-
         try {
             mpClient = new MPClient();
         } catch (IOException e) {
@@ -24,6 +23,8 @@ public class Main extends Game {
         Gdx.app.log("check", "created app");
         menuScreen = new MenuScreen(this, mpClient);
         controllerScreen = new ControllerScreen(this, mpClient);
+
+        mpClient.controllerScreen = controllerScreen;
 
         changeScreen(1);
     }
@@ -37,7 +38,7 @@ public class Main extends Game {
                 break;
             case 2:
                 Gdx.input.setInputProcessor(controllerScreen.getStage());
-                Gdx.app.log("check", "changed screen");
+                Gdx.app.log("screen", "changed screen");
                 setScreen(controllerScreen);
                 menuScreen.connect();
                 break;

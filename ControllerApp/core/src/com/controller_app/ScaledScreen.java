@@ -63,4 +63,5 @@ public abstract class ScaledScreen implements Screen {
     protected Stage getStage() {
         return stage;
     }
+
 }

@@ -38,20 +38,16 @@ public class MenuScreen extends ScaledScreen {
         logo = new Texture(Gdx.files.internal("images/logo.png"));
 
         // font generator
-
         generateFonts();
-        // skin = new Skin(Gdx.files.internal("uiskin/uiskin.json"));
+
         try {
-            //skin = new Skin();
-            //skin.addRegions(new TextureAtlas(Gdx.files.internal("uiskin/uiskin.atlas")));
             atlas = new TextureAtlas(Gdx.files.internal("uiskin/uiskin.atlas"));
             skin = new Skin();
             skin.addRegions(atlas);
             skin.add("default-font", font, BitmapFont.class);
             skin.load(Gdx.files.internal("uiskin/uiskin.json"));
-            //skin = new Skin(Gdx.files.internal("uiskin/uiskin.json"), atlas);
         } catch (Exception E) {
-            Gdx.app.log("fan", "failed reading it");
+            Gdx.app.log("font", "failed reading it");
         }
         Gdx.input.setInputProcessor(stage);
         //generateTextButtonStyle();
@@ -69,7 +65,7 @@ public class MenuScreen extends ScaledScreen {
         try {
             skin.add("default-font", font);
         } catch (Exception e) {
-            Gdx.app.log("fail", "failed adding font");
+            Gdx.app.log("font", "failed adding font");
         }
         generator.dispose();
     }
@@ -93,7 +89,7 @@ public class MenuScreen extends ScaledScreen {
         Image image = new Image(logo);
         buttonController = new TextButton("Connect Controller", skin);
         buttonExit = new TextButton("Exit", skin);
-        textField = new TextField("ip:", skin);
+        textField = new TextField("", skin);
 
         buttonController.addListener(new ClickListener() {
             @Override
@@ -164,8 +160,6 @@ public class MenuScreen extends ScaledScreen {
 
     // Connect to server
     public void connect() {
-
         mpClient.connectToServer(textField.getText());
-        Gdx.app.log("ipadress", textField.getText());
     }
 }
