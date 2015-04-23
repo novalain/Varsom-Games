@@ -8,31 +8,26 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.varsom.system.Commons;
 import com.varsom.system.VarsomSystem;
 
-/**
- * Created by oskarcarlbaum on 16/04/15.
- */
-public class VarsomSplash implements Screen {
+public class VarsomSplash extends ScaledScreen {
     private Texture splashTexture;
     private Image splashImage;
-    private Stage stage;
+    //private Stage stage;
     protected VarsomSystem varsomSystem;
 
-    public VarsomSplash(VarsomSystem varsomSystem){
+    public VarsomSplash(VarsomSystem varsomSystem) {
         this.varsomSystem = varsomSystem;
     }
+
     @Override
     public void show() {
-        //If your image is not the same size as your screen
-        //Gdx.app.log("Screen","width"+Gdx.graphics.getWidth());
-        //Gdx.app.log("Screen","height"+Gdx.graphics.getHeight());
-        // Set position of splash image
         splashTexture = new Texture(Gdx.files.internal("system/img/varsomsplash.png"));
-        splashImage =  new Image(splashTexture);
-        splashImage.setX( (Gdx.graphics.getWidth()-splashImage.getWidth())/2);
-        splashImage.setY( (Gdx.graphics.getHeight()-splashImage.getHeight())/2);
-        stage = new Stage();
+        splashImage = new Image(splashTexture);
+        splashImage.setX((Commons.WORLD_WIDTH - splashImage.getWidth()) / 2);
+        splashImage.setY((Commons.WORLD_HEIGHT - splashImage.getHeight()) / 2);
+        // stage = new Stage();
         stage.addActor(splashImage); //adds the image as an actor to the stage
         splashImage.addAction(Actions.sequence(Actions.alpha(0), Actions.fadeIn(1.2f), Actions.delay(1), Actions.run(new Runnable() {
             @Override
@@ -40,12 +35,11 @@ public class VarsomSplash implements Screen {
                 ((Game) Gdx.app.getApplicationListener()).setScreen(new VarsomMenu(varsomSystem));
             }
         })));
-
     }
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0.137f,0.121f,0.125f,1); //sets clear color to black
+        Gdx.gl.glClearColor(0.137f, 0.121f, 0.125f, 1); //sets clear color to black
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); //clear the batch
         stage.act(); //update all actors
         stage.draw();
@@ -53,22 +47,18 @@ public class VarsomSplash implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
     }
 
     @Override
     public void pause() {
-
     }
 
     @Override
     public void resume() {
-
     }
 
     @Override
     public void hide() {
-
     }
 
     @Override

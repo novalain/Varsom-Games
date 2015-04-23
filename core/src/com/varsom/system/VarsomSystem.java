@@ -36,10 +36,11 @@ import java.util.List;
 public class VarsomSystem extends /*ApplicationAdapter*/Game {
     public static final String TITLE= "Varsom-System";
 
-    public static final int WIDTH = 800;
-    public static final int HEIGHT= 480; // used later to set window size
+  //  public static final int WIDTH = 800;
+  //  public static final int HEIGHT= 480; // used later to set window size
 
     //an array that stores the games IDs
+
     public static final int SIZE = 2;
     public static int[] games = new int[SIZE];
 

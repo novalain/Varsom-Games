@@ -20,12 +20,7 @@ public class  NetworkListener extends Listener {
 
     public String message;
     private VarsomSystem varsomSystem;
-/*
-    public void init(EditText b) {
-        //message = b.getText().toString();
-        message = "";
-    }
-*/
+
     public NetworkListener(VarsomSystem varsomSystem){
         this.varsomSystem = varsomSystem;
     }
@@ -65,9 +60,6 @@ public class  NetworkListener extends Listener {
             String toDeCode = ((GamePacket) o).message;
             varsomSystem.getActiveGame().handleDataFromClients(c, toDeCode);
             //varsomGame.handleDataFromClients();
-
-
-
         }
 
     }
