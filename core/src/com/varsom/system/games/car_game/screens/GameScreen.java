@@ -134,9 +134,7 @@ public class GameScreen implements Screen{
         table.setFillParent(true);
         stage.addActor(table);
 
-
-
-        //TODO Denna behövs för att man ska kunna klicka på knappen  men gör att vi inte längre kan gasa
+        //TODO Dena behövs för att man ska kunna klicka på knappen  men gör att vi inte längre kan gasa
         //Gdx.input.setInputProcessor(stage);
 
         buttonLeave.addListener(new ClickListener() {
