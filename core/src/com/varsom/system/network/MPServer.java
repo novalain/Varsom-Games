@@ -3,7 +3,6 @@ package com.varsom.system.network;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Server;
 import com.varsom.system.VarsomSystem;
-import com.varsom.system.abstract_gameobjects.VarsomGame;
 
 import java.io.IOException;
 
@@ -28,12 +27,9 @@ public class MPServer {
         server.start();
     }
 
-    public void gameRunning(Boolean b) {
-        Packet.Message msg = new Packet.Message();
-
+    public void gameRunning(boolean b) {
         Packet.SendGameData sGD = new Packet.SendGameData();
 
-        //msg.message = b;
         sGD.send = b;
 
         try {
@@ -64,14 +60,10 @@ public class MPServer {
         kryo.register(Packet.LoginRequest.class);
         kryo.register(Packet.LoginAnswer.class);
         kryo.register(Packet.Message.class);
-<<<<<<< HEAD
         kryo.register(Packet.GamePacket.class);
         kryo.register(Packet.SendGameData.class);
-
-=======
         kryo.register(Packet.PauseRequest.class);
         kryo.register(Packet.ExitRequest.class);
->>>>>>> 6a46d10ae96fb3b13ee9a8b66148cdbeeb1a8ab4
     }
 
     public void stop() {
