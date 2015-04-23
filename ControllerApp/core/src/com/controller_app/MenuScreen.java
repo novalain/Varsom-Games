@@ -93,7 +93,7 @@ public class MenuScreen extends ScaledScreen {
         Image image = new Image(logo);
         buttonController = new TextButton("Connect Controller", skin);
         buttonExit = new TextButton("Exit", skin);
-        textField = new TextField("ip:", skin);
+        textField = new TextField("", skin);
 
         buttonController.addListener(new ClickListener() {
             @Override

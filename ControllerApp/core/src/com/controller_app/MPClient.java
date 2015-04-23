@@ -1,6 +1,7 @@
 package com.controller_app;
 
 
+import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 
@@ -56,7 +57,21 @@ public class MPClient {
         //client.sendTCP(sendMessage);
     }
 
+    //send a boolean for pause state
+    public void sendPause(boolean p){
+        Packet.PauseRequest sendState = new Packet.PauseRequest();
+        sendState.pause = p;
+        client.sendTCP(sendState);
+    }
 
+    //send a boolean for pause state
+    public void sendExit(boolean p){
+        Packet.ExitRequest sendState = new Packet.ExitRequest();
+        sendState.exit = p;
+        client.sendTCP(sendState);
+        Gdx.app.log("in MPClient", "sent Exit");
+
+    }
 
     // Register packets to a kryo
     private void register() {
@@ -65,6 +80,8 @@ public class MPClient {
         kryo.register(Packet.LoginRequest.class);
         kryo.register(Packet.LoginAnswer.class);
         kryo.register(Packet.Message.class);
+        kryo.register(Packet.PauseRequest.class);
+        kryo.register(Packet.ExitRequest.class);
     }
 
 }

@@ -8,7 +8,7 @@ public class Packet {
     }
 
     public static class LoginAnswer {
-        Boolean accepted = false;
+        boolean accepted = false;
     }
 
     public static class Message {
@@ -21,5 +21,13 @@ public class Packet {
 
     public static class SendGameData {
         Boolean start;
+    }
+
+    public static class PauseRequest {
+        boolean pause = false;
+    }
+
+    public static class ExitRequest {
+        boolean exit = false;
     }
 }
