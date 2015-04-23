@@ -13,6 +13,7 @@ import static com.controller_app.Packet.*;
 public class NetworkListener extends Listener {
 
     private Client client;
+    private ControllerScreen controllerScreen;
     private String message;
 
 
@@ -57,6 +58,7 @@ public class NetworkListener extends Listener {
         if (o instanceof SendGameData) {
 
             Boolean start = ((SendGameData) o).start;
+            controllerScreen.sendPacket(start);
 
         }
 

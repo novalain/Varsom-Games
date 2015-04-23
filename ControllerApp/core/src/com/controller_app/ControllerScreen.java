@@ -191,12 +191,12 @@ public class ControllerScreen extends ScaledScreen {
 
     // Converts boolean drive and float rotation to one sting and calls upon a function to send the packet to the server
     public void sendPacket(Boolean send) {
-
+        /*
         while (send) {
             packet = Boolean.toString(getDrive()) + " " + Float.toString(getRotation());
             mpClient.sendPacket(packet);
         }
-
+        */
     }
 
 }
