@@ -64,9 +64,14 @@ public class MPServer {
         kryo.register(Packet.LoginRequest.class);
         kryo.register(Packet.LoginAnswer.class);
         kryo.register(Packet.Message.class);
+<<<<<<< HEAD
         kryo.register(Packet.GamePacket.class);
         kryo.register(Packet.SendGameData.class);
 
+=======
+        kryo.register(Packet.PauseRequest.class);
+        kryo.register(Packet.ExitRequest.class);
+>>>>>>> 6a46d10ae96fb3b13ee9a8b66148cdbeeb1a8ab4
     }
 
     public void stop() {

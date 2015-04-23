@@ -8,6 +8,8 @@ import com.varsom.system.VarsomSystem;
 import com.varsom.system.abstract_gameobjects.VarsomGame;
 import com.varsom.system.network.Packet.LoginAnswer;
 import com.varsom.system.network.Packet.LoginRequest;
+import com.varsom.system.network.Packet.PauseRequest;
+import com.varsom.system.network.Packet.ExitRequest;
 
 import static com.varsom.system.network.Packet.Message;
 import static com.varsom.system.network.Packet.GamePacket;
@@ -19,13 +21,12 @@ import static com.varsom.system.network.Packet.GamePacket;
 public class  NetworkListener extends Listener {
 
     public String message;
+
+    public static boolean pause = false;
+    public static boolean goBack = false;
+
     private VarsomSystem varsomSystem;
-/*
-    public void init(EditText b) {
-        //message = b.getText().toString();
-        message = "";
-    }
-*/
+
     public NetworkListener(VarsomSystem varsomSystem){
         this.varsomSystem = varsomSystem;
     }
@@ -50,7 +51,7 @@ public class  NetworkListener extends Listener {
 
         }
         //Message is received from the client
-        if (o instanceof Message) {
+        else if (o instanceof Message) {
 
             //The received message is saved in a string
             //message = ((Message) o).message;
@@ -60,15 +61,22 @@ public class  NetworkListener extends Listener {
 
         }
 
-        if (o instanceof GamePacket) {
+        else if (o instanceof PauseRequest) {
+            //saves the received bool
+            pause = ((PauseRequest) o).pause;
+        }
+
+        else if (o instanceof ExitRequest) {
+            //saves the received bool
+            goBack = ((ExitRequest) o).exit;
+        }
+
+        else if (o instanceof GamePacket) {
             System.out.println("NETWORK: " + "Recieved GamePacket");
             String toDeCode = ((GamePacket) o).message;
             //System.out.println("Connection " + c.getID() + " says " + toDeCode);
             varsomSystem.getActiveGame().handleDataFromClients(c, toDeCode);
             //varsomGame.handleDataFromClients();
-
-
-
         }
 
     }

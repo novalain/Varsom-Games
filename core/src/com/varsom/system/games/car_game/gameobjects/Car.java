@@ -241,7 +241,9 @@ public class Car extends DynamicObject {
         //Track point position and traveledDistance
         //delta = (new Vector2(currentLinePos[1].x-getNewPointOnTrack().x,currentLinePos[1].y-getNewPointOnTrack().y)).len();
 //        delta = (new Vector2(pointOnTrack.x-getNewPointOnTrack().x,pointOnTrack.y-getNewPointOnTrack().y)).len(); //the point's moved distance since last update
+
         delta = subtractVector(pointOnTrack,getNewPointOnTrack()).len(); //the point's translated distance since last update
+
         if(waypointIsReached()){
             delta = getVectorBetweenPoints(pointOnTrack,currentLinePos[1]).len();
             Array<Vector2> WPs =  track.getPath();
@@ -357,7 +359,19 @@ public class Car extends DynamicObject {
     }
 
     private boolean waypointIsReached(){
-        return (Math.abs(currentLinePos[1].x - pointOnTrack.x) <= delta && Math.abs(currentLinePos[1].y - pointOnTrack.y) <= delta);
+
+//        System.out.println("XXXXXXXXX " + Math.abs(currentLinePos[1].x - getNewPointOnTrack().x));
+  //      System.out.println("YYYYYYYYY " + Math.abs(currentLinePos[1].y - getNewPointOnTrack().y));
+
+        if((Math.abs(currentLinePos[1].x - getNewPointOnTrack().x) < 0.3f) && Math.abs(currentLinePos[1].y - getNewPointOnTrack().y) < 0.3f){
+            System.out.println("waypointCheck");
+            return true;
+        }
+
+        return false;
+
+        //Old
+       // return ((Math.abs(currentLinePos[1].x) - Math.abs(pointOnTrack.x)) <= delta && (Math.abs(currentLinePos[1].y) - Math.abs(pointOnTrack.y)) <= delta);
     }
 
     // Sets speed on car based on value from color on backgroundMask (black or white),
