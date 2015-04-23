@@ -1,6 +1,7 @@
 package com.controller_app;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Net;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -17,6 +18,8 @@ public class ControllerScreen extends ScaledScreen {
 
     private TextButton drive;
     private TextButton home;
+    private TextButton buttonPause;
+    private TextButton buttonUnpause;
     private TextButton buttonExit;
 
     private boolean drive_pressed = false;
@@ -48,6 +51,8 @@ public class ControllerScreen extends ScaledScreen {
 
         stage.addActor(drive);
         stage.addActor(home);
+        stage.addActor(buttonPause);
+        stage.addActor(buttonUnpause);
         stage.addActor(buttonExit);
 
         mpc.controllerScreen = this;
@@ -110,7 +115,17 @@ public class ControllerScreen extends ScaledScreen {
         home = new TextButton("Menu", textButtonStyle);
         home.setWidth(300);
         home.setHeight(300);
-        home.setPosition(Commons.WORLD_WIDTH * 0.2f, Commons.WORLD_HEIGHT * 0.3f);
+        home.setPosition(Commons.WORLD_WIDTH * 0.2f, Commons.WORLD_HEIGHT * 0.2f);
+
+        buttonPause = new TextButton("Pause", textButtonStyle);
+        buttonPause.setWidth(300);
+        buttonPause.setHeight(300);
+        buttonPause.setPosition(Commons.WORLD_WIDTH * 0.2f, Commons.WORLD_HEIGHT * 0.2f + 300f);
+
+        buttonUnpause = new TextButton("Unpause", textButtonStyle);
+        buttonUnpause.setWidth(300);
+        buttonUnpause.setHeight(300);
+        buttonUnpause.setPosition(Commons.WORLD_WIDTH * 0.2f, Commons.WORLD_HEIGHT * 0.2f + 600f);
 
         buttonExit = new TextButton("Exit", textButtonStyle);
         buttonExit.setWidth(300);
@@ -126,12 +141,36 @@ public class ControllerScreen extends ScaledScreen {
             }
         });
 
+        buttonPause.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                //send pause request to server with true
+                mpClient.sendPause(true);
+                Gdx.app.log("in ControllerScreen", "pressed Pause");
+
+            }
+        });
+
+        buttonUnpause.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                //send pause request to server with false
+                mpClient.sendPause(false);
+                Gdx.app.log("in ControllerScreen", "pressed Pause");
+
+            }
+        });
+
         buttonExit.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                Gdx.app.log("in ControllerScreen", "pressed Exit");
                 //Go back to main menu on the server
+                //TODO pause the game on the server
+
+                //for now send exit request
+                mpClient.sendExit(true);
+                Gdx.app.log("in ControllerScreen", "pressed Exit");
 
             }
         });

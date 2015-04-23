@@ -1,6 +1,7 @@
 package com.controller_app;
 
 
+import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 
@@ -51,6 +52,23 @@ public class MPClient {
         //client.sendUDP(sendMessage);
     }
 
+
+    //send a boolean for pause state
+    public void sendPause(boolean p){
+        Packet.PauseRequest sendState = new Packet.PauseRequest();
+        sendState.pause = p;
+        client.sendTCP(sendState);
+    }
+
+    //send a boolean for pause state
+    public void sendExit(boolean p){
+        Packet.ExitRequest sendState = new Packet.ExitRequest();
+        sendState.exit = p;
+        client.sendTCP(sendState);
+        Gdx.app.log("in MPClient", "sent Exit");
+
+    }
+
     // Register packets to a kryo
     private void register() {
         Kryo kryo = client.getKryo();
@@ -61,6 +79,8 @@ public class MPClient {
         kryo.register(Packet.GamePacket.class);
         kryo.register(Packet.SendGameData.class);
         kryo.register(Packet.ShutDownPacket.class);
+        kryo.register(Packet.PauseRequest.class);
+        kryo.register(Packet.ExitRequest.class);
     }
 
     public void sendPacket(Boolean send) {
@@ -74,12 +94,9 @@ public class MPClient {
 
             Packet.GamePacket packet = new Packet.GamePacket();
 
-            //System.out.println("TEST" + controllerScreen.getDrive());
             packet.message = controllerScreen.getDrive() + " " + controllerScreen.getRotation();
             client.sendUDP(packet);
-
-            //System.out.println(packet);
-
+            
             try {
                 Thread.sleep(1000 / TICKS_PER_SECOND);
             } catch(InterruptedException ex) {

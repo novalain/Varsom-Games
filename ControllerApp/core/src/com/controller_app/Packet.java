@@ -10,4 +10,7 @@ public class Packet {
     public static class GamePacket { String message; }
     public static class SendGameData { Boolean send = false; }
     public static class ShutDownPacket { Boolean shutDown = false; }
+    public static class PauseRequest { boolean pause = false; }
+    public static class ExitRequest { boolean exit = false; }
+
 }
