@@ -74,11 +74,12 @@ public abstract class Track {
      * @param backgroundMask
      * @param backgroundScale
      */
-    protected Track(World world,Sprite backgroundSprite, Sprite backgroundMask, float backgroundScale) {
+    protected Track(World world,Sprite backgroundSprite, Sprite backgroundMask, float backgroundScale,int NUMBER_OF_PLAYERS) {
         bgSprite = backgroundSprite;
         bgMask = backgroundMask;
         bgScale = backgroundScale;
         this.world = world;
+        this.NUMBER_OF_PLAYERS = NUMBER_OF_PLAYERS;
         sprites = new Vector<Sprite>();
         frontLayer = new Vector<Body>();
         backLayer = new Vector<Body>();
@@ -206,12 +207,14 @@ public abstract class Track {
 
         elapsedTime += Gdx.graphics.getDeltaTime();
 
-        // Set shape renderer to be drawn in world, not on screen
-        shapeRenderer.setProjectionMatrix(camera.combined);
-
         drawBodySprites(backLayer,inBatch);
         drawBodySprites(frontLayer,inBatch);
 
+        // Set shape renderer to be drawn in world, not on screen
+        shapeRenderer.setProjectionMatrix(camera.combined);
+        drawWayPoints();
+
+        /*
         TextureRegion txtRegion = carAnimation.getKeyFrame(elapsedTime, true);
         Sprite sprite = new Sprite(txtRegion);
 
@@ -221,8 +224,7 @@ public abstract class Track {
         sprite.setPosition(cars[0].getBody().getPosition().x - sprite.getWidth()/2, cars[0].getBody().getPosition().y - sprite.getHeight()/2);
         sprite.setRotation(cars[0].getBody().getAngle() * MathUtils.radiansToDegrees);
         sprite.draw(inBatch);
-
-        //drawWayPoints();
+        */
 
         inBatch.end();
     }
@@ -249,7 +251,7 @@ public abstract class Track {
             shapeRenderer.end();
 
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.circle(points[i+1].x, points[i+1].y, 0.5f);
+            shapeRenderer.circle(points[i].x, points[i].y, 0.5f);
             shapeRenderer.end();
         }
     }

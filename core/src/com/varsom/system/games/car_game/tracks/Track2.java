@@ -26,8 +26,8 @@ public class Track2 extends Track{
     // This one is needed if we want to access several layers in our particlesystem
     //public ParticleEmitter emitter;
 
-    public Track2(World inWorld) {
-        super(inWorld,new Sprite(AssetLoader.track2Texture),new Sprite(AssetLoader.track2Mask),10f);
+    public Track2(World inWorld, int NUMBER_OF_PLAYERS) {
+        super(inWorld,new Sprite(AssetLoader.track2Texture),new Sprite(AssetLoader.track2Mask),10f,NUMBER_OF_PLAYERS);
         createTestTrack();
     }
 
@@ -58,11 +58,11 @@ public class Track2 extends Track{
         float carPower = 60, maxSteerAngle = 20, maxSpeed = 30;
 
         //TODO. Fix when the game can be started from the server, DO NOT REMOVE THE COMMENTED FUNCTION
-        /*
-        cars = new Car[AMOUNT_OF_PLAYERS];
-        for(int i = 0; i < AMOUNT_OF_PLAYERS; i++) {
+
+        cars = new Car[NUMBER_OF_PLAYERS];
+        for(int i = 0; i < NUMBER_OF_PLAYERS; i++) {
             cars[i] = new Car(carWidth, carLength, hardcodedSpawnPoints()[i], world, null,
-                spawnPosRotation, carPower, maxSteerAngle, maxSpeed,this);
+                spawnPosRotation, carPower, maxSteerAngle, maxSpeed,this,i);
                 Gdx.input.setInputProcessor(new InputHandler(cars[i]));
 
                 //add car to the frontLayer and all its wheels to the backLayer
@@ -71,8 +71,8 @@ public class Track2 extends Track{
                 }
                 frontLayer.addElement(cars[i].getBody());
         }
-        */
 
+/*
         //TODO Everything in this following block should be deleted/moved/changed when game can be started from the server
         cars = new Car[2];
         TextureRegion[] frames = {AssetLoader.tex1, AssetLoader.tex2, AssetLoader.tex3};
@@ -95,6 +95,7 @@ public class Track2 extends Track{
         effect.setPosition(cars[0].getBody().getPosition().x, cars[0].getBody().getPosition().y);
         effect.scaleEffect(0.01f);
         effect.start();
+        */
     }
 
     private Vector2[] hardcodedSpawnPoints() {

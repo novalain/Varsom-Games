@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -30,7 +31,7 @@ public class VarsomMenu implements Screen {
 
     //TODO Load files from a SystemAssetLoader. Also, create a folder and skin for the varsom system
     private Skin skin = new Skin(Gdx.files.internal("system/skins/menuSkin.json"), new TextureAtlas(Gdx.files.internal("system/skins/menuSkin.pack")));
-    //private Skin skin2 = new Skin(Gdx.files.internal("data/uiskin.json"));
+    private Skin skin2 = new Skin(Gdx.files.internal("data/uiskin.json"));
 
     private TextButton buttonExit = new TextButton("Exit system", skin);
     private Label ips;
@@ -45,7 +46,7 @@ public class VarsomMenu implements Screen {
     @Override
     public void show() {
         //For every VarsomeGame in the game array create a button
-        ips = new Label("Server IP: " + this.varsomSystem.getServerIP(),skin);
+        ips = new Label("Server IP's:\n" + varsomSystem.getServerIP(),skin2);
         table.add(ips).size(600,90).padBottom(80).row();
         for(int i = 0; i < VarsomSystem.SIZE; i++) {
             switch (VarsomSystem.games[i]){
@@ -57,10 +58,17 @@ public class VarsomMenu implements Screen {
                     buttonPlayCarGame.addListener(new ClickListener() {
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
-                            VarsomGame carGame = new CarGame((VarsomSystem) Gdx.app.getApplicationListener());
+                           // if(varsomSystem.getServer().getConnections().length != 0) {
+                                VarsomGame carGame = new CarGame((VarsomSystem) Gdx.app.getApplicationListener());
+                                hide();
+                            /*}
+                            else{
+                                AlertDialog aD = new AlertDialog("Too few players", skin2);
+                                aD.show(stage);
+                            }*/
                             Gdx.app.log("clicked", "pressed CarGame");
+
                             //((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(1));
-                            hide();
                         }
                     });
                     table.add(buttonPlayCarGame).size(450, 90).padBottom(10).row();
@@ -138,5 +146,28 @@ public class VarsomMenu implements Screen {
     public void dispose() {
         stage.dispose();
         skin.dispose();
+    }
+
+    public static class AlertDialog extends Dialog {
+
+        public AlertDialog(String title, Skin skin, String windowStyleName) {
+            super(title, skin, windowStyleName);
+        }
+        public AlertDialog(String title, Skin skin) {
+            super(title, skin);
+        }
+        public AlertDialog(String title, WindowStyle windowStyle) {
+            super(title, windowStyle);
+        }
+
+        {
+            text("CarGame requiers at least two connected players");
+            button("OK");
+        }
+
+        @Override
+        protected void result(Object object){
+
+        }
     }
 }

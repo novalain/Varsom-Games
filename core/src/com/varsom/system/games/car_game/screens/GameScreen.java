@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.varsom.system.VarsomSystem;
 import com.varsom.system.games.car_game.gameobjects.Car;
 import com.varsom.system.games.car_game.tracks.Track;
@@ -55,14 +56,10 @@ public class GameScreen implements Screen{
 
     private SpriteBatch batch;
 
-    // TODO Implement class Track
-    //private /*Track*/TestTrack track;
     private Track track;
 
 //    private Pixmap pixmap;
     private Car leaderCar;
-//    private MoveSprite moveSprite;
-//    private Sprite bgSprite;
 
     //for pause menu
     private Stage stage = new Stage();
@@ -75,31 +72,35 @@ public class GameScreen implements Screen{
     private TextButton buttonLeave = new TextButton("Leave Game", skin);
     //end for pause menu
 
+    //temp
+    Label carsTraveled;
+
     protected VarsomSystem varsomSystem;
+    protected int NUMBER_OF_PLAYERS;
 
     public GameScreen(int level, final VarsomSystem varsomSystem){
         this.varsomSystem = varsomSystem;
         this.level = level;
         world = new World(new Vector2(0f,0f),true);
         debugRenderer = new Box2DDebugRenderer();
+
         int SCREEN_WIDTH = Gdx.graphics.getWidth();
         int SCREEN_HEIGHT = Gdx.graphics.getHeight();
+
+        NUMBER_OF_PLAYERS = this.varsomSystem.getServer().getConnections().length;
+
+        //TODO THIS IS ONLY TEMPORARY.. DURING DEVELOPMENT
+        if (NUMBER_OF_PLAYERS < 1) {
+            NUMBER_OF_PLAYERS = 8;
+        }
 
         // Create objects and select level
         switch(level){
             case 1:
-                track = new Track1(world);
-////                moveSprite = testTrack.moveSprite;
-//                car = track.car;
-//                pixmap = track.pixmap;
-//                bgSprite = track.backgroundSprite;
+                track = new Track1(world, NUMBER_OF_PLAYERS);
                 break;
             case 2:
-                track = new Track2(world);
-//                moveSprite = track2.moveSprite;
-                //car = track2.car;
-                //pixmap = track2.pixmap;
-                //bgSprite = track2.backgroundSprite;
+                track = new Track2(world, NUMBER_OF_PLAYERS);
                 break;
             default:
                 System.out.println("Mega Error");
@@ -113,28 +114,37 @@ public class GameScreen implements Screen{
         //camera.rotate(-90);
 //        camera.position.set(new Vector2(moveSprite.getX(),moveSprite.getY()), 0);
         //TODO camera.position.set(leaderCar.getPointOnTrack(), 0);
-        camera.position.set(track.getCars()[0].getPointOnTrack(), 0);
+        camera.position.set(leaderCar.getPointOnTrack(), 0);
         camera.rotate((float)Math.toDegrees(leaderCar.getRotationTrack())-180);
-        camera.zoom = 5.0f; // can be used to see the entire track
+        camera.zoom = 1.0f; // can be used to see the entire track
         camera.update();
 
         batch = new SpriteBatch();
         batch.setProjectionMatrix(camera.combined);
 
         // pause menu button
-        table.bottom().left();
+        table.top().left();
         table.add(buttonLeave).size(400, 75).row();
+        // connected devices text thingys....
+        carsTraveled = new Label("CarDist:\n",skin);
+        carsTraveled.setFontScaleX(0.75f);
+        carsTraveled.setFontScaleY(0.75f);
+        table.add(carsTraveled).size(400,200).row();
+
         table.setFillParent(true);
         stage.addActor(table);
 
-        //TODO Dena behövs för att man ska kunna klicka på knappen  men gör att vi inte längre kan gasa
-        Gdx.input.setInputProcessor(stage);
+
+
+        //TODO Denna behövs för att man ska kunna klicka på knappen  men gör att vi inte längre kan gasa
+        //Gdx.input.setInputProcessor(stage);
 
         buttonLeave.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.log("clicked", "pressed the Leave button.");
                 ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu(varsomSystem));
+                varsomSystem.getMPServer().gameRunning(false);
             }
         });
         //end pause menu button
@@ -183,9 +193,14 @@ public class GameScreen implements Screen{
 
        // Here goes the all the updating / game logic
        if(!paused){
+           String temp = "CarDist:\n";
            for(Car car : track.getCars()) {
                car.update(Gdx.app.getGraphics().getDeltaTime());
+               temp += car.getTraveledDistance() + "\n";
            }
+
+
+           carsTraveled.setText(temp);
 
            updateCamera();
        }
@@ -196,8 +211,7 @@ public class GameScreen implements Screen{
 
     private void updateCamera(){
         float smoothCamConst = 0.1f;
-        // TODO LEADER CAR
-        //leaderCar = track.getLeaderCar();
+        leaderCar = track.getLeaderCar();
         //leaderCar = track.getCars()[0];
         float newCamPosX = (leaderCar.getPointOnTrack().x - camera.position.x);
         float newCamPosY = (leaderCar.getPointOnTrack().y - camera.position.y);
@@ -223,7 +237,6 @@ public class GameScreen implements Screen{
         camera.rotate(desiredCamRotation*0.02f);
 
         camera.update();
-        //Gdx.app.log("MoveSprite", "MoveSprite: (" + moveSprite.getX() + ", " + moveSprite.getY() +")");
 
     }
 

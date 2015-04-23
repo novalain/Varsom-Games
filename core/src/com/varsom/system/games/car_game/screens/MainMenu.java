@@ -63,6 +63,7 @@ public class MainMenu implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.log("clicked", "pressed the PLAY button.");
+                varsomSystem.getMPServer().gameRunning(true);
                 ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(1,varsomSystem));
             }
         });

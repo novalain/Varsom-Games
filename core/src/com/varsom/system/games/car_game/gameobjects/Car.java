@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
+import com.badlogic.gdx.utils.Array;
 import com.varsom.system.games.car_game.abstract_gameobjects.DynamicObject;
 import com.varsom.system.games.car_game.helpers.AssetLoader;
 import com.varsom.system.games.car_game.screens.GameScreen;
@@ -39,7 +40,10 @@ public class Car extends DynamicObject {
     private Vector2 lineToCar, lineToEnd;
     private float angleOfCurrentLine;
 
-    public Car(float width, float length, Vector2 position, World world, Sprite carSprite, float angle, float power, float maxSteerAngle, float maxSpeed,Track inTrack) {
+    //temp
+    int ID;
+
+    public Car(float width, float length, Vector2 position, World world, Sprite carSprite, float angle, float power, float maxSteerAngle, float maxSpeed,Track inTrack,int ID) {
         super(position, angle, new PolygonShape(), carSprite, world);
         this.steer = GameScreen.STEER_NONE;
         this.accelerate = GameScreen.ACC_NONE;
@@ -50,29 +54,24 @@ public class Car extends DynamicObject {
         this.power = power;
         this.wheelAngle = 0;
         this.steeringSensitivity = 0.4f; // a value less than 1 makes ta car less sensitive to device rotation
+        this.ID = ID; //temp.. i think..
         track = inTrack;
-        //init body
-       /* BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(position);*/
-        bodyDef.angle = angle;
-        //body = world.createBody(bodyDef);
+
+        bodyDef.angle = angle; //start angle
 
         //init shape
-        // FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.density = 1.0f;
         fixtureDef.friction = 0.6f; //friction when rubbing against other shapes
         fixtureDef.restitution = 0.4f; //amount of force feedback when hitting something. >0 makes the car bounce off, it's fun!
-        //PolygonShape carShape = new PolygonShape();
+
         //we have to parse the Shape to a PolygonShape in order to access the .setAsBox method
         ((PolygonShape) shape).setAsBox(width / 2f, length / 2f);
-        //carShape.setAsBox(this.width / 2, this.length / 2);
-        //fixtureDef.shape = carShape;
+
         fixtureDef.shape = shape;
-        //this.body.createFixture(fixtureDef);
 
         addObjectToWorld();
-        //initialize wheels
+
+        //WHEELS
         float wheelWidth = width * 0.3f, wheelHeight = length * 0.3f;
         this.wheels = new ArrayList<Wheel>();
         this.wheels.add(new Wheel(world, this, -width / 2.5f, -length / 3, wheelWidth, wheelHeight, true, true)); //top left
@@ -175,9 +174,13 @@ public class Car extends DynamicObject {
         }*/
 
         //update revolving wheels based on angle
+        //TODO this should be implemented/uncommented when we can start the game with controllers
         updateDeviceRotation();
+
         for (Wheel wheel : this.getRevolvingWheels()) {
             //wheel.setAngle( - Gdx.input.getAccelerometerY()*10);
+            //TODO FIX TILT ANGLE
+            //wheel.setAngle(0);
             wheel.setAngle(tiltAngle);
         }
 
@@ -240,7 +243,9 @@ public class Car extends DynamicObject {
 //        delta = (new Vector2(pointOnTrack.x-getNewPointOnTrack().x,pointOnTrack.y-getNewPointOnTrack().y)).len(); //the point's moved distance since last update
         delta = subtractVector(pointOnTrack,getNewPointOnTrack()).len(); //the point's translated distance since last update
         if(waypointIsReached()){
-            currentLinePos[0] = currentLinePos[1];
+            delta = getVectorBetweenPoints(pointOnTrack,currentLinePos[1]).len();
+            Array<Vector2> WPs =  track.getPath();
+            currentLinePos[0] = track.getPath().get(waypoint);//currentLinePos[1]; //update new line's start point
             pointOnTrack = currentLinePos[0];
             if(waypoint + 1 >= track.getPath().size){
                 waypoint = 0;
@@ -248,20 +253,27 @@ public class Car extends DynamicObject {
             else {
                 waypoint++;
             }
-            currentLinePos[1] = track.getPath().get(waypoint);
+            currentLinePos[1] = track.getPath().get(waypoint);   //update new line's end point
             currentLineVec = getVectorBetweenPoints(currentLinePos[0], currentLinePos[1]);
-            traveledDistance += delta; //TODO this is probably slightly wrong
+
+            traveledDistance += delta; //TODO this is probably slightly wrong... think its fixed now
+            Array<Vector2> WPs2 =  track.getPath();
         }
         else{
-            //if the previous pointOnTrack were closer to the end point, delta should be negative. Car is probably going the wrong way
-            if(getVectorBetweenPoints(pointOnTrack,currentLinePos[1]).len() < delta){
+            //if the previous pointOnTrack were closer to the end point of current line, delta should be negative. Car is probably going the wrong way
+            if(getVectorBetweenPoints(pointOnTrack,currentLinePos[1]).len() < getVectorBetweenPoints(getNewPointOnTrack(),currentLinePos[1]).len()){//delta){
 //            if ((new Vector2(currentLinePos[1].x-pointOnTrack.x,currentLinePos[1].y-pointOnTrack.y)).len() < delta) {
                 delta *= -1;
             }
+            //TODO should perhaps be done after the next if..... think its fixed now
             pointOnTrack = getNewPointOnTrack();
-            //if the car is further away from the next waypoint than the previous waypoint
+
+            //if the car's track point is further away from the next waypoint than the previous waypoint is
+            //supposed to fix the fact that the trackPoint ends up before the current line's start point
             if((new Vector2(currentLinePos[1].x-pointOnTrack.x, currentLinePos[1].y-pointOnTrack.y).len() > (new Vector2(currentLinePos[1].x-currentLinePos[0].x, currentLinePos[1].y-currentLinePos[0].y)).len())){
                 pointOnTrack = currentLinePos[0];
+                delta = 0;
+                //TODO FIX THIS!!!... think its fixed now
             }
             traveledDistance += delta;
         }
@@ -331,6 +343,9 @@ public class Car extends DynamicObject {
         Vector2 newPoint = new Vector2(scaleVec( currentLineVec, dotProd(vecToCar,currentLineVec)/dotProd(currentLineVec,currentLineVec)) );
         newPoint.x += currentLinePos[0].x;
         newPoint.y += currentLinePos[0].y;
+        if (newPoint.x == Float.NaN || newPoint.y == Float.NaN || currentLinePos[0].x==Float.NaN || currentLinePos[0].y == Float.NaN) {
+            Gdx.app.log("FUUUUDGE","ERROR");
+        }
         return newPoint;
     }
 
@@ -341,7 +356,7 @@ public class Car extends DynamicObject {
         return angleOfCurrentLine;
     }
 
-    public boolean waypointIsReached(){
+    private boolean waypointIsReached(){
         return (Math.abs(currentLinePos[1].x - pointOnTrack.x) <= delta && Math.abs(currentLinePos[1].y - pointOnTrack.y) <= delta);
     }
 
