@@ -42,6 +42,8 @@ public class MPServer {
         kryo.register(Packet.LoginRequest.class);
         kryo.register(Packet.LoginAnswer.class);
         kryo.register(Packet.Message.class);
+        kryo.register(Packet.PauseRequest.class);
+        kryo.register(Packet.ExitRequest.class);
     }
 
     public void stop() {

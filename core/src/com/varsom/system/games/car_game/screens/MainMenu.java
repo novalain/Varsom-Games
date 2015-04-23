@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import com.varsom.system.VarsomSystem;
 import com.varsom.system.games.car_game.com.varsomgames.cargame.CarGame;
 import com.varsom.system.games.car_game.gameobjects.BackgroundObject;
+import com.varsom.system.network.NetworkListener;
 import com.varsom.system.screens.VarsomMenu;
 
 public class MainMenu implements Screen {
@@ -117,6 +118,16 @@ public class MainMenu implements Screen {
 
     @Override
     public void render(float delta) {
+
+        // If Exit was pressed on a client
+        if(NetworkListener.goBack) {
+            Gdx.app.log("in GameScreen", "go back to main menu");
+            //TODO ska vi skapa en ny meny eller gå tillbaka till den gamla?
+            //TODO om va gör en ny, när tar vi bort den gamla?
+            ((Game) Gdx.app.getApplicationListener()).setScreen(new VarsomMenu(varsomSystem));
+            NetworkListener.goBack = false;
+            //dispose(); ??
+        }
 
         updateBackground();
 

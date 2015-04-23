@@ -26,6 +26,7 @@ import com.varsom.system.VarsomSystem;
 import com.varsom.system.abstract_gameobjects.VarsomGame;
 import com.varsom.system.games.car_game.com.varsomgames.cargame.CarGame;
 import com.varsom.system.games.other_game.OtherGame;
+import com.varsom.system.network.NetworkListener;
 import com.varsom.system.screens.ScaledScreen;
 import com.varsom.system.Commons;
 import java.util.Vector;
@@ -310,6 +311,14 @@ public class VarsomMenu extends ScaledScreen {
 
     @Override
     public void render(float delta) {
+        // If Exit was pressed on a client
+        if(NetworkListener.goBack) {
+            Gdx.app.log("in GameScreen", "go back to main menu");
+            NetworkListener.goBack = false;
+            Gdx.app.exit();
+            dispose();
+        }
+
         Gdx.gl.glClearColor(0.12f, 0.12f, 0.12f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 

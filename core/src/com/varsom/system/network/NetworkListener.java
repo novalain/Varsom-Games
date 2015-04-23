@@ -5,6 +5,8 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 import com.varsom.system.network.Packet.LoginAnswer;
 import com.varsom.system.network.Packet.LoginRequest;
+import com.varsom.system.network.Packet.PauseRequest;
+import com.varsom.system.network.Packet.ExitRequest;
 
 import static com.varsom.system.network.Packet.Message;
 
@@ -15,6 +17,8 @@ import static com.varsom.system.network.Packet.Message;
 public class  NetworkListener extends Listener {
 
     public String message;
+    public static boolean pause = false;
+    public static boolean goBack = false;
 /*
     public void init(EditText b) {
         //message = b.getText().toString();
@@ -40,7 +44,7 @@ public class  NetworkListener extends Listener {
             System.out.println("Login is accepted");
         }
         //Message is received from the client
-        if (o instanceof Message) {
+        else if (o instanceof Message) {
 
             //The received message is saved in a string
             message = ((Message) o).message;
@@ -48,6 +52,16 @@ public class  NetworkListener extends Listener {
             //Writes the message in the log
             System.out.println("MESSAGE: " + message);
 
+        }
+
+        else if (o instanceof PauseRequest) {
+            //saves the received bool
+            pause = ((PauseRequest) o).pause;
+        }
+
+        else if (o instanceof ExitRequest) {
+            //saves the received bool
+            goBack = ((ExitRequest) o).exit;
         }
 
     }

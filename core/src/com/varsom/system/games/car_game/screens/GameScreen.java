@@ -4,8 +4,10 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -13,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.varsom.system.VarsomSystem;
 import com.varsom.system.games.car_game.gameobjects.Car;
 import com.varsom.system.games.car_game.tracks.Track;
@@ -26,6 +29,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.varsom.system.screens.VarsomMenu;
+import com.varsom.system.network.NetworkListener;
 
 
 public class GameScreen implements Screen{
@@ -64,7 +68,6 @@ public class GameScreen implements Screen{
 //    private MoveSprite moveSprite;
 //    private Sprite bgSprite;
 
-    //for pause menu
     private Stage stage = new Stage();
     private Table table = new Table();
 
@@ -73,7 +76,8 @@ public class GameScreen implements Screen{
             new TextureAtlas(Gdx.files.internal("system/skins/menuSkin.pack")));
 
     private TextButton buttonLeave = new TextButton("Leave Game", skin);
-    //end for pause menu
+    private Label labelPause;
+    private String pauseMessage = "Paused";
 
     protected VarsomSystem varsomSystem;
 
@@ -127,7 +131,17 @@ public class GameScreen implements Screen{
         table.setFillParent(true);
         stage.addActor(table);
 
-        //TODO Dena behövs för att man ska kunna klicka på knappen  men gör att vi inte längre kan gasa
+        BitmapFont fontType = new BitmapFont();
+        fontType.scale(2.f);
+        Label.LabelStyle style = new Label.LabelStyle(fontType, Color.WHITE);
+
+        labelPause = new Label(pauseMessage,style);
+        labelPause.setPosition(0, 0);
+
+        labelPause.setPosition(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+        stage.addActor(labelPause);
+
+        //TODO Denna behövs för att man ska kunna klicka på knappen  men gör att vi inte längre kan gasa
         //Gdx.input.setInputProcessor(stage);
 
         buttonLeave.addListener(new ClickListener() {
@@ -141,22 +155,21 @@ public class GameScreen implements Screen{
 
     }
 
+    //TODO handles count down timer and pause, should the name change or pause be moved?
     private void handleCountDownTimer(){
+        paused = NetworkListener.pause;
 
         countDownTimer -= Gdx.graphics.getDeltaTime();
         float secondsLeft = (int)countDownTimer % 60;
 
         // Render some kick-ass countdown label
         if(secondsLeft > 0){
-
+            paused = true;
            //Gdx.app.log("COUNTDOWN: ", (int)secondsLeft + "");
-
         }
-
-        if(secondsLeft == 0){
+        /*else if(secondsLeft == 0){
             paused = false;
-
-        }
+        }*/
 
     }
 
@@ -165,11 +178,19 @@ public class GameScreen implements Screen{
         Gdx.gl.glClearColor(0.7f, 0.2f, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        // If Exit was pressed on a client
+        if(NetworkListener.goBack) {
+            Gdx.app.log("in GameScreen", "go back to main menu");
+            ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu(varsomSystem));
+            NetworkListener.goBack = false;
+            //dispose(); ??
+        }
+
         handleCountDownTimer();
 
         batch.setProjectionMatrix(camera.combined);
 
-        track.addToRenderBatch(batch,camera);
+        track.addToRenderBatch(batch, camera);
 
         //debugRenderer.render(world, camera.combined);
 
@@ -181,14 +202,18 @@ public class GameScreen implements Screen{
         // Get current angle from body
         //float playerAngle = constrainAngle(car.body.getAngle()*MathUtils.radiansToDegrees);
 
-       // Here goes the all the updating / game logic
-       if(!paused){
-           for(Car car : track.getCars()) {
-               car.update(Gdx.app.getGraphics().getDeltaTime());
-           }
+        // Here goes the all the updating / game logic
+        if (!paused) {
 
-           updateCamera();
-       }
+            for (Car car : track.getCars()) {
+                car.update(Gdx.app.getGraphics().getDeltaTime());
+            }
+
+            updateCamera();
+        }
+
+        //If paused pause menu is displayed, else it is not
+        displayPauseMenu(paused);
 
         stage.act();
         stage.draw();
@@ -262,5 +287,13 @@ public class GameScreen implements Screen{
     @Override
     public void dispose() {
         // Leave blank
+    }
+
+    //makes the pause menu visible if pause == true and invisible if not
+    public void displayPauseMenu(boolean pause){
+        //TODO display who paused
+        labelPause.setVisible(pause);
+        buttonLeave.setVisible(pause);
+
     }
 }
