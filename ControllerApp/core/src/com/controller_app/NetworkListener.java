@@ -42,7 +42,7 @@ public class NetworkListener extends Listener {
 
             if (answer) {
                 String mess = o.toString();
-                System.out.println("Message: " + mess);
+                //System.out.println("Message: " + mess);
 
             } else {
                 c.close();
@@ -55,7 +55,7 @@ public class NetworkListener extends Listener {
             message = ((Message) o).message;
 
             //Writes the message in the log
-            System.out.println("MESSAGE: " + message);
+            //System.out.println("MESSAGE: " + message);
 
         }
         if (o instanceof SendGameData) {

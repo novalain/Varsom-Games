@@ -62,12 +62,9 @@ public class MPClient {
 
     public void sendPacket(boolean send) {
 
-        final int TICKS_PER_SECOND = 1;
+        final int TICKS_PER_SECOND = 30;
         System.out.println(send);
         while (send && client.isConnected()) {
-
-            System.out.println("send" + send);
-            System.out.println("client " + client.isConnected());
 
             Packet.GamePacket packet = new Packet.GamePacket();
 

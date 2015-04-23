@@ -23,6 +23,8 @@ public class ControllerScreen extends ScaledScreen {
 
     private boolean drive_pressed = false;
 
+    private float steeringSensitivity = 0.4f;
+
     private String packet;
 
     private MPClient mpClient;
@@ -209,18 +211,11 @@ public class ControllerScreen extends ScaledScreen {
         Xaxis = Gdx.input.getAccelerometerX();
         Yaxis = Gdx.input.getAccelerometerY();
 
-        tiltAngle = (float) (Math.atan2(Yaxis, Xaxis));
-        //tiltAngle -= Math.PI / 2;
-
-        tiltAngle = (float) Math.toDegrees(tiltAngle);
-
-        if (tiltAngle < -200 && tiltAngle > -270) {
-            tiltAngle += 360;
-        }
+        tiltAngle = (float) (-Math.atan2(Yaxis, Xaxis));;
+        tiltAngle *= steeringSensitivity;
 
         return tiltAngle;
 
-        //Gdx.app.log("inputhandler", "tiltAngle: " + tiltAngle);
     }
 
 }
