@@ -107,13 +107,20 @@ public class MenuScreen extends ScaledScreen {
         });
 
         // Add everything to the table
+       // table.debug();
+        // the logo is somehow glichy and
         table.add(image).padTop(10).padBottom(40).row();
         table.add(textField).size(800, 200).padBottom(20).row();
         table.add(buttonController).size(800, 200).padBottom(100).row();
         table.add(buttonExit).size(800, 200).row();
 
-        table.setFillParent(true);
+        table.setX(Commons.WORLD_WIDTH / 2 - table.getPrefWidth() / 2);
+        table.setY(Commons.WORLD_HEIGHT / 2 - table.getPrefHeight() /2);
+
+        table.pack();
         stage.addActor(table);
+
+        System.out.println("image: " + table.getPrefWidth() + " , " + table.getPrefHeight() );
     }
 
     @Override

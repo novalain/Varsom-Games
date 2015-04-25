@@ -49,11 +49,6 @@ public abstract class ScaledScreen implements Screen {
         stage.getViewport().setCamera(camera);
     }
 
-    @Override
-    public void render(float delta) {
-
-    }
-
     abstract void generateFonts();
 
     abstract void generateUI();
