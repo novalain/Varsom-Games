@@ -43,7 +43,7 @@ public class InputHandler {
         selectPressed = false;
     }
 
-    public void setSelectPressedPressed() {
+    public void setSelectPressed() {
         upPressed = false;
         downPressed = false;
         leftPressed = false;
