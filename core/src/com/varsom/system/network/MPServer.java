@@ -42,26 +42,14 @@ public class MPServer {
         }
     }
 
-    public void sendMassMessage() {
-        Packet.Message sendMessage = new Packet.Message();
-
-        try {
-            // Sends the message to all clients
-            server.sendToAllTCP(sendMessage);
-            server.sendToAllUDP(sendMessage);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     private void registerPackets() {
         Kryo kryo = server.getKryo();
         // Register packets in the same order as in Packet.java
         kryo.register(Packet.LoginRequest.class);
         kryo.register(Packet.LoginAnswer.class);
-        kryo.register(Packet.Message.class);
         kryo.register(Packet.GamePacket.class);
         kryo.register(Packet.SendGameData.class);
+        kryo.register(Packet.ShutDownPacket.class);
         kryo.register(Packet.PauseRequest.class);
         kryo.register(Packet.ExitRequest.class);
     }
