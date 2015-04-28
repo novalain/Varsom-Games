@@ -28,6 +28,7 @@ import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -88,7 +89,8 @@ public class VarsomSystem extends /*ApplicationAdapter*/Game {
             for(NetworkInterface ni : Collections.list(interfaces)){
                 for(InetAddress address : Collections.list(ni.getInetAddresses()))
                 {
-                    if(address instanceof Inet4Address){
+
+                    if(address instanceof Inet4Address && !address.isLoopbackAddress()){ //&& !address.isSiteLocalAddress()){
                         addresses.add(address.getHostAddress());
                     }
                 }
