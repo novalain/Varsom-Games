@@ -2,8 +2,12 @@ package com.controller_app;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.controller_app.screens.ControllerScreen;
+import com.controller_app.screens.MenuScreen;
 
 import java.io.IOException;
+
+import com.controller_app.network.MPClient;
 
 public class Main extends Game {
 
