@@ -107,7 +107,7 @@ public class MenuScreen extends ScaledScreen {
         buttonController.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                main.changeScreen(2);
+                main.changeScreen(Commons.CONTROLLER_SCREEN);
             }
         });
 
