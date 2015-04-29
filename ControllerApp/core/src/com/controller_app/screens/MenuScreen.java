@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -40,6 +41,7 @@ public class MenuScreen extends ScaledScreen {
 
     private FreeTypeFontGenerator generator;
     private SpriteBatch spriteBatch;
+    public int check;
 
     public MenuScreen(Main m, MPClient mpc) {
         super();
@@ -66,6 +68,7 @@ public class MenuScreen extends ScaledScreen {
         }
 
         generateUI();
+
     }
 
 
@@ -134,6 +137,46 @@ public class MenuScreen extends ScaledScreen {
         System.out.println("image: " + table.getPrefWidth() + " , " + table.getPrefHeight());
     }
 
+    public void errorMessage(int s){
+        if(check == 2) {
+            main.changeScreen(1);
+        }
+        switch(s){
+            case 1:
+            new Dialog("Error", skin) {
+                {
+                    text("It's seems that your connection sucks");
+                    button("Ok");
+                }
+
+                @Override
+                protected void result(final Object object) {
+
+                }
+
+            }.show(stage);
+                break;
+
+            case 2:
+                main.changeScreen(1);
+                new Dialog("Error", skin) {
+                    {
+                        text("Please enter a correct IP");
+                        button("Ok");
+                    }
+
+                    @Override
+                    protected void result(final Object object) {
+
+                    }
+
+                }.show(stage);
+                break;
+        }
+
+
+    }
+
     @Override
     public void show() {
     }
@@ -149,8 +192,10 @@ public class MenuScreen extends ScaledScreen {
 
         spriteBatch.end();
 
+        stage.act(delta);
         stage.draw();
     }
+
 
     @Override
     public void resize(int width, int height) {

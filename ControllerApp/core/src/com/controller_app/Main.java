@@ -29,8 +29,11 @@ public class Main extends Game {
         controllerScreen = new ControllerScreen(this, mpClient);
 
         mpClient.controllerScreen = controllerScreen;
+        mpClient.menuScreen = menuScreen;
+
 
         changeScreen(1);
+
     }
 
     public void changeScreen(int s) {
@@ -38,14 +41,15 @@ public class Main extends Game {
             case 1:
                 Gdx.input.setInputProcessor(menuScreen.getStage());
                 setScreen(menuScreen);
-
+                menuScreen.check = 1;
                 break;
             case 2:
-                Gdx.input.setInputProcessor(controllerScreen.getStage());
-                Gdx.app.log("screen", "changed screen");
-                setScreen(controllerScreen);
-                menuScreen.connect();
-                break;
+                    Gdx.input.setInputProcessor(controllerScreen.getStage());
+                    Gdx.app.log("screen", "changed screen");
+                    setScreen(controllerScreen);
+                    menuScreen.connect();
+                    menuScreen.check = 2;
+                    break;
             default:
                 break;
         }

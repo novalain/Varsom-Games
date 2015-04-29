@@ -11,9 +11,9 @@ public class Packet {
         boolean accepted = false;
     }
 
-    public static class Message {
-        String message;
-    }
+//    public static class Message {
+//        String message;
+//    }
 
     public static class GamePacket {
         String message;
