@@ -64,7 +64,7 @@ public class MainMenu implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.log("clicked", "pressed the PLAY button.");
-
+                varsomSystem.getMPServer().setJoinable(false);
                 ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(1,varsomSystem));
             }
         });
@@ -73,6 +73,7 @@ public class MainMenu implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.log("clicked", "pressed the PLAY 2 button.");
+                varsomSystem.getMPServer().setJoinable(false);
                 ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(2,varsomSystem));
             }
         });
