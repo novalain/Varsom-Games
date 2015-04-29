@@ -56,8 +56,8 @@ public class CarGame extends VarsomGame {
         //while (st.hasMoreTokens()) {
         boolean is_driving = st.nextToken().equalsIgnoreCase("true");
         float angle = Float.parseFloat(st.nextToken());
-        System.out.println("Player " + carNumber + " has the angle: " + angle);
-        System.out.println("Does player " + carNumber + " accelerate: " + is_driving);
+        //System.out.println("Player " + carNumber + " has the angle: " + angle);
+        //System.out.println("Does player " + carNumber + " accelerate: " + is_driving);
         //}
 
      //   System.out.println

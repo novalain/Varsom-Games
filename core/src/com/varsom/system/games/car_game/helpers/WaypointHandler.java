@@ -36,16 +36,28 @@ public class WaypointHandler {
         path = t.getPath(); // should not be able to be changed
         waypointIndex = 1; // the index in path of the currentLine's end pos
 
-        //currentLineStartPos = new Vector2();
-        //currentLineEndPos = new Vector2();
-        currentLineStartPos = path.get(waypointIndex-1); //startLineStart
-        currentLineEndPos = path.get(waypointIndex); //startLineEnd
+        currentLineStartPos = new Vector2();
+        currentLineEndPos = new Vector2();
+        assignNewVec(currentLineStartPos,path.get(waypointIndex-1));
+        assignNewVec(currentLineEndPos,path.get(waypointIndex));
+        //currentLineStartPos = path.get(waypointIndex-1); //startLineStart
+        //currentLineEndPos = path.get(waypointIndex); //startLineEnd
+        //currentLineStartPos = track.getStartLine()[0]; //startLineStart
+        //currentLineEndPos = track.getStartLine()[1]; //startLineEnd
 
-        //currentLineVec = new Vector2();
+        currentLineVec = new Vector2();
         calcCurrentLineVec();
         currentLineAngle = calcLineAngle(currentLineStartPos,currentLineEndPos);
 
+        quadrant = calcQuadrant(currentLineVec);
+
+        projectionPoint = new Vector2();
         updateProjectionPoint(spawnPos);
+        prevProjPoint = new Vector2();
+        assignNewVec(prevProjPoint,projectionPoint);
+        //prevProjPoint = projectionPoint;
+
+        traveledDistance = lengthOfVector2(projectionPoint, currentLineStartPos);
     }
 
 
@@ -86,10 +98,12 @@ public class WaypointHandler {
      * @return
      */
     private /*Vector2*/ void updateProjectionPoint(Vector2 objectPosition){
-        Vector2 lineToObject = objectPosition;
-        Gdx.app.log("Projection", "lineToObject1 = (" + lineToObject.x + "," + lineToObject.y +")");
+        Vector2 lineToObject = new Vector2();
+        //lineToObject = objectPosition;
+        assignNewVec(lineToObject,objectPosition);
+        //System.out.println("currentLineStartPos = (" + currentLineStartPos.x + "," + currentLineStartPos.y +")");
         lineToObject.sub(currentLineStartPos); // a
-        Gdx.app.log("Projection", "lineToObject2 = (" + lineToObject.x + "," + lineToObject.y +")");
+        //System.out.println("currentLineVec = (" + currentLineVec.x + "," + currentLineVec.y +")");
 
         float a_dot_b = dotProd(lineToObject,currentLineVec);
         float b_dot_b = dotProd(currentLineVec,currentLineVec);
@@ -98,7 +112,12 @@ public class WaypointHandler {
         float projectionEndPointY = scale * currentLineVec.y;
         projectionPoint.x = currentLineStartPos.x + projectionEndPointX;
         projectionPoint.y = currentLineStartPos.y + projectionEndPointY;
-
+/*
+        System.out.println("currentLineStartPos = (" + currentLineStartPos.x + "," + currentLineStartPos.y +")");
+        System.out.println("currentLineVec = (" + currentLineVec.x + "," + currentLineVec.y +")");
+        System.out.println("projectionPoint = (" + projectionPoint.x + "," + projectionPoint.y +")");
+        System.out.println("projectionVectorPoint = (" + projectionEndPointX + "," + projectionEndPointY +")");
+*/
         //return projectionPoint;
     }
 
@@ -141,7 +160,7 @@ public class WaypointHandler {
                 }
                 break;
             case 4:
-                if(trackPoint.x >= endPoint.x && trackPoint.y >= endPoint.y){
+                if(trackPoint.x >= endPoint.x && trackPoint.y <= endPoint.y){
                     return true;
                 }
                 break;
@@ -165,6 +184,7 @@ public class WaypointHandler {
      *   3.1.5              update the waypointIndex, make sure it doesn't go out of bounds
      *   3.1.6              update currentLineEndPos,
      *   3.1.7              update currentLine's angle
+     *   3.1.8              update currentLineVec
      *      /           }
      *   3.2            else if NOT reached{
      *   3.2.1              if pointOnTrack is further from currentLine's end point than it was in the previous update, (car is going the wrong way) {
@@ -191,25 +211,38 @@ public class WaypointHandler {
         float delta;
 
         updateProjectionPoint(carPos); // updates the projection point
-
         // 3.1 if wayPoint is exceeded
+        boolean k = false;
         if(waypointIsReached(quadrant,projectionPoint,currentLineEndPos)){
+            System.out.println("Waypoint " + waypointIndex + " is reached");
             delta = lengthOfVector2(prevProjPoint, currentLineEndPos);
             traveledDistance += delta;
-            projectionPoint = currentLineEndPos;
-            currentLineStartPos = path.get(waypointIndex);
+            //projectionPoint = currentLineEndPos;
+            assignNewVec(projectionPoint,currentLineEndPos);
+            //currentLineStartPos = path.get(waypointIndex);
+            assignNewVec(currentLineStartPos,path.get(waypointIndex));
             updateWaypointIndex();
-            currentLineEndPos = path.get(waypointIndex);
+            System.out.println("Next waypoint is " + waypointIndex);
+            //currentLineEndPos = path.get(waypointIndex);
+            assignNewVec(currentLineEndPos,path.get(waypointIndex));
             currentLineAngle = calcLineAngle(currentLineStartPos, currentLineEndPos);
-            quadrant = calcQuadrant(currentLineStartPos,currentLineEndPos);
+            calcCurrentLineVec();
+            quadrant = calcQuadrant(currentLineVec);
+            System.out.println("Quadrant to waypoint" + waypointIndex + " is quadrant# " + quadrant);
+            System.out.println("CurrentLineAngle = " + currentLineAngle);
+            System.out.println("CurrentLineStart = (" + currentLineStartPos.x + ", " +currentLineStartPos.y + ")");
+            System.out.println("CurrentLineEnd = (" + currentLineEndPos.x + ", " +currentLineEndPos.y + ")");
+            k = true;
         }
         // 3.2 waypoint is NOT yet reached
         else{
             // 3.2.1 if car is reversing
             if(lengthOfVector2(projectionPoint,currentLineEndPos) > lengthOfVector2(prevProjPoint,currentLineEndPos)){
+                //System.out.println("Car is going the wrong way");
                 // 3.2.1.2 preceded currentLineStartPos
                 if(waypointIsReached(reverseQuad(quadrant), projectionPoint, currentLineStartPos)) {
-                    projectionPoint = currentLineStartPos;
+                    //projectionPoint = currentLineStartPos;
+                    assignNewVec(projectionPoint,currentLineStartPos);
                     delta = lengthOfVector2(prevProjPoint, currentLineStartPos);
                 }
                 // 3.2.1.3 still on currentLine
@@ -225,8 +258,16 @@ public class WaypointHandler {
             }
         }
 
-        prevProjPoint = projectionPoint; // make sure the prev is the actual prev next time this function is called
+        if(k){
+            System.out.println("Quadrant to waypoint" + waypointIndex + " is quadrant# " + quadrant);
+            System.out.println("CurrentLineAngle = " + currentLineAngle);
+            System.out.println("CurrentLineStart = (" + currentLineStartPos.x + ", " +currentLineStartPos.y + ")");
+            System.out.println("CurrentLineEnd = (" + currentLineEndPos.x + ", " +currentLineEndPos.y + ")");
+            k = false;
+        }
 
+        //prevProjPoint = projectionPoint; // make sure the prev is the actual prev next time this function is called
+        assignNewVec(prevProjPoint,projectionPoint);
         return projectionPoint;
     }
 
@@ -235,20 +276,24 @@ public class WaypointHandler {
     }
 
     private float lengthOfVector2(Vector2 a, Vector2 b){
-       return (float) Math.sqrt(Math.pow(b.x-a.x,2) + Math.pow(b.y-a.y, 2));
+       double c = Math.pow(b.x-a.x,2);
+       double d = Math.pow(b.y-a.y, 2);
+       float e = (float) Math.sqrt(c+d);
+       return e;
+      // return (float) Math.sqrt(Math.pow(b.x-a.x,2) + Math.pow(b.y-a.y, 2));
     }
 
-    private int calcQuadrant(Vector2 startP, Vector2 endP){
-        if(currentLineVec.x >= 0 && currentLineVec.y >= 0){ // first quadrant
+    private int calcQuadrant(Vector2 vec){
+        if(vec.x >= 0 && vec.y >= 0){ // first quadrant
             return 1;
         }
-        else if(currentLineVec.x <= 0 && currentLineVec.y >= 0){ // second quadrant
+        else if(vec.x <= 0 && vec.y >= 0){ // second quadrant
             return 2;
         }
-        else if(currentLineVec.x <= 0 && currentLineVec.y <= 0){ // third quadrant
+        else if(vec.x <= 0 && vec.y <= 0){ // third quadrant
             return 3;
         }
-        else if(currentLineVec.x >= 0 && currentLineVec.y >= 0){ // fourth quadrant
+        else if(vec.x >= 0 && vec.y <= 0){ // fourth quadrant
             return 4;
         }
 
@@ -278,5 +323,10 @@ public class WaypointHandler {
             reversed += 4;
         }
         return reversed;
+    }
+
+    private void assignNewVec(Vector2 newVec, Vector2 oldVec) {
+        newVec.x = oldVec.x;
+        newVec.y = oldVec.y;
     }
 }

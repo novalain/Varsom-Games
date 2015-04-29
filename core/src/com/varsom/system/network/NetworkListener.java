@@ -58,7 +58,7 @@ public class  NetworkListener extends Listener {
         }
 
         else if (o instanceof GamePacket) {
-            System.out.println("NETWORK: " + "Recieved GamePacket");
+            //System.out.println("NETWORK: " + "Recieved GamePacket");
             String toDeCode = ((GamePacket) o).message;
             //System.out.println("Connection " + c.getID() + " says " + toDeCode);
             varsomSystem.getActiveGame().handleDataFromClients(c, toDeCode);
