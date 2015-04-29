@@ -128,17 +128,16 @@ public class NavigationScreen extends ScaledScreen{
         });
         table.debug();
         table.row();
-        table.add(btnSettings).size(300, 300).padLeft(Commons.WORLD_WIDTH - 200);
+        table.add(btnSettings).padBottom(50).colspan(5).size(200, 200).right();
+
         table.row();
-        table.add(btnUp).size(300, 300);
+        table.add(btnUp).padBottom(10).colspan(5).center().size(200,200);
         table.row();
-        Cell<TextButton> cell = table.add(btnSettings);
-        cell.colspan(3);
-        table.add(btnLeft).size(300, 300);
-        table.add(btnSelect).size(300, 300);
-        table.add(btnRight).size(300, 300);
+        table.add(btnLeft).size(200, 200).colspan(2).right();
+        table.add(btnSelect).size(200, 200).colspan(1).center().padBottom(10);
+        table.add(btnRight).size(200, 200).colspan(2).right();
         table.row();
-        table.add(btnDown).size(300, 300);
+        table.add(btnDown).colspan(5).center().size(200, 200);
 
         table.setX(Commons.WORLD_WIDTH / 2 - table.getPrefWidth() / 2);
         table.setY(Commons.WORLD_HEIGHT / 2 - table.getPrefHeight() / 2);
