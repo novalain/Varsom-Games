@@ -38,7 +38,7 @@ public class Track1 extends Track{
     //public ParticleEmitter emitter;
 
     public Track1(World inWorld,int NUMBER_OF_PLAYERS) {
-        super(inWorld,new Sprite(AssetLoader.testTrackTexture),new Sprite(AssetLoader.testTrackMask),10f,NUMBER_OF_PLAYERS);
+        super(inWorld,new Sprite(AssetLoader.testTrackTexture),new Sprite(AssetLoader.testTrackMask),50f,NUMBER_OF_PLAYERS);
         createTestTrack();
     }
 
@@ -50,16 +50,17 @@ public class Track1 extends Track{
 
     // Create objects that are unique for this track
     private void createObstacles(){
+        int hrf = 5; //higherResFactor
       //Static physical objects
         TireObstacle tire  = new TireObstacle(new Vector2(  0.0f, -6.0f), 0, 1.5f, world);
         TireObstacle tire2 = new TireObstacle(new Vector2(  0.0f,  1.6f), 0, 0.5f, world);
         TireObstacle tire3 = new TireObstacle(new Vector2(-13.0f,  0.2f), 0, 0.5f, world);
         TireObstacle tire4 = new TireObstacle(new Vector2( 13.0f,  0.2f), 0, 0.5f, world);
 
-        BoxObstacle bO1 = new BoxObstacle(new Vector2(-8.5f/bgScale,-116.7f/bgScale),0
-                ,new Vector2(445/bgScale,15/bgScale), world);
-        BoxObstacle bO2 = new BoxObstacle(new Vector2(-30.50f/bgScale,124.7f/bgScale),0
-                ,new Vector2(405/bgScale,6/bgScale), world);
+        BoxObstacle bO1 = new BoxObstacle(new Vector2(-hrf*8.5f/bgScale,-hrf*116.7f/bgScale),0
+                ,new Vector2(hrf*445/bgScale,hrf*15/bgScale), world);
+        BoxObstacle bO2 = new BoxObstacle(new Vector2(-hrf*30.50f/bgScale,hrf*124.7f/bgScale),0
+                ,new Vector2(hrf*405/bgScale,hrf*6/bgScale), world);
 
         //Add all newly made obstacles to a layer
         backLayer.addElement(tire.getBody());
@@ -158,32 +159,33 @@ public class Track1 extends Track{
                 new Vector2(-16.0f, -17.00f),
                 new Vector2(-15.0f, -14.00f),
                 new Vector2(-15.0f, -16.00f),
-                new Vector2(-15.0f, -18.00f)};
+                new Vector2(-15.0f, -18.00f)}; //these do not have to be scaled
         return sPs;
     }
     private Vector2[] hardcodedWayPoints() {
+        int hrf = 5; // higher res factor
         Vector2[] wPs = {
-            new Vector2( -95, -131),
-            new Vector2(-180, -131),
-            new Vector2(-220, -131),
-            new Vector2(-245, -111),
-            new Vector2(-220,  -90),
-            new Vector2(-110,  -30),
-            new Vector2( -85,   11),
-            new Vector2(-110,   55),
-            new Vector2(-226,  114),
-            new Vector2(-245,  126),
-            new Vector2(-226,  138),
-            new Vector2( 169,  138),
-            new Vector2( 196,  127),
-            new Vector2( 158,   52),
-            new Vector2(  73,  -30),
-            new Vector2(  64,  -43),
-            new Vector2(  85,  -47),
-            new Vector2( 216,  -40),
-            new Vector2( 239,  -60),
-            new Vector2( 239, -110),
-            new Vector2( 210, -131)};
+            new Vector2( -95*hrf, -131*hrf),
+            new Vector2(-180*hrf, -131*hrf),
+            new Vector2(-220*hrf, -131*hrf),
+            new Vector2(-245*hrf, -111*hrf),
+            new Vector2(-220*hrf,  -90*hrf),
+            new Vector2(-110*hrf,  -30*hrf),
+            new Vector2( -85*hrf,   11*hrf),
+            new Vector2(-110*hrf,   55*hrf),
+            new Vector2(-226*hrf,  114*hrf),
+            new Vector2(-230*hrf,  126*hrf),
+            new Vector2(-226*hrf,  138*hrf),
+            new Vector2( 169*hrf,  138*hrf),
+            new Vector2( 172*hrf,  127*hrf),
+            new Vector2( 158*hrf,   52*hrf),
+            new Vector2(  73*hrf,  -30*hrf),
+            new Vector2(  64*hrf,  -43*hrf),
+            new Vector2(  85*hrf,  -47*hrf),
+            new Vector2( 216*hrf,  -40*hrf),
+            new Vector2( 239*hrf,  -60*hrf),
+            new Vector2( 239*hrf, -110*hrf),
+            new Vector2( 210*hrf, -131*hrf)}; // these need to be scaled by 10
         return wPs;
     }
 }
