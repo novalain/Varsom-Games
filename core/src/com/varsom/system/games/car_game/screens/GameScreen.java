@@ -121,7 +121,7 @@ public class GameScreen implements Screen{
         //TODO camera.position.set(leaderCar.getPointOnTrack(), 0);
         camera.position.set(leaderCar.getPointOnTrack(), 0);
         camera.rotate((float)Math.toDegrees(leaderCar.getRotationTrack())-180);
-        camera.zoom = 1.0f; // can be used to see the entire track
+        camera.zoom = 2.0f; // can be used to see the entire track
         camera.update();
 
         batch = new SpriteBatch();
@@ -190,8 +190,13 @@ public class GameScreen implements Screen{
         // If Exit was pressed on a client
         if(NetworkListener.goBack) {
             Gdx.app.log("in GameScreen", "go back to main menu");
-            ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu(varsomSystem));
             NetworkListener.goBack = false;
+
+            //new clients can join now when the game is over
+            varsomSystem.getMPServer().setJoinable(true);
+
+            ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu(varsomSystem));
+
             //dispose(); ??
         }
 
