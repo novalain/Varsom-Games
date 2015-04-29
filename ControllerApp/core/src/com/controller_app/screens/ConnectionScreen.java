@@ -107,7 +107,8 @@ public class ConnectionScreen extends ScaledScreen {
         buttonController.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                main.changeScreen(Commons.CONTROLLER_SCREEN);
+                connect();
+                main.changeScreen(Commons.NAVIGATION_SCREEN);
             }
         });
 
