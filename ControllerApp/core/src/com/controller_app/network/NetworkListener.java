@@ -1,6 +1,8 @@
 package com.controller_app.network;
 
 
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.controller_app.screens.MenuScreen;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -13,6 +15,7 @@ public class NetworkListener extends Listener {
     private Client client;
     private MPClient mpClient;
 
+
     private boolean start;
     public static boolean answer = false;
     public static boolean standby = false;
@@ -22,6 +25,8 @@ public class NetworkListener extends Listener {
     public void init(Client client, MPClient mpClient) {
         this.client = client;
         this.mpClient = mpClient;
+
+
     }
 
     public void connected(Connection c) {
@@ -32,6 +37,7 @@ public class NetworkListener extends Listener {
 
     public void disconnected(Connection c) {
         System.out.println("You have disconnected.");
+        mpClient.errorHandler();
     }
 
     public void received(Connection c, Object o) {
@@ -49,6 +55,7 @@ public class NetworkListener extends Listener {
             }
 
         }
+
         if (o instanceof Packet.SendGameData) {
 
             start = ((Packet.SendGameData) o).send;

@@ -33,8 +33,11 @@ public class Main extends Game {
         standbyScreen = new StandbyScreen(this, mpClient);
 
         mpClient.controllerScreen = controllerScreen;
+        mpClient.menuScreen = menuScreen;
+
 
         changeScreen(1);
+
     }
 
     public void changeScreen(int s) {
@@ -43,6 +46,7 @@ public class Main extends Game {
                 //change to the menuScreen
                 Gdx.input.setInputProcessor(menuScreen.getStage());
                 setScreen(menuScreen);
+                menuScreen.check = 1;
                 break;
             case 2:
                 //change to the controllerScreen if we shouldn't standby
@@ -58,12 +62,14 @@ public class Main extends Game {
                     Gdx.app.log("screen", "changed to controller");
                     setScreen(controllerScreen);
                 }
+                menuScreen.check = 2;
                 break;
             case 3:
                 //change to standbyScreen
                 Gdx.input.setInputProcessor(standbyScreen.getStage());
                 Gdx.app.log("screen", "changed to standby");
                 setScreen(standbyScreen);
+                menuScreen.check = 3;
                 break;
             default:
                 break;

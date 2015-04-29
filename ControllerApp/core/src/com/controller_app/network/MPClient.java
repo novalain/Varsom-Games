@@ -2,6 +2,7 @@ package com.controller_app.network;
 
 
 import com.badlogic.gdx.Gdx;
+import com.controller_app.screens.MenuScreen;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 
@@ -15,22 +16,28 @@ import com.controller_app.screens.ControllerScreen;
 public class MPClient {
     public Client client;
     public ControllerScreen controllerScreen;
+    public MenuScreen menuScreen;
+    public boolean correctIP;
 
 
     public MPClient() throws IOException {
+         correctIP = false;
 
         client = new Client();
         register();
 
         NetworkListener nl = new NetworkListener();
 
+
         // Initialise variables (not sure if it needed, maybe later)
+
         nl.init(client, this);
         client.addListener(nl);
 
         client.start();
 
         System.setProperty("java.net.preferIPv4Stack", "true");
+
 
     }
 
@@ -39,9 +46,12 @@ public class MPClient {
 
         try {
             client.connect(5000, ip, 54555, 64555);
+
+
         } catch (IOException e) {
             e.printStackTrace();
             client.stop();
+            //menuScreen.errorMessage(2);
         }
 
     }
@@ -94,6 +104,13 @@ public class MPClient {
         sendState.exit = p;
         client.sendTCP(sendState);
         Gdx.app.log("in MPClient", "sent Exit");
+
+    }
+
+    public void errorHandler(){
+
+
+        menuScreen.errorMessage(1);
 
     }
 
