@@ -48,7 +48,6 @@ public class NavigationScreen extends ScaledScreen{
         generateSkin();
         generateUI();
 
-
     }
 
     void generateFonts() {
