@@ -161,6 +161,5 @@ public class SettingsScreen extends ScaledScreen {
         stage.addActor(table);
 
         stage.addActor(btnBack);
-
     }
 }
