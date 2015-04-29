@@ -107,7 +107,9 @@ public class ConnectionScreen extends ScaledScreen {
         buttonController.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                connect();
                 main.changeScreen(Commons.CONTROLLER_SCREEN);
+
             }
         });
 
@@ -177,7 +179,7 @@ public class ConnectionScreen extends ScaledScreen {
     }
 
     // Connect to server
-    public void connect() {
+    private void connect() {
         mpClient.connectToServer(textField.getText());
     }
 }

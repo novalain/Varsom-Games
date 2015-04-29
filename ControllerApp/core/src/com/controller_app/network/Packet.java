@@ -1,8 +1,5 @@
 package com.controller_app.network;
 
-/**
- *
- */
 public class Packet {
     public static class LoginRequest {
     }
@@ -34,5 +31,10 @@ public class Packet {
     public static class ExitRequest {
         boolean exit = false;
     }
+
+    public static class SendDPadData{
+        int data;
+    }
+
 
 }

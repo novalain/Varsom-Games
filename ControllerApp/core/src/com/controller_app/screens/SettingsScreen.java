@@ -7,13 +7,18 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.controller_app.Main;
 import com.controller_app.helper.Commons;
+import com.controller_app.helper.DPad;
 
 public class SettingsScreen extends ScaledScreen {
 
@@ -28,6 +33,7 @@ public class SettingsScreen extends ScaledScreen {
 
     private CheckBox checkVibration;
     private CheckBox checkTest;
+    private TextButton btnBack;
 
     public SettingsScreen(Main main) {
         super();
@@ -37,7 +43,6 @@ public class SettingsScreen extends ScaledScreen {
         generateFonts();
         generateSkin();
         generateUI();
-
     }
 
     @Override
@@ -109,6 +114,17 @@ public class SettingsScreen extends ScaledScreen {
     private void generateUI() {
         skin.getFont("default-font").scale(4f);
 
+        btnBack = new TextButton("Back", skin);
+        btnBack.setSize(200, 100);
+        btnBack.setPosition(Commons.WORLD_WIDTH - btnBack.getPrefWidth() - 10, Commons.WORLD_HEIGHT - btnBack.getPrefHeight());
+
+        btnBack.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                main.changeScreen(Commons.NAVIGATION_SCREEN);
+            }
+        });
+
         checkTest = new CheckBox("Fun Game", skin);
         checkTest.setChecked(true);
         checkVibration = new CheckBox("Vibration ", skin);
@@ -143,5 +159,8 @@ public class SettingsScreen extends ScaledScreen {
 
         table.pack();
         stage.addActor(table);
+
+        stage.addActor(btnBack);
+
     }
 }

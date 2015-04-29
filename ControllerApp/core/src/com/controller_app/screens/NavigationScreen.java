@@ -18,12 +18,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.controller_app.Main;
 import com.controller_app.helper.Commons;
+import com.controller_app.helper.DPad;
 import com.controller_app.helper.InputHandler;
 import com.controller_app.network.MPClient;
+import com.controller_app.network.Packet;
 
-/**
- * Created by Alice on 2015-04-28.
- */
 public class NavigationScreen extends ScaledScreen{
     private TextButton btnUp, btnDown, btnRight, btnLeft, btnSettings, btnSelect;
     private Table table;
@@ -35,14 +34,12 @@ public class NavigationScreen extends ScaledScreen{
 
     private MPClient mpClient;
     private Main main;
-    private InputHandler inputHandler;
 
     public NavigationScreen(Main m, MPClient mpc){
         super();
         this.main = m;
         mpClient = mpc;
         batch = new SpriteBatch();
-        inputHandler = new InputHandler();
 
         generateFonts(); // call to all generating functions, have to be called in this order!
         generateSkin();
@@ -92,31 +89,32 @@ public class NavigationScreen extends ScaledScreen{
         btnUp.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                inputHandler.setUpPressed();
+               // inputHandler.setUpPressed();
+                mpClient.sendDPadData(DPad.UP);
             }
         });
         btnDown.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                inputHandler.setDownPressed();
+                mpClient.sendDPadData(DPad.DOWN);
             }
         });
         btnLeft.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                inputHandler.setLeftPressed();
+                mpClient.sendDPadData(DPad.LEFT);
             }
         });
         btnRight.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                inputHandler.setRightPressed();
+                mpClient.sendDPadData(DPad.RIGHT);
             }
         });
         btnSelect.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                inputHandler.setSelectPressed();
+                mpClient.sendDPadData(DPad.SELECT);
             }
         });
         btnSettings.addListener(new ClickListener() {
@@ -126,6 +124,7 @@ public class NavigationScreen extends ScaledScreen{
                 main.changeScreen(Commons.SETTINGS_SCREEN);
             }
         });
+
         table.debug();
         table.row();
         table.add(btnSettings).padBottom(50).colspan(5).size(200, 200).right();
@@ -189,6 +188,8 @@ public class NavigationScreen extends ScaledScreen{
 
     @Override
     public void dispose() {
-
+        font.dispose();
+        atlas.dispose();
+        skin.dispose();
     }
 }

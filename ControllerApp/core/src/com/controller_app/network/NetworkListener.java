@@ -5,9 +5,6 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
-/**
- *
- */
 public class NetworkListener extends Listener {
 
     private Client client;
@@ -15,7 +12,6 @@ public class NetworkListener extends Listener {
     private MPClient mpClient;
 
     private boolean start;
-
 
     // If you want to send a object, you need to send it with this client variable
     public void init(Client client, MPClient mpClient) {
@@ -64,7 +60,6 @@ public class NetworkListener extends Listener {
                     mpClient.sendPacket(start);
                 }
             }.start();
-
         }
 
     }

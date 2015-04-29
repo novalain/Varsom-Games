@@ -1,15 +1,14 @@
 package com.controller_app.helper;
 
-public class Commons {
+public interface Commons{
 
-    // A nice singleton
+    // A nice singleton for common constants. They are final -> unchangeable after initialization.
 
     // Screen dimensions
     public static final int WORLD_WIDTH = 1920;
     public static final int WORLD_HEIGHT = 1080;
 
-
-    // Screens
+    // Screen ID:s
     public static final int CONNECTION_SCREEN = 0;
     public static final int NAVIGATION_SCREEN = 1;
     public final static int SETTINGS_SCREEN = 2;

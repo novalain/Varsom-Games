@@ -1,6 +1,5 @@
 package com.controller_app.network;
 
-
 import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
@@ -9,9 +8,6 @@ import java.io.IOException;
 
 import com.controller_app.screens.ControllerScreen;
 
-/**
- *
- */
 public class MPClient {
     public Client client;
     public ControllerScreen controllerScreen;
@@ -31,7 +27,6 @@ public class MPClient {
         client.start();
 
         System.setProperty("java.net.preferIPv4Stack", "true");
-
     }
 
     // get IP from user input and connects
@@ -43,9 +38,7 @@ public class MPClient {
             e.printStackTrace();
             client.stop();
         }
-
     }
-
 
     // Register packets to a kryo
     private void register() {
@@ -59,6 +52,7 @@ public class MPClient {
         kryo.register(Packet.ShutDownPacket.class);
         kryo.register(Packet.PauseRequest.class);
         kryo.register(Packet.ExitRequest.class);
+        kryo.register(Packet.SendDPadData.class);
     }
 
     public void sendPacket(boolean send) {
@@ -94,8 +88,11 @@ public class MPClient {
         sendState.exit = p;
         client.sendTCP(sendState);
         Gdx.app.log("in MPClient", "sent Exit");
-
     }
 
-
+    public void sendDPadData(int i){
+        Packet.SendDPadData dp = new Packet.SendDPadData();
+        dp.data = i;
+        client.sendTCP(dp);
+    }
 }
