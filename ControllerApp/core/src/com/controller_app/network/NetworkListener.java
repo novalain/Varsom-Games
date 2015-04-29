@@ -13,7 +13,6 @@ import com.esotericsoftware.kryonet.Listener;
 public class NetworkListener extends Listener {
 
     private Client client;
-    private String message;
     private MPClient mpClient;
 
 
@@ -53,15 +52,7 @@ public class NetworkListener extends Listener {
             }
 
         }
-//        if (o instanceof Packet.Message) {
-//
-//            //The received message is saved in a string
-//            message = ((Packet.Message) o).message;
-//
-//            //Writes the message in the log
-//            //System.out.println("MESSAGE: " + message);
-//
-//        }
+
         if (o instanceof Packet.SendGameData) {
 
             start = ((Packet.SendGameData) o).send;

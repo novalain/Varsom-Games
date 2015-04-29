@@ -63,7 +63,6 @@ public class MPClient {
         // Register packets
         kryo.register(Packet.LoginRequest.class);
         kryo.register(Packet.LoginAnswer.class);
-        //kryo.register(Packet.Message.class);
         kryo.register(Packet.GamePacket.class);
         kryo.register(Packet.SendGameData.class);
         kryo.register(Packet.ShutDownPacket.class);

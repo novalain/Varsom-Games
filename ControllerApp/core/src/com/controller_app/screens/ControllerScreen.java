@@ -25,7 +25,7 @@ public class ControllerScreen extends ScaledScreen {
     private TextButton home;
     private TextButton buttonExit;
     private TextButton buttonPause;
-    private TextButton buttonUnpause;
+    private TextButton buttonPlay;
 
     // Menu stuff
     private Main main;
@@ -72,7 +72,7 @@ public class ControllerScreen extends ScaledScreen {
         stage.addActor(home);
         stage.addActor(buttonExit);
         stage.addActor(buttonPause);
-        stage.addActor(buttonUnpause);
+        stage.addActor(buttonPlay);
 
         mpc.controllerScreen = this;
     }
@@ -140,10 +140,10 @@ public class ControllerScreen extends ScaledScreen {
         buttonPause.setHeight(300);
         buttonPause.setPosition(Commons.WORLD_WIDTH * 0.2f, Commons.WORLD_HEIGHT * 0.2f + 300f);
 
-        buttonUnpause = new TextButton("Unpause", textButtonStyle);
-        buttonUnpause.setWidth(300);
-        buttonUnpause.setHeight(300);
-        buttonUnpause.setPosition(Commons.WORLD_WIDTH * 0.2f, Commons.WORLD_HEIGHT * 0.2f + 600f);
+        buttonPlay = new TextButton("Play", textButtonStyle);
+        buttonPlay.setWidth(300);
+        buttonPlay.setHeight(300);
+        buttonPlay.setPosition(Commons.WORLD_WIDTH * 0.2f, Commons.WORLD_HEIGHT * 0.2f + 600f);
 
         buttonExit = new TextButton("Exit", textButtonStyle);
         buttonExit.setWidth(300);
@@ -169,12 +169,12 @@ public class ControllerScreen extends ScaledScreen {
             }
         });
 
-        buttonUnpause.addListener(new ClickListener() {
+        buttonPlay.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 //send pause request to server with false
                 mpClient.sendPause(false);
-                Gdx.app.log("in ControllerScreen", "pressed Pause");
+                Gdx.app.log("in ControllerScreen", "pressed Play");
             }
         });
 
@@ -182,6 +182,7 @@ public class ControllerScreen extends ScaledScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
+                mpClient.sendExit(true);
                 Gdx.app.log("in ControllerScreen", "pressed Exit");
                 //Go back to main menu on the server
 
