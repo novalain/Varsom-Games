@@ -64,10 +64,6 @@ public class Main extends Game {
             case Commons.CONTROLLER_SCREEN:
                 Gdx.input.setInputProcessor(controllerScreen.getStage());
                 setScreen(controllerScreen);
-
-                break;
-            default:
-                break;
         }
     }
 
