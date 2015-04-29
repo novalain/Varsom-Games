@@ -15,6 +15,7 @@ import com.controller_app.Main;
 import com.controller_app.network.MPClient;
 
 import com.controller_app.helper.Commons;
+import com.controller_app.network.NetworkListener;
 
 /**
  *
@@ -154,6 +155,7 @@ public class ControllerScreen extends ScaledScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
+                main.getMenuScreen().disconnect();
                 main.changeScreen(1);
 
             }

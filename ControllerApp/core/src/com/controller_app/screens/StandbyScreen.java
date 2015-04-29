@@ -118,7 +118,7 @@ public class StandbyScreen extends ScaledScreen {
         stage.draw();
 
         //did we connect
-        if(NetworkListener.answer){
+        if(NetworkListener.connected){
             //check if the server asks the client to stand by
             if(NetworkListener.standby) {
                 Gdx.app.log("in standbyScreen", "standby");
