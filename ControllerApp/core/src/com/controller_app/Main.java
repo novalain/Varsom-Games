@@ -76,4 +76,8 @@ public class Main extends Game {
         }
     }
 
+    public MenuScreen getMenuScreen(){
+        return menuScreen;
+    }
+
 }

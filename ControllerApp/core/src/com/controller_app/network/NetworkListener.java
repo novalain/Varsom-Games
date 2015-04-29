@@ -17,7 +17,7 @@ public class NetworkListener extends Listener {
 
 
     private boolean start;
-    public static boolean answer = false;
+    public static boolean connected = false;
     public static boolean standby = false;
 
 
@@ -43,10 +43,10 @@ public class NetworkListener extends Listener {
     public void received(Connection c, Object o) {
         // checks for login answers from server
         if (o instanceof Packet.LoginAnswer) {
-            answer = ((Packet.LoginAnswer) o).accepted;
+            connected = ((Packet.LoginAnswer) o).accepted;
             standby = ((Packet.LoginAnswer) o).standby;
 
-            if (answer) {
+            if (connected) {
                 String mess = o.toString();
                 System.out.println("in NetworkListener: answer = true");
                 //System.out.println("Message: " + mess);

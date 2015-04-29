@@ -191,7 +191,7 @@ public class MenuScreen extends ScaledScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //Check if we have connected we should change to the controllerScreen
-        if(NetworkListener.answer)
+        if(NetworkListener.connected)
             main.changeScreen(2);
 
         // Sprite renders
@@ -232,5 +232,11 @@ public class MenuScreen extends ScaledScreen {
     // Connect to server
     public void connect() {
         mpClient.connectToServer(textField.getText());
+    }
+
+    // Disconnect from server
+    public void disconnect() {
+        mpClient.client.stop();
+        NetworkListener.connected = false;
     }
 }
