@@ -3,7 +3,9 @@ package com.varsom.system.games.car_game.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
@@ -13,7 +15,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.varsom.system.Commons;
+import com.varsom.system.screens.ScaledScreen;
 
 import java.util.ArrayList;
 
@@ -21,11 +26,10 @@ import com.varsom.system.VarsomSystem;
 import com.varsom.system.games.car_game.com.varsomgames.cargame.CarGame;
 import com.varsom.system.games.car_game.gameobjects.BackgroundObject;
 import com.varsom.system.network.NetworkListener;
-import com.varsom.system.screens.VarsomMenu;
+import com.varsom.system.screens.*;
 
-public class MainMenu implements Screen {
+public class MainMenu extends ScaledScreen {
 
-    private Stage stage = new Stage();
     private Table table = new Table();
 
     private final int WIDTH = Gdx.graphics.getWidth();
@@ -47,6 +51,9 @@ public class MainMenu implements Screen {
             buttonAbout = new TextButton("About", skin),
             buttonExit = new TextButton("Exit", skin);
     private Label title = new Label(CarGame.TITLE, skin);
+    private Label connectedClientNames;
+
+    private String clientNames;
 
     public MainMenu(VarsomSystem varsomSystem) {
         this.varsomSystem = varsomSystem;
@@ -112,8 +119,19 @@ public class MainMenu implements Screen {
         table.add(buttonAbout).size(400, 75).padBottom(20).row();
         table.add(buttonExit).size(400, 75).padBottom(20).row();
 
-        table.setFillParent(true);
+        BitmapFont fontType = new BitmapFont();
+        fontType.scale(2.f);
+        Label.LabelStyle style = new Label.LabelStyle(fontType, Color.WHITE);
+
+        //label that shows all connected players
+        clientNames = "Connected players:";
+        connectedClientNames = new Label(clientNames, style);
+        connectedClientNames.setPosition(0, Commons.WORLD_HEIGHT - connectedClientNames.getHeight());
+
+        table.setPosition(Commons.WORLD_WIDTH / 2 - table.getWidth() / 2, Commons.WORLD_HEIGHT / 2 - table.getHeight() / 2);
+
         stage.addActor(table);
+        stage.addActor(connectedClientNames);
 
         Gdx.input.setInputProcessor(stage);
     }
@@ -136,7 +154,9 @@ public class MainMenu implements Screen {
         Gdx.gl.glClearColor(122 / 255.0f, 209 / 255.0f, 255 / 255.0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        handleClients();
         drawBackground();
+
         stage.act();
         stage.draw();
     }
@@ -188,5 +208,19 @@ public class MainMenu implements Screen {
         }
 
         spriteBatch.end();
+    }
+
+    //make sure that all connected clients are displayed in a label
+    //if a new client is connected add it
+    //if a client is disconnected remove it
+    public void handleClients() {
+        clientNames = "Connected players:";
+
+        //update the client names label with clients connected at the moment
+        for (int i = 0; i < varsomSystem.getServer().getConnections().length; i++) {
+            //TODO right now the IP is displayed, it should be the name chosen by the player
+            clientNames += "\n" + varsomSystem.getServer().getConnections()[i].getRemoteAddressTCP().toString();
+        }
+        connectedClientNames.setText(clientNames);
     }
 }

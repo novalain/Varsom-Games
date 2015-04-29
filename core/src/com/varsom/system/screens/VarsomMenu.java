@@ -222,7 +222,7 @@ public class VarsomMenu extends ScaledScreen {
         //label that shows all connected players
         clientNames = "Connected players:";
         connectedClientNames = new Label(clientNames, style);
-        connectedClientNames.setPosition(0, 0);
+        connectedClientNames.setPosition(0, Commons.WORLD_HEIGHT - connectedClientNames.getHeight());
 
         // place the table in the middle of the screen.
         table.setPosition(Commons.WORLD_WIDTH / 2 - table.getWidth() / 2, Commons.WORLD_HEIGHT / 2 - table.getHeight() / 2);
