@@ -3,8 +3,8 @@ package com.controller_app;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.controller_app.helper.Commons;
+import com.controller_app.screens.ConnectionScreen;
 import com.controller_app.screens.ControllerScreen;
-import com.controller_app.screens.MenuScreen;
 
 import java.io.IOException;
 
@@ -14,7 +14,7 @@ import com.controller_app.screens.SettingsScreen;
 
 public class Main extends Game {
 
-    private MenuScreen menuScreen;
+    private ConnectionScreen connectionScreen;
     private NavigationScreen navScreen;
     private SettingsScreen settingsScreen;
     private ControllerScreen controllerScreen;
@@ -31,7 +31,7 @@ public class Main extends Game {
         }
 
         Gdx.app.log("check", "created app");
-        menuScreen = new MenuScreen(this, mpClient);
+        connectionScreen = new ConnectionScreen(this, mpClient);
         controllerScreen = new ControllerScreen(this, mpClient);
         navScreen = new NavigationScreen(this, mpClient);
         settingsScreen = new SettingsScreen(this);
@@ -44,8 +44,8 @@ public class Main extends Game {
     public void changeScreen(int s) {
         switch (s) {
             case Commons.CONNECTION_SCREEN:
-                Gdx.input.setInputProcessor(menuScreen.getStage());
-                setScreen(menuScreen);
+                Gdx.input.setInputProcessor(connectionScreen.getStage());
+                setScreen(connectionScreen);
 
                 break;
 
@@ -64,7 +64,7 @@ public class Main extends Game {
             case Commons.CONTROLLER_SCREEN:
                 Gdx.input.setInputProcessor(controllerScreen.getStage());
                 setScreen(controllerScreen);
-                menuScreen.connect();
+                connectionScreen.connect();
                 break;
             default:
                 break;

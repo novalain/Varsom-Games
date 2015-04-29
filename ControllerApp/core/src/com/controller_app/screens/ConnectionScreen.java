@@ -21,7 +21,7 @@ import com.controller_app.network.MPClient;
 
 import com.controller_app.helper.Commons;
 
-public class MenuScreen extends ScaledScreen {
+public class ConnectionScreen extends ScaledScreen {
 
     private TextButton buttonController;
     private TextButton buttonExit;
@@ -41,7 +41,7 @@ public class MenuScreen extends ScaledScreen {
     private FreeTypeFontGenerator generator;
     private SpriteBatch spriteBatch;
 
-    public MenuScreen(Main m, MPClient mpc) {
+    public ConnectionScreen(Main m, MPClient mpc) {
         super();
 
         spriteBatch = new SpriteBatch();

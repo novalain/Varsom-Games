@@ -119,10 +119,11 @@ public class NavigationScreen extends ScaledScreen{
                 inputHandler.setSelectPressed();
             }
         });
-        btnUp.addListener(new ClickListener() {
+        btnSettings.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.log("input", "settings pressed");
+                main.changeScreen(Commons.SETTINGS_SCREEN);
             }
         });
         table.debug();
