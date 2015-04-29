@@ -2,17 +2,20 @@ package com.controller_app;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.controller_app.network.NetworkListener;
 import com.controller_app.screens.ControllerScreen;
 import com.controller_app.screens.MenuScreen;
 
 import java.io.IOException;
 
 import com.controller_app.network.MPClient;
+import com.controller_app.screens.StandbyScreen;
 
 public class Main extends Game {
 
     private MenuScreen menuScreen;
     private ControllerScreen controllerScreen;
+    private StandbyScreen standbyScreen;
     private MPClient mpClient;
 
     @Override
@@ -27,6 +30,7 @@ public class Main extends Game {
         Gdx.app.log("check", "created app");
         menuScreen = new MenuScreen(this, mpClient);
         controllerScreen = new ControllerScreen(this, mpClient);
+        standbyScreen = new StandbyScreen(this, mpClient);
 
         mpClient.controllerScreen = controllerScreen;
 
@@ -36,15 +40,30 @@ public class Main extends Game {
     public void changeScreen(int s) {
         switch (s) {
             case 1:
+                //change to the menuScreen
                 Gdx.input.setInputProcessor(menuScreen.getStage());
                 setScreen(menuScreen);
-
                 break;
             case 2:
-                Gdx.input.setInputProcessor(controllerScreen.getStage());
-                Gdx.app.log("screen", "changed screen");
-                setScreen(controllerScreen);
-                menuScreen.connect();
+                //change to the controllerScreen if we shouldn't standby
+                //check if the server asks the client to stand by
+                if(NetworkListener.standby) {
+                    //change to standbyScreen
+                    Gdx.app.log("in Main", "standby");
+                    changeScreen(3);
+                }
+                else {
+                    //change to the controllerScreen
+                    Gdx.input.setInputProcessor(controllerScreen.getStage());
+                    Gdx.app.log("screen", "changed to controller");
+                    setScreen(controllerScreen);
+                }
+                break;
+            case 3:
+                //change to standbyScreen
+                Gdx.input.setInputProcessor(standbyScreen.getStage());
+                Gdx.app.log("screen", "changed to standby");
+                setScreen(standbyScreen);
                 break;
             default:
                 break;

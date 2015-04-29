@@ -1,7 +1,7 @@
 package com.controller_app.screens;
 
+
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Net;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -17,16 +17,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.controller_app.Main;
-
-import com.controller_app.network.MPClient;
-
 import com.controller_app.helper.Commons;
+import com.controller_app.network.MPClient;
 import com.controller_app.network.NetworkListener;
 
-public class MenuScreen extends ScaledScreen {
+public class StandbyScreen extends ScaledScreen {
 
-    private TextButton buttonController;
-    private TextButton buttonExit;
     private TextField textField;
 
     private Table table;
@@ -43,7 +39,7 @@ public class MenuScreen extends ScaledScreen {
     private FreeTypeFontGenerator generator;
     private SpriteBatch spriteBatch;
 
-    public MenuScreen(Main m, MPClient mpc) {
+    public StandbyScreen(Main m, MPClient mpc) {
         super();
 
         spriteBatch = new SpriteBatch();
@@ -70,7 +66,6 @@ public class MenuScreen extends ScaledScreen {
         generateUI();
     }
 
-
     void generateFonts() {
         generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -87,13 +82,7 @@ public class MenuScreen extends ScaledScreen {
     }
 
     void generateTextButtonStyle() {
-/*        textButtonStyle = new TextButton.TextButtonStyle();
-        textButtonStyle.font = font;
-        textButtonStyle.up = skin.getDrawable("up");
-        textButtonStyle.down = skin.getDrawable("down");
 
-        textButtonStyle.up = skin.getDrawable("up");
-        textButtonStyle.down = skin.getDrawable("down"); */
     }
 
     void generateUI() {
@@ -102,32 +91,11 @@ public class MenuScreen extends ScaledScreen {
         table = new Table(skin);
 
         Image image = new Image(logo);
-        buttonController = new TextButton("Connect Controller", skin);
-        buttonExit = new TextButton("Exit", skin);
-        textField = new TextField("", skin);
-
-        buttonController.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.log("in MenuScreen", "pressed controller");
-                //main.changeScreen(2);
-                connect();
-            }
-        });
-
-        buttonExit.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.exit();
-                dispose();
-            }
-        });
+        textField = new TextField("Standby", skin);
 
         // table.debug();
         table.add(image).padTop(10).padBottom(40).row();
         table.add(textField).size(800, 200).padBottom(20).row();
-        table.add(buttonController).size(800, 200).padBottom(100).row();
-        table.add(buttonExit).size(800, 200).row();
 
         table.setX(Commons.WORLD_WIDTH / 2 - table.getPrefWidth() / 2);
         table.setY(Commons.WORLD_HEIGHT / 2 - table.getPrefHeight() / 2);
@@ -147,17 +115,23 @@ public class MenuScreen extends ScaledScreen {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        //Check if we have connected we should change to the controllerScreen
-        if(NetworkListener.answer)
-            main.changeScreen(2);
-
-        // Sprite renders
-        spriteBatch.setProjectionMatrix(camera.combined);
-        spriteBatch.begin();
-
-        spriteBatch.end();
-
         stage.draw();
+
+        //did we connect
+        if(NetworkListener.answer){
+            //check if the server asks the client to stand by
+            if(NetworkListener.standby) {
+                Gdx.app.log("in standbyScreen", "standby");
+            }
+            else {
+                Gdx.app.log("in standbyScreen", "don't standby");
+                main.changeScreen(2);
+            }
+        }
+        else {
+            Gdx.app.log("in standbyScreen", "not connected");
+            main.changeScreen(1);
+        }
     }
 
     @Override
@@ -182,10 +156,5 @@ public class MenuScreen extends ScaledScreen {
     @Override
     public void dispose() {
 
-    }
-
-    // Connect to server
-    public void connect() {
-        mpClient.connectToServer(textField.getText());
     }
 }

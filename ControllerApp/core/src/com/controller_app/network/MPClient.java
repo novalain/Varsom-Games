@@ -58,6 +58,7 @@ public class MPClient {
         kryo.register(Packet.ShutDownPacket.class);
         kryo.register(Packet.PauseRequest.class);
         kryo.register(Packet.ExitRequest.class);
+        kryo.register(Packet.StandbyOrder.class);
     }
 
     public void sendPacket(boolean send) {
