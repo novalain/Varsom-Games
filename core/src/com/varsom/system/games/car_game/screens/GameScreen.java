@@ -45,7 +45,7 @@ public class GameScreen implements Screen{
     public static int level;
 
     // For countdown
-    private static float countDownTimer = 5.0f;
+    private static float countDownTimer = 1.0f;
     private static boolean paused = true;
 
     // Class variables
