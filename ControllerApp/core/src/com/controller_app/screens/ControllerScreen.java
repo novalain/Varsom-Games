@@ -23,6 +23,7 @@ import com.controller_app.network.NetworkListener;
 public class ControllerScreen extends ScaledScreen {
 
     private TextButton drive;
+    private TextButton buttonReverse;
     private TextButton home;
     private TextButton buttonExit;
     private TextButton buttonPause;
@@ -40,7 +41,7 @@ public class ControllerScreen extends ScaledScreen {
     private BitmapFont font;
 
 
-    private boolean drivePressed = false;
+    private boolean drivePressed = false, reversePressed = false;
 
     private float steeringSensitivity = 0.4f;
 
@@ -70,6 +71,7 @@ public class ControllerScreen extends ScaledScreen {
         generateUI();
 
         stage.addActor(drive);
+        stage.addActor(buttonReverse);
         stage.addActor(home);
         stage.addActor(buttonExit);
         stage.addActor(buttonPause);
@@ -128,8 +130,13 @@ public class ControllerScreen extends ScaledScreen {
     private void generateUI() {
         drive = new TextButton("Drive", textButtonStyle);
         drive.setWidth(1000);
-        drive.setHeight(1080);
+        drive.setHeight(900);
         drive.setPosition(Commons.WORLD_WIDTH * 0.5f, 0);
+
+        buttonReverse = new TextButton("Reverse", textButtonStyle);
+        buttonReverse.setWidth(1000);
+        buttonReverse.setHeight(180);
+        buttonReverse.setPosition(Commons.WORLD_WIDTH * 0.5f, 900);
 
         home = new TextButton("Menu", textButtonStyle);
         home.setWidth(300);
@@ -205,6 +212,20 @@ public class ControllerScreen extends ScaledScreen {
                 drivePressed = false;
             }
         });
+
+        buttonReverse.addListener(new ClickListener() {
+
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+
+                reversePressed = true;
+
+                return true;
+            }
+
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                reversePressed = false;
+            }
+        });
     }
 
     private void generateTextButtonStyle() {
@@ -218,6 +239,12 @@ public class ControllerScreen extends ScaledScreen {
     public boolean getDrive() {
 
         return drivePressed;
+    }
+
+    public boolean getReverse(){
+
+        return reversePressed;
+
     }
 
     // Calculates the rotation of the phone

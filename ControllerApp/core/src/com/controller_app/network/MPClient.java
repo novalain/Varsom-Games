@@ -79,7 +79,7 @@ public class MPClient {
 
             Packet.GamePacket packet = new Packet.GamePacket();
 
-            packet.message = controllerScreen.getDrive() + " " + controllerScreen.getRotation();
+            packet.message = controllerScreen.getDrive() + " " + controllerScreen.getReverse() + " " + controllerScreen.getRotation();
             client.sendUDP(packet);
 
             try {
