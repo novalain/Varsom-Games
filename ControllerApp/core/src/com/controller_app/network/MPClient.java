@@ -2,13 +2,12 @@ package com.controller_app.network;
 
 
 import com.badlogic.gdx.Gdx;
+import com.controller_app.screens.ControllerScreen;
 import com.controller_app.screens.MenuScreen;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 
 import java.io.IOException;
-
-import com.controller_app.screens.ControllerScreen;
 
 /**
  *
@@ -16,8 +15,10 @@ import com.controller_app.screens.ControllerScreen;
 public class MPClient {
     public Client client;
     public ControllerScreen controllerScreen;
+    private MulticastClient multicastClient;
     public MenuScreen menuScreen;
     public boolean correctIP;
+    private String serverIP;
 
 
     public MPClient() throws IOException {
@@ -44,9 +45,19 @@ public class MPClient {
     // get IP from user input and connects
     public void connectToServer(String ip) {
 
+        // Start a multicast reciver
         try {
-            client.connect(5000, ip, 54555, 64555);
+            multicastClient= new MulticastClient();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+        //Gets ip from multicast
+        serverIP = multicastClient.getSertverIP();
+        System.out.println("IP is " + serverIP);
+
+        try {
+            client.connect(5000, serverIP, 54555, 64555);
 
         } catch (IOException e) {
             e.printStackTrace();
