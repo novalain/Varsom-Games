@@ -7,6 +7,7 @@ import com.varsom.system.abstract_gameobjects.VarsomGame;
 import com.varsom.system.games.car_game.com.varsomgames.cargame.CarGame;
 import com.varsom.system.games.other_game.OtherGame;
 import com.varsom.system.network.MPServer;
+import com.varsom.system.network.MulticastServerThread;
 import com.varsom.system.screens.VarsomSplash;
 
 import java.io.IOException;
@@ -91,6 +92,12 @@ public class VarsomSystem extends /*ApplicationAdapter*/Game {
         Gdx.app.log("NETWORK", "NETWORK: IP-address is " + ipAddress);
         try {
             mpServer = new MPServer(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //Start a multicastsender
+        try {
+            new MulticastServerThread(serverIPAddress).start();
         } catch (IOException e) {
             e.printStackTrace();
         }
