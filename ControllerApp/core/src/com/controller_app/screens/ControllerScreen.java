@@ -22,9 +22,9 @@ import com.controller_app.network.NetworkListener;
  */
 public class ControllerScreen extends ScaledScreen {
 
-    private TextButton drive;
+    private TextButton buttonDrive;
     private TextButton buttonReverse;
-    private TextButton home;
+    private TextButton buttonHome;
     private TextButton buttonExit;
     private TextButton buttonPause;
     private TextButton buttonPlay;
@@ -70,9 +70,9 @@ public class ControllerScreen extends ScaledScreen {
         generateTextButtonStyle();
         generateUI();
 
-        stage.addActor(drive);
+        stage.addActor(buttonDrive);
         stage.addActor(buttonReverse);
-        stage.addActor(home);
+        stage.addActor(buttonHome);
         stage.addActor(buttonExit);
         stage.addActor(buttonPause);
         stage.addActor(buttonPlay);
@@ -128,20 +128,20 @@ public class ControllerScreen extends ScaledScreen {
     }
 
     private void generateUI() {
-        drive = new TextButton("Drive", textButtonStyle);
-        drive.setWidth(1000);
-        drive.setHeight(900);
-        drive.setPosition(Commons.WORLD_WIDTH * 0.5f, 0);
+        buttonDrive = new TextButton("Drive", textButtonStyle);
+        buttonDrive.setWidth(1000);
+        buttonDrive.setHeight(900);
+        buttonDrive.setPosition(Commons.WORLD_WIDTH * 0.5f, 0);
 
         buttonReverse = new TextButton("Reverse", textButtonStyle);
         buttonReverse.setWidth(1000);
         buttonReverse.setHeight(180);
         buttonReverse.setPosition(Commons.WORLD_WIDTH * 0.5f, 900);
 
-        home = new TextButton("Menu", textButtonStyle);
-        home.setWidth(300);
-        home.setHeight(300);
-        home.setPosition(Commons.WORLD_WIDTH * 0.2f, Commons.WORLD_HEIGHT * 0.2f);
+        buttonHome = new TextButton("Menu", textButtonStyle);
+        buttonHome.setWidth(300);
+        buttonHome.setHeight(300);
+        buttonHome.setPosition(Commons.WORLD_WIDTH * 0.2f, Commons.WORLD_HEIGHT * 0.2f);
 
         buttonPause = new TextButton("Pause", textButtonStyle);
         buttonPause.setWidth(300);
@@ -158,7 +158,7 @@ public class ControllerScreen extends ScaledScreen {
         buttonExit.setHeight(300);
         buttonExit.setPosition(Commons.WORLD_WIDTH * 0.5f - 150f, Commons.WORLD_HEIGHT - 300f);
 
-        home.addListener(new ClickListener() {
+        buttonHome.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
@@ -199,7 +199,7 @@ public class ControllerScreen extends ScaledScreen {
         });
 
 
-        drive.addListener(new ClickListener() {
+        buttonDrive.addListener(new ClickListener() {
 
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
@@ -219,6 +219,8 @@ public class ControllerScreen extends ScaledScreen {
 
                 reversePressed = true;
 
+                vibrate(200);
+
                 return true;
             }
 
@@ -226,6 +228,13 @@ public class ControllerScreen extends ScaledScreen {
                 reversePressed = false;
             }
         });
+    }
+
+    // Vibrate the controller where time is in milliseconds
+    public void vibrate(int time){
+
+        Gdx.input.vibrate(time);
+
     }
 
     private void generateTextButtonStyle() {
