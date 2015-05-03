@@ -15,6 +15,13 @@ public class BoxObstacle extends StaticObject {
     private Vector2 size;
     private float width, height;
 
+    /**
+     *
+     * @param inPosition
+     * @param angle
+     * @param inSize
+     * @param inWorld
+     */
     public BoxObstacle(Vector2 inPosition, float angle, Vector2 inSize,World inWorld) {
         super(inPosition, angle, new PolygonShape(), new Sprite(AssetLoader.wallTexture), inWorld);
         width = inSize.x;

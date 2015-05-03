@@ -121,7 +121,7 @@ public class GameScreen implements Screen{
         //TODO camera.position.set(leaderCar.getPointOnTrack(), 0);
         camera.position.set(leaderCar.getPointOnTrack(), 0);
         camera.rotate((float)Math.toDegrees(leaderCar.getRotationTrack())-180);
-        camera.zoom = 2.0f; // can be used to see the entire track
+        camera.zoom = 4.0f; // can be used to see the entire track
         camera.update();
 
         batch = new SpriteBatch();

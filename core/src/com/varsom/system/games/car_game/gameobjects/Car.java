@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.varsom.system.games.car_game.abstract_gameobjects.DynamicObject;
 import com.varsom.system.games.car_game.helpers.AssetLoader;
+import com.varsom.system.games.car_game.helpers.WaypointHandler;
 import com.varsom.system.games.car_game.screens.GameScreen;
 //import tracks.TestTrack;
 import com.varsom.system.games.car_game.tracks.Track;
@@ -21,7 +22,7 @@ public class Car extends DynamicObject {
     //public Body body;
     public float width, length, maxSteerAngle, maxSpeed, power;
     float wheelAngle;
-    private boolean userAccelerate = false;
+    private boolean userAccelerate = false, userBreaking = false;
     public boolean smoke = false;
     public int steer, accelerate;
     //public Vector2 position;
@@ -30,19 +31,22 @@ public class Car extends DynamicObject {
 
     private float accelX, accelY, tiltAngle, steeringSensitivity;
 
-    //For track tracking ;)
+/*    //For track tracking ;)
     private Vector2[] currentLinePos;
     private Vector2 pointOnTrack, currentLineVec;
     private float traveledDistance;
     private float delta; //distance traveled since last frame
     private int waypoint;
-    private Track track;
-    public Sprite pathTrackingSprite;
+
     private Vector2 lineToCar, lineToEnd;
     private float angleOfCurrentLine;
-
+*/
+    private Track track;
+    private WaypointHandler wpHandler;
+    private Vector2 pointOnTrack;
     //temp
     int ID;
+    public Sprite pathTrackingSprite;
 
     public Car(float width, float length, Vector2 position, World world, Sprite carSprite, float angle, float power, float maxSteerAngle, float maxSpeed,Track inTrack,int ID) {
         super(position, angle, new PolygonShape(), carSprite, world);
@@ -85,8 +89,7 @@ public class Car extends DynamicObject {
             sprite.setOriginCenter();
         }
 
-        //TODO Need to create a Class called Track. shouldn't be TestTrack below, should be something like GameScreen.getTrack().
-
+        /*
         currentLinePos = new Vector2[2];
         currentLineVec = new Vector2();
         lineToCar = new Vector2();
@@ -96,14 +99,19 @@ public class Car extends DynamicObject {
         pointOnTrack = getNewPointOnTrack();
         traveledDistance = subtractVector(pointOnTrack,currentLinePos[0]).len();
         waypoint = 1;
+        */
        /* angleOfCurrentLine = (float) Math.atan2(currentLinePos[1].y - pointOnTrack.y,
                 currentLinePos[0].x - pointOnTrack.x);
 */
-        angleOfCurrentLine = -angle;
+        //angleOfCurrentLine = -angle;
+
+        wpHandler = new WaypointHandler(track,position);
+        pointOnTrack = wpHandler.getProjectionPoint(position);
+
         pathTrackingSprite = new Sprite(AssetLoader.pathCircleTexture);
         pathTrackingSprite.setSize(length,length);
         pathTrackingSprite.setPosition(pointOnTrack.x, pointOnTrack.y);
-        pathTrackingSprite.setRotation((float)Math.toDegrees(angleOfCurrentLine));
+        pathTrackingSprite.setRotation((float)Math.toDegrees(wpHandler.getCurrentLineAngle()));
         pathTrackingSprite.setOriginCenter();
     }
 
@@ -152,9 +160,10 @@ public class Car extends DynamicObject {
     }
 
 
-    public void handleDataFromClients(boolean isDriving, float angle){
+    public void handleDataFromClients(boolean isDriving, boolean isBreaking, float angle){
 
        userAccelerate = isDriving;
+       userBreaking = isBreaking;
        tiltAngle = angle;
 
     }
@@ -198,7 +207,7 @@ public class Car extends DynamicObject {
         Vector2 baseVector; //vector pointing in the direction force will be applied to a wheel ; relative to the wheel.
 
         //if accelerator is pressed down and speed limit has not been reached, go forwards
-        if ((userAccelerate == true) && (this.getSpeedKMH() < this.maxSpeed)) {
+        if (userAccelerate && (this.getSpeedKMH() < this.maxSpeed)) {
 
             // Add smoke effect for low velocities
             if (this.getSpeedKMH() < 10.f)
@@ -208,6 +217,18 @@ public class Car extends DynamicObject {
                 smoke = false;
 
             baseVector = new Vector2(0, -0.05f);
+        }
+
+        else if(userBreaking){
+
+            if (this.getLocalVelocity().y < 0) {
+                baseVector = new Vector2(0f, 0.5f);
+            }
+
+            //going in reverse - less force
+            else
+                baseVector = new Vector2(0f, 0.03f);
+
         }
         /*
         else if (this.accelerate == GameScreen.ACC_BRAKE) {
@@ -239,19 +260,20 @@ public class Car extends DynamicObject {
         }
 
 */
+        // Slow down if not accelerating
         else if (!userAccelerate) {
 
-            //slow down if not accelerating
             baseVector = new Vector2(0, 0);
             if (this.getSpeedKMH() < 7)
                 this.setSpeed(0);
             else if (this.getLocalVelocity().y < 0)
-                baseVector = new Vector2(0, 0.05f);
+                baseVector = new Vector2(0, 0.03f);
             else if (this.getLocalVelocity().y > 0)
-                baseVector = new Vector2(0, -0.05f);
+                baseVector = new Vector2(0, -0.03f);
             smoke = false;
         }
 
+        // Max speed reached, just keep going
         else {
             baseVector = new Vector2(0, 0);
             smoke = false;
@@ -274,7 +296,7 @@ public class Car extends DynamicObject {
         //delta = (new Vector2(currentLinePos[1].x-getNewPointOnTrack().x,currentLinePos[1].y-getNewPointOnTrack().y)).len();
 //        delta = (new Vector2(pointOnTrack.x-getNewPointOnTrack().x,pointOnTrack.y-getNewPointOnTrack().y)).len(); //the point's moved distance since last update
 
-        delta = subtractVector(pointOnTrack,getNewPointOnTrack()).len(); //the point's translated distance since last update
+        /*delta = subtractVector(pointOnTrack,getNewPointOnTrack()).len(); //the point's translated distance since last update
 
         if(waypointIsReached()){
             delta = getVectorBetweenPoints(pointOnTrack,currentLinePos[1]).len();
@@ -315,8 +337,11 @@ public class Car extends DynamicObject {
 
         angleOfCurrentLine = (float) Math.atan2(currentLinePos[1].y - pointOnTrack.y,
                 currentLinePos[1].x - pointOnTrack.x);
+                */
+
+        wpHandler.getProjectionPoint(getPosition());
         pathTrackingSprite.setPosition(pointOnTrack.x, pointOnTrack.y);
-        pathTrackingSprite.setRotation((float)Math.toDegrees(angleOfCurrentLine));
+        pathTrackingSprite.setRotation((float)Math.toDegrees(wpHandler.getCurrentLineAngle()));
         pathTrackingSprite.setOriginCenter();
         //Gdx.app.log("CarUpdate","pointOnTrack = " + pointOnTrack + "\tangleOfCurrentLine = " + angleOfCurrentLine + "\n");
         //Gdx.app.log("CarUpdate","waypoint = " + waypoint + "\tNumOfWPs = " + track.getPath().size + "\n");
@@ -340,7 +365,7 @@ public class Car extends DynamicObject {
     /**
      * Returns a new Vector2
      */
-    private Vector2 getNewPointOnTrack() {
+//    private Vector2 getNewPointOnTrack() {
 //        Vector2 lineToCar2 = (new Vector2(getPosition())).sub(currentLinePos[0]);
 //        lineToCar = new Vector2(getPosition().x-currentLinePos[0].x,getPosition().y-currentLinePos[0].y); //Vector from the currentLinePos's start point to the car's position
 //        if(lineToCar.len() != lineToCar2.len()){
@@ -373,6 +398,7 @@ public class Car extends DynamicObject {
 //        }
 //        return temp;
         //Vector projection.. project
+        /*
         Vector2 vecToCar = getVectorBetweenPoints(currentLinePos[0], getPosition());
         Vector2 newPoint = new Vector2(scaleVec( currentLineVec, dotProd(vecToCar,currentLineVec)/dotProd(currentLineVec,currentLineVec)) );
         newPoint.x += currentLinePos[0].x;
@@ -380,17 +406,18 @@ public class Car extends DynamicObject {
         if (newPoint.x == Float.NaN || newPoint.y == Float.NaN || currentLinePos[0].x==Float.NaN || currentLinePos[0].y == Float.NaN) {
             Gdx.app.log("FUUUUDGE","ERROR");
         }
-        return newPoint;
-    }
+
+        return newPoint;*/
+//    }
 
     public Vector2 getPointOnTrack() {
         return pointOnTrack;
     }
     public float getRotationTrack() {
-        return angleOfCurrentLine;
+        return wpHandler.getCurrentLineAngle();
     }
 
-    private boolean waypointIsReached(){
+   /* private boolean waypointIsReached(){
 
 //        System.out.println("XXXXXXXXX " + Math.abs(currentLinePos[1].x - getNewPointOnTrack().x));
   //      System.out.println("YYYYYYYYY " + Math.abs(currentLinePos[1].y - getNewPointOnTrack().y));
@@ -405,7 +432,7 @@ public class Car extends DynamicObject {
         //Old
        // return ((Math.abs(currentLinePos[1].x) - Math.abs(pointOnTrack.x)) <= delta && (Math.abs(currentLinePos[1].y) - Math.abs(pointOnTrack.y)) <= delta);
     }
-
+*/
     // Sets speed on car based on value from color on backgroundMask (black or white),
     //TODO THIS FUNCTIONS NEEDS OPTIMIZING
     public void setCarSpeed(){
@@ -419,7 +446,7 @@ public class Car extends DynamicObject {
     }
 
     public float getTraveledDistance(){
-        return traveledDistance;
+        return wpHandler.getTraveledDistance();
     }
 
     private Vector2 getVectorBetweenPoints(Vector2 startP, Vector2 endP){
