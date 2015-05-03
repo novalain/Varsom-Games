@@ -144,7 +144,9 @@ public class VarsomMenu extends ScaledScreen {
                                     @Override
                                     public void run() {
                                         // ((Game) Gdx.app.getApplicationListener()).setScreen(new VarsomMenu(varsomSystem));
-                                        VarsomGame OtherGame = new OtherGame((Game) Gdx.app.getApplicationListener());
+                                        VarsomGame carGame = new CarGame((VarsomSystem) Gdx.app.getApplicationListener());
+                                        varsomSystem.setActiveGame(carGame);
+                                        //VarsomGame OtherGame = new OtherGame((Game) Gdx.app.getApplicationListener());
                                         Gdx.app.log("clicked", "pressed OtherGame.");
                                         hide();
                                     }
@@ -241,8 +243,19 @@ public class VarsomMenu extends ScaledScreen {
 
         imagePlayOtherGame.setScale(1.52f);
 
-        images.elementAt(currentButton - 1).addAction(Actions.sequence(Actions.alpha(0.3f, 0.2f)));
-        images.elementAt(currentButton + 1).addAction(Actions.sequence(Actions.alpha(0.3f, 0.2f)));
+        for(int i = 0; i < images.size(); i++){
+            if(i!=currentButton) {
+                images.elementAt(i).addAction(Actions.sequence(Actions.alpha(0.3f, 0.2f)));
+            }
+        }
+       /* if(currentButton == 1 ) {
+            images.elementAt(currentButton - 1).addAction(Actions.sequence(Actions.alpha(0.3f, 0.2f)));
+            images.elementAt(currentButton + 1).addAction(Actions.sequence(Actions.alpha(0.3f, 0.2f)));
+        }
+        else if (currentButton == 0) {
+            images.elementAt(currentButton + 1).addAction(Actions.sequence(Actions.alpha(0.3f, 0.2f)));
+            images.elementAt(currentButton + 2).addAction(Actions.sequence(Actions.alpha(0.3f, 0.2f)));
+        }*/
 
     }
 

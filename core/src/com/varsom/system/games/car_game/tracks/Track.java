@@ -170,14 +170,10 @@ public abstract class Track {
         float posHorizontal = (bgSprite.getWidth()+wallThickness)/2f;
 
         //Create walls surrounding the background sprite
-        BoxObstacle upperWall = new BoxObstacle(new Vector2(0,posVertical),0
-                ,new Vector2(bgSprite.getWidth()+2*wallThickness,wallThickness), world);
-        BoxObstacle lowerWall = new BoxObstacle(new Vector2(0,-posVertical),0
-                ,new Vector2(bgSprite.getWidth()+2*wallThickness,wallThickness), world);
-        BoxObstacle leftWall = new BoxObstacle(new Vector2(-posHorizontal,0),0
-                ,new Vector2(wallThickness,bgSprite.getHeight()), world);
-        BoxObstacle rightWall = new BoxObstacle(new Vector2(posHorizontal,0),0
-                ,new Vector2(wallThickness,bgSprite.getHeight()), world);
+        BoxObstacle upperWall = new BoxObstacle(new Vector2(0,posVertical), 0,new Vector2(bgSprite.getWidth()+2*wallThickness,wallThickness), world);
+        BoxObstacle lowerWall = new BoxObstacle(new Vector2(0,-posVertical),0,new Vector2(bgSprite.getWidth()+2*wallThickness,wallThickness), world);
+        BoxObstacle leftWall  = new BoxObstacle(new Vector2(-posHorizontal,0),(float) Math.PI/2,new Vector2(bgSprite.getHeight(),wallThickness), world);
+        BoxObstacle rightWall = new BoxObstacle(new Vector2(posHorizontal,0) ,(float) Math.PI/2,new Vector2(bgSprite.getHeight(),wallThickness), world);
 
         //Place walls in the backLayer
         backLayer.addElement(upperWall.getBody());
@@ -212,7 +208,7 @@ public abstract class Track {
 
         // Set shape renderer to be drawn in world, not on screen
         shapeRenderer.setProjectionMatrix(camera.combined);
-        drawWayPoints();
+        //drawWayPoints();
 
         /*
         TextureRegion txtRegion = carAnimation.getKeyFrame(elapsedTime, true);
@@ -275,4 +271,6 @@ public abstract class Track {
         return leaderCar;
     }
 }
+
+
 

@@ -116,12 +116,10 @@ public class GameScreen implements Screen{
         // Init camera
         //TODO /100 should probably be changed
         camera = new OrthographicCamera(SCREEN_WIDTH/100,SCREEN_HEIGHT/100);
-        //camera.rotate(-90);
-//        camera.position.set(new Vector2(moveSprite.getX(),moveSprite.getY()), 0);
         //TODO camera.position.set(leaderCar.getPointOnTrack(), 0);
         camera.position.set(leaderCar.getPointOnTrack(), 0);
         camera.rotate((float)Math.toDegrees(leaderCar.getRotationTrack())-180);
-        camera.zoom = 4.0f; // can be used to see the entire track
+        camera.zoom = 1.75f; // can be used to see the entire track
         camera.update();
 
         batch = new SpriteBatch();

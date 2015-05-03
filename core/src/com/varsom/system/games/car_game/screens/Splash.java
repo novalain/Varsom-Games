@@ -37,7 +37,7 @@ public class Splash implements Screen {
         splashImage.setY( (Gdx.graphics.getHeight()-splashImage.getHeight())/2);
         stage = new Stage();
         stage.addActor(splashImage); //adds the image as an actor to the stage
-        splashImage.addAction(Actions.sequence(Actions.alpha(0), Actions.fadeIn(0.5f), Actions.delay(1), Actions.run(new Runnable() {
+        splashImage.addAction(Actions.sequence(Actions.alpha(0), Actions.fadeIn(0.0f), Actions.delay(0), Actions.run(new Runnable() {
             @Override
             public void run() {
                 ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu(varsomSystem));

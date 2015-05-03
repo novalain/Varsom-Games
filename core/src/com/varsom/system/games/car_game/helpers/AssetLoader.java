@@ -32,16 +32,16 @@ public class AssetLoader {
         pathCircleTexture = new Texture(Gdx.files.internal("car_game_assets/img/colorwheel.png"));
         // loading texture for car
         carTexture = new Texture(Gdx.files.internal("car_game_assets/img/ambulance_animation/1c.png"));
-        carTexture1 = new Texture(Gdx.files.internal("car_game_assets/img/car2.png"));
+        carTexture1 = new Texture(Gdx.files.internal("car_game_assets/img/car.png"));
         carTexture2 = new Texture(Gdx.files.internal("car_game_assets/img/car2.png"));
         //carTexture = new Texture(Gdx.files.internal("car_game_assets/img/car.png"));
         //carTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
         tireTrackTexture = new Texture(Gdx.files.internal("car_game_assets/img/tire-tracks.jpg"));
-        tireTrackTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        //tireTrackTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
         tireObstacleTexture = new Texture("car_game_assets/img/tire.png");
-        wallTexture = new Texture("car_game_assets/img/blackbox.jpg");
+        wallTexture = new Texture("car_game_assets/img/wall.jpg");
 
         // Guessing bg is background
         bgTexture = new Texture(Gdx.files.internal("car_game_assets/img/temp_background.png"));

@@ -57,10 +57,17 @@ public class Track1 extends Track{
         TireObstacle tire3 = new TireObstacle(new Vector2(-13.0f,  0.2f), 0, 0.5f, world);
         TireObstacle tire4 = new TireObstacle(new Vector2( 13.0f,  0.2f), 0, 0.5f, world);
 
-        BoxObstacle bO1 = new BoxObstacle(new Vector2(-hrf*8.5f/bgScale,-hrf*116.7f/bgScale),0
-                ,new Vector2(hrf*445/bgScale,hrf*15/bgScale), world);
-        BoxObstacle bO2 = new BoxObstacle(new Vector2(-hrf*30.50f/bgScale,hrf*124.7f/bgScale),0
-                ,new Vector2(hrf*405/bgScale,hrf*6/bgScale), world);
+        //HORIZONTAL WALLS
+        BoxObstacle bO0 = new BoxObstacle(new Vector2(-12.12f,-11.1f),0,new Vector2(22.25f,0.5f), world);
+        BoxObstacle bO1 = new BoxObstacle(new Vector2(10.12f,-11.67f),0,new Vector2(22.25f,0.5f), world);
+        BoxObstacle bO2 = new BoxObstacle(new Vector2(-3.05f,12.47f),0,new Vector2(40.5f,0.5f), world);
+        BoxObstacle bO3 = new BoxObstacle(new Vector2(26.0f,3.7f),  0, new Vector2(20f,0.5f), world);
+        BoxObstacle bO4 = new BoxObstacle(new Vector2(-22.7f,1.4f),0, new Vector2(27.0f,0.5f), world);
+        //VERTICAL WALLS
+        BoxObstacle bO5 = new BoxObstacle(new Vector2(-1.2f,0.4f), (float) Math.PI/2, new Vector2(24.5f,0.5f), world);
+        BoxObstacle bO6 = new BoxObstacle(new Vector2(21.2f,-8.3f),(float) Math.PI/2, new Vector2(7.3f,0.5f), world);
+        //ANGELED WALLS
+        BoxObstacle bO7 = new BoxObstacle(new Vector2(11.9f,-0.2f),(float) Math.toRadians(43),new Vector2(11.8f,0.5f), world);
 
         //Add all newly made obstacles to a layer
         backLayer.addElement(tire.getBody());
@@ -68,8 +75,14 @@ public class Track1 extends Track{
         backLayer.addElement(tire3.getBody());
         backLayer.addElement(tire4.getBody());
 
-        frontLayer.addElement(bO1.getBody());
+        backLayer.addElement(bO0.getBody());
+        backLayer.addElement(bO1.getBody());
         backLayer.addElement(bO2.getBody());
+        backLayer.addElement(bO3.getBody());
+        backLayer.addElement(bO4.getBody());
+        backLayer.addElement(bO5.getBody());
+        backLayer.addElement(bO6.getBody());
+        backLayer.addElement(bO7.getBody());
     }
 
     private void createCars() {
@@ -113,10 +126,10 @@ public class Track1 extends Track{
 
             cars[i] = new Car(carWidth, carLength, hardcodedSpawnPoints()[i], world, carSprite,
                 spawnPosRotation, carPower, maxSteerAngle, maxSpeed,this,i);
-            sprites.addElement(cars[i].pathTrackingSprite);
+            //sprites.addElement(cars[i].pathTrackingSprite);
 
             //TODO fix input
-             Gdx.input.setInputProcessor(new InputHandler(cars[i]));
+             //Gdx.input.setInputProcessor(new InputHandler(cars[i]));
 
             //add car to the frontLayer and all its wheels to the backLayer
             for(Wheel tempWheel : cars[i].wheels) {
@@ -168,7 +181,7 @@ public class Track1 extends Track{
             new Vector2( -95*hrf, -131*hrf),
             new Vector2(-180*hrf, -131*hrf),
             new Vector2(-220*hrf, -131*hrf),
-            new Vector2(-245*hrf, -111*hrf),
+            new Vector2(-230*hrf, -111*hrf),
             new Vector2(-220*hrf,  -90*hrf),
             new Vector2(-110*hrf,  -30*hrf),
             new Vector2( -85*hrf,   11*hrf),
@@ -180,7 +193,7 @@ public class Track1 extends Track{
             new Vector2( 172*hrf,  127*hrf),
             new Vector2( 158*hrf,   52*hrf),
             new Vector2(  73*hrf,  -30*hrf),
-            new Vector2(  64*hrf,  -43*hrf),
+            new Vector2(  73*hrf,  -43*hrf),
             new Vector2(  85*hrf,  -47*hrf),
             new Vector2( 216*hrf,  -40*hrf),
             new Vector2( 239*hrf,  -60*hrf),
