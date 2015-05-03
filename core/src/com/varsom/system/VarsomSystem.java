@@ -6,8 +6,8 @@ import com.esotericsoftware.kryonet.Server;
 import com.varsom.system.abstract_gameobjects.VarsomGame;
 import com.varsom.system.games.car_game.com.varsomgames.cargame.CarGame;
 import com.varsom.system.games.other_game.OtherGame;
+import com.varsom.system.network.BroadcastServerThread;
 import com.varsom.system.network.MPServer;
-import com.varsom.system.network.MulticastServerThread;
 import com.varsom.system.screens.VarsomSplash;
 
 import java.io.IOException;
@@ -72,8 +72,7 @@ public class VarsomSystem extends /*ApplicationAdapter*/Game {
             for(NetworkInterface ni : Collections.list(interfaces)){
                 for(InetAddress address : Collections.list(ni.getInetAddresses()))
                 {
-
-                    if(address instanceof Inet4Address && !address.isLoopbackAddress()){ //&& !address.isSiteLocalAddress()){
+                    if(address instanceof Inet4Address && !address.isLoopbackAddress() && address.isSiteLocalAddress()){ //&& !address.isSiteLocalAddress()){
                         addresses.add(address.getHostAddress());
                     }
                 }
@@ -95,9 +94,9 @@ public class VarsomSystem extends /*ApplicationAdapter*/Game {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //Start a multicastsender
+        //Broadcast sender
         try {
-            new MulticastServerThread(serverIPAddress).start();
+            new BroadcastServerThread(serverIPAddress).start();
         } catch (IOException e) {
             e.printStackTrace();
         }

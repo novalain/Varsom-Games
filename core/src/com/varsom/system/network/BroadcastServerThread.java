@@ -9,31 +9,31 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
-public class MulticastServerThread extends Thread {
+public class BroadcastServerThread extends Thread {
 
     private String ip;
 
     private long FIVE_SECONDS = 5000;
-    public DatagramSocket socket = null;
+    public DatagramSocket socket = new DatagramSocket(4446);
 
-    public MulticastServerThread(String serverip) throws IOException {
-        //super("MulticastServerThread");
+    public BroadcastServerThread(String serverip) throws IOException {
         ip = serverip;
 
-        socket = new DatagramSocket(4446);
+        socket = new DatagramSocket(4447);
     }
 
     public void run() {
 
         byte[] buf = new byte[256];
-
         buf = ip.getBytes();
 
         for (int i = 0; i < 50; i++) {
             try {
                 // send it
-                InetAddress group = InetAddress.getByName("230.0.0.1");
-                DatagramPacket packet = new DatagramPacket(buf, buf.length, group, 4447);
+                //InetAddress group = InetAddress.getByName("224.0.0.0");
+                InetAddress group = InetAddress.getByName("192.168.1.255");
+                DatagramPacket packet = new DatagramPacket(buf, buf.length, group, 4446);
+                socket.setBroadcast(true);
                 socket.send(packet);
 
                 // sleep for a while
