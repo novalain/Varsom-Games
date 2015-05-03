@@ -6,18 +6,17 @@ package com.controller_app.network;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
-import java.net.InetAddress;
 import java.net.MulticastSocket;
 
-public class MulticastClient {
+public class BroadcastClient {
 
     public String IP;
 
-    public MulticastClient() throws IOException {
+    public BroadcastClient() throws IOException {
 
-        MulticastSocket socket = new MulticastSocket(4447);
-        InetAddress address = InetAddress.getByName("230.0.0.1");
-        socket.joinGroup(address);
+        MulticastSocket socket = new MulticastSocket(4446);
+        //InetAddress address = InetAddress.getByName("230.0.0.1");
+        //socket.joinGroup(address);
 
         DatagramPacket packet = null;
 
@@ -29,7 +28,7 @@ public class MulticastClient {
             IP = new String(packet.getData(), 0, packet.getLength());
         }
 
-        socket.leaveGroup(address);
+        //socket.leaveGroup(address);
         socket.close();
     }
 

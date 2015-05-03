@@ -15,7 +15,7 @@ import java.io.IOException;
 public class MPClient {
     public Client client;
     public ControllerScreen controllerScreen;
-    private MulticastClient multicastClient;
+    private BroadcastClient broadcastClient;
     public MenuScreen menuScreen;
     public boolean correctIP;
     private String serverIP;
@@ -47,13 +47,13 @@ public class MPClient {
 
         // Start a multicast reciver
         try {
-            multicastClient= new MulticastClient();
+            broadcastClient= new BroadcastClient();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         //Gets ip from multicast
-        serverIP = multicastClient.getSertverIP();
+        serverIP = broadcastClient.getSertverIP();
         System.out.println("IP is " + serverIP);
 
         try {
