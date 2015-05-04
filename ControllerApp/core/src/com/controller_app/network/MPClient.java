@@ -1,23 +1,20 @@
 package com.controller_app.network;
 
-
 import com.badlogic.gdx.Gdx;
-import com.controller_app.screens.MenuScreen;
+import com.controller_app.screens.ConnectionScreen;
+import com.controller_app.screens.ControllerScreen;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 
 import java.io.IOException;
 
-import com.controller_app.screens.ControllerScreen;
-
-/**
- *
- */
 public class MPClient {
     public Client client;
     public ControllerScreen controllerScreen;
-    public MenuScreen menuScreen;
+    private BroadcastClient broadcastClient;
     public boolean correctIP;
+    private String serverIP;
+    private Thread networkThread;
 
 
     public MPClient() throws IOException {
@@ -27,7 +24,8 @@ public class MPClient {
         register();
 
         NetworkListener nl = new NetworkListener();
-
+        networkThread = newThread();
+        //newThread(networkThread);
 
         // Initialise variables (not sure if it needed, maybe later)
 
@@ -37,25 +35,36 @@ public class MPClient {
         client.start();
 
         System.setProperty("java.net.preferIPv4Stack", "true");
-
-
     }
 
     // get IP from user input and connects
     public void connectToServer(String ip) {
 
-        try {
-            client.connect(5000, ip, 54555, 64555);
-
-
+        // Start a multicast reciver
+        /*try {
+            broadcastClient = new BroadcastClient();
         } catch (IOException e) {
             e.printStackTrace();
-            client.stop();
-            //menuScreen.errorMessage(2);
         }
 
-    }
+        //Gets ip from multicast
+        serverIP = broadcastClient.getServerIP();
 
+        System.out.print("\nIP is " + serverIP + "\n");*/
+
+        serverIP = ip;
+        if (serverIP != null && !serverIP.isEmpty()) {
+
+            try {
+                client.connect(5000, serverIP.trim(), 54555, 64555);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                client.stop();
+                // ConnectionScreen.errorMessage(2);
+            }
+        }
+    }
 
     // Register packets to a kryo
     private void register() {
@@ -68,27 +77,37 @@ public class MPClient {
         kryo.register(Packet.ShutDownPacket.class);
         kryo.register(Packet.PauseRequest.class);
         kryo.register(Packet.ExitRequest.class);
+        kryo.register(Packet.SendDPadData.class);
         kryo.register(Packet.StandbyOrder.class);
     }
 
     public void sendPacket(boolean send) {
 
-        final int TICKS_PER_SECOND = 30;
-        System.out.println(send);
-        while (send && client.isConnected()) {
+        System.out.println("Sending device data: " + send);
+        if(!networkThread.isAlive()){
+            Gdx.app.log("SEND PACKETS", "THREAD WASN'T ALIVE");
+            if(send) {
+                Gdx.app.log("SEND PACKETS", "STARTING THREAD");
+                networkThread.start();
+            }
+            else if (!send) {
 
-            Packet.GamePacket packet = new Packet.GamePacket();
-
-            packet.message = controllerScreen.getDrive() + " " + controllerScreen.getRotation();
-            client.sendUDP(packet);
-
-            try {
-                Thread.sleep(1000 / TICKS_PER_SECOND);
-            } catch (InterruptedException ex) {
-                Thread.currentThread().interrupt();
-                break;
             }
         }
+        else{
+            Gdx.app.log("SEND PACKETS", "THREAD IS ALIVE");
+            if(!send) {
+                Gdx.app.log("SEND PACKETS", "INTERUPTING THREAD");
+                networkThread.interrupt();
+            }
+            else{
+                Gdx.app.log("SEND PACKETS", "RESTARTING THREAD");
+                //newThread(networkThread);
+                networkThread = newThread();
+            }
+
+        }
+
     }
 
     //send a boolean for pause state
@@ -104,15 +123,41 @@ public class MPClient {
         sendState.exit = p;
         client.sendTCP(sendState);
         Gdx.app.log("in MPClient", "sent Exit");
+    }
 
+    public void sendDPadData(int i){
+        Packet.SendDPadData dp = new Packet.SendDPadData();
+        dp.data = i;
+        client.sendTCP(dp);
+        Gdx.app.log("in MPClient", "sent dPadInfo");
     }
 
     public void errorHandler(){
-
-
-        menuScreen.errorMessage(1);
-
+      //  ConnectionScreen.errorMessage(1);
     }
 
+    public Thread newThread(){
+        Thread nT = new Thread(new Runnable() {
 
+            final int TICKS_PER_SECOND = 30;
+
+            public void run() {
+
+                Gdx.app.log("Thread", "NEW THREAD IS RUNNING");
+                try {
+                    while (!Thread.currentThread().isInterrupted()) {
+                        Thread.sleep(1000 /  TICKS_PER_SECOND );
+                        Gdx.app.log("Thread", "DATA IS BEING SENT!!");
+                        Packet.GamePacket packet = new Packet.GamePacket();
+
+                        packet.message = controllerScreen.getDrive() + " " + controllerScreen.getReverse() + " " + controllerScreen.getRotation();
+                        client.sendUDP(packet);
+                    }
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        });
+        return nT;
+    }
 }

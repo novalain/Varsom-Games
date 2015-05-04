@@ -22,10 +22,13 @@ import com.controller_app.network.NetworkListener;
  */
 public class ControllerScreen extends ScaledScreen {
 
-    private TextButton drive;
-    private TextButton home;
+    private TextButton buttonDrive;
+    private TextButton buttonReverse;
+    private TextButton buttonHome;
     private TextButton buttonExit;
     private TextButton buttonPause;
+    private TextButton buttonUnpause;
+    private TextButton btnName;
     private TextButton buttonPlay;
 
     // Menu stuff
@@ -40,11 +43,12 @@ public class ControllerScreen extends ScaledScreen {
     private BitmapFont font;
 
 
-    private boolean drivePressed = false;
+    private boolean drivePressed = false, reversePressed = false;
 
     private float steeringSensitivity = 0.4f;
 
     private String packet;
+    private String playerName = "";
 
     private MPClient mpClient;
 
@@ -65,14 +69,19 @@ public class ControllerScreen extends ScaledScreen {
         buttonAtlas = new TextureAtlas(Gdx.files.internal("skins/menuSkin.pack"));
         skin.addRegions(buttonAtlas);
 
+        //playerName = main.getSettingsScreen().getPlayerName();
+        //main.getClient().setName(playerName);
+
         generateFonts();
         generateTextButtonStyle();
         generateUI();
 
-        stage.addActor(drive);
-        stage.addActor(home);
+        stage.addActor(buttonDrive);
+        stage.addActor(buttonReverse);
+        stage.addActor(buttonHome);
         stage.addActor(buttonExit);
         stage.addActor(buttonPause);
+        stage.addActor(btnName);
         stage.addActor(buttonPlay);
 
         mpc.controllerScreen = this;
@@ -86,6 +95,8 @@ public class ControllerScreen extends ScaledScreen {
     public void render(float delta) {
         Gdx.gl.glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        printName();
 
         stage.draw();
     }
@@ -126,15 +137,20 @@ public class ControllerScreen extends ScaledScreen {
     }
 
     private void generateUI() {
-        drive = new TextButton("Drive", textButtonStyle);
-        drive.setWidth(1000);
-        drive.setHeight(1080);
-        drive.setPosition(Commons.WORLD_WIDTH * 0.5f, 0);
+        buttonDrive = new TextButton("Drive", textButtonStyle);
+        buttonDrive.setWidth(1000);
+        buttonDrive.setHeight(900);
+        buttonDrive.setPosition(Commons.WORLD_WIDTH * 0.5f, 0);
 
-        home = new TextButton("Menu", textButtonStyle);
-        home.setWidth(300);
-        home.setHeight(300);
-        home.setPosition(Commons.WORLD_WIDTH * 0.2f, Commons.WORLD_HEIGHT * 0.2f);
+        buttonReverse = new TextButton("Reverse", textButtonStyle);
+        buttonReverse.setWidth(1000);
+        buttonReverse.setHeight(180);
+        buttonReverse.setPosition(Commons.WORLD_WIDTH * 0.5f, 900);
+
+        buttonHome = new TextButton("Menu", textButtonStyle);
+        buttonHome.setWidth(300);
+        buttonHome.setHeight(300);
+        buttonHome.setPosition(Commons.WORLD_WIDTH * 0.2f, Commons.WORLD_HEIGHT * 0.2f);
 
         buttonPause = new TextButton("Pause", textButtonStyle);
         buttonPause.setWidth(300);
@@ -151,12 +167,17 @@ public class ControllerScreen extends ScaledScreen {
         buttonExit.setHeight(300);
         buttonExit.setPosition(Commons.WORLD_WIDTH * 0.5f - 150f, Commons.WORLD_HEIGHT - 300f);
 
-        home.addListener(new ClickListener() {
+        btnName = new TextButton(playerName, textButtonStyle);
+        btnName.setWidth(300);
+        btnName.setHeight(300);
+        btnName.setPosition(Commons.WORLD_WIDTH * 0.2f, Commons.WORLD_HEIGHT * 0.2f - 300f);
+
+        buttonHome.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-
-                main.getMenuScreen().disconnect();
-                main.changeScreen(1);
+        // TODO: Fel under merge, ta bort helt om den inte behövs
+                main.getConnectionScreen().disconnect();
+                main.changeScreen(Commons.CONNECTION_SCREEN);
 
             }
         });
@@ -192,7 +213,7 @@ public class ControllerScreen extends ScaledScreen {
         });
 
 
-        drive.addListener(new ClickListener() {
+        buttonDrive.addListener(new ClickListener() {
 
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
@@ -205,6 +226,29 @@ public class ControllerScreen extends ScaledScreen {
                 drivePressed = false;
             }
         });
+
+        buttonReverse.addListener(new ClickListener() {
+
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+
+                reversePressed = true;
+
+                vibrate(200);
+
+                return true;
+            }
+
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                reversePressed = false;
+            }
+        });
+    }
+
+    // Vibrate the controller where time is in milliseconds
+    public void vibrate(int time){
+
+        Gdx.input.vibrate(time);
+
     }
 
     private void generateTextButtonStyle() {
@@ -220,6 +264,12 @@ public class ControllerScreen extends ScaledScreen {
         return drivePressed;
     }
 
+    public boolean getReverse(){
+
+        return reversePressed;
+
+    }
+
     // Calculates the rotation of the phone
     public float getRotation() {
 
@@ -232,5 +282,9 @@ public class ControllerScreen extends ScaledScreen {
         tiltAngle *= steeringSensitivity;
 
         return tiltAngle;
+    }
+
+    public void printName(){
+        btnName.setText(main.getClient().toString());
     }
 }

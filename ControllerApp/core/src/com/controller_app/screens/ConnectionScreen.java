@@ -24,10 +24,9 @@ import com.controller_app.network.MPClient;
 import com.controller_app.helper.Commons;
 import com.controller_app.network.NetworkListener;
 
-public class MenuScreen extends ScaledScreen {
+public class ConnectionScreen extends ScaledScreen {
 
-    private TextButton buttonController;
-    private TextButton buttonExit;
+    private TextButton buttonController, buttonExit, btnSettings;
     private TextField textField;
 
     private Table table;
@@ -45,7 +44,7 @@ public class MenuScreen extends ScaledScreen {
     private SpriteBatch spriteBatch;
     public int check;
 
-    public MenuScreen(Main m, MPClient mpc) {
+    public ConnectionScreen(Main m, MPClient mpc) {
         super();
 
         spriteBatch = new SpriteBatch();
@@ -105,16 +104,25 @@ public class MenuScreen extends ScaledScreen {
         table = new Table(skin);
 
         Image image = new Image(logo);
-        buttonController = new TextButton("Connect Controller", skin);
-        buttonExit = new TextButton("Exit", skin);
         textField = new TextField("", skin);
+        buttonController = new TextButton("Connect Controller", skin);
+        btnSettings = new TextButton("Settings", skin);
+        buttonExit = new TextButton("Exit", skin);
 
         buttonController.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.log("in MenuScreen", "pressed controller");
-                //main.changeScreen(2);
+ // ControllerApp/core/src/com/controller_app/screens/ConnectionScreen.java
                 connect();
+                main.changeScreen(Commons.CONTROLLER_SCREEN);
+            }
+        });
+
+        btnSettings.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                main.changeScreen(Commons.SETTINGS_SCREEN);
+                Gdx.app.log("in MenuScreen", "pressed settings");
             }
         });
 
@@ -128,8 +136,9 @@ public class MenuScreen extends ScaledScreen {
 
         // table.debug();
         table.add(image).padTop(10).padBottom(40).row();
-        table.add(textField).size(800, 200).padBottom(20).row();
-        table.add(buttonController).size(800, 200).padBottom(100).row();
+        table.add(textField).size(800, 200).row();
+        table.add(buttonController).size(800, 200).padBottom(20).row();
+        table.add(btnSettings).size(800, 200).row();
         table.add(buttonExit).size(800, 200).row();
 
         table.setX(Commons.WORLD_WIDTH / 2 - table.getPrefWidth() / 2);
@@ -230,7 +239,16 @@ public class MenuScreen extends ScaledScreen {
     }
 
     // Connect to server
-    public void connect() {
+    private void connect() {
+        //Get the customized player name
+        //if the name id "Player -1" the user hasn't chosen a name and we don't change connection name
+        //if the user has changed the name we change the connection name
+        if(main.getSettingsScreen().getPlayerName().equals("Player -1")){
+            //Kryonet gives the automatic name "Connection X"
+        }
+        else
+            main.getClient().setName(main.getSettingsScreen().getPlayerName());
+
         mpClient.connectToServer(textField.getText());
     }
 

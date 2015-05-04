@@ -1,16 +1,10 @@
 package com.controller_app.network;
 
-
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.controller_app.screens.MenuScreen;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
-/**
- *
- */
 public class NetworkListener extends Listener {
 
     private Client client;
@@ -21,7 +15,6 @@ public class NetworkListener extends Listener {
     public static boolean connected = false;
     public static boolean standby = false;
 
-
     // If you want to send a object, you need to send it with this client variable
     public void init(Client client, MPClient mpClient) {
         this.client = client;
@@ -31,7 +24,17 @@ public class NetworkListener extends Listener {
     }
 
     public void connected(Connection c) {
-        client.sendTCP(new Packet.LoginRequest());
+        Packet.LoginRequest login = new Packet.LoginRequest();
+
+        if(c.toString().equals("Connection " + c.getID()) || c.toString().equals("")){
+            //No name was chosen, change to "Player X"
+            login.playerName = "Player " + c.getID();
+            c.setName(login.playerName);
+        }
+        else
+            login.playerName = c.toString();
+
+        client.sendTCP(login);
         System.out.println("You have connected.");
 
     }
@@ -62,6 +65,9 @@ public class NetworkListener extends Listener {
             message += "SendGameData";
             Gdx.app.log("NETWORK", message);
             start = ((Packet.SendGameData) o).send;
+
+            mpClient.sendPacket(start);
+            /*
             if(start) {
                 new Thread() {
                     public void run() {
@@ -69,7 +75,7 @@ public class NetworkListener extends Listener {
                     }
                 }.start();
             }
-
+            */
         }
         if (o instanceof Packet.StandbyOrder) {
             System.out.println("in NetworkListener: standby");
@@ -77,7 +83,5 @@ public class NetworkListener extends Listener {
             standby = ((Packet.StandbyOrder) o).standby;
 
         }
-
     }
-
 }
