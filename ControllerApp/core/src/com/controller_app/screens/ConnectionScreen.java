@@ -201,7 +201,7 @@ public class ConnectionScreen extends ScaledScreen {
 
         //Check if we have connected we should change to the controllerScreen
         if(NetworkListener.connected)
-            main.changeScreen(2);
+            main.changeScreen(Commons.NAVIGATION_SCREEN);
 
         // Sprite renders
         spriteBatch.setProjectionMatrix(camera.combined);
