@@ -162,8 +162,7 @@ public class ControllerScreen extends ScaledScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                main.getMenuScreen().disconnect();
-                main.changeScreen(1);
+                main.changeScreen(Commons.NAVIGATION_SCREEN);
 
             }
         });

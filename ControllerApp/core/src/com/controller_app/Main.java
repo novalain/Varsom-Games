@@ -3,19 +3,25 @@ package com.controller_app;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.controller_app.network.NetworkListener;
+import com.controller_app.helper.Commons;
+import com.controller_app.screens.ConnectionScreen;
 import com.controller_app.screens.ControllerScreen;
-import com.controller_app.screens.MenuScreen;
 
 import java.io.IOException;
 
 import com.controller_app.network.MPClient;
 import com.controller_app.screens.StandbyScreen;
+import com.controller_app.screens.NavigationScreen;
+import com.controller_app.screens.SettingsScreen;
 
 public class Main extends Game {
 
-    private MenuScreen menuScreen;
+    private ConnectionScreen connectionScreen;
+    private NavigationScreen navScreen;
+    private SettingsScreen settingsScreen;
     private ControllerScreen controllerScreen;
     private StandbyScreen standbyScreen;
+
     private MPClient mpClient;
 
     @Override
@@ -28,56 +34,43 @@ public class Main extends Game {
         }
 
         Gdx.app.log("check", "created app");
-        menuScreen = new MenuScreen(this, mpClient);
+        settingsScreen = new SettingsScreen(this);
+        connectionScreen = new ConnectionScreen(this, mpClient);
         controllerScreen = new ControllerScreen(this, mpClient);
+        navScreen = new NavigationScreen(this, mpClient);
         standbyScreen = new StandbyScreen(this, mpClient);
 
         mpClient.controllerScreen = controllerScreen;
-        mpClient.menuScreen = menuScreen;
 
-
-        changeScreen(1);
+        changeScreen(Commons.CONNECTION_SCREEN);
 
     }
 
     public void changeScreen(int s) {
         switch (s) {
-            case 1:
-                //change to the menuScreen
-                Gdx.input.setInputProcessor(menuScreen.getStage());
-                setScreen(menuScreen);
-                menuScreen.check = 1;
-                break;
-            case 2:
-                //change to the controllerScreen if we shouldn't standby
-                //check if the server asks the client to stand by
-                if(NetworkListener.standby) {
-                    //change to standbyScreen
-                    Gdx.app.log("in Main", "standby");
-                    changeScreen(3);
-                }
-                else {
-                    //change to the controllerScreen
-                    Gdx.input.setInputProcessor(controllerScreen.getStage());
-                    Gdx.app.log("screen", "changed to controller");
-                    setScreen(controllerScreen);
-                }
-                menuScreen.check = 2;
-                break;
-            case 3:
-                //change to standbyScreen
-                Gdx.input.setInputProcessor(standbyScreen.getStage());
-                Gdx.app.log("screen", "changed to standby");
-                setScreen(standbyScreen);
-                menuScreen.check = 3;
-                break;
-            default:
-                break;
-        }
-    }
 
-    public MenuScreen getMenuScreen(){
-        return menuScreen;
+            case Commons.CONNECTION_SCREEN:
+                Gdx.input.setInputProcessor(connectionScreen.getStage());
+                setScreen(connectionScreen);
+                break;
+
+            case Commons.NAVIGATION_SCREEN:
+                Gdx.input.setInputProcessor(navScreen.getStage());
+                setScreen(navScreen);
+                break;
+
+            case Commons.SETTINGS_SCREEN:
+                //TODO: Settings Screen
+                Gdx.input.setInputProcessor(settingsScreen.getStage());
+                setScreen(settingsScreen);
+                break;
+            case Commons.CONTROLLER_SCREEN:
+                Gdx.input.setInputProcessor(controllerScreen.getStage());
+                setScreen(controllerScreen);
+                break;
+
+            default: System.out.println("Error in changeScreen");
+        }
     }
 
 }

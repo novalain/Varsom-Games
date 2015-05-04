@@ -2,14 +2,10 @@ package com.controller_app.network;
 
 
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.controller_app.screens.MenuScreen;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
-/**
- *
- */
 public class NetworkListener extends Listener {
 
     private Client client;
@@ -19,7 +15,6 @@ public class NetworkListener extends Listener {
     private boolean start;
     public static boolean connected = false;
     public static boolean standby = false;
-
 
     // If you want to send a object, you need to send it with this client variable
     public void init(Client client, MPClient mpClient) {
@@ -64,12 +59,11 @@ public class NetworkListener extends Listener {
                     mpClient.sendPacket(start);
                 }
             }.start();
-
         }
-        if (o instanceof Packet.StandbyOrder) {
+        if (o instanceof Packet.StandByOrder) {
             System.out.println("in NetworkListener: standby");
 
-            standby = ((Packet.StandbyOrder) o).standby;
+            standby = ((Packet.StandByOrder) o).standby;
 
         }
 

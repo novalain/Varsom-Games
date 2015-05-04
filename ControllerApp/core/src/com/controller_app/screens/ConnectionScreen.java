@@ -24,7 +24,7 @@ import com.controller_app.network.MPClient;
 import com.controller_app.helper.Commons;
 import com.controller_app.network.NetworkListener;
 
-public class MenuScreen extends ScaledScreen {
+public class ConnectionScreen extends ScaledScreen {
 
     private TextButton buttonController;
     private TextButton buttonExit;
@@ -45,7 +45,7 @@ public class MenuScreen extends ScaledScreen {
     private SpriteBatch spriteBatch;
     public int check;
 
-    public MenuScreen(Main m, MPClient mpc) {
+    public ConnectionScreen(Main m, MPClient mpc) {
         super();
 
         spriteBatch = new SpriteBatch();
@@ -113,8 +113,8 @@ public class MenuScreen extends ScaledScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.log("in MenuScreen", "pressed controller");
-                //main.changeScreen(2);
                 connect();
+                main.changeScreen(Commons.CONTROLLER_SCREEN);
             }
         });
 
@@ -230,7 +230,7 @@ public class MenuScreen extends ScaledScreen {
     }
 
     // Connect to server
-    public void connect() {
+    private void connect() {
         mpClient.connectToServer(textField.getText());
     }
 
