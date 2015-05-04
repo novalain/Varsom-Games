@@ -72,6 +72,7 @@ public class MPServer {
         kryo.register(Packet.PauseRequest.class);
         kryo.register(Packet.ExitRequest.class);
         kryo.register(Packet.StandByOrder.class);
+        kryo.register(Packet.SendDPadData.class);
     }
 
     public void stop() {

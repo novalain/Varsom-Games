@@ -52,17 +52,19 @@ public class CarGame extends VarsomGame {
     public void handleDataFromClients(Connection c, String s) {
 
         int carNumber = c.getID() - 1;
+
         StringTokenizer st = new StringTokenizer(s, " ");
         //while (st.hasMoreTokens()) {
         boolean is_driving = st.nextToken().equalsIgnoreCase("true");
+        boolean is_breaking = st.nextToken().equalsIgnoreCase("true");
         float angle = Float.parseFloat(st.nextToken());
+
         //System.out.println("Player " + carNumber + " has the angle: " + angle);
         //System.out.println("Does player " + carNumber + " accelerate: " + is_driving);
         //}
 
      //   System.out.println
-       gameScreen.getTrack().getCars()[carNumber].handleDataFromClients(is_driving,angle);
-
+       gameScreen.getTrack().getCars()[carNumber].handleDataFromClients(is_driving,is_breaking, angle);
 
 
     }

@@ -8,7 +8,7 @@ import com.varsom.system.network.Packet.ExitRequest;
 import com.varsom.system.network.Packet.LoginAnswer;
 import com.varsom.system.network.Packet.LoginRequest;
 import com.varsom.system.network.Packet.PauseRequest;
-import com.varsom.system.network.MPServer;
+import com.varsom.system.network.Packet.SendDPadData;
 
 import static com.varsom.system.network.Packet.GamePacket;
 
@@ -37,6 +37,7 @@ public class  NetworkListener extends Listener {
         if (o instanceof LoginRequest ) {
             LoginAnswer loginaccepted = new LoginAnswer();
             loginaccepted.accepted = true;
+            c.setName(((LoginRequest) o).playerName);
 
             //if the server doesn't permit new clients to join tell the client
             if(!MPServer.joinable) {
@@ -50,7 +51,7 @@ public class  NetworkListener extends Listener {
             // Send the packet back with the variable login.accepted, that is now true
             c.sendTCP(loginaccepted);
             //Write in the log if login was successful
-            System.out.println("Connection: " + c.getID() + " Login is accepted");
+            System.out.println("Connection: " + c.toString() + " Login is accepted");
 
         }
 
@@ -73,7 +74,10 @@ public class  NetworkListener extends Listener {
             //varsomGame.handleDataFromClients();
         }
 
-
+        else if (o instanceof SendDPadData) {
+            int dpad = ((SendDPadData) o).dpaddir;
+            System.out.println("Dpad dir is " + dpad);
+        }
 
     }
 

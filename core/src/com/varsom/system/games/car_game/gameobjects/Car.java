@@ -22,7 +22,7 @@ public class Car extends DynamicObject {
     //public Body body;
     public float width, length, maxSteerAngle, maxSpeed, power;
     float wheelAngle;
-    private boolean userAccelerate = false;
+    private boolean userAccelerate = false, userBreaking = false;
     public boolean smoke = false;
     public int steer, accelerate;
     //public Vector2 position;
@@ -37,7 +37,6 @@ public class Car extends DynamicObject {
     private float traveledDistance;
     private float delta; //distance traveled since last frame
     private int waypoint;
-
 
     private Vector2 lineToCar, lineToEnd;
     private float angleOfCurrentLine;
@@ -163,9 +162,10 @@ public class Car extends DynamicObject {
     }
 
 
-    public void handleDataFromClients(boolean isDriving, float angle){
+    public void handleDataFromClients(boolean isDriving, boolean isBreaking, float angle){
 
        userAccelerate = isDriving;
+       userBreaking = isBreaking;
        tiltAngle = angle;
 
     }
@@ -209,7 +209,7 @@ public class Car extends DynamicObject {
         Vector2 baseVector; //vector pointing in the direction force will be applied to a wheel ; relative to the wheel.
 
         //if accelerator is pressed down and speed limit has not been reached, go forwards
-        if ((userAccelerate == true) && (this.getSpeedKMH() < this.maxSpeed)) {
+        if (userAccelerate && (this.getSpeedKMH() < this.maxSpeed)) {
 
             // Add smoke effect for low velocities
             if (this.getSpeedKMH() < 10.f)
@@ -219,6 +219,18 @@ public class Car extends DynamicObject {
                 smoke = false;
 
             baseVector = new Vector2(0, -0.05f);
+        }
+
+        else if(userBreaking){
+
+            if (this.getLocalVelocity().y < 0) {
+                baseVector = new Vector2(0f, 0.5f);
+            }
+
+            //going in reverse - less force
+            else
+                baseVector = new Vector2(0f, 0.03f);
+
         }
         /*
         else if (this.accelerate == GameScreen.ACC_BRAKE) {
@@ -250,19 +262,20 @@ public class Car extends DynamicObject {
         }
 
 */
+        // Slow down if not accelerating
         else if (!userAccelerate) {
 
-            //slow down if not accelerating
             baseVector = new Vector2(0, 0);
             if (this.getSpeedKMH() < 7)
                 this.setSpeed(0);
             else if (this.getLocalVelocity().y < 0)
-                baseVector = new Vector2(0, 0.05f);
+                baseVector = new Vector2(0, 0.03f);
             else if (this.getLocalVelocity().y > 0)
-                baseVector = new Vector2(0, -0.05f);
+                baseVector = new Vector2(0, -0.03f);
             smoke = false;
         }
 
+        // Max speed reached, just keep going
         else {
             baseVector = new Vector2(0, 0);
             smoke = false;
