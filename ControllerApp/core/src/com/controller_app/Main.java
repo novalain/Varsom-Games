@@ -42,7 +42,6 @@ public class Main extends Game {
         standbyScreen = new StandbyScreen(this, mpClient);
 
         mpClient.controllerScreen = controllerScreen;
-        // mpClient.menuScreen = menuScreen;
 
         changeScreen(Commons.CONNECTION_SCREEN);
     }

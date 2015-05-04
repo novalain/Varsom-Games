@@ -114,7 +114,7 @@ public class ConnectionScreen extends ScaledScreen {
             public void clicked(InputEvent event, float x, float y) {
  // ControllerApp/core/src/com/controller_app/screens/ConnectionScreen.java
                 connect();
-                main.changeScreen(Commons.CONTROLLER_SCREEN);
+                main.changeScreen(Commons.NAVIGATION_SCREEN);
             }
         });
 
