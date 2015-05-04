@@ -8,7 +8,7 @@ import com.varsom.system.network.Packet.ExitRequest;
 import com.varsom.system.network.Packet.LoginAnswer;
 import com.varsom.system.network.Packet.LoginRequest;
 import com.varsom.system.network.Packet.PauseRequest;
-import com.varsom.system.network.Packet.SendDpadData;
+import com.varsom.system.network.Packet.SendDPadData;
 
 import static com.varsom.system.network.Packet.GamePacket;
 
@@ -74,8 +74,8 @@ public class  NetworkListener extends Listener {
             //varsomGame.handleDataFromClients();
         }
 
-        else if (o instanceof SendDpadData) {
-            int dpad = ((SendDpadData) o).dpaddir;
+        else if (o instanceof SendDPadData) {
+            int dpad = ((SendDPadData) o).dpaddir;
             System.out.println("Dpad dir is " + dpad);
         }
 
