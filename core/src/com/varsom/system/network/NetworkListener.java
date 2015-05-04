@@ -39,7 +39,7 @@ public class  NetworkListener extends Listener {
         if (o instanceof LoginRequest ) {
             LoginAnswer loginaccepted = new LoginAnswer();
             loginaccepted.accepted = true;
-            c.setName(((LoginRequest) o).playerName);
+            //c.setName(((LoginRequest) o).playerName);
 
             //if the server doesn't permit new clients to join tell the client
             if(!MPServer.joinable) {
@@ -77,8 +77,8 @@ public class  NetworkListener extends Listener {
         }
 
         else if (o instanceof SendDPadData) {
-            dpad = ((SendDPadData) o).dpaddir;
             dPadSelect = true;
+            dpad = ((SendDPadData) o).data;
             System.out.println("Dpad dir is " + dpad);
         }
 
