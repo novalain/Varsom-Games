@@ -222,7 +222,7 @@ public class VarsomMenu extends ScaledScreen {
         //label that shows all connected players
         clientNames = "Connected players:";
         connectedClientNames = new Label(clientNames, style);
-        connectedClientNames.setPosition(0, 0);
+        connectedClientNames.setPosition(0, Commons.WORLD_HEIGHT - connectedClientNames.getHeight());
 
         // place the table in the middle of the screen.
         table.setPosition(Commons.WORLD_WIDTH / 2 - table.getWidth() / 2, Commons.WORLD_HEIGHT / 2 - table.getHeight() / 2);
@@ -371,7 +371,7 @@ public class VarsomMenu extends ScaledScreen {
         //update the client names label with clients connected at the moment
         for (int i = 0; i < varsomSystem.getServer().getConnections().length; i++) {
             //TODO right now the IP is displayed, it should be the name chosen by the player
-            clientNames += "\n" + varsomSystem.getServer().getConnections()[i].getRemoteAddressTCP().toString();
+            clientNames += "\n" + varsomSystem.getServer().getConnections()[i].toString();
         }
         connectedClientNames.setText(clientNames);
     }

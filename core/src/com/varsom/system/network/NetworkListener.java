@@ -37,6 +37,7 @@ public class  NetworkListener extends Listener {
         if (o instanceof LoginRequest ) {
             LoginAnswer loginaccepted = new LoginAnswer();
             loginaccepted.accepted = true;
+            c.setName(((LoginRequest) o).playerName);
 
             //if the server doesn't permit new clients to join tell the client
             if(!MPServer.joinable) {
@@ -50,7 +51,7 @@ public class  NetworkListener extends Listener {
             // Send the packet back with the variable login.accepted, that is now true
             c.sendTCP(loginaccepted);
             //Write in the log if login was successful
-            System.out.println("Connection: " + c.getID() + " Login is accepted");
+            System.out.println("Connection: " + c.toString() + " Login is accepted");
 
         }
 
