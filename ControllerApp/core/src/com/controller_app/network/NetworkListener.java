@@ -1,7 +1,6 @@
 package com.controller_app.network;
 
 
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -64,6 +63,14 @@ public class NetworkListener extends Listener {
             System.out.println("in NetworkListener: standby");
 
             standby = ((Packet.StandByOrder) o).standby;
+
+        }
+
+        if (o instanceof Packet.SendDPadData) {
+            System.out.println("in NetworkListener: standby");
+
+            int paddir = ((Packet.SendDPadData) o).data;
+            System.out.println("Paddir is " + paddir);
 
         }
 
