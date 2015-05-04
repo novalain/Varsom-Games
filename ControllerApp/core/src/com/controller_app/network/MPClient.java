@@ -17,7 +17,7 @@ public class MPClient {
 
 
     public MPClient() throws IOException {
-         correctIP = false;
+        correctIP = false;
 
         client = new Client();
         register();
@@ -38,14 +38,14 @@ public class MPClient {
     // get IP from user input and connects
     public void connectToServer(String ip) {
 
-        // Start a multicast reciver
+        // Start a broadcast receiver
         try {
             broadcastClient = new BroadcastClient();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        //Gets ip from multicast
+        //Gets ip from broadcast
         serverIP = broadcastClient.getServerIP();
 
         System.out.print("\nIP is " + serverIP + "\n");
@@ -74,8 +74,8 @@ public class MPClient {
         kryo.register(Packet.ShutDownPacket.class);
         kryo.register(Packet.PauseRequest.class);
         kryo.register(Packet.ExitRequest.class);
+        kryo.register(Packet.StandByOrder.class);
         kryo.register(Packet.SendDPadData.class);
-        kryo.register(Packet.StandbyOrder.class);
     }
 
     public void sendPacket(boolean send) {
@@ -113,15 +113,14 @@ public class MPClient {
         Gdx.app.log("in MPClient", "sent Exit");
     }
 
-    public void sendDPadData(int i){
+    public void sendDPadData(int i) {
         Packet.SendDPadData dp = new Packet.SendDPadData();
         dp.data = i;
         client.sendTCP(dp);
         Gdx.app.log("in MPClient", "sent dPadInfo");
     }
 
-    public void errorHandler(){
-      //  ConnectionScreen.errorMessage(1);
+    public void errorHandler() {
+        //  ConnectionScreen.errorMessage(1);
     }
-
 }

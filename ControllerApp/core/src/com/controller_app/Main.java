@@ -2,9 +2,9 @@ package com.controller_app;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.controller_app.network.NetworkListener;
 import com.controller_app.helper.Commons;
 import com.controller_app.screens.ConnectionScreen;
-import com.controller_app.network.NetworkListener;
 import com.controller_app.screens.ControllerScreen;
 
 import java.io.IOException;
@@ -22,8 +22,8 @@ public class Main extends Game {
     private ConnectionScreen connectionScreen;
     private NavigationScreen navScreen;
     private ControllerScreen controllerScreen;
-
     private StandbyScreen standbyScreen;
+
     private MPClient mpClient;
 
     @Override
@@ -52,7 +52,6 @@ public class Main extends Game {
             case Commons.CONNECTION_SCREEN:
                 Gdx.input.setInputProcessor(connectionScreen.getStage());
                 setScreen(connectionScreen);
-
                 break;
 
             case Commons.NAVIGATION_SCREEN:
@@ -82,19 +81,19 @@ public class Main extends Game {
                 setScreen(standbyScreen);
                 menuScreen.check = 3;
                 break;  */
-
+                break;
             case Commons.SETTINGS_SCREEN:
                 //TODO: Settings Screen
                 Gdx.input.setInputProcessor(settingsScreen.getStage());
                 setScreen(settingsScreen);
-
                 break;
             case Commons.CONTROLLER_SCREEN:
                 Gdx.input.setInputProcessor(controllerScreen.getStage());
                 setScreen(controllerScreen);
+                break;
+            default: System.out.println("Error in changeScreen");
         }
     }
-
     public MPClient getMpClient(){
         return mpClient;
     }
@@ -118,4 +117,5 @@ public class Main extends Game {
     public ControllerScreen getControllerScreen(){
         return controllerScreen;
     }
+
 }

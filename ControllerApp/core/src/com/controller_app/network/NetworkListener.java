@@ -68,10 +68,18 @@ public class NetworkListener extends Listener {
                 }
             }.start();
         }
-        if (o instanceof Packet.StandbyOrder) {
+        if (o instanceof Packet.StandByOrder) {
             System.out.println("in NetworkListener: standby");
 
-            standby = ((Packet.StandbyOrder) o).standby;
+            standby = ((Packet.StandByOrder) o).standby;
+
+        }
+
+        if (o instanceof Packet.SendDPadData) {
+            System.out.println("in NetworkListener: standby");
+
+            int paddir = ((Packet.SendDPadData) o).data;
+            System.out.println("Paddir is " + paddir);
 
         }
     }

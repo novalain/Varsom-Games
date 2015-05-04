@@ -178,7 +178,6 @@ public class ControllerScreen extends ScaledScreen {
         // TODO: Fel under merge, ta bort helt om den inte behövs
                 main.getConnectionScreen().disconnect();
                 main.changeScreen(Commons.CONNECTION_SCREEN);
-
             }
         });
 
