@@ -18,10 +18,12 @@ public class BroadcastServerThread extends Thread {
     public DatagramSocket socket = new DatagramSocket(4446);
 
     public BroadcastServerThread(String serverip) throws IOException {
-        if(ip.equals(""))
+
+        if(serverip.equals(""))
         {
             System.out.println("ip is empty");
         }
+
         ip = serverip;
         // gets the broadcast subgroup
         broadip = ip.substring(0,ip.lastIndexOf(".")) +  ".255";
