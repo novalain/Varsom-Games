@@ -57,6 +57,7 @@ public class Main extends Game {
             case Commons.NAVIGATION_SCREEN:
                 Gdx.input.setInputProcessor(navScreen.getStage());
                 setScreen(navScreen);
+                break;
  // TODO: Erase if not needed, left after merge with Dpad branch
            /* case 2:
                 //change to the controllerScreen if we shouldn't standby
@@ -81,7 +82,6 @@ public class Main extends Game {
                 setScreen(standbyScreen);
                 menuScreen.check = 3;
                 break;  */
-                break;
             case Commons.SETTINGS_SCREEN:
                 //TODO: Settings Screen
                 Gdx.input.setInputProcessor(settingsScreen.getStage());
