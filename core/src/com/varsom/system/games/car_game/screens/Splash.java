@@ -3,6 +3,7 @@ package com.varsom.system.games.car_game.screens;
 /**
  * Created by oskarcarlbaum on 06/03/15.
  */
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -21,20 +22,20 @@ public class Splash implements Screen {
     private Stage stage;
     protected VarsomSystem varsomSystem;
 
-    public Splash(VarsomSystem varsomSystem){
+    public Splash(VarsomSystem varsomSystem) {
         this.varsomSystem = varsomSystem;
     }
 
     @Override
     public void show() {
-         //If your image is not the same size as your screen
+        //If your image is not the same size as your screen
         //Gdx.app.log("Screen","width"+Gdx.graphics.getWidth());
         //Gdx.app.log("Screen","height"+Gdx.graphics.getHeight());
         // Set position of splash image
         splashTexture = new Texture(Gdx.files.internal("car_game_assets/img/splashscreen.png"));
-        splashImage =  new Image(splashTexture);
-        splashImage.setX( (Gdx.graphics.getWidth()-splashImage.getWidth())/2);
-        splashImage.setY( (Gdx.graphics.getHeight()-splashImage.getHeight())/2);
+        splashImage = new Image(splashTexture);
+        splashImage.setX((Gdx.graphics.getWidth() - splashImage.getWidth()) / 2);
+        splashImage.setY((Gdx.graphics.getHeight() - splashImage.getHeight()) / 2);
         stage = new Stage();
         stage.addActor(splashImage); //adds the image as an actor to the stage
         splashImage.addAction(Actions.sequence(Actions.alpha(0), Actions.fadeIn(0.0f), Actions.delay(0), Actions.run(new Runnable() {
@@ -47,7 +48,7 @@ public class Splash implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0.5f,0.3f,0.3f,1); //sets clear color to black
+        Gdx.gl.glClearColor(0.5f, 0.3f, 0.3f, 1); //sets clear color to black
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); //clear the batch
         stage.act(); //update all actors
         stage.draw(); //draw all actors on the Stage.getBatch()

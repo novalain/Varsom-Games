@@ -4,7 +4,7 @@ package com.varsom.system.network;
  *
  */
 public class Packet {
-    public static class LoginRequest {}
+    public static class LoginRequest { String playerName = ""; }
     public static class LoginAnswer { boolean accepted = false, standby = false; }
     public static class GamePacket { String message; }
     public static class SendGameData { boolean send = false; }
