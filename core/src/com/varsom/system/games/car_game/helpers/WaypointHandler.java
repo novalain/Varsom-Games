@@ -214,7 +214,7 @@ public class WaypointHandler {
         // 3.1 if wayPoint is exceeded
         boolean k = false;
         if(waypointIsReached(quadrant,projectionPoint,currentLineEndPos)){
-            System.out.println("Waypoint " + waypointIndex + " is reached");
+            //System.out.println("Waypoint " + waypointIndex + " is reached");
             delta = lengthOfVector2(prevProjPoint, currentLineEndPos);
             traveledDistance += delta;
             //projectionPoint = currentLineEndPos;
@@ -222,17 +222,16 @@ public class WaypointHandler {
             //currentLineStartPos = path.get(waypointIndex);
             assignNewVec(currentLineStartPos,path.get(waypointIndex));
             updateWaypointIndex();
-            System.out.println("Next waypoint is " + waypointIndex);
+            //System.out.println("Next waypoint is " + waypointIndex);
             //currentLineEndPos = path.get(waypointIndex);
             assignNewVec(currentLineEndPos,path.get(waypointIndex));
             currentLineAngle = calcLineAngle(currentLineStartPos, currentLineEndPos);
             calcCurrentLineVec();
             quadrant = calcQuadrant(currentLineVec);
-            System.out.println("Quadrant to waypoint" + waypointIndex + " is quadrant# " + quadrant);
-            System.out.println("CurrentLineAngle = " + currentLineAngle);
-            System.out.println("CurrentLineStart = (" + currentLineStartPos.x + ", " +currentLineStartPos.y + ")");
-            System.out.println("CurrentLineEnd = (" + currentLineEndPos.x + ", " +currentLineEndPos.y + ")");
-            k = true;
+            //System.out.println("Quadrant to waypoint" + waypointIndex + " is quadrant# " + quadrant);
+            //System.out.println("CurrentLineAngle = " + currentLineAngle);
+            //System.out.println("CurrentLineStart = (" + currentLineStartPos.x + ", " +currentLineStartPos.y + ")");
+            //System.out.println("CurrentLineEnd = (" + currentLineEndPos.x + ", " +currentLineEndPos.y + ")");
         }
         // 3.2 waypoint is NOT yet reached
         else{
@@ -256,14 +255,6 @@ public class WaypointHandler {
                 delta = lengthOfVector2(prevProjPoint, currentLineEndPos) - lengthOfVector2(projectionPoint, currentLineEndPos);
                 traveledDistance += delta;
             }
-        }
-
-        if(k){
-            System.out.println("Quadrant to waypoint" + waypointIndex + " is quadrant# " + quadrant);
-            System.out.println("CurrentLineAngle = " + currentLineAngle);
-            System.out.println("CurrentLineStart = (" + currentLineStartPos.x + ", " +currentLineStartPos.y + ")");
-            System.out.println("CurrentLineEnd = (" + currentLineEndPos.x + ", " +currentLineEndPos.y + ")");
-            k = false;
         }
 
         //prevProjPoint = projectionPoint; // make sure the prev is the actual prev next time this function is called

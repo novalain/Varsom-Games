@@ -45,6 +45,22 @@ public class MPServer {
         }
     }
 
+    public void gameRunning(boolean b, int cID) {
+        Packet.SendGameData sGD = new Packet.SendGameData();
+
+        sGD.send = b;
+
+        try {
+            // Sends the message to client with connectionID cID
+            server.sendToTCP(cID,sGD);
+            //server.sendToAllTCP(sGD);
+            System.out.println("Sent package");
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
     private void registerPackets() {
         Kryo kryo = server.getKryo();
         // Register packets in the same order as in Packet.java

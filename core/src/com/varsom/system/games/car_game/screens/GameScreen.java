@@ -93,8 +93,8 @@ public class GameScreen implements Screen{
         NUMBER_OF_PLAYERS = this.varsomSystem.getServer().getConnections().length;
 
         //TODO THIS IS ONLY TEMPORARY.. DURING DEVELOPMENT
-        if (NUMBER_OF_PLAYERS < 1) {
-            NUMBER_OF_PLAYERS = 8;
+        if (NUMBER_OF_PLAYERS < 2) {
+            NUMBER_OF_PLAYERS = 2;
         }
 
         // Create objects and select level
@@ -218,6 +218,9 @@ public class GameScreen implements Screen{
         if(!paused){
            String temp = "CarDist:\n";
            for(Car car : track.getCars()) {
+               if(car.isActive() && !camera.frustum.boundsInFrustum(car.getPosition().x,car.getPosition().y,0,0.5f,1f,0.1f)){
+                   carLost(car.getID());
+               }
                car.update(Gdx.app.getGraphics().getDeltaTime());
                temp += car.getTraveledDistance() + "\n";
            }
@@ -313,5 +316,13 @@ public class GameScreen implements Screen{
 
     public Track getTrack(){
         return track;
+    }
+
+    private void carLost(int carID){
+        System.out.println("Car # " + carID +" left the screen");
+        //TODO This doesn't work.. need to properly say to the correct client that it should stop sending packages
+        varsomSystem.getMPServer().gameRunning(false);//,carID+1);
+        track.getCars()[carID].handleDataFromClients(false,0);
+        track.getCars()[carID].setActive(false);
     }
 }
