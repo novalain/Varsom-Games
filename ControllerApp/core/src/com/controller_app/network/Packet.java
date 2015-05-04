@@ -1,5 +1,7 @@
 package com.controller_app.network;
 
+import com.badlogic.gdx.math.Vector2;
+
 public class Packet {
 
     public static class LoginRequest {
@@ -13,6 +15,10 @@ public class Packet {
     public static class PauseRequest {boolean pause = false;}
     public static class ExitRequest {boolean exit = false;}
     public static class StandByOrder {boolean standby = false;}
-    public static class SendDPadData{ int data; }
+    public static class SendDPadData{
+        int dataX = 0;
+        int dataY = 0; 
+        boolean select = false;
+    }
 
 }
