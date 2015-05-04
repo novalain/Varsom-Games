@@ -321,8 +321,8 @@ public class GameScreen implements Screen{
     private void carLost(int carID){
         System.out.println("Car # " + carID +" left the screen");
         //TODO This doesn't work.. need to properly say to the correct client that it should stop sending packages
-        varsomSystem.getMPServer().gameRunning(false);//,carID+1);
-        track.getCars()[carID].handleDataFromClients(false,0);
+        varsomSystem.getMPServer().gameRunning(false,carID+1);
         track.getCars()[carID].setActive(false);
+        track.getCars()[carID].handleDataFromClients(false,false,0);
     }
 }

@@ -45,15 +45,14 @@ public class MPServer {
         }
     }
 
-    public void gameRunning(boolean b, int cID) {
+    public void gameRunning(boolean b, int carID) {
         Packet.SendGameData sGD = new Packet.SendGameData();
 
         sGD.send = b;
 
         try {
             // Sends the message to client with connectionID cID
-            server.sendToTCP(cID,sGD);
-            //server.sendToAllTCP(sGD);
+            server.sendToTCP(carID,sGD);
             System.out.println("Sent package");
         } catch (Exception e)
         {
