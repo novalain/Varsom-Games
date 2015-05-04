@@ -12,4 +12,5 @@ public class Packet {
     public static class PauseRequest { boolean pause = false; }
     public static class ExitRequest { boolean exit = false; }
     public static class StandByOrder { boolean standby = false; }
+    public static class SendDpadData { int dpaddir; }
 }
