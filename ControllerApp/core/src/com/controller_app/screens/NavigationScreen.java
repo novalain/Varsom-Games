@@ -86,31 +86,31 @@ public class NavigationScreen extends ScaledScreen{
             @Override
             public void clicked(InputEvent event, float x, float y) {
                // inputHandler.setUpPressed();
-                mpClient.sendDPadData(DPad.UP);
+                mpClient.sendDPadData(0, DPad.UP, false);
             }
         });
         btnDown.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                mpClient.sendDPadData(DPad.DOWN);
+                mpClient.sendDPadData(0, DPad.DOWN, false);
             }
         });
         btnLeft.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                mpClient.sendDPadData(DPad.LEFT);
+                mpClient.sendDPadData(DPad.LEFT,0, false);
             }
         });
         btnRight.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                mpClient.sendDPadData(DPad.RIGHT);
+                mpClient.sendDPadData(DPad.RIGHT,0, false);
             }
         });
         btnSelect.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                mpClient.sendDPadData(DPad.SELECT);
+                mpClient.sendDPadData(0,0,DPad.SELECT);
             }
         });
         btnSettings.addListener(new ClickListener() {
