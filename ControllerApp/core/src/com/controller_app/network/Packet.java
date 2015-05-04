@@ -2,10 +2,14 @@ package com.controller_app.network;
 
 public class Packet {
     public static class LoginRequest {
+        //playerName tells the server the name the user has chosen
+        //if no name is chosen it will be "Player X"
+        String playerName = "";
     }
 
     public static class LoginAnswer {
         boolean accepted = false;
+        boolean standby = false;
     }
 
     public static class Message {

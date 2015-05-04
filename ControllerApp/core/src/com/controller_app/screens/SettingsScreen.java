@@ -14,11 +14,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.controller_app.Main;
 import com.controller_app.helper.Commons;
 import com.controller_app.helper.DPad;
+import com.controller_app.network.MPClient;
 
 public class SettingsScreen extends ScaledScreen {
 
@@ -34,6 +36,7 @@ public class SettingsScreen extends ScaledScreen {
     private CheckBox checkVibration;
     private CheckBox checkTest;
     private TextButton btnBack;
+    private TextField playerName;
 
     public SettingsScreen(Main main) {
         super();
@@ -121,7 +124,7 @@ public class SettingsScreen extends ScaledScreen {
         btnBack.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                main.changeScreen(Commons.NAVIGATION_SCREEN);
+                main.changeScreen(Commons.CONNECTION_SCREEN);
             }
         });
 
@@ -145,6 +148,11 @@ public class SettingsScreen extends ScaledScreen {
         });
 
 
+        playerName = new TextField("Player " + main.getClient().getID(), skin);
+
+
+        //Add elements to table
+
         table = new Table(skin);
 
         checkTest.getImage().setScale(5);
@@ -153,6 +161,7 @@ public class SettingsScreen extends ScaledScreen {
         table.add(lblTitle).padTop(10).padBottom(40).row();
         table.add(checkTest).size(1000, 200).padBottom(20).row();
         table.add(checkVibration).size(1000, 200).padBottom(100).row();
+        table.add(playerName).size(800, 200).padBottom(20).row();
 
         table.setX(Commons.WORLD_WIDTH / 2 - table.getPrefWidth() / 2);
         table.setY(Commons.WORLD_HEIGHT / 2 - table.getPrefHeight() / 2);
@@ -162,4 +171,8 @@ public class SettingsScreen extends ScaledScreen {
 
         stage.addActor(btnBack);
     }
+
+   public String getPlayerName(){
+       return playerName.getText();
+   }
 }

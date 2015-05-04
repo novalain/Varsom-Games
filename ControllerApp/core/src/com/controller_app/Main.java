@@ -11,6 +11,7 @@ import java.io.IOException;
 import com.controller_app.network.MPClient;
 import com.controller_app.screens.NavigationScreen;
 import com.controller_app.screens.SettingsScreen;
+import com.esotericsoftware.kryonet.Client;
 
 public class Main extends Game {
 
@@ -31,10 +32,10 @@ public class Main extends Game {
         }
 
         Gdx.app.log("check", "created app");
+        settingsScreen = new SettingsScreen(this);
         connectionScreen = new ConnectionScreen(this, mpClient);
         controllerScreen = new ControllerScreen(this, mpClient);
         navScreen = new NavigationScreen(this, mpClient);
-        settingsScreen = new SettingsScreen(this);
 
         mpClient.controllerScreen = controllerScreen;
 
@@ -67,4 +68,15 @@ public class Main extends Game {
         }
     }
 
+    public MPClient getMpClient(){
+        return mpClient;
+    }
+
+    public Client getClient(){
+        return mpClient.client;
+    }
+
+    public SettingsScreen getSettingsScreen(){
+        return settingsScreen;
+    }
 }

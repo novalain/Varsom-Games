@@ -26,6 +26,7 @@ public class ControllerScreen extends ScaledScreen {
     private TextButton buttonExit;
     private TextButton buttonPause;
     private TextButton buttonUnpause;
+    private TextButton btnName;
 
     // Menu stuff
     private Main main;
@@ -44,6 +45,7 @@ public class ControllerScreen extends ScaledScreen {
     private float steeringSensitivity = 0.4f;
 
     private String packet;
+    private String playerName = "";
 
     private MPClient mpClient;
 
@@ -64,6 +66,9 @@ public class ControllerScreen extends ScaledScreen {
         buttonAtlas = new TextureAtlas(Gdx.files.internal("skins/menuSkin.pack"));
         skin.addRegions(buttonAtlas);
 
+        //playerName = main.getSettingsScreen().getPlayerName();
+        //main.getClient().setName(playerName);
+
         generateFonts();
         generateTextButtonStyle();
         generateUI();
@@ -73,6 +78,7 @@ public class ControllerScreen extends ScaledScreen {
         stage.addActor(buttonExit);
         stage.addActor(buttonPause);
         stage.addActor(buttonUnpause);
+        stage.addActor(btnName);
 
         mpc.controllerScreen = this;
     }
@@ -85,6 +91,8 @@ public class ControllerScreen extends ScaledScreen {
     public void render(float delta) {
         Gdx.gl.glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        printName();
 
         stage.draw();
     }
@@ -149,6 +157,11 @@ public class ControllerScreen extends ScaledScreen {
         buttonExit.setWidth(300);
         buttonExit.setHeight(300);
         buttonExit.setPosition(Commons.WORLD_WIDTH * 0.5f - 150f, Commons.WORLD_HEIGHT - 300f);
+
+        btnName = new TextButton(playerName, textButtonStyle);
+        btnName.setWidth(300);
+        btnName.setHeight(300);
+        btnName.setPosition(Commons.WORLD_WIDTH * 0.2f, Commons.WORLD_HEIGHT * 0.2f - 300f);
 
         home.addListener(new ClickListener() {
             @Override
@@ -229,5 +242,9 @@ public class ControllerScreen extends ScaledScreen {
         tiltAngle *= steeringSensitivity;
 
         return tiltAngle;
+    }
+
+    public void printName(){
+        btnName.setText(main.getClient().toString());
     }
 }

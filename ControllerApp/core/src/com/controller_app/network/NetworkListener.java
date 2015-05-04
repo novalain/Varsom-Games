@@ -20,7 +20,17 @@ public class NetworkListener extends Listener {
     }
 
     public void connected(Connection c) {
-        client.sendTCP(new Packet.LoginRequest());
+        Packet.LoginRequest login = new Packet.LoginRequest();
+
+        if(c.toString().equals("Connection " + c.getID()) || c.toString().equals("")){
+            //No name was chosen, change to "Player X"
+            login.playerName = "Player " + c.getID();
+            c.setName(login.playerName);
+        }
+        else
+            login.playerName = c.toString();
+
+        client.sendTCP(login);
         System.out.println("You have connected.");
 
     }
