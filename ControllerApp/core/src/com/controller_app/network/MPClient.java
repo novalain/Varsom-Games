@@ -94,5 +94,6 @@ public class MPClient {
         Packet.SendDPadData dp = new Packet.SendDPadData();
         dp.data = i;
         client.sendTCP(dp);
+        Gdx.app.log("in MPClient", "sent dPadInfo");
     }
 }
