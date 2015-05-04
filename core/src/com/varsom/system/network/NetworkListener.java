@@ -17,6 +17,8 @@ public class  NetworkListener extends Listener {
 
     public static boolean pause = false;
     public static boolean goBack = false;
+    public static boolean dPadSelect = false;
+    public static int dpad = 0;
 
     private VarsomSystem varsomSystem;
 
@@ -75,7 +77,8 @@ public class  NetworkListener extends Listener {
         }
 
         else if (o instanceof SendDPadData) {
-            int dpad = ((SendDPadData) o).dpaddir;
+            dpad = ((SendDPadData) o).dpaddir;
+            dPadSelect = true;
             System.out.println("Dpad dir is " + dpad);
         }
 

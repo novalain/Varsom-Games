@@ -9,13 +9,16 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 import com.varsom.system.VarsomSystem;
 import com.varsom.system.abstract_gameobjects.VarsomGame;
 import com.varsom.system.games.car_game.com.varsomgames.cargame.CarGame;
@@ -52,8 +55,6 @@ public class VarsomMenu extends ScaledScreen {
     protected VarsomSystem varsomSystem;
 
     private int addedClients = 0;
-
-
     private int middleImageX = -150;
 
     public VarsomMenu(VarsomSystem varsomSystem) {
@@ -63,6 +64,25 @@ public class VarsomMenu extends ScaledScreen {
 
     @Override
     public void show() {
+
+        // Vill kolla om NetworkListener fått in ett SendDpadData.dpad,
+        // Om något nytt kommit in, sätt dpad.x med currentButton
+        // TODO: Gör dpad-datan till 2D, alltså en x och en y-koordinat
+        // Avkommentera när det är fixat
+        if(NetworkListener.dPadSelect == true) {
+         //   currentButton += NetworkListener.dpad;
+            Gdx.app.log("in varsommenu", "dPadSelect!");
+      /*      if(NetworkListener.dPadSelect.x > 0)
+            {
+                right = true;
+            }
+            else
+            {
+                left = true;
+            } */
+            NetworkListener.dPadSelect = false;
+        }
+
         BitmapFont fontType = new BitmapFont();
         fontType.scale(2.f);
 
