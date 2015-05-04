@@ -114,7 +114,7 @@ public class ConnectionScreen extends ScaledScreen {
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.log("in MenuScreen", "pressed controller");
                 connect();
-                main.changeScreen(Commons.CONTROLLER_SCREEN);
+                main.changeScreen(Commons.NAVIGATION_SCREEN);
             }
         });
 
