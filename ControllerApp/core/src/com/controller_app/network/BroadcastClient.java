@@ -25,13 +25,20 @@ public class BroadcastClient {
             byte[] buf = new byte[256];
             packet = new DatagramPacket(buf, buf.length);
             socket.receive(packet);
+
+            System.out.println("CONTROLLER TRYING TO CONNECT TO " + IP);
+
+            System.out.println("packet getData()" + packet.getData());
+            System.out.println("packet getLength()" + packet.getLength());
+
             IP = new String(packet.getData(), 0, packet.getLength());
+
         }
 
         //socket.leaveGroup(address);
         socket.close();
     }
 
-    public String getSertverIP() { return IP; }
+    public String getServerIP() { return IP; }
 
 }

@@ -53,16 +53,21 @@ public class MPClient {
         }
 
         //Gets ip from multicast
-        serverIP = broadcastClient.getSertverIP();
-        System.out.println("IP is " + serverIP);
+        serverIP = broadcastClient.getServerIP();
 
-        try {
-            client.connect(5000, serverIP, 54555, 64555);
+        System.out.print("\nIP is " + serverIP + "\n");
 
-        } catch (IOException e) {
-            e.printStackTrace();
-            client.stop();
-            //menuScreen.errorMessage(2);
+        if(serverIP != null && !serverIP.isEmpty()){
+
+            try {
+                client.connect(5000, serverIP.trim(), 54555, 64555);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                client.stop();
+                //menuScreen.errorMessage(2);
+            }
+
         }
 
     }
