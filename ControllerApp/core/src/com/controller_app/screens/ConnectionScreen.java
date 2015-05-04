@@ -1,6 +1,7 @@
 package com.controller_app.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Net;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -20,6 +22,7 @@ import com.controller_app.Main;
 import com.controller_app.network.MPClient;
 
 import com.controller_app.helper.Commons;
+import com.controller_app.network.NetworkListener;
 
 public class ConnectionScreen extends ScaledScreen {
 
@@ -39,6 +42,7 @@ public class ConnectionScreen extends ScaledScreen {
 
     private FreeTypeFontGenerator generator;
     private SpriteBatch spriteBatch;
+    public int check;
 
     public ConnectionScreen(Main m, MPClient mpc) {
         super();
@@ -65,6 +69,7 @@ public class ConnectionScreen extends ScaledScreen {
         }
 
         generateUI();
+
     }
 
 
@@ -107,6 +112,7 @@ public class ConnectionScreen extends ScaledScreen {
         buttonController.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+ // ControllerApp/core/src/com/controller_app/screens/ConnectionScreen.java
                 connect();
                 main.changeScreen(Commons.CONTROLLER_SCREEN);
             }
@@ -116,6 +122,10 @@ public class ConnectionScreen extends ScaledScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 main.changeScreen(Commons.SETTINGS_SCREEN);
+                Gdx.app.log("in MenuScreen", "pressed controller");
+                //main.changeScreen(2);
+                connect();
+    //          ControllerApp/core/src/com/controller_app/screens/MenuScreen.java
             }
         });
 
@@ -143,6 +153,46 @@ public class ConnectionScreen extends ScaledScreen {
         System.out.println("image: " + table.getPrefWidth() + " , " + table.getPrefHeight());
     }
 
+    public void errorMessage(int s){
+        if(check == 2) {
+            main.changeScreen(1);
+        }
+        switch(s){
+            case 1:
+            new Dialog("Error", skin) {
+                {
+                    text("It's seems that your connection sucks");
+                    button("Ok");
+                }
+
+                @Override
+                protected void result(final Object object) {
+
+                }
+
+            }.show(stage);
+                break;
+
+            case 2:
+                main.changeScreen(1);
+                new Dialog("Error", skin) {
+                    {
+                        text("Please enter a correct IP");
+                        button("Ok");
+                    }
+
+                    @Override
+                    protected void result(final Object object) {
+
+                    }
+
+                }.show(stage);
+                break;
+        }
+
+
+    }
+
     @Override
     public void show() {
     }
@@ -152,14 +202,20 @@ public class ConnectionScreen extends ScaledScreen {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        //Check if we have connected we should change to the controllerScreen
+        if(NetworkListener.connected)
+            main.changeScreen(2);
+
         // Sprite renders
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin();
 
         spriteBatch.end();
 
+        stage.act(delta);
         stage.draw();
     }
+
 
     @Override
     public void resize(int width, int height) {
@@ -197,5 +253,11 @@ public class ConnectionScreen extends ScaledScreen {
             main.getClient().setName(main.getSettingsScreen().getPlayerName());
 
         mpClient.connectToServer(textField.getText());
+    }
+
+    // Disconnect from server
+    public void disconnect() {
+        mpClient.client.stop();
+        NetworkListener.connected = false;
     }
 }

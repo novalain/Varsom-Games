@@ -35,6 +35,7 @@ public class Packet {
     public static class ExitRequest {
         boolean exit = false;
     }
+    public static class StandbyOrder {boolean standby = false;}
 
     public static class SendDPadData{
         int data;

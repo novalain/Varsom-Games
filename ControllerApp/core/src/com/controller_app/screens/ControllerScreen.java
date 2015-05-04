@@ -15,18 +15,21 @@ import com.controller_app.Main;
 import com.controller_app.network.MPClient;
 
 import com.controller_app.helper.Commons;
+import com.controller_app.network.NetworkListener;
 
 /**
  *
  */
 public class ControllerScreen extends ScaledScreen {
 
-    private TextButton drive;
-    private TextButton home;
+    private TextButton buttonDrive;
+    private TextButton buttonReverse;
+    private TextButton buttonHome;
     private TextButton buttonExit;
     private TextButton buttonPause;
     private TextButton buttonUnpause;
     private TextButton btnName;
+    private TextButton buttonPlay;
 
     // Menu stuff
     private Main main;
@@ -40,7 +43,7 @@ public class ControllerScreen extends ScaledScreen {
     private BitmapFont font;
 
 
-    private boolean drivePressed = false;
+    private boolean drivePressed = false, reversePressed = false;
 
     private float steeringSensitivity = 0.4f;
 
@@ -73,12 +76,13 @@ public class ControllerScreen extends ScaledScreen {
         generateTextButtonStyle();
         generateUI();
 
-        stage.addActor(drive);
-        stage.addActor(home);
+        stage.addActor(buttonDrive);
+        stage.addActor(buttonReverse);
+        stage.addActor(buttonHome);
         stage.addActor(buttonExit);
         stage.addActor(buttonPause);
-        stage.addActor(buttonUnpause);
         stage.addActor(btnName);
+        stage.addActor(buttonPlay);
 
         mpc.controllerScreen = this;
     }
@@ -133,25 +137,30 @@ public class ControllerScreen extends ScaledScreen {
     }
 
     private void generateUI() {
-        drive = new TextButton("Drive", textButtonStyle);
-        drive.setWidth(1000);
-        drive.setHeight(1080);
-        drive.setPosition(Commons.WORLD_WIDTH * 0.5f, 0);
+        buttonDrive = new TextButton("Drive", textButtonStyle);
+        buttonDrive.setWidth(1000);
+        buttonDrive.setHeight(900);
+        buttonDrive.setPosition(Commons.WORLD_WIDTH * 0.5f, 0);
 
-        home = new TextButton("Menu", textButtonStyle);
-        home.setWidth(300);
-        home.setHeight(300);
-        home.setPosition(Commons.WORLD_WIDTH * 0.2f, Commons.WORLD_HEIGHT * 0.2f);
+        buttonReverse = new TextButton("Reverse", textButtonStyle);
+        buttonReverse.setWidth(1000);
+        buttonReverse.setHeight(180);
+        buttonReverse.setPosition(Commons.WORLD_WIDTH * 0.5f, 900);
+
+        buttonHome = new TextButton("Menu", textButtonStyle);
+        buttonHome.setWidth(300);
+        buttonHome.setHeight(300);
+        buttonHome.setPosition(Commons.WORLD_WIDTH * 0.2f, Commons.WORLD_HEIGHT * 0.2f);
 
         buttonPause = new TextButton("Pause", textButtonStyle);
         buttonPause.setWidth(300);
         buttonPause.setHeight(300);
         buttonPause.setPosition(Commons.WORLD_WIDTH * 0.2f, Commons.WORLD_HEIGHT * 0.2f + 300f);
 
-        buttonUnpause = new TextButton("Unpause", textButtonStyle);
-        buttonUnpause.setWidth(300);
-        buttonUnpause.setHeight(300);
-        buttonUnpause.setPosition(Commons.WORLD_WIDTH * 0.2f, Commons.WORLD_HEIGHT * 0.2f + 600f);
+        buttonPlay = new TextButton("Play", textButtonStyle);
+        buttonPlay.setWidth(300);
+        buttonPlay.setHeight(300);
+        buttonPlay.setPosition(Commons.WORLD_WIDTH * 0.2f, Commons.WORLD_HEIGHT * 0.2f + 600f);
 
         buttonExit = new TextButton("Exit", textButtonStyle);
         buttonExit.setWidth(300);
@@ -163,10 +172,11 @@ public class ControllerScreen extends ScaledScreen {
         btnName.setHeight(300);
         btnName.setPosition(Commons.WORLD_WIDTH * 0.2f, Commons.WORLD_HEIGHT * 0.2f - 300f);
 
-        home.addListener(new ClickListener() {
+        buttonHome.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-
+        // TODO: Fel under merge, ta bort helt om den inte behövs
+         //       main.getMenuScreen().disconnect();
                 main.changeScreen(1);
 
             }
@@ -182,12 +192,12 @@ public class ControllerScreen extends ScaledScreen {
             }
         });
 
-        buttonUnpause.addListener(new ClickListener() {
+        buttonPlay.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 //send pause request to server with false
                 mpClient.sendPause(false);
-                Gdx.app.log("in ControllerScreen", "pressed Pause");
+                Gdx.app.log("in ControllerScreen", "pressed Play");
             }
         });
 
@@ -195,6 +205,7 @@ public class ControllerScreen extends ScaledScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
+                mpClient.sendExit(true);
                 Gdx.app.log("in ControllerScreen", "pressed Exit");
                 //Go back to main menu on the server
 
@@ -202,7 +213,7 @@ public class ControllerScreen extends ScaledScreen {
         });
 
 
-        drive.addListener(new ClickListener() {
+        buttonDrive.addListener(new ClickListener() {
 
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
@@ -215,6 +226,29 @@ public class ControllerScreen extends ScaledScreen {
                 drivePressed = false;
             }
         });
+
+        buttonReverse.addListener(new ClickListener() {
+
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+
+                reversePressed = true;
+
+                vibrate(200);
+
+                return true;
+            }
+
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                reversePressed = false;
+            }
+        });
+    }
+
+    // Vibrate the controller where time is in milliseconds
+    public void vibrate(int time){
+
+        Gdx.input.vibrate(time);
+
     }
 
     private void generateTextButtonStyle() {
@@ -228,6 +262,12 @@ public class ControllerScreen extends ScaledScreen {
     public boolean getDrive() {
 
         return drivePressed;
+    }
+
+    public boolean getReverse(){
+
+        return reversePressed;
+
     }
 
     // Calculates the rotation of the phone

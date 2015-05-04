@@ -1,26 +1,32 @@
 package com.controller_app.network;
 
 import com.badlogic.gdx.Gdx;
+import com.controller_app.screens.ConnectionScreen;
+import com.controller_app.screens.ControllerScreen;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 
 import java.io.IOException;
 
-import com.controller_app.screens.ControllerScreen;
-
 public class MPClient {
     public Client client;
     public ControllerScreen controllerScreen;
+    private BroadcastClient broadcastClient;
+    public boolean correctIP;
+    private String serverIP;
 
 
     public MPClient() throws IOException {
+         correctIP = false;
 
         client = new Client();
         register();
 
         NetworkListener nl = new NetworkListener();
 
+
         // Initialise variables (not sure if it needed, maybe later)
+
         nl.init(client, this);
         client.addListener(nl);
 
@@ -32,11 +38,24 @@ public class MPClient {
     // get IP from user input and connects
     public void connectToServer(String ip) {
 
+        // Start a multicast reciver
         try {
-            client.connect(5000, ip, 54555, 64555);
+            broadcastClient= new BroadcastClient();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //Gets ip from multicast
+        serverIP = broadcastClient.getSertverIP();
+        System.out.println("IP is " + serverIP);
+
+        try {
+            client.connect(5000, serverIP, 54555, 64555);
+
         } catch (IOException e) {
             e.printStackTrace();
             client.stop();
+           // ConnectionScreen.errorMessage(2);
         }
     }
 
@@ -46,13 +65,13 @@ public class MPClient {
         // Register packets
         kryo.register(Packet.LoginRequest.class);
         kryo.register(Packet.LoginAnswer.class);
-        kryo.register(Packet.Message.class);
         kryo.register(Packet.GamePacket.class);
         kryo.register(Packet.SendGameData.class);
         kryo.register(Packet.ShutDownPacket.class);
         kryo.register(Packet.PauseRequest.class);
         kryo.register(Packet.ExitRequest.class);
         kryo.register(Packet.SendDPadData.class);
+        kryo.register(Packet.StandbyOrder.class);
     }
 
     public void sendPacket(boolean send) {
@@ -63,7 +82,7 @@ public class MPClient {
 
             Packet.GamePacket packet = new Packet.GamePacket();
 
-            packet.message = controllerScreen.getDrive() + " " + controllerScreen.getRotation();
+            packet.message = controllerScreen.getDrive() + " " + controllerScreen.getReverse() + " " + controllerScreen.getRotation();
             client.sendUDP(packet);
 
             try {
@@ -96,4 +115,9 @@ public class MPClient {
         client.sendTCP(dp);
         Gdx.app.log("in MPClient", "sent dPadInfo");
     }
+
+    public void errorHandler(){
+      //  ConnectionScreen.errorMessage(1);
+    }
+
 }
