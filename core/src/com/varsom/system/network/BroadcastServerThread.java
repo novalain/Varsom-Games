@@ -25,6 +25,12 @@ public class BroadcastServerThread extends Thread {
         }
 
         ip = serverip;
+
+        // Removes unneeded ip addresses
+        if(ip.contains(" ")) {
+            ip = ip.substring(0, ip.indexOf(" "));
+        }
+        System.out.println("IP is " + ip);
         // gets the broadcast subgroup
         broadip = ip.substring(0,ip.lastIndexOf(".")) +  ".255";
 
