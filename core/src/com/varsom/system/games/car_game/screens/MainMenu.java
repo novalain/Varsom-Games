@@ -41,7 +41,10 @@ public class MainMenu extends ScaledScreen {
     private int selectedButtonIndex = 0;
 
     protected VarsomSystem varsomSystem;
-
+    // keeping track of which button is hovered by the controller app (Dpad)
+    // Button has x and y index, where index 0,0 is the button on top to the left and
+    // sizeX, sizeY (where size is amout of buttons) is bottom right
+    private Vector2 currentButton = new Vector2(0,0);
     //TODO Load files from AssetLoader
 
     private Skin defaultSkin = new Skin(Gdx.files.internal("car_game_assets/skins/menuSkin.json"),
@@ -80,6 +83,17 @@ public class MainMenu extends ScaledScreen {
 
     @Override
     public void show() {
+        // Vill kolla om NetworkListener fått in ett SendDpadData.dpad,
+        // Om något nytt kommit in, sätt dpad.x med currentButton
+        // TODO: Gör dpad-datan till 2D, alltså en x och en y-koordinat
+        // Avkommentera när det är fixat
+        if(NetworkListener.dPadSelect == true) {
+            //   currentButton.x += NetworkListener.dpad.x;
+            // currentButton.y = NetworkListener.dpad.y;
+            Gdx.app.log("in Main Menu", "dPad input catched!");
+            NetworkListener.dPadSelect = false;
+        }
+
         Gdx.input.setCatchBackKey(false);
         buttonPlay.addListener(new ClickListener() {
             @Override
