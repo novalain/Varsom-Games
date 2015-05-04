@@ -18,7 +18,7 @@ import com.controller_app.helper.DPad;
 import com.controller_app.network.MPClient;
 
 public class NavigationScreen extends ScaledScreen{
-    private TextButton btnUp, btnDown, btnRight, btnLeft, btnSettings, btnSelect;
+    private TextButton btnUp, btnDown, btnRight, btnLeft, btnSettings, btnSelect, btnDisconnect, btnController;
     private Table table;
     private TextureAtlas atlas;
     private Skin skin;
@@ -79,36 +79,38 @@ public class NavigationScreen extends ScaledScreen{
         btnRight = new TextButton("Right", skin);
         btnSelect = new TextButton("Select", skin);
         btnSettings = new TextButton("Settings", skin);
+        btnDisconnect = new TextButton("Disc", skin);
+        btnController = new TextButton("Cont", skin);
 
         btnUp.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                // inputHandler.setUpPressed();
-                mpClient.sendDPadData(DPad.UP);
+                mpClient.sendDPadData(0, DPad.UP, false);
             }
         });
         btnDown.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                mpClient.sendDPadData(DPad.DOWN);
+                mpClient.sendDPadData(0, DPad.DOWN, false);
             }
         });
         btnLeft.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                mpClient.sendDPadData(DPad.LEFT);
+                mpClient.sendDPadData(DPad.LEFT,0, false);
             }
         });
         btnRight.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                mpClient.sendDPadData(DPad.RIGHT);
+                mpClient.sendDPadData(DPad.RIGHT,0, false);
             }
         });
         btnSelect.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                mpClient.sendDPadData(DPad.SELECT);
+                mpClient.sendDPadData(0,0,DPad.SELECT);
             }
         });
         btnSettings.addListener(new ClickListener() {
@@ -118,10 +120,27 @@ public class NavigationScreen extends ScaledScreen{
                 main.changeScreen(Commons.SETTINGS_SCREEN);
             }
         });
+        btnDisconnect.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.log("input", "disconnect pressed");
+                main.getConnectionScreen().disconnect();
+                main.changeScreen(Commons.CONNECTION_SCREEN);
+            }
+        });
+        btnController.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.log("input", "controller pressed");
+                main.changeScreen(Commons.CONTROLLER_SCREEN);
+            }
+        });
 
         table.debug();
         table.row();
-        table.add(btnSettings).padBottom(50).colspan(5).size(200, 200).right();
+        table.add(btnDisconnect).padBottom(50).colspan(2).size(200, 200).left();
+        table.add(btnController).padBottom(50).colspan(1).size(200, 200).center();
+        table.add(btnSettings).padBottom(50).colspan(2).size(200, 200).right();
 
         table.row();
         table.add(btnUp).padBottom(10).colspan(5).center().size(200,200);

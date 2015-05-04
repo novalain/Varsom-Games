@@ -123,9 +123,11 @@ public class MPClient {
         Gdx.app.log("in MPClient", "sent Exit");
     }
 
-    public void sendDPadData(int i) {
+    public void sendDPadData(int x, int y, boolean bool) {
         Packet.SendDPadData dp = new Packet.SendDPadData();
-        dp.data = i;
+        dp.dataX = x;
+        dp.dataY = y;
+        dp.select = bool;
         client.sendTCP(dp);
         Gdx.app.log("in MPClient", "sent dPadInfo");
     }

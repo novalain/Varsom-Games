@@ -1,6 +1,7 @@
 package com.controller_app.network;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -14,6 +15,7 @@ public class NetworkListener extends Listener {
     private boolean start;
     public static boolean connected = false;
     public static boolean standby = false;
+    public static int paddir;
 
     // If you want to send a object, you need to send it with this client variable
     public void init(Client client, MPClient mpClient) {
@@ -87,8 +89,9 @@ public class NetworkListener extends Listener {
         if (o instanceof Packet.SendDPadData) {
             System.out.println("in NetworkListener: standby");
 
-            int paddir = ((Packet.SendDPadData) o).data;
-            System.out.println("Paddir is " + paddir);
+            paddir = ((Packet.SendDPadData) o).dataX;
+            boolean padSelected = ((Packet.SendDPadData) o).select;
+            System.out.println("Paddir is " + paddir + " and select is " + padSelected );
 
         }
     }
