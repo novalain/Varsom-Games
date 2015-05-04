@@ -2,7 +2,6 @@ package com.varsom.system.games.car_game.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -10,14 +9,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.varsom.system.Commons;
+import com.varsom.system.DPad;
 import com.varsom.system.screens.ScaledScreen;
 
 import java.util.ArrayList;
@@ -38,19 +36,28 @@ public class MainMenu extends ScaledScreen {
     private SpriteBatch spriteBatch = new SpriteBatch();
     private ArrayList<BackgroundObject> objectList;
 
+    // Select buttons
+    private ArrayList<TextButton> buttonList = new ArrayList<TextButton>();
+    private int selectedButtonIndex = 0;
+
     protected VarsomSystem varsomSystem;
 
     //TODO Load files from AssetLoader
 
-    private Skin skin = new Skin(Gdx.files.internal("car_game_assets/skins/menuSkin.json"),
+    private Skin defaultSkin = new Skin(Gdx.files.internal("car_game_assets/skins/menuSkin.json"),
             new TextureAtlas(Gdx.files.internal("car_game_assets/skins/menuSkin.pack")));
 
-    private TextButton buttonPlay = new TextButton("Play level 1", skin),
-            buttonPlay2 = new TextButton("Play level 2", skin),
-            buttonSettings = new TextButton("Settings", skin),
-            buttonAbout = new TextButton("About", skin),
-            buttonExit = new TextButton("Exit", skin);
-    private Label title = new Label(CarGame.TITLE, skin);
+    private Skin selectedSkin = new Skin(Gdx.files.internal("car_game_assets/skins/selectedSkin.json"),
+            new TextureAtlas(Gdx.files.internal("car_game_assets/skins/selectedSkin.pack")));
+
+
+    private TextButton buttonPlay = new TextButton("Play level 1", selectedSkin),
+            buttonPlay2 = new TextButton("Play level 2", defaultSkin),
+            buttonSettings = new TextButton("Settings", defaultSkin),
+            buttonAbout = new TextButton("About", defaultSkin),
+            buttonExit = new TextButton("Exit", defaultSkin);
+
+    private Label title = new Label(CarGame.TITLE, defaultSkin);
     private Label connectedClientNames;
 
     private String clientNames;
@@ -58,10 +65,17 @@ public class MainMenu extends ScaledScreen {
     public MainMenu(VarsomSystem varsomSystem) {
         this.varsomSystem = varsomSystem;
         objectList = new ArrayList<BackgroundObject>();
-        for (int i = 0; i < 10; i++) {
-            Vector2 temp = new Vector2( (float) ( Math.random()*WIDTH), (float) ( Math.random()*HEIGHT) );
+        for (int i = 0; i < 100; i++) {
+            Vector2 temp = new Vector2((float) (Math.random() * WIDTH), (float) (Math.random() * HEIGHT));
             objectList.add(new BackgroundObject(temp, "car_game_assets/img/cloud.png"));
         }
+        // add to ArrayList
+
+        buttonList.add(buttonPlay);
+        buttonList.add(buttonPlay2);
+        buttonList.add(buttonSettings);
+        buttonList.add(buttonAbout);
+        buttonList.add(buttonExit);
     }
 
     @Override
@@ -72,7 +86,8 @@ public class MainMenu extends ScaledScreen {
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.log("clicked", "pressed the PLAY button.");
                 varsomSystem.getMPServer().setJoinable(false);
-                ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(1,varsomSystem));
+
+                //((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(1, varsomSystem));
             }
         });
 
@@ -81,7 +96,8 @@ public class MainMenu extends ScaledScreen {
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.log("clicked", "pressed the PLAY 2 button.");
                 varsomSystem.getMPServer().setJoinable(false);
-                ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(2,varsomSystem));
+
+                ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(2, varsomSystem));
             }
         });
 
@@ -102,7 +118,7 @@ public class MainMenu extends ScaledScreen {
         buttonExit.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-             //   Boolean isKeyPressed = true;
+                //   Boolean isKeyPressed = true;
                 Gdx.app.log("clicked", "pressed the EXIT CARGAME button.");
                 ((Game) Gdx.app.getApplicationListener()).setScreen(new VarsomMenu(varsomSystem));
                 // or System.exit(0);
@@ -113,11 +129,11 @@ public class MainMenu extends ScaledScreen {
 
         // Elements are displayed in the order they're added, top to bottom
         table.add(title).padBottom(40).row();
-        table.add(buttonPlay).size(400, 75).padBottom(20).row();
-        table.add(buttonPlay2).size(400, 75).padBottom(20).row();
-        table.add(buttonSettings).size(400, 75).padBottom(20).row();
-        table.add(buttonAbout).size(400, 75).padBottom(20).row();
-        table.add(buttonExit).size(400, 75).padBottom(20).row();
+        table.add(buttonPlay).size(500, 150).padBottom(20).row();
+        table.add(buttonPlay2).size(500, 150).padBottom(20).row();
+        table.add(buttonSettings).size(500, 150).padBottom(20).row();
+        table.add(buttonAbout).size(500, 150).padBottom(20).row();
+        table.add(buttonExit).size(500, 150).padBottom(20).row();
 
         BitmapFont fontType = new BitmapFont();
         fontType.scale(2.f);
@@ -140,7 +156,7 @@ public class MainMenu extends ScaledScreen {
     public void render(float delta) {
 
         // If Exit was pressed on a client
-        if(NetworkListener.goBack) {
+        if (NetworkListener.goBack) {
             Gdx.app.log("in GameScreen", "go back to main menu");
             //TODO ska vi skapa en ny meny eller gå tillbaka till den gamla?
             //TODO om va gör en ny, när tar vi bort den gamla?
@@ -184,18 +200,18 @@ public class MainMenu extends ScaledScreen {
     @Override
     public void dispose() {
         stage.dispose();
-        skin.dispose();
+        defaultSkin.dispose();
     }
 
     public void updateBackground() {
-        
+
         for (int i = 0; i < objectList.size(); i++) {
             BackgroundObject temp = objectList.get(i);
             temp.update();
 
-            if(temp.getPos().x > WIDTH + temp.getWidth() + 10){
+            if (temp.getPos().x > WIDTH + temp.getWidth() + 10) {
                 temp.setX(-10 - temp.getWidth());
-                temp.setY( (float) ( Math.random()*HEIGHT) );
+                temp.setY((float) (Math.random() * HEIGHT));
             }
         }
     }
@@ -222,5 +238,32 @@ public class MainMenu extends ScaledScreen {
             clientNames += "\n" + varsomSystem.getServer().getConnections()[i].getRemoteAddressTCP().toString();
         }
         connectedClientNames.setText(clientNames);
+    }
+
+    private void processDPad(int upOrDown) {
+
+        if (upOrDown == DPad.UP) {
+            if (selectedButtonIndex <= 0) {
+                selectedButtonIndex = buttonList.size() - 1;
+            } else {
+                selectedButtonIndex--;
+            }
+        } else if (upOrDown == DPad.DOWN) {
+            if (selectedButtonIndex >= buttonList.size() - 1) {
+                selectedButtonIndex = 0;
+            } else {
+                selectedButtonIndex++;
+            }
+        }
+    }
+
+    private void setSelectedButtonSkin() {
+        for (int i = 0; i < buttonList.size(); i++) {
+            if (i == selectedButtonIndex) {
+                buttonList.get(i).setSkin(selectedSkin);
+            } else {
+                buttonList.get(i).setSkin(defaultSkin);
+            }
+        }
     }
 }
