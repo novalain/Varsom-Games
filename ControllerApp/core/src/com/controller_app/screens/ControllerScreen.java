@@ -176,8 +176,8 @@ public class ControllerScreen extends ScaledScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
         // TODO: Fel under merge, ta bort helt om den inte behövs
-         //       main.getMenuScreen().disconnect();
-                main.changeScreen(1);
+                main.getConnectionScreen().disconnect();
+                main.changeScreen(Commons.CONNECTION_SCREEN);
 
             }
         });

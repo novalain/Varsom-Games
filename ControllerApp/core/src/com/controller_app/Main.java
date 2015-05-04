@@ -8,6 +8,7 @@ import com.controller_app.network.NetworkListener;
 import com.controller_app.screens.ControllerScreen;
 
 import java.io.IOException;
+import java.sql.Connection;
 
 import com.controller_app.network.MPClient;
 import com.controller_app.screens.NavigationScreen;
@@ -17,9 +18,9 @@ import com.controller_app.screens.StandbyScreen;
 
 public class Main extends Game {
 
+    private SettingsScreen settingsScreen;
     private ConnectionScreen connectionScreen;
     private NavigationScreen navScreen;
-    private SettingsScreen settingsScreen;
     private ControllerScreen controllerScreen;
 
     private StandbyScreen standbyScreen;
@@ -94,9 +95,9 @@ public class Main extends Game {
         }
     }
 
- /*   public MPClient getMpClient(){
+    public MPClient getMpClient(){
         return mpClient;
-    } */
+    }
 
     public Client getClient(){
         return mpClient.client;
@@ -104,5 +105,17 @@ public class Main extends Game {
 
     public SettingsScreen getSettingsScreen(){
         return settingsScreen;
+    }
+
+    public ConnectionScreen getConnectionScreen(){
+        return connectionScreen;
+    }
+
+    public NavigationScreen getNavigationScreen(){
+        return navScreen;
+    }
+
+    public ControllerScreen getControllerScreen(){
+        return controllerScreen;
     }
 }
