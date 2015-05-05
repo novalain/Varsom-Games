@@ -5,6 +5,7 @@ import com.controller_app.screens.ConnectionScreen;
 import com.controller_app.screens.ControllerScreen;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.kryonet.Connection;
 
 import java.io.IOException;
 
@@ -15,10 +16,13 @@ public class MPClient {
     public boolean correctIP;
     private String serverIP;
     private Thread networkThread;
+    private ConnectionScreen connectionScreen;
+    private boolean closeThread;
 
 
     public MPClient() throws IOException {
         correctIP = false;
+        closeThread = true;
 
         client = new Client();
         register();
@@ -43,6 +47,7 @@ public class MPClient {
             broadcastClient = new BroadcastClient();
         } catch (IOException e) {
             e.printStackTrace();
+            connectionScreen.errorMessage(2);
         }
 
         //Gets ip from broadcast
@@ -58,7 +63,7 @@ public class MPClient {
             } catch (IOException e) {
                 e.printStackTrace();
                 client.stop();
-                // ConnectionScreen.errorMessage(2);
+                connectionScreen.errorMessage(2);
             }
         }
     }
@@ -134,6 +139,7 @@ public class MPClient {
 
     public void sendDPadData(int x, int y, boolean bool) {
         Packet.SendDPadData dp = new Packet.SendDPadData();
+        // TODO: Put dataX and dataY together to an array or string for efficiency
         dp.dataX = x;
         dp.dataY = y;
         dp.select = bool;
@@ -141,8 +147,14 @@ public class MPClient {
         Gdx.app.log("in MPClient", "sent dPadInfo");
     }
 
+    public void setConnectionScreen(ConnectionScreen cs){
+
+        this.connectionScreen = cs;
+    }
+
     public void errorHandler() {
-        //  ConnectionScreen.errorMessage(1);
+          connectionScreen.errorMessage(1);
+        closeThread = false;
     }
     public Thread newThread(){
         Thread nT = new Thread(new Runnable() {
@@ -153,7 +165,7 @@ public class MPClient {
 
                 Gdx.app.log("Thread", "NEW THREAD IS RUNNING");
                 try {
-                    while (!Thread.currentThread().isInterrupted()) {
+                    while (!Thread.currentThread().isInterrupted() && closeThread) {
                         Thread.sleep(1000 /  TICKS_PER_SECOND );
                         Gdx.app.log("Thread", "DATA IS BEING SENT!!");
                         Packet.GamePacket packet = new Packet.GamePacket();

@@ -46,6 +46,7 @@ public class NetworkListener extends Listener {
     public void disconnected(Connection c) {
         System.out.println("You have disconnected.");
         mpClient.errorHandler();
+        connected = false;
     }
 
     public void received(Connection c, Object o) {

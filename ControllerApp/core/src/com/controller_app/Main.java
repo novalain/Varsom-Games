@@ -51,11 +51,13 @@ public class Main extends Game {
         switch (s) {
             case Commons.CONNECTION_SCREEN:
                 Gdx.input.setInputProcessor(connectionScreen.getStage());
+                connectionScreen.check = 1;
                 setScreen(connectionScreen);
                 break;
 
             case Commons.NAVIGATION_SCREEN:
                 Gdx.input.setInputProcessor(navScreen.getStage());
+                connectionScreen.check = 2;
                 setScreen(navScreen);
                 break;
  // TODO: Erase if not needed, left after merge with Dpad branch
@@ -85,10 +87,12 @@ public class Main extends Game {
             case Commons.SETTINGS_SCREEN:
                 //TODO: Settings Screen
                 Gdx.input.setInputProcessor(settingsScreen.getStage());
+                connectionScreen.check = 2;
                 setScreen(settingsScreen);
                 break;
             case Commons.CONTROLLER_SCREEN:
                 Gdx.input.setInputProcessor(controllerScreen.getStage());
+                connectionScreen.check = 2;
                 setScreen(controllerScreen);
                 break;
 
