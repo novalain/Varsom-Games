@@ -14,6 +14,7 @@ public class MPClient {
     private BroadcastClient broadcastClient;
     public boolean correctIP;
     private String serverIP;
+    private Thread networkThread;
 
 
     public MPClient() throws IOException {
@@ -23,7 +24,8 @@ public class MPClient {
         register();
 
         NetworkListener nl = new NetworkListener();
-
+        networkThread = newThread();
+        //newThread(networkThread);
 
         // Initialise variables (not sure if it needed, maybe later)
 
@@ -37,7 +39,6 @@ public class MPClient {
 
     // get IP from user input and connects
     public void connectToServer(String ip) {
-
         // Start a broadcast receiver
         try {
             broadcastClient = new BroadcastClient();
@@ -80,22 +81,31 @@ public class MPClient {
 
     public void sendPacket(boolean send) {
 
-        final int TICKS_PER_SECOND = 30;
-        System.out.println(send);
-        while (send && client.isConnected()) {
+        System.out.println("Sending device data: " + send);
+        if(!networkThread.isAlive()){
+            Gdx.app.log("SEND PACKETS", "THREAD WASN'T ALIVE");
+            if(send) {
+                Gdx.app.log("SEND PACKETS", "STARTING THREAD");
+                networkThread.start();
+            }
+            else if (!send) {
 
-            Packet.GamePacket packet = new Packet.GamePacket();
-
-            packet.message = controllerScreen.getDrive() + " " + controllerScreen.getReverse() + " " + controllerScreen.getRotation();
-            client.sendUDP(packet);
-
-            try {
-                Thread.sleep(1000 / TICKS_PER_SECOND);
-            } catch (InterruptedException ex) {
-                Thread.currentThread().interrupt();
-                break;
             }
         }
+        else{
+            Gdx.app.log("SEND PACKETS", "THREAD IS ALIVE");
+            if(!send) {
+                Gdx.app.log("SEND PACKETS", "INTERUPTING THREAD");
+                networkThread.interrupt();
+            }
+            else{
+                Gdx.app.log("SEND PACKETS", "RESTARTING THREAD");
+                //newThread(networkThread);
+                networkThread = newThread();
+            }
+
+        }
+
     }
 
     //send a boolean for pause state
@@ -125,5 +135,29 @@ public class MPClient {
 
     public void errorHandler() {
         //  ConnectionScreen.errorMessage(1);
+    }
+    public Thread newThread(){
+        Thread nT = new Thread(new Runnable() {
+
+            final int TICKS_PER_SECOND = 30;
+
+            public void run() {
+
+                Gdx.app.log("Thread", "NEW THREAD IS RUNNING");
+                try {
+                    while (!Thread.currentThread().isInterrupted()) {
+                        Thread.sleep(1000 /  TICKS_PER_SECOND );
+                        Gdx.app.log("Thread", "DATA IS BEING SENT!!");
+                        Packet.GamePacket packet = new Packet.GamePacket();
+
+                        packet.message = controllerScreen.getDrive() + " " + controllerScreen.getReverse() + " " + controllerScreen.getRotation();
+                        client.sendUDP(packet);
+                    }
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        });
+        return nT;
     }
 }

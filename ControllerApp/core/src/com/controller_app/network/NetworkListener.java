@@ -1,5 +1,6 @@
 package com.controller_app.network;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
@@ -47,6 +48,7 @@ public class NetworkListener extends Listener {
 
     public void received(Connection c, Object o) {
         // checks for login answers from server
+        String message = "Recieved a message of type: ";
         if (o instanceof Packet.LoginAnswer) {
             connected = ((Packet.LoginAnswer) o).accepted;
             standby = ((Packet.LoginAnswer) o).standby;
@@ -62,13 +64,20 @@ public class NetworkListener extends Listener {
         }
 
         if (o instanceof Packet.SendGameData) {
-
+            message += "SendGameData";
+            Gdx.app.log("NETWORK", message);
             start = ((Packet.SendGameData) o).send;
-            new Thread() {
-                public void run() {
-                    mpClient.sendPacket(start);
-                }
-            }.start();
+
+            mpClient.sendPacket(start);
+            /*
+            if(start) {
+                new Thread() {
+                    public void run() {
+                        mpClient.sendPacket(start);
+                    }
+                }.start();
+            }
+            */
         }
         if (o instanceof Packet.StandByOrder) {
             System.out.println("in NetworkListener: standby");

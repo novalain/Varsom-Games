@@ -91,6 +91,7 @@ public class Main extends Game {
                 Gdx.input.setInputProcessor(controllerScreen.getStage());
                 setScreen(controllerScreen);
                 break;
+
             default: System.out.println("Error in changeScreen");
         }
     }
