@@ -472,13 +472,6 @@ public class Car extends DynamicObject {
         float temp = a.x * b.x + a.y * b.y;
         return temp;
     }
-
-<<<<<<< HEAD
-    public int getID(){
-        return ID;
-    }
-
-=======
     public boolean isActive(){
         return active;
     }
@@ -490,5 +483,4 @@ public class Car extends DynamicObject {
     public int getID(){
         return ID;
     }
->>>>>>> 1104de501ea97da2545896c9038803a12b74fe2d
 }
