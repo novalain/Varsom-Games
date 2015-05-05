@@ -60,6 +60,7 @@ public class VarsomMenu extends ScaledScreen {
     public VarsomMenu(VarsomSystem varsomSystem) {
 
         this.varsomSystem = varsomSystem;
+        varsomSystem.setActiveStage(stage);
     }
 
     @Override

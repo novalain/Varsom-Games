@@ -83,6 +83,7 @@ public class GameScreen implements Screen {
 
     public GameScreen(int level, final VarsomSystem varsomSystem) {
         this.varsomSystem = varsomSystem;
+        varsomSystem.setActiveStage(stage);
         this.level = level;
         world = new World(new Vector2(0f, 0f), true);
         debugRenderer = new Box2DDebugRenderer();
