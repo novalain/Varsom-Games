@@ -146,6 +146,7 @@ public class VarsomMenu extends ScaledScreen {
             //If position reached middle, set swipe swipedRight to false (810 is original pos for the middle image)
             if (images.elementAt(currentButton).getX() >= middleImageX) {
                 swipedRight = false;
+
             } else {
 
                 //Translate all images
@@ -258,7 +259,7 @@ public class VarsomMenu extends ScaledScreen {
 
         //update the client names label with clients connected at the moment
         for (int i = 0; i < varsomSystem.getServer().getConnections().length; i++) {
-            //TODO swipedRight now the IP is displayed, it should be the name chosen by the player
+            //TODO right now the IP is displayed, it should be the name chosen by the player
             clientNames += "\n" + varsomSystem.getServer().getConnections()[i].toString();
         }
         connectedClientNames.setText(clientNames);
@@ -267,6 +268,18 @@ public class VarsomMenu extends ScaledScreen {
     // Checking if Networklistener have recieved a dPad-package
     // If something has updated, update currentButton with dpadData(x-value)
     public void handleDpad() {
+
+        if(NetworkListener.dPadSelect){
+
+            System.out.println("HALLOJ");
+            System.out.println("swipedLeft" + swipedLeft);
+            System.out.println("swipedright" + swipedRight);
+
+            if(!swipedLeft && !swipedRight)
+                selectMenuItem();
+
+            NetworkListener.dPadSelect = false;
+        }
 
         if (NetworkListener.dpadTouched == true) {
             NetworkListener.dpadTouched = false;
@@ -288,14 +301,10 @@ public class VarsomMenu extends ScaledScreen {
                     currentButton = 0;
                 }
             }
-            if(NetworkListener.dPadSelect){
 
-                if(!swipedLeft && !swipedRight)
-                    selectMenuItem();
-
-                NetworkListener.dPadSelect = false;
-            }
         }
+
+
     }
     public void createMenuItems(){
 
