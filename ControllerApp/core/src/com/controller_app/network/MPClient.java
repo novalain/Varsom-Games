@@ -25,7 +25,6 @@ public class MPClient {
 
         NetworkListener nl = new NetworkListener();
         networkThread = newThread();
-        //newThread(networkThread);
 
         // Initialise variables (not sure if it needed, maybe later)
 
@@ -77,6 +76,8 @@ public class MPClient {
         kryo.register(Packet.ExitRequest.class);
         kryo.register(Packet.StandByOrder.class);
         kryo.register(Packet.SendDPadData.class);
+        kryo.register(Packet.VibrateClient.class);
+        kryo.register(Packet.PulseVibrateClient.class);
     }
 
     public void sendPacket(boolean send) {
@@ -85,8 +86,14 @@ public class MPClient {
         if(!networkThread.isAlive()){
             Gdx.app.log("SEND PACKETS", "THREAD WASN'T ALIVE");
             if(send) {
-                Gdx.app.log("SEND PACKETS", "STARTING THREAD");
-                networkThread.start();
+                Gdx.app.log("SEND PACKETS", "STARTING NEW THREAD");
+                try {
+                    networkThread.start();
+                }
+                catch (Exception e){
+                    networkThread = newThread();
+                    networkThread.start();
+                }
             }
             else if (!send) {
 
@@ -102,6 +109,8 @@ public class MPClient {
                 Gdx.app.log("SEND PACKETS", "RESTARTING THREAD");
                 //newThread(networkThread);
                 networkThread = newThread();
+                networkThread.start();
+
             }
 
         }
