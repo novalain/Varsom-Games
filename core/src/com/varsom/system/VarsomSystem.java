@@ -131,6 +131,7 @@ public class VarsomSystem extends /*ApplicationAdapter*/Game {
         this.activeGame = vG;
 
     }
+    // a function that is used in every screen to get the stage that is active
     public void setActiveStage(Stage s){
 
         this.activeStage = s;
@@ -138,7 +139,8 @@ public class VarsomSystem extends /*ApplicationAdapter*/Game {
     }
 
 
-
+    //a function to show a popup message when a player is disconnected
+    //
     public void errorMessage(Connection c){
         final Connection myC = c;
 
@@ -155,7 +157,7 @@ public class VarsomSystem extends /*ApplicationAdapter*/Game {
 
         };
 
-
+        //this is values that can be modified if the popup window is to big or to small
         errorDialog.setHeight(errorDialog.getPrefHeight()*2);
         errorDialog.setWidth(errorDialog.getPrefWidth()*2);
         errorDialog.setScale(2);
