@@ -46,6 +46,7 @@ public class Car extends DynamicObject {
     private Vector2 pointOnTrack;
     //temp
     int ID;
+    boolean active;
     public Sprite pathTrackingSprite;
 
     public Car(float width, float length, Vector2 position, World world, Sprite carSprite, float angle, float power, float maxSteerAngle, float maxSpeed,Track inTrack,int ID) {
@@ -60,6 +61,7 @@ public class Car extends DynamicObject {
         this.wheelAngle = 0;
         this.steeringSensitivity = 0.4f; // a value less than 1 makes ta car less sensitive to device rotation
         this.ID = ID; //temp.. i think..
+        active = true;
         track = inTrack;
 
         bodyDef.angle = angle; //start angle
@@ -471,8 +473,22 @@ public class Car extends DynamicObject {
         return temp;
     }
 
+<<<<<<< HEAD
     public int getID(){
         return ID;
     }
 
+=======
+    public boolean isActive(){
+        return active;
+    }
+
+    public void setActive(boolean b){
+        active = b;
+    }
+
+    public int getID(){
+        return ID;
+    }
+>>>>>>> 1104de501ea97da2545896c9038803a12b74fe2d
 }

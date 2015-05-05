@@ -32,15 +32,15 @@ import com.varsom.system.screens.VarsomMenu;
 import com.varsom.system.network.NetworkListener;
 
 
-public class GameScreen implements Screen{
+public class GameScreen implements Screen {
 
-    public static final int STEER_NONE=0;
-    public static final int STEER_RIGHT=1;
-    public static final int STEER_LEFT=2;
+    public static final int STEER_NONE = 0;
+    public static final int STEER_RIGHT = 1;
+    public static final int STEER_LEFT = 2;
 
-    public static final int ACC_NONE=0;
-    public static final int ACC_ACCELERATE=1;
-    public static final int ACC_BRAKE=2;
+    public static final int ACC_NONE = 0;
+    public static final int ACC_ACCELERATE = 1;
+    public static final int ACC_BRAKE = 2;
 
     public static int level;
 
@@ -53,15 +53,15 @@ public class GameScreen implements Screen{
     private Box2DDebugRenderer debugRenderer;
     private OrthographicCamera camera;
 
-    private final float TIMESTEP = 1/60f;
-    private final int   VELOCITY_ITERATIONS = 8,
-                        POSITION_ITERATIONS = 3;
+    private final float TIMESTEP = 1 / 60f;
+    private final int VELOCITY_ITERATIONS = 8,
+            POSITION_ITERATIONS = 3;
 
     private SpriteBatch batch;
 
     private Track track;
 
-//    private Pixmap pixmap;
+    //    private Pixmap pixmap;
     private Car leaderCar;
 
     private Stage stage = new Stage();
@@ -81,10 +81,10 @@ public class GameScreen implements Screen{
     protected VarsomSystem varsomSystem;
     protected int NUMBER_OF_PLAYERS;
 
-    public GameScreen(int level, final VarsomSystem varsomSystem){
+    public GameScreen(int level, final VarsomSystem varsomSystem) {
         this.varsomSystem = varsomSystem;
         this.level = level;
-        world = new World(new Vector2(0f,0f),true);
+        world = new World(new Vector2(0f, 0f), true);
         debugRenderer = new Box2DDebugRenderer();
 
         int SCREEN_WIDTH = Gdx.graphics.getWidth();
@@ -93,12 +93,12 @@ public class GameScreen implements Screen{
         NUMBER_OF_PLAYERS = this.varsomSystem.getServer().getConnections().length;
 
         //TODO THIS IS ONLY TEMPORARY.. DURING DEVELOPMENT
-        if (NUMBER_OF_PLAYERS < 1) {
-            NUMBER_OF_PLAYERS = 8;
+        if (NUMBER_OF_PLAYERS < 2) {
+            NUMBER_OF_PLAYERS = 2;
         }
 
         // Create objects and select level
-        switch(level){
+        switch (level) {
             case 1:
                 track = new Track1(world, NUMBER_OF_PLAYERS);
                 break;
@@ -116,12 +116,10 @@ public class GameScreen implements Screen{
         // Init camera
         //TODO /100 should probably be changed
         camera = new OrthographicCamera(SCREEN_WIDTH/100,SCREEN_HEIGHT/100);
-        //camera.rotate(-90);
-//        camera.position.set(new Vector2(moveSprite.getX(),moveSprite.getY()), 0);
         //TODO camera.position.set(leaderCar.getPointOnTrack(), 0);
         camera.position.set(leaderCar.getPointOnTrack(), 0);
         camera.rotate((float)Math.toDegrees(leaderCar.getRotationTrack())-180);
-        camera.zoom = 4.0f; // can be used to see the entire track
+        camera.zoom = 1.75f; // can be used to see the entire track
         camera.update();
 
         batch = new SpriteBatch();
@@ -131,10 +129,10 @@ public class GameScreen implements Screen{
         table.top().left();
         table.add(buttonLeave).size(400, 75).row();
         // connected devices text thingys....
-        carsTraveled = new Label("CarDist:\n",skin);
+        carsTraveled = new Label("CarDist:\n", skin);
         carsTraveled.setFontScaleX(0.75f);
         carsTraveled.setFontScaleY(0.75f);
-        table.add(carsTraveled).size(400,200).row();
+        table.add(carsTraveled).size(400, 200).row();
 
         table.setFillParent(true);
         stage.addActor(table);
@@ -143,7 +141,7 @@ public class GameScreen implements Screen{
         fontType.scale(2.f);
         Label.LabelStyle style = new Label.LabelStyle(fontType, Color.WHITE);
 
-        labelPause = new Label(pauseMessage,style);
+        labelPause = new Label(pauseMessage, style);
         labelPause.setPosition(0, 0);
 
         labelPause.setPosition(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
@@ -165,16 +163,16 @@ public class GameScreen implements Screen{
     }
 
     //TODO handles count down timer and pause, should the name change or pause be moved?
-    private void handleCountDownTimer(){
+    private void handleCountDownTimer() {
         paused = NetworkListener.pause;
 
         countDownTimer -= Gdx.graphics.getDeltaTime();
-        float secondsLeft = (int)countDownTimer % 60;
+        float secondsLeft = (int) countDownTimer % 60;
 
         // Render some kick-ass countdown label
-        if(secondsLeft > 0){
+        if (secondsLeft > 0) {
             paused = true;
-           //Gdx.app.log("COUNTDOWN: ", (int)secondsLeft + "");
+            //Gdx.app.log("COUNTDOWN: ", (int)secondsLeft + "");
         }
         /*else if(secondsLeft == 0){
             paused = false;
@@ -188,7 +186,7 @@ public class GameScreen implements Screen{
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         // If Exit was pressed on a client
-        if(NetworkListener.goBack) {
+        if (NetworkListener.goBack) {
             Gdx.app.log("in GameScreen", "go back to main menu");
             NetworkListener.goBack = false;
 
@@ -220,14 +218,17 @@ public class GameScreen implements Screen{
         if(!paused){
            String temp = "CarDist:\n";
            for(Car car : track.getCars()) {
+               if(car.isActive() && !camera.frustum.boundsInFrustum(car.getPosition().x,car.getPosition().y,0,0.5f,1f,0.1f)){
+                   carLost(car.getID());
+               }
                car.update(Gdx.app.getGraphics().getDeltaTime());
                temp += car.getTraveledDistance() + "\n";
            }
 
 
-           carsTraveled.setText(temp);
+            carsTraveled.setText(temp);
 
-           updateCamera();
+            updateCamera();
         }
 
         //If paused pause menu is displayed, else it is not
@@ -237,40 +238,38 @@ public class GameScreen implements Screen{
         stage.draw();
     }
 
-    private void updateCamera(){
+    private void updateCamera() {
         float smoothCamConst = 0.1f;
         leaderCar = track.getLeaderCar();
         //leaderCar = track.getCars()[0];
         float newCamPosX = (leaderCar.getPointOnTrack().x - camera.position.x);
         float newCamPosY = (leaderCar.getPointOnTrack().y - camera.position.y);
-        Vector2 newPos = new Vector2(camera.position.x+newCamPosX*smoothCamConst,camera.position.y+newCamPosY*smoothCamConst);
+        Vector2 newPos = new Vector2(camera.position.x + newCamPosX * smoothCamConst, camera.position.y + newCamPosY * smoothCamConst);
         //Gdx.app.log("CAMERA","Camera position: " + camera.position);
         if (newPos.x == Float.NaN || newPos.y == Float.NaN) {
-            Gdx.app.log("FUUUUDGE","ERROR");
+            Gdx.app.log("FUUUUDGE", "ERROR");
         }
-        camera.position.set(newPos,0);
+        camera.position.set(newPos, 0);
 
         // Convert camera angle from [-180, 180] to [0, 360]
         float camAngle = -getCurrentCameraAngle(camera) + 180;
 
-        float desiredCamRotation = (camAngle - (float)Math.toDegrees(leaderCar.getRotationTrack())-90);
+        float desiredCamRotation = (camAngle - (float) Math.toDegrees(leaderCar.getRotationTrack()) - 90);
 
-        if(desiredCamRotation > 180){
+        if (desiredCamRotation > 180) {
             desiredCamRotation -= 360;
-        }
-        else if(desiredCamRotation < -180) {
+        } else if (desiredCamRotation < -180) {
             desiredCamRotation += 360;
         }
 
-        camera.rotate(desiredCamRotation*0.02f);
+        camera.rotate(desiredCamRotation * 0.02f);
 
         camera.update();
 
     }
 
-    private float getCurrentCameraAngle(OrthographicCamera cam)
-    {
-        return (float)Math.atan2(cam.up.x, cam.up.y)*MathUtils.radiansToDegrees;
+    private float getCurrentCameraAngle(OrthographicCamera cam) {
+        return (float) Math.atan2(cam.up.x, cam.up.y) * MathUtils.radiansToDegrees;
     }
 
     @Override
@@ -306,14 +305,22 @@ public class GameScreen implements Screen{
     }
 
     //makes the pause menu visible if pause == true and invisible if not
-    public void displayPauseMenu(boolean pause){
+    public void displayPauseMenu(boolean pause) {
         //TODO display who paused
         labelPause.setVisible(pause);
         buttonLeave.setVisible(pause);
 
     }
 
-    public Track getTrack(){
+    public Track getTrack() {
         return track;
+    }
+
+    private void carLost(int carID){
+        System.out.println("Car # " + carID +" left the screen");
+        //TODO This doesn't work.. need to properly say to the correct client that it should stop sending packages
+        varsomSystem.getMPServer().gameRunning(false,carID+1);
+        track.getCars()[carID].setActive(false);
+        track.getCars()[carID].handleDataFromClients(false,false,0);
     }
 }

@@ -17,6 +17,10 @@ public class  NetworkListener extends Listener {
 
     public static boolean pause = false;
     public static boolean goBack = false;
+    public static boolean dPadSelect = false;
+    public static int dpadx = 0;
+    public static int dpady = 0;
+    public static boolean dpadTouched;
 
     private VarsomSystem varsomSystem;
 
@@ -75,8 +79,13 @@ public class  NetworkListener extends Listener {
         }
 
         else if (o instanceof SendDPadData) {
-            int dpad = ((SendDPadData) o).data;
-            System.out.println("Dpad dir is " + dpad);
+            dPadSelect = ((SendDPadData) o).select;
+            dpadx = ((SendDPadData) o).dataX;
+            dpady = ((SendDPadData) o).dataY;
+            dpadTouched = true;
+            System.out.println("dpadx is " + dpadx);
+            System.out.println("dpady is " + dpady);
+            System.out.println("select is " + dPadSelect);
         }
 
     }
