@@ -71,7 +71,7 @@ public class GameScreen implements Screen {
     private Skin skin = new Skin(Gdx.files.internal("system/skins/menuSkin.json"),
             new TextureAtlas(Gdx.files.internal("system/skins/menuSkin.pack")));
 
-    private TextButton buttonLeave = new TextButton("Leave Game", skin);
+    private TextButton buttonLeave = new TextButton("Win screen", skin);
     private Label labelPause;
     private String pauseMessage = "Paused";
 
@@ -83,6 +83,7 @@ public class GameScreen implements Screen {
 
     public GameScreen(int level, final VarsomSystem varsomSystem) {
         this.varsomSystem = varsomSystem;
+        varsomSystem.setActiveStage(stage);
         this.level = level;
         world = new World(new Vector2(0f, 0f), true);
         debugRenderer = new Box2DDebugRenderer();
@@ -148,13 +149,13 @@ public class GameScreen implements Screen {
         stage.addActor(labelPause);
 
         //TODO Denna behövs för att man ska kunna klicka på knappen  men gör att vi inte längre kan gasa
-        //Gdx.input.setInputProcessor(stage);
+        Gdx.input.setInputProcessor(stage);
 
         buttonLeave.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.log("clicked", "pressed the Leave button.");
-                ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu(varsomSystem));
+                Gdx.app.log("clicked", "pressed the Done button.");
+                ((Game) Gdx.app.getApplicationListener()).setScreen(new WinScreen(varsomSystem));
                 varsomSystem.getMPServer().gameRunning(false);
             }
         });
@@ -232,7 +233,7 @@ public class GameScreen implements Screen {
         }
 
         //If paused pause menu is displayed, else it is not
-        displayPauseMenu(paused);
+        displayPauseMenu(true);
 
         stage.act();
         stage.draw();

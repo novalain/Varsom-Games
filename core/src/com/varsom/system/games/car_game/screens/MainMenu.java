@@ -67,6 +67,7 @@ public class MainMenu extends ScaledScreen {
 
     public MainMenu(VarsomSystem varsomSystem) {
         this.varsomSystem = varsomSystem;
+        varsomSystem.setActiveStage(stage);
         objectList = new ArrayList<BackgroundObject>();
         for (int i = 0; i < 100; i++) {
             Vector2 temp = new Vector2((float) (Math.random() * WIDTH), (float) (Math.random() * HEIGHT));

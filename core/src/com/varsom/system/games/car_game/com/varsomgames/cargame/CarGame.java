@@ -28,6 +28,7 @@ public class CarGame extends VarsomGame {
         //Gdx.app.log("CarGame", "Creates cargame");
         varsomSystem.setScreen(new Splash(this.varsomSystem));
 
+
         // load assets
         AssetLoader.load();
         gameScreen = null;

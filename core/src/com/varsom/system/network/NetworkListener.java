@@ -34,6 +34,7 @@ public class  NetworkListener extends Listener {
 
     public void disconnected(Connection c) {
         Log.info("[SERVER] Someone have disconnect.");
+        varsomSystem.errorMessage(c);
     }
 
     public void received(Connection c, Object o) {
