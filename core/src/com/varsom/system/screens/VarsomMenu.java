@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
+import com.varsom.system.DPad;
 import com.varsom.system.VarsomSystem;
 import com.varsom.system.abstract_gameobjects.VarsomGame;
 import com.varsom.system.games.car_game.com.varsomgames.cargame.CarGame;
@@ -65,24 +66,6 @@ public class VarsomMenu extends ScaledScreen {
     @Override
     public void show() {
 
-        // Vill kolla om NetworkListener fått in ett SendDpadData.dpad,
-        // Om något nytt kommit in, sätt dpad.x med currentButton
-        // TODO: Gör dpad-datan till 2D, alltså en x och en y-koordinat
-        // Avkommentera när det är fixat
-        if(NetworkListener.dPadSelect == true) {
-         //   currentButton += NetworkListener.dpad;
-            Gdx.app.log("in varsommenu", "dPadSelect!");
-      /*      if(NetworkListener.dPadSelect.x > 0)
-            {
-                right = true;
-            }
-            else
-            {
-                left = true;
-            } */
-            NetworkListener.dPadSelect = false;
-        }
-
         BitmapFont fontType = new BitmapFont();
         fontType.scale(2.f);
 
@@ -96,12 +79,14 @@ public class VarsomMenu extends ScaledScreen {
 
         //For every VarsomeGame in the game array create an image
         for (int i = 0; i < VarsomSystem.SIZE; i++) {
+            // getting rid of switch since switch enters every index anyways.
+            // making method createMenuItem that can call on startGame
 
             switch (VarsomSystem.games[i]) {
-
                 //Cargame
                 case 1:
                     //buttonPlayCarGame = new TextButton(" CarGame", skin);
+                 //   startGame();
                     imagePlayCarGame = new Image(new Texture(Gdx.files.internal("system/img/varsomful.png")));
 
                     imagePlayCarGame.addListener(new ClickListener() {
@@ -120,28 +105,12 @@ public class VarsomMenu extends ScaledScreen {
                                         VarsomGame carGame = new CarGame((VarsomSystem) Gdx.app.getApplicationListener());
                                         varsomSystem.setActiveGame(carGame);
 
-                                        // if(varsomSystem.getServer().getConnections().length != 0) {
-                                        /*VarsomGame carGame = new CarGame((VarsomSystem) Gdx.app.getApplicationListener());
-                                        hide();
-                                        }
-                                        else{
-                                            AlertDialog aD = new AlertDialog("Too few players", skin2);
-                                            aD.show(stage);
-                                        }*/
                                     }
                                 })));
 
                                 hide();
                             }
 
-                            //To go directly to touched button.
-                           /* else if (!right){
-
-                                right = true;
-                                currentButton--;
-                                stage.cancelTouchFocus();
-
-                            }*/
                         }
                     });
 
@@ -263,8 +232,8 @@ public class VarsomMenu extends ScaledScreen {
 
         imagePlayOtherGame.setScale(1.52f);
 
-        for(int i = 0; i < images.size(); i++){
-            if(i!=currentButton) {
+        for (int i = 0; i < images.size(); i++) {
+            if (i != currentButton) {
                 images.elementAt(i).addAction(Actions.sequence(Actions.alpha(0.3f, 0.2f)));
             }
         }
@@ -327,7 +296,7 @@ public class VarsomMenu extends ScaledScreen {
     @Override
     public void render(float delta) {
         // If Exit was pressed on a client
-        if(NetworkListener.goBack) {
+        if (NetworkListener.goBack) {
             Gdx.app.log("in GameScreen", "go back to main menu");
             NetworkListener.goBack = false;
             Gdx.app.exit();
@@ -336,7 +305,7 @@ public class VarsomMenu extends ScaledScreen {
 
         Gdx.gl.glClearColor(0.12f, 0.12f, 0.12f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
+        handleDpad();
         handleSwipedImages();
         handleClients();
 
@@ -407,5 +376,38 @@ public class VarsomMenu extends ScaledScreen {
             clientNames += "\n" + varsomSystem.getServer().getConnections()[i].toString();
         }
         connectedClientNames.setText(clientNames);
+    }
+
+    // Vill kolla om NetworkListener fått in ett SendDpadData,
+    // Om något nytt kommit in, öndra currentButton med dataX
+    // TODO: Gör dpad-datan till 2D, alltså en x och en y-koordinat
+    public void handleDpad() {
+
+        if (NetworkListener.dpadTouched == true) {
+            NetworkListener.dpadTouched = false;
+            Gdx.app.log("in varsommenu", "The value of dpadTouched is: " + NetworkListener.dpadTouched);
+            if (NetworkListener.dpadx == DPad.RIGHT) {
+                left = true;
+                currentButton += NetworkListener.dpadx;
+                Gdx.app.log("Right selected, Currentbutton is ", ""+currentButton);
+                if (currentButton > images.size()) {
+                    Gdx.app.log("CurrentButton value max", "is " + images.size());
+                    currentButton = images.size();
+                }
+            } else {
+                Gdx.app.log("Left selected, Currentbutton is ", ""+currentButton);
+                right = true;
+                currentButton += NetworkListener.dpadx;
+                if (currentButton < 0) {
+                    Gdx.app.log("CurrentButton value max", "is " + 0);
+                    currentButton = 0;
+                }
+            }
+            NetworkListener.dPadSelect = false;
+        }
+    }
+
+    private void startGame() {
+
     }
 }
