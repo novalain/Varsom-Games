@@ -471,4 +471,8 @@ public class Car extends DynamicObject {
         return temp;
     }
 
+    public int getID(){
+        return ID;
+    }
+
 }
