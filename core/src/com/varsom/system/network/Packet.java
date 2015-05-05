@@ -12,5 +12,5 @@ public class Packet {
     public static class PauseRequest { boolean pause = false; }
     public static class ExitRequest { boolean exit = false; }
     public static class StandByOrder { boolean standby = false; }
-    public static class SendDPadData { int data; }
+    public static class SendDPadData { int dataX, dataY; boolean select; }
 }

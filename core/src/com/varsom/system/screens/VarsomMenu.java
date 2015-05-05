@@ -1,6 +1,5 @@
 package com.varsom.system.screens;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -9,22 +8,18 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Array;
+import com.varsom.system.DPad;
 import com.varsom.system.VarsomSystem;
 import com.varsom.system.abstract_gameobjects.VarsomGame;
 import com.varsom.system.games.car_game.com.varsomgames.cargame.CarGame;
-import com.varsom.system.games.other_game.OtherGame;
 import com.varsom.system.network.NetworkListener;
-import com.varsom.system.screens.ScaledScreen;
 import com.varsom.system.Commons;
 
 import java.util.Vector;
@@ -35,7 +30,7 @@ public class VarsomMenu extends ScaledScreen {
     private Table table = new Table();
     private Vector2 lastTouch = new Vector2();
     private int currentButton = 1;
-    private boolean left = false, right = false;
+    private boolean swipedLeft = false, swipedRight = false;
 
     //TODO Load files from a SystemAssetLoader. Also, create a folder and skin for the varsom system
     private Skin skin = new Skin(Gdx.files.internal("system/skins/menuSkin.json"), new TextureAtlas(Gdx.files.internal("system/skins/menuSkin.pack")));
@@ -60,28 +55,11 @@ public class VarsomMenu extends ScaledScreen {
     public VarsomMenu(VarsomSystem varsomSystem) {
 
         this.varsomSystem = varsomSystem;
+        varsomSystem.setActiveStage(stage);
     }
 
     @Override
     public void show() {
-
-        // Vill kolla om NetworkListener fått in ett SendDpadData.dpad,
-        // Om något nytt kommit in, sätt dpad.x med currentButton
-        // TODO: Gör dpad-datan till 2D, alltså en x och en y-koordinat
-        // Avkommentera när det är fixat
-        if(NetworkListener.dPadSelect == true) {
-         //   currentButton += NetworkListener.dpad;
-            Gdx.app.log("in varsommenu", "dPadSelect!");
-      /*      if(NetworkListener.dPadSelect.x > 0)
-            {
-                right = true;
-            }
-            else
-            {
-                left = true;
-            } */
-            NetworkListener.dPadSelect = false;
-        }
 
         BitmapFont fontType = new BitmapFont();
         fontType.scale(2.f);
@@ -95,151 +73,37 @@ public class VarsomMenu extends ScaledScreen {
         stage.addActor(ips);
 
         //For every VarsomeGame in the game array create an image
-        for (int i = 0; i < VarsomSystem.SIZE; i++) {
+        createMenuItems();
 
-            switch (VarsomSystem.games[i]) {
+        stage.addListener(new ClickListener() {
 
-                //Cargame
-                case 1:
-                    //buttonPlayCarGame = new TextButton(" CarGame", skin);
-                    imagePlayCarGame = new Image(new Texture(Gdx.files.internal("system/img/varsomful.png")));
+            @Override
+            public void touchDragged(InputEvent event, float x, float y, int pointer) {
 
-                    imagePlayCarGame.addListener(new ClickListener() {
-                        @Override
-                        public void clicked(InputEvent event, float x, float y) {
+                Vector2 newTouch = new Vector2(x, y);
+                Vector2 delta = newTouch.cpy().sub(lastTouch);
+                lastTouch = newTouch;
 
-                            if (currentButton == 0 && !left && !right) {
+                if (delta.x > 50 && currentButton > 0 && !swipedRight) {
 
-                                Gdx.app.log("clicked", "pressed CarGame");
-                                //((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(1));
+                    swipedRight = true;
+                    currentButton--;
+                    stage.cancelTouchFocus();
 
-                                images.elementAt(currentButton).addAction(Actions.sequence(Actions.scaleBy(2.f, 2.f, 0.6f), Actions.alpha(0.0f, 0.6f), Actions.run(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        // ((Game) Gdx.app.getApplicationListener()).setScreen(new VarsomMenu(varsomSystem));
-                                        VarsomGame carGame = new CarGame((VarsomSystem) Gdx.app.getApplicationListener());
-                                        varsomSystem.setActiveGame(carGame);
-
-                                        // if(varsomSystem.getServer().getConnections().length != 0) {
-                                        /*VarsomGame carGame = new CarGame((VarsomSystem) Gdx.app.getApplicationListener());
-                                        hide();
-                                        }
-                                        else{
-                                            AlertDialog aD = new AlertDialog("Too few players", skin2);
-                                            aD.show(stage);
-                                        }*/
-                                    }
-                                })));
-
-                                hide();
-                            }
-
-                            //To go directly to touched button.
-                           /* else if (!right){
-
-                                right = true;
-                                currentButton--;
-                                stage.cancelTouchFocus();
-
-                            }*/
-                        }
-                    });
-
-                    table.add(imagePlayCarGame).size(300, 300).padRight(200);
-
-                    break;
-
-                //OtherGame
-                case 2:
-                    //buttonPlayOtherGame = new TextButton(" OtherGame", skin);
-                    imagePlayOtherGame = new Image(new Texture(Gdx.files.internal("system/img/varsomful.png")));
-
-                    imagePlayOtherGame.addListener(new ClickListener() {
-                        @Override
-                        public void clicked(InputEvent event, float x, float y) {
-
-                            if (currentButton == 1 && !left && !right) {
-
-                                images.elementAt(currentButton).addAction(Actions.sequence(Actions.scaleBy(2.f, 2.f, 0.6f), Actions.alpha(0.0f, 0.6f), Actions.run(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        // ((Game) Gdx.app.getApplicationListener()).setScreen(new VarsomMenu(varsomSystem));
-                                        VarsomGame carGame = new CarGame((VarsomSystem) Gdx.app.getApplicationListener());
-                                        varsomSystem.setActiveGame(carGame);
-                                        //VarsomGame OtherGame = new OtherGame((Game) Gdx.app.getApplicationListener());
-                                        Gdx.app.log("clicked", "pressed OtherGame.");
-                                        hide();
-                                    }
-                                })));
-
-                            }
-                        }
-                    });
-                    table.add(imagePlayOtherGame).size(300, 300).padRight(200);
-                    //  imagePlayOtherGame.setWidth(350);
-                    // imagePlayOtherGame.setHeight(350);
-                    break;
-
-                //If something goes wrong
-                default:
-                    Gdx.app.log("in game array", "wrong game ID");
+                } else if (delta.x < -50 && currentButton < 2 && !swipedLeft) {
+                    swipedLeft = true;
+                    currentButton++;
+                    stage.cancelTouchFocus();
+                }
             }
 
-            imageExit = new Image(new Texture(Gdx.files.internal("system/img/varsomful.png")));
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                lastTouch.set(x, y);
+                return true;
+            }
 
-            // Add all images into array
-            images = new Vector();
-            images.add(imagePlayCarGame);
-            images.add(imagePlayOtherGame);
-            images.add(imageExit);
-
-            imageExit.addListener(new ClickListener() {
-
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-
-                    if (currentButton == 2 && !left && !right) {
-                        Gdx.app.log("clicked", "pressed the EXIT SYSTEM button.");
-                        Gdx.app.exit();
-                        dispose();
-                    }
-                }
-            });
-
-            stage.addListener(new ClickListener() {
-
-                @Override
-                public void touchDragged(InputEvent event, float x, float y, int pointer) {
-
-                    Vector2 newTouch = new Vector2(x, y);
-                    // delta holds the difference between the last and current touch position
-                    // delta.x > 0 means the touch moved to the right, delta.x < 0 to the left
-                    Vector2 delta = newTouch.cpy().sub(lastTouch);
-                    lastTouch = newTouch;
-
-                    if (delta.x > 50 && currentButton > 0 && !right) {
-
-                        right = true;
-                        currentButton--;
-                        stage.cancelTouchFocus();
-
-                    } else if (delta.x < -50 && currentButton < 2 && !left) {
-                        left = true;
-                        currentButton++;
-                        stage.cancelTouchFocus();
-                    }
-                }
-
-                @Override
-                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    lastTouch.set(x, y);
-                    return true;
-                }
-
-            });
-        }
-
-        table.add(imageExit).size(300, 300);
+        });
 
         //label that shows all connected players
         clientNames = "Connected players:";
@@ -263,34 +127,25 @@ public class VarsomMenu extends ScaledScreen {
 
         imagePlayOtherGame.setScale(1.52f);
 
-        for(int i = 0; i < images.size(); i++){
-            if(i!=currentButton) {
+        for (int i = 0; i < images.size(); i++) {
+            if (i != currentButton) {
                 images.elementAt(i).addAction(Actions.sequence(Actions.alpha(0.3f, 0.2f)));
             }
         }
-       /* if(currentButton == 1 ) {
-            images.elementAt(currentButton - 1).addAction(Actions.sequence(Actions.alpha(0.3f, 0.2f)));
-            images.elementAt(currentButton + 1).addAction(Actions.sequence(Actions.alpha(0.3f, 0.2f)));
-        }
-        else if (currentButton == 0) {
-            images.elementAt(currentButton + 1).addAction(Actions.sequence(Actions.alpha(0.3f, 0.2f)));
-            images.elementAt(currentButton + 2).addAction(Actions.sequence(Actions.alpha(0.3f, 0.2f)));
-        }*/
-
     }
 
     public void handleSwipedImages() {
 
-        // Move to the left
-        if (right && currentButton < 2) {
+        // Move to the swipedLeft
+        if (swipedRight && currentButton < 2) {
 
             //Fade down
             images.elementAt(currentButton + 1).addAction(Actions.sequence(Actions.alpha(0.3f, 1.f)));
             images.elementAt(currentButton).addAction(Actions.sequence(Actions.alpha(1.f, 1.f)));
 
-            //If position reached middle, set swipe right to false (810 is original pos for the middle image)
+            //If position reached middle, set swipe swipedRight to false (810 is original pos for the middle image)
             if (images.elementAt(currentButton).getX() >= middleImageX) {
-                right = false;
+                swipedRight = false;
             } else {
 
                 //Translate all images
@@ -305,13 +160,13 @@ public class VarsomMenu extends ScaledScreen {
 
         }
         //Same but the other way
-        else if (left && currentButton > 0) {
+        else if (swipedLeft && currentButton > 0) {
 
             images.elementAt(currentButton - 1).addAction(Actions.sequence(Actions.alpha(0.3f, 1.f)));
             images.elementAt(currentButton).addAction(Actions.sequence(Actions.alpha(1.f, 1.f)));
 
             if (images.elementAt(currentButton).getX() <= middleImageX) {
-                left = false;
+                swipedLeft = false;
             } else {
 
                 for (int i = 0; i < images.size(); i++) {
@@ -327,7 +182,7 @@ public class VarsomMenu extends ScaledScreen {
     @Override
     public void render(float delta) {
         // If Exit was pressed on a client
-        if(NetworkListener.goBack) {
+        if (NetworkListener.goBack) {
             Gdx.app.log("in GameScreen", "go back to main menu");
             NetworkListener.goBack = false;
             Gdx.app.exit();
@@ -336,7 +191,7 @@ public class VarsomMenu extends ScaledScreen {
 
         Gdx.gl.glClearColor(0.12f, 0.12f, 0.12f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
+        handleDpad();
         handleSwipedImages();
         handleClients();
 
@@ -403,9 +258,128 @@ public class VarsomMenu extends ScaledScreen {
 
         //update the client names label with clients connected at the moment
         for (int i = 0; i < varsomSystem.getServer().getConnections().length; i++) {
-            //TODO right now the IP is displayed, it should be the name chosen by the player
+            //TODO swipedRight now the IP is displayed, it should be the name chosen by the player
             clientNames += "\n" + varsomSystem.getServer().getConnections()[i].toString();
         }
         connectedClientNames.setText(clientNames);
     }
+
+    // Checking if Networklistener have recieved a dPad-package
+    // If something has updated, update currentButton with dpadData(x-value)
+    public void handleDpad() {
+
+        if (NetworkListener.dpadTouched == true) {
+            NetworkListener.dpadTouched = false;
+            Gdx.app.log("in varsommenu", "The value of dpadTouched is: " + NetworkListener.dpadTouched);
+            if (NetworkListener.dpadx == DPad.RIGHT) {
+                swipedLeft = true;
+                currentButton += NetworkListener.dpadx;
+                Gdx.app.log("Right selected, Currentbutton is ", ""+currentButton);
+                if (currentButton > images.size()) {
+                    Gdx.app.log("CurrentButton value max", "is " + images.size());
+                    currentButton = images.size();
+                }
+            } else {
+                Gdx.app.log("Left selected, Currentbutton is ", ""+currentButton);
+                swipedRight = true;
+                currentButton += NetworkListener.dpadx;
+                if (currentButton < 0) {
+                    Gdx.app.log("CurrentButton value max", "is " + 0);
+                    currentButton = 0;
+                }
+            }
+            if(NetworkListener.dPadSelect){
+                selectMenuItem();
+                NetworkListener.dPadSelect = false;
+            }
+        }
+    }
+    public void createMenuItems(){
+
+        // creating first game - the car game
+        imagePlayCarGame = new Image(new Texture(Gdx.files.internal("system/img/varsomful.png")));
+
+        imagePlayCarGame.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (currentButton == 0 && !swipedLeft && !swipedRight) {
+                    Gdx.app.log("clicked", "pressed CarGame");
+                    images.elementAt(currentButton).addAction(Actions.sequence(Actions.scaleBy(2.f, 2.f, 0.6f), Actions.alpha(0.0f, 0.6f), Actions.run(new Runnable() {
+                        @Override
+                        public void run() {
+                          selectMenuItem();
+                        }
+                    })));
+                    hide();
+                }
+            }
+        });
+        table.add(imagePlayCarGame).size(300, 300).padRight(200);
+
+        // create the second game - OtherGame
+        imagePlayOtherGame = new Image(new Texture(Gdx.files.internal("system/img/varsomful.png")));
+
+        imagePlayOtherGame.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (currentButton == 1 && !swipedLeft && !swipedRight) {
+                    Gdx.app.log("clicked", "pressed OtherGame.");
+                    images.elementAt(currentButton).addAction(Actions.sequence(Actions.scaleBy(2.f, 2.f, 0.6f), Actions.alpha(0.0f, 0.6f), Actions.run(new Runnable() {
+                        @Override
+                        public void run() {
+                            selectMenuItem();
+                        }
+                    })));
+                    hide();
+                }
+            }
+        });
+        table.add(imagePlayOtherGame).size(300, 300).padRight(200);
+
+        // create third game - exit system
+
+        imageExit = new Image(new Texture(Gdx.files.internal("system/img/varsomful.png")));
+        imageExit.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+
+                if (currentButton == 2 && !swipedLeft && !swipedRight) {
+                    Gdx.app.log("clicked", "pressed the EXIT SYSTEM button.");
+                    selectMenuItem();
+                }
+            }
+        });
+        table.add(imageExit).size(300, 300);
+        // If more games, add them here!
+
+        // add everything to table
+        images = new Vector();
+        images.add(imagePlayCarGame);
+        images.add(imagePlayOtherGame);
+        images.add(imageExit);
+
+    }
+    private void selectMenuItem() {
+        switch(currentButton) {
+            // Could consider making constants for game-IDs
+            case 0:
+                VarsomGame carGame = new CarGame((VarsomSystem) Gdx.app.getApplicationListener());
+                varsomSystem.setActiveGame(carGame);
+                break;
+            case 1:
+                // currently runs the carGame too, but should implement another game
+                // TODO: Implement otherGame instead of running carGame again!
+                VarsomGame otherGame = new CarGame((VarsomSystem) Gdx.app.getApplicationListener());
+                varsomSystem.setActiveGame(otherGame);
+                break;
+            case 2:
+                Gdx.app.exit();
+                dispose();
+                break;
+            default:
+                break;
+
+        }
+    }
 }
+

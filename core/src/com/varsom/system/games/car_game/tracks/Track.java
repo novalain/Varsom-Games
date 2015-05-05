@@ -194,7 +194,6 @@ public abstract class Track {
         inBatch.begin();
 
         bgSprite.draw(inBatch);
-        bgMask.draw(inBatch);
 
         // Draw sprites that are not connected to a physical body
         for (Sprite sprite : sprites) {

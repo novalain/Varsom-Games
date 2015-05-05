@@ -19,6 +19,7 @@ public class VarsomSplash extends ScaledScreen {
 
     public VarsomSplash(VarsomSystem varsomSystem) {
         this.varsomSystem = varsomSystem;
+        varsomSystem.setActiveStage(stage);
     }
 
     @Override
