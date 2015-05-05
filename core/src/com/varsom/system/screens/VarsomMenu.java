@@ -289,7 +289,10 @@ public class VarsomMenu extends ScaledScreen {
                 }
             }
             if(NetworkListener.dPadSelect){
-                selectMenuItem();
+
+                if(!swipedLeft && !swipedRight)
+                    selectMenuItem();
+
                 NetworkListener.dPadSelect = false;
             }
         }
@@ -304,13 +307,7 @@ public class VarsomMenu extends ScaledScreen {
             public void clicked(InputEvent event, float x, float y) {
                 if (currentButton == 0 && !swipedLeft && !swipedRight) {
                     Gdx.app.log("clicked", "pressed CarGame");
-                    images.elementAt(currentButton).addAction(Actions.sequence(Actions.scaleBy(2.f, 2.f, 0.6f), Actions.alpha(0.0f, 0.6f), Actions.run(new Runnable() {
-                        @Override
-                        public void run() {
-                          selectMenuItem();
-                        }
-                    })));
-                    hide();
+                    selectMenuItem();
                 }
             }
         });
@@ -323,14 +320,8 @@ public class VarsomMenu extends ScaledScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (currentButton == 1 && !swipedLeft && !swipedRight) {
+                    selectMenuItem();
                     Gdx.app.log("clicked", "pressed OtherGame.");
-                    images.elementAt(currentButton).addAction(Actions.sequence(Actions.scaleBy(2.f, 2.f, 0.6f), Actions.alpha(0.0f, 0.6f), Actions.run(new Runnable() {
-                        @Override
-                        public void run() {
-                            selectMenuItem();
-                        }
-                    })));
-                    hide();
                 }
             }
         });
@@ -363,14 +354,28 @@ public class VarsomMenu extends ScaledScreen {
         switch(currentButton) {
             // Could consider making constants for game-IDs
             case 0:
-                VarsomGame carGame = new CarGame((VarsomSystem) Gdx.app.getApplicationListener());
-                varsomSystem.setActiveGame(carGame);
+                images.elementAt(currentButton).addAction(Actions.sequence(Actions.scaleBy(2.f, 2.f, 0.6f), Actions.alpha(0.0f, 0.6f), Actions.run(new Runnable() {
+                    @Override
+                    public void run() {
+                        VarsomGame carGame = new CarGame((VarsomSystem) Gdx.app.getApplicationListener());
+                        varsomSystem.setActiveGame(carGame);
+
+                    }
+                })));
+                hide();
                 break;
             case 1:
-                // currently runs the carGame too, but should implement another game
-                // TODO: Implement otherGame instead of running carGame again!
-                VarsomGame otherGame = new CarGame((VarsomSystem) Gdx.app.getApplicationListener());
-                varsomSystem.setActiveGame(otherGame);
+                images.elementAt(currentButton).addAction(Actions.sequence(Actions.scaleBy(2.f, 2.f, 0.6f), Actions.alpha(0.0f, 0.6f), Actions.run(new Runnable() {
+                    @Override
+                    public void run() {
+                        // currently runs the carGame too, but should implement another game
+                        // TODO: Implement otherGame instead of running carGame again!
+                        VarsomGame otherGame = new CarGame((VarsomSystem) Gdx.app.getApplicationListener());
+                        varsomSystem.setActiveGame(otherGame);
+                    }
+                })));
+                hide();
+
                 break;
             case 2:
                 Gdx.app.exit();
