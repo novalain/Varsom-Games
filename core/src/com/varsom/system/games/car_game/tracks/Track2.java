@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
+import com.varsom.system.VarsomSystem;
 import com.varsom.system.games.car_game.gameobjects.Car;
 import com.varsom.system.games.car_game.gameobjects.TireObstacle;
 import com.varsom.system.games.car_game.gameobjects.Wheel;
@@ -26,8 +27,8 @@ public class Track2 extends Track{
     // This one is needed if we want to access several layers in our particlesystem
     //public ParticleEmitter emitter;
 
-    public Track2(World inWorld, int NUMBER_OF_PLAYERS) {
-        super(inWorld,new Sprite(AssetLoader.track2Texture),new Sprite(AssetLoader.track2Mask),10f,NUMBER_OF_PLAYERS);
+    public Track2(World inWorld, int NUMBER_OF_PLAYERS,VarsomSystem vs) {
+        super(inWorld,new Sprite(AssetLoader.track2Texture),new Sprite(AssetLoader.track2Mask),10f,NUMBER_OF_PLAYERS, vs);
         createTestTrack();
     }
 

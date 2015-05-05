@@ -18,7 +18,7 @@ import com.varsom.system.games.car_game.screens.GameScreen;
 //import tracks.TestTrack;
 import com.varsom.system.games.car_game.tracks.Track;
 
-public class Car extends DynamicObject {
+public class Car extends DynamicObject implements Comparable<Car> {
 
     private float width, length, maxSteerAngle, maxSpeed, power, wheelAngle;
     private boolean userAccelerate = false, userBreaking = false;
@@ -44,7 +44,7 @@ public class Car extends DynamicObject {
         this.maxSpeed = maxSpeed;
         this.power = power;
         this.wheelAngle = 0;
-        this.steeringSensitivity = 0.4f; // a value less than 1 makes ta car less sensitive to device rotation
+        this.steeringSensitivity = 0.9f; // a value less than 1 makes ta car less sensitive to device rotation
         this.ID = ID; //temp.. i think..
         this.active = true;
         this.track = inTrack;
@@ -131,7 +131,7 @@ public class Car extends DynamicObject {
 
        userAccelerate = isDriving;
        userBreaking = isBreaking;
-       tiltAngle = angle;
+       tiltAngle = angle*steeringSensitivity;
 
     }
 
@@ -170,7 +170,7 @@ public class Car extends DynamicObject {
         else if(userBreaking){
 
             if (this.getLocalVelocity().y < 0) {
-                baseVector = new Vector2(0f, 0.5f);
+                baseVector = new Vector2(0f, 0.05f);
             }
 
             //going in reverse - less force
@@ -184,7 +184,7 @@ public class Car extends DynamicObject {
         else if (!userAccelerate) {
 
             baseVector = new Vector2(0, 0);
-            if (this.getSpeedKMH() < 7)
+            if (this.getSpeedKMH() < 1)
                 this.setSpeed(0);
             else if (this.getLocalVelocity().y < 0)
                 baseVector = new Vector2(0, 0.03f);
@@ -234,6 +234,9 @@ public class Car extends DynamicObject {
         if(valueFromMask != -1){
             //System.out.println("offTrack");
             this.setSpeed(this.getSpeedKMH() * track.getOffTrackSpeed());
+            if(getSpeedKMH() != 0){
+                track.getVarsomSystem().getMPServer().vibrateClient(50,ID+1);
+            }
         }
 
     }
@@ -257,5 +260,13 @@ public class Car extends DynamicObject {
 
         return wheels;
 
+    }
+
+    public void setSteeringSensitivity(float sens){
+        steeringSensitivity = sens;
+    }
+
+    public int compareTo(Car c) {
+        return Float.compare(c.getTraveledDistance(),getTraveledDistance());
     }
 }

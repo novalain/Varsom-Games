@@ -2,7 +2,6 @@ package com.varsom.system.games.car_game.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -16,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.World;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.Array;
 import com.varsom.system.VarsomSystem;
 import com.varsom.system.games.car_game.gameobjects.Car;
 import com.varsom.system.games.car_game.tracks.Track;
@@ -28,20 +28,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.varsom.system.screens.VarsomMenu;
 import com.varsom.system.network.NetworkListener;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 
 public class GameScreen implements Screen {
-
-    /*
-    public static final int STEER_NONE = 0;
-    public static final int STEER_RIGHT = 1;
-    public static final int STEER_LEFT = 2;
-
-    public static final int ACC_NONE = 0;
-    public static final int ACC_ACCELERATE = 1;
-    public static final int ACC_BRAKE = 2;*/
 
     public static int level;
 
@@ -52,7 +46,11 @@ public class GameScreen implements Screen {
     // Class variables
     private World world;
     private Box2DDebugRenderer debugRenderer;
+
+    //CAMERA
     private OrthographicCamera camera;
+    final float CAMERA_POS_INTERPOLATION = 0.1f;
+    final float CAMERA_ROT_INTERPOLATION = 0.015f;
 
     private final float TIMESTEP = 1 / 60f;
     private final int VELOCITY_ITERATIONS = 8,
@@ -64,6 +62,8 @@ public class GameScreen implements Screen {
 
     //    private Pixmap pixmap;
     private Car leaderCar;
+    //private Comparator<Car> carComparator;
+    private ArrayList<Car> activeCars, sortedCars;
 
     private Stage stage = new Stage();
     private Table table = new Table();
@@ -81,6 +81,7 @@ public class GameScreen implements Screen {
 
     protected VarsomSystem varsomSystem;
     protected int NUMBER_OF_PLAYERS;
+    private String diePulse;
 
     public GameScreen(int level, final VarsomSystem varsomSystem) {
         this.varsomSystem = varsomSystem;
@@ -102,10 +103,10 @@ public class GameScreen implements Screen {
         // Create objects and select level
         switch (level) {
             case 1:
-                track = new Track1(world, NUMBER_OF_PLAYERS);
+                track = new Track1(world, NUMBER_OF_PLAYERS,varsomSystem);
                 break;
             case 2:
-                track = new Track2(world, NUMBER_OF_PLAYERS);
+                track = new Track2(world, NUMBER_OF_PLAYERS,varsomSystem);
                 break;
             default:
                 System.out.println("Mega Error");
@@ -114,6 +115,11 @@ public class GameScreen implements Screen {
         varsomSystem.getActiveGame().setGameScreen(this);
         varsomSystem.getMPServer().gameRunning(true);
         leaderCar = track.getCars()[0];
+        activeCars = new ArrayList<Car>();
+        sortedCars = new ArrayList<Car>();
+        addActiveCars();
+        createDiePulse();
+        //sortCars();
 
         // Init camera
         //TODO /100 should probably be changed
@@ -156,8 +162,7 @@ public class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.log("clicked", "pressed the Done button.");
-                ((Game) Gdx.app.getApplicationListener()).setScreen(new WinScreen(varsomSystem));
-                varsomSystem.getMPServer().gameRunning(false);
+                weHaveAWinner();
             }
         });
         //end pause menu button
@@ -211,15 +216,28 @@ public class GameScreen implements Screen {
 
            world.step(TIMESTEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 
-           String temp = "CarDist:\n";
-           for(Car car : track.getCars()) {
+           String temp = "Standings:\n";
+           /*for(Car car : track.getCars()) {
                if(car.isActive() && !camera.frustum.boundsInFrustum(car.getPosition().x,car.getPosition().y,0,0.5f,1f,0.1f)){
                    carLost(car.getID());
                }
                car.update(Gdx.app.getGraphics().getDeltaTime());
                temp += car.getTraveledDistance() + "\n";
-           }
+           }*/
+            for(int i = 0; i < activeCars.size(); i++){
+                if(!camera.frustum.boundsInFrustum(activeCars.get(i).getPosition().x,activeCars.get(i).getPosition().y,0,0.5f,1f,0.1f)){
+                    carLost(activeCars.get(i).getID(),i);
 
+                    if(i != 0){
+                        i--;
+                    }
+                }
+                else {
+                    activeCars.get(i).update(Gdx.app.getGraphics().getDeltaTime());
+                }
+            }
+            sortCars();
+            temp += sortedCars2String();
             carsTraveled.setText(temp);
             updateCamera();
         }
@@ -232,12 +250,11 @@ public class GameScreen implements Screen {
     }
 
     private void updateCamera() {
-        float smoothCamConst = 0.1f;
         leaderCar = track.getLeaderCar();
         //leaderCar = track.getCars()[0];
         float newCamPosX = (leaderCar.getPointOnTrack().x - camera.position.x);
         float newCamPosY = (leaderCar.getPointOnTrack().y - camera.position.y);
-        Vector2 newPos = new Vector2(camera.position.x + newCamPosX * smoothCamConst, camera.position.y + newCamPosY * smoothCamConst);
+        Vector2 newPos = new Vector2(camera.position.x + newCamPosX * CAMERA_POS_INTERPOLATION, camera.position.y + newCamPosY * CAMERA_POS_INTERPOLATION);
         //Gdx.app.log("CAMERA","Camera position: " + camera.position);
         if (newPos.x == Float.NaN || newPos.y == Float.NaN) {
             Gdx.app.log("FUUUUDGE", "ERROR");
@@ -255,7 +272,7 @@ public class GameScreen implements Screen {
             desiredCamRotation += 360;
         }
 
-        camera.rotate(desiredCamRotation * 0.015f);
+        camera.rotate(desiredCamRotation * CAMERA_ROT_INTERPOLATION);
 
         camera.update();
 
@@ -295,6 +312,8 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         // Leave blank
+        System.out.println("GameScreen was disposed");
+        varsomSystem.getMPServer().gameRunning(false);
     }
 
     //makes the pause menu visible if pause == true and invisible if not
@@ -309,11 +328,68 @@ public class GameScreen implements Screen {
         return track;
     }
 
-    private void carLost(int carID){
+    private void carLost(int carID, int activeCarIndex){
         System.out.println("Car # " + carID +" left the screen");
-        //TODO This doesn't work.. need to properly say to the correct client that it should stop sending packages
+        //varsomSystem.getMPServer().vibrateClient(1000,carID+1);
+        varsomSystem.getMPServer().PulseVibrateClient(diePulse,-1,carID+1);
         varsomSystem.getMPServer().gameRunning(false,carID+1);
         track.getCars()[carID].setActive(false);
+        activeCars.remove(activeCarIndex);
+        //System.out.println("activeCars contains " + activeCars.size() + " items");
         track.getCars()[carID].handleDataFromClients(false,false,0);
+        if(activeCars.size() == 1) {
+            weHaveAWinner();
+        }
     }
+
+    private void weHaveAWinner(){
+        ((Game) Gdx.app.getApplicationListener()).setScreen(new WinScreen(varsomSystem,sortedCars2String()));
+
+        varsomSystem.getMPServer().gameRunning(false);
+    }
+
+    private void addActiveCars(){
+        for(Car car : track.getCars()){
+            activeCars.add(car);
+            sortedCars.add(car);
+        }
+        System.out.println("activeCars contains " + activeCars.size() + " items");
+    }
+    private void sortCars(){
+        Collections.sort(sortedCars);
+    }
+
+    private String sortedCars2String(){
+        String temp = "";
+        for(int i = 0; i < sortedCars.size() ; i++){
+            /*if(i < varsomSystem.getServer().getConnections().length){
+                System.out.println("i = " + i + "No. of connections: " + varsomSystem.getServer().getConnections().length);
+                temp += i+1 + ". " + varsomSystem.getServer().getConnections()[sortedCars.get(i).getID()].toString() + "\n";
+            }
+            else {
+                temp += i+1 + ". *NoConnection*\n";
+            }*/
+            try{
+                temp += /*i+1 + ". " +*/ varsomSystem.getServer().getConnections()[sortedCars.get(i).getID()].toString() + "\n";
+            }
+            catch(Exception e){
+                temp += /*i+1 + ". */"*NoConnection*\n";
+            }
+        }
+        return temp;
+    }
+
+    private void createDiePulse(){
+        diePulse = "0 125 125 125 350 125 125 125 350";
+        int paus = 0;
+        for(int i = 0 ; i < 200; i++){
+            if(i % 10 == 0 ){
+                paus++;
+            }
+            diePulse += " 5 " + paus;
+        }
+        System.out.println("PULSE: = " + diePulse);
+    }
+
+
 }

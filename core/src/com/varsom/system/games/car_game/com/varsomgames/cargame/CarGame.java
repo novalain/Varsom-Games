@@ -52,7 +52,7 @@ public class CarGame extends VarsomGame {
     @Override
     public void handleDataFromClients(Connection c, String s) {
 
-        int carNumber = c.getID() - 1;
+      //  int carNumber = c.getID() - 1;
 
         StringTokenizer st = new StringTokenizer(s, " ");
         //while (st.hasMoreTokens()) {
@@ -65,7 +65,8 @@ public class CarGame extends VarsomGame {
         //}
 
      //   System.out.println
-       gameScreen.getTrack().getCars()[carNumber].handleDataFromClients(is_driving,is_breaking, angle);
+      // gameScreen.getTrack().getCars()[carNumber].handleDataFromClients(is_driving,is_breaking, angle);
+       gameScreen.getTrack().getCarByConnectionID(c.getID()).handleDataFromClients(is_driving,is_breaking, angle);
 
 
     }

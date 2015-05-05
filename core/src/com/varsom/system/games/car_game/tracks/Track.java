@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.Array;
 
 import java.util.Vector;
 
+import com.varsom.system.VarsomSystem;
 import com.varsom.system.games.car_game.gameobjects.BoxObstacle;
 import com.varsom.system.games.car_game.gameobjects.Car;
 import com.varsom.system.games.car_game.helpers.AssetLoader;
@@ -63,6 +64,8 @@ public abstract class Track {
     //NETWORK RELATED??
     // TODO should maybe be within the gameScreen?!?!?!
     protected int NUMBER_OF_PLAYERS;
+    protected int[] connectionIDs;
+    protected VarsomSystem varsomSystem;
 
     //ANIMATION..
     // TODO shouldn't this be withing the 'Car' class?
@@ -76,7 +79,8 @@ public abstract class Track {
      * @param backgroundMask
      * @param backgroundScale
      */
-    protected Track(World world,Sprite backgroundSprite, Sprite backgroundMask, float backgroundScale,int NUMBER_OF_PLAYERS) {
+    protected Track(World world,Sprite backgroundSprite, Sprite backgroundMask, float backgroundScale,int NUMBER_OF_PLAYERS,VarsomSystem vS) {
+        varsomSystem = vS;
         bgSprite = backgroundSprite;
         bgMask = backgroundMask;
         bgScale = backgroundScale;
@@ -157,7 +161,7 @@ public abstract class Track {
         }
 
         startLine = new Vector2[]{path.get(0), path.get(1)};
-        Gdx.app.log("StartLine", "startLine[0]: (" + startLine[0].toString() + "), startLine[1] = (" +startLine[1].toString() + ")");
+        Gdx.app.log("StartLine", "startLine[0]: (" + startLine[0].toString() + "), startLine[1] = (" + startLine[1].toString() + ")");
     }
 
     /**
@@ -280,10 +284,31 @@ public abstract class Track {
         return bgScale;
     }
 
-    public Sprite getBgSprite(){
+    public Sprite getBgSprite() {
 
         return bgSprite;
 
+    }
+    public VarsomSystem getVarsomSystem() {
+        return varsomSystem;
+    }
+    public Car getCarByConnectionID (int conID) {
+        int i = 0;
+        for( ; i < NUMBER_OF_PLAYERS; i++) {
+            try {
+                if (connectionIDs[i] == conID) {
+                    return cars[i];
+                }
+            } catch (Exception e) {
+                //System.out.println("No connection");
+
+            }
+
+        }
+
+        System.out.println("ERRRRROOOORRR: There's something wrong in the getCarByConnectionID function");
+        System.out.println("The connectionID is probably wrong! Some car might be without a controlling device");
+        return cars[i];
     }
 
 }

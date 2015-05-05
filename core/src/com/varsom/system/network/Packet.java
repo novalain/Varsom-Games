@@ -13,4 +13,6 @@ public class Packet {
     public static class ExitRequest { boolean exit = false; }
     public static class StandByOrder { boolean standby = false; }
     public static class SendDPadData { int dataX, dataY; boolean select; }
+    public static class VibrateClient { int vibTime; }
+    public static class PulseVibrateClient { String pattern; int repeat; }
 }

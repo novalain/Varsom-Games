@@ -17,12 +17,16 @@ import com.varsom.system.Commons;
 import com.varsom.system.VarsomSystem;
 import com.varsom.system.games.car_game.gameobjects.Car;
 
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+
 public class WinScreen extends ScaledScreen {
 
     private Table table = new Table();
 
     protected VarsomSystem varsomSystem;
-    protected Array<Car> carList;
+
+    private ArrayList<String> carOrder;
 
     //TODO Load files from AssetLoader
 
@@ -34,8 +38,13 @@ public class WinScreen extends ScaledScreen {
 
     private String playerScores;
 
-    public WinScreen(VarsomSystem varsomSystem) {
+    public WinScreen(VarsomSystem varsomSystem, String names) {
         this.varsomSystem = varsomSystem;
+        carOrder = new ArrayList<String>();
+        StringTokenizer st = new StringTokenizer(names, "\n");
+        while(st.hasMoreTokens()){
+            carOrder.add(st.nextToken());
+        }
         //carList = varsomSystem.getActiveGame().getGameScreen().getTrack().getCars();
         //Gdx.app.log("carList-length", carList.length());
     }
@@ -59,8 +68,9 @@ public class WinScreen extends ScaledScreen {
         Label.LabelStyle style = new Label.LabelStyle(fontType, Color.WHITE);
 
         //label that shows all connected players
-        playerScores = ": Name : Time/Score/Dist : Knockouts :\n";
-        result = new Label(playerScores, style);
+        //playerScores = ": Name : Time/Score/Dist : Knockouts :\n";
+        //result = new Label(playerScores, style);
+        result = new Label(carOrder.get(0) + " is VICTORIOUS!!", style);
         result.setPosition(Commons.WORLD_WIDTH / 2 - result.getWidth() / 2, Commons.WORLD_HEIGHT * 0.8f - result.getHeight());
 
         stage.addActor(result);

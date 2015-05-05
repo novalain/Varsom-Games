@@ -250,7 +250,7 @@ public class MainMenu extends ScaledScreen {
         //update the client names label with clients connected at the moment
         for (int i = 0; i < varsomSystem.getServer().getConnections().length; i++) {
             //TODO right now the IP is displayed, it should be the name chosen by the player
-            clientNames += "\n" + varsomSystem.getServer().getConnections()[i].getRemoteAddressTCP().toString();
+            clientNames += "\n" + varsomSystem.getServer().getConnections()[i].toString();
         }
         connectedClientNames.setText(clientNames);
     }

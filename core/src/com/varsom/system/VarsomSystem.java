@@ -66,6 +66,7 @@ public class VarsomSystem extends /*ApplicationAdapter*/Game {
 
     @Override
     public void dispose() {
+        mpServer.gameRunning(false);
         mpServer.stop();
         super.dispose();
     }

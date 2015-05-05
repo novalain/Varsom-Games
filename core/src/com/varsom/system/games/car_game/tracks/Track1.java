@@ -1,30 +1,16 @@
 package com.varsom.system.games.car_game.tracks;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.CatmullRomSpline;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Array;
 
-import java.util.Vector;
-
+import com.varsom.system.VarsomSystem;
 import com.varsom.system.games.car_game.gameobjects.BoxObstacle;
 import com.varsom.system.games.car_game.gameobjects.Car;
 import com.varsom.system.games.car_game.gameobjects.TireObstacle;
 import com.varsom.system.games.car_game.gameobjects.Wheel;
 import com.varsom.system.games.car_game.helpers.AssetLoader;
-import com.varsom.system.games.car_game.helpers.InputHandler;
-//import gameobjects.MoveSprite;
 
 /**
  * Created by oskarcarlbaum on 18/03/15.
@@ -37,8 +23,8 @@ public class Track1 extends Track{
     // This one is needed if we want to access several layers in our particlesystem
     //public ParticleEmitter emitter;
 
-    public Track1(World inWorld,int NUMBER_OF_PLAYERS) {
-        super(inWorld,new Sprite(AssetLoader.testTrackTexture),new Sprite(AssetLoader.testTrackMask),50f,NUMBER_OF_PLAYERS);
+    public Track1(World inWorld,int NUMBER_OF_PLAYERS,VarsomSystem vS) {
+        super(inWorld,new Sprite(AssetLoader.testTrackTexture),new Sprite(AssetLoader.testTrackMask),50f,NUMBER_OF_PLAYERS,vS);
         createTestTrack();
         offTrackSpeed = 0.95f;
     }
@@ -89,10 +75,11 @@ public class Track1 extends Track{
     private void createCars() {
         float carWidth = 0.5f, carLength = 1.0f;
         float spawnPosRotation = (float) -Math.PI/2;
-        float carPower = 60, maxSteerAngle = 20, maxSpeed = 30;
+        float carPower = 60, maxSteerAngle = 20, maxSpeed = 25;
 
         //TODO. Fix when the game can be started from the server, DO NOT REMOVE THE COMMENTED FUNCTION
         cars = new Car[NUMBER_OF_PLAYERS];
+        connectionIDs = new int[NUMBER_OF_PLAYERS];
         for(int i = 0; i < NUMBER_OF_PLAYERS; i++) {
             Sprite carSprite;
             switch(i){
@@ -127,6 +114,13 @@ public class Track1 extends Track{
 
             cars[i] = new Car(carWidth, carLength, hardcodedSpawnPoints()[i], world, carSprite,
                 spawnPosRotation, carPower, maxSteerAngle, maxSpeed,this,i);
+
+            try {
+                connectionIDs[i] = varsomSystem.getServer().getConnections()[i].getID();
+            }
+            catch(Exception e) {
+                System.out.print("FAILED TO ACCESS CONNECTED DEVICE");
+            }
             //sprites.addElement(cars[i].pathTrackingSprite);
 
             //TODO fix input

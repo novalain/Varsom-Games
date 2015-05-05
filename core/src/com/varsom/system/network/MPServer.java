@@ -72,6 +72,8 @@ public class MPServer {
         kryo.register(Packet.ExitRequest.class);
         kryo.register(Packet.StandByOrder.class);
         kryo.register(Packet.SendDPadData.class);
+        kryo.register(Packet.VibrateClient.class);
+        kryo.register(Packet.PulseVibrateClient.class);
     }
 
     public void stop() {
@@ -103,6 +105,36 @@ public class MPServer {
             }
             // Send the packet back with the variable login.accepted, that is now true
             varsomSystem.getServer().sendToAllTCP(sendState);
+        }
+    }
+
+    public void vibrateClient(int time, int connectionID) {
+        Packet.VibrateClient vibPack = new Packet.VibrateClient();
+
+        vibPack.vibTime = time;
+
+        try {
+            // Sends the message to client with connectionID cID
+            server.sendToTCP(connectionID,vibPack);
+            System.out.println("Sent package");
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+    public void PulseVibrateClient(String pattern, int repeat, int connectionID) {
+        Packet.PulseVibrateClient vibPack = new Packet.PulseVibrateClient();
+
+        vibPack.pattern = pattern;
+        vibPack.repeat = repeat;
+
+        try {
+            // Sends the message to client with connectionID cID
+            server.sendToTCP(connectionID,vibPack);
+            System.out.println("Sent package");
+        } catch (Exception e)
+        {
+            e.printStackTrace();
         }
     }
 
