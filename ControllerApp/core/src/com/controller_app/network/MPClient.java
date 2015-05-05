@@ -130,6 +130,7 @@ public class MPClient {
 
     public void sendDPadData(int x, int y, boolean bool) {
         Packet.SendDPadData dp = new Packet.SendDPadData();
+        // TODO: Put dataX and dataY together to an array or string for efficiency
         dp.dataX = x;
         dp.dataY = y;
         dp.select = bool;
