@@ -472,7 +472,6 @@ public class Car extends DynamicObject {
         float temp = a.x * b.x + a.y * b.y;
         return temp;
     }
-
     public boolean isActive(){
         return active;
     }
