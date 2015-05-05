@@ -61,6 +61,8 @@ public class ControllerScreen extends ScaledScreen {
         this.main = m;
         mpClient = mpc;
 
+
+
         skin = new Skin();
 
         generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));

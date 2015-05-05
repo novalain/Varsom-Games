@@ -49,8 +49,10 @@ public class ConnectionScreen extends ScaledScreen {
 
         spriteBatch = new SpriteBatch();
 
+
         this.main = m;
         mpClient = mpc;
+        mpClient.setConnectionScreen(this);
 
         //logo
         logo = new Texture(Gdx.files.internal("images/logo.png"));
@@ -115,6 +117,7 @@ public class ConnectionScreen extends ScaledScreen {
                 Gdx.app.log("in MenuScreen", "pressed controller");
                 connect();
                 main.changeScreen(Commons.NAVIGATION_SCREEN);
+
             }
         });
 
@@ -151,9 +154,9 @@ public class ConnectionScreen extends ScaledScreen {
     }
 
     public void errorMessage(int s){
-        if(check == 2) {
-            main.changeScreen(1);
-        }
+
+            main.changeScreen(0);
+
         switch(s){
             case 1:
             new Dialog("Error", skin) {
@@ -171,7 +174,7 @@ public class ConnectionScreen extends ScaledScreen {
                 break;
 
             case 2:
-                main.changeScreen(1);
+                //main.changeScreen(1);
                 new Dialog("Error", skin) {
                     {
                         text("Please enter a correct IP");
@@ -196,6 +199,7 @@ public class ConnectionScreen extends ScaledScreen {
 
     @Override
     public void render(float delta) {
+        check = 1;
         Gdx.gl.glClearColor(0f, 0f, 0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 

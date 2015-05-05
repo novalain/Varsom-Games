@@ -33,6 +33,7 @@ public class NavigationScreen extends ScaledScreen{
         super();
         this.main = m;
         mpClient = mpc;
+
         batch = new SpriteBatch();
 
         generateFonts(); // call to all generating functions, have to be called in this order!
@@ -167,6 +168,7 @@ public class NavigationScreen extends ScaledScreen{
 
     @Override
     public void render(float delta) {
+
         Gdx.gl.glClearColor(0f, 0f, 0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
