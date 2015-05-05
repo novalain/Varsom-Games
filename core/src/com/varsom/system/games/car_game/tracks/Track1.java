@@ -40,6 +40,7 @@ public class Track1 extends Track{
     public Track1(World inWorld,int NUMBER_OF_PLAYERS) {
         super(inWorld,new Sprite(AssetLoader.testTrackTexture),new Sprite(AssetLoader.testTrackMask),50f,NUMBER_OF_PLAYERS);
         createTestTrack();
+        offTrackSpeed = 0.95f;
     }
 
     private void createTestTrack(){
@@ -132,7 +133,7 @@ public class Track1 extends Track{
              //Gdx.input.setInputProcessor(new InputHandler(cars[i]));
 
             //add car to the frontLayer and all its wheels to the backLayer
-            for(Wheel tempWheel : cars[i].wheels) {
+            for(Wheel tempWheel : cars[i].getWheels()) {
                 backLayer.addElement(tempWheel.body);
             }
             frontLayer.addElement(cars[i].getBody());

@@ -34,13 +34,14 @@ import com.varsom.system.network.NetworkListener;
 
 public class GameScreen implements Screen {
 
+    /*
     public static final int STEER_NONE = 0;
     public static final int STEER_RIGHT = 1;
     public static final int STEER_LEFT = 2;
 
     public static final int ACC_NONE = 0;
     public static final int ACC_ACCELERATE = 1;
-    public static final int ACC_BRAKE = 2;
+    public static final int ACC_BRAKE = 2;*/
 
     public static int level;
 
@@ -119,7 +120,7 @@ public class GameScreen implements Screen {
         //TODO camera.position.set(leaderCar.getPointOnTrack(), 0);
         camera.position.set(leaderCar.getPointOnTrack(), 0);
         camera.rotate((float)Math.toDegrees(leaderCar.getRotationTrack())-180);
-        camera.zoom = 1.75f; // can be used to see the entire track
+        camera.zoom = 15.f; // can be used to see the entire track
         camera.update();
 
         batch = new SpriteBatch();
@@ -199,23 +200,16 @@ public class GameScreen implements Screen {
         }
 
         handleCountDownTimer();
-
         batch.setProjectionMatrix(camera.combined);
-
         track.addToRenderBatch(batch, camera);
 
         //debugRenderer.render(world, camera.combined);
 
-        world.step(TIMESTEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
-
-        //world.clearForces();
-        // Set camera position to same as car
-
-        // Get current angle from body
-        //float playerAngle = constrainAngle(car.body.getAngle()*MathUtils.radiansToDegrees);
-
        // Here goes the all the updating / game logic
         if(!paused){
+
+           world.step(TIMESTEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
+
            String temp = "CarDist:\n";
            for(Car car : track.getCars()) {
                if(car.isActive() && !camera.frustum.boundsInFrustum(car.getPosition().x,car.getPosition().y,0,0.5f,1f,0.1f)){
@@ -225,9 +219,7 @@ public class GameScreen implements Screen {
                temp += car.getTraveledDistance() + "\n";
            }
 
-
             carsTraveled.setText(temp);
-
             updateCamera();
         }
 
@@ -262,7 +254,7 @@ public class GameScreen implements Screen {
             desiredCamRotation += 360;
         }
 
-        camera.rotate(desiredCamRotation * 0.02f);
+        camera.rotate(desiredCamRotation * 0.015f);
 
         camera.update();
 

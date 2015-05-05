@@ -26,6 +26,8 @@ import com.varsom.system.games.car_game.helpers.AssetLoader;
  */
 public abstract class Track {
 
+    protected float offTrackSpeed;
+
     //PHYSICS
     protected World world;
 
@@ -87,13 +89,10 @@ public abstract class Track {
     }
 
     protected void createBackground() {
+
         bgSprite.setSize(bgSprite.getWidth()/bgScale,bgSprite.getHeight()/bgScale);
-        //backgroundSprite.setOriginCenter();
-
         bgSprite.setPosition(-bgSprite.getWidth()/2,-bgSprite.getHeight()/2);
-        //sprites.addElement(backgroundSprite);
 
-        // Set up mask
         bgMask.getTexture().getTextureData().prepare();
         pixmap = bgMask.getTexture().getTextureData().consumePixmap();
         //pixmap.dispose();
@@ -195,6 +194,7 @@ public abstract class Track {
         inBatch.begin();
 
         bgSprite.draw(inBatch);
+        bgMask.draw(inBatch);
 
         // Draw sprites that are not connected to a physical body
         for (Sprite sprite : sprites) {
@@ -270,6 +270,23 @@ public abstract class Track {
         }
         return leaderCar;
     }
+
+    public float getOffTrackSpeed(){
+
+        return offTrackSpeed;
+
+    }
+
+    public float getBgScale(){
+        return bgScale;
+    }
+
+    public Sprite getBgSprite(){
+
+        return bgSprite;
+
+    }
+
 }
 
 

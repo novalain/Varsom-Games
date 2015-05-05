@@ -28,14 +28,6 @@ public class InputHandler implements InputProcessor{
     // Function to check if screen is touched
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        accelY = Gdx.input.getAccelerometerY();
-
-        if(screenX > Gdx.graphics.getWidth()/2) {
-            car.accelerate = GameScreen.ACC_ACCELERATE;
-        }
-        else if(screenX < Gdx.graphics.getWidth()/2) {
-            car.accelerate = GameScreen.ACC_BRAKE;
-        }
         return true; // return true to say there's been a touch event
     }
 
@@ -57,7 +49,6 @@ public class InputHandler implements InputProcessor{
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        car.accelerate = GameScreen.ACC_NONE;
         return true;
     }
 
