@@ -123,4 +123,12 @@ public class Main extends Game {
         return controllerScreen;
     }
 
+    //changes screen if the server has told us to
+    public void handleController(){
+        if(NetworkListener.changeController) {
+            changeScreen(NetworkListener.controller);
+            NetworkListener.changeController = false;
+        }
+    }
+
 }

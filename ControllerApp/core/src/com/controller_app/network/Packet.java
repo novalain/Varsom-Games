@@ -22,5 +22,6 @@ public class Packet {
     }
     public static class VibrateClient { int vibTime; }
     public static class PulseVibrateClient { String pattern; int repeat; }
+    public static class ChangeController { int controller; }
 
 }

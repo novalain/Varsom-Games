@@ -18,6 +18,8 @@ public class NetworkListener extends Listener {
     public static boolean connected = false;
     public static boolean standby = false;
     public static int paddir;
+    public static int controller;
+    public static boolean changeController = false;
 
     // If you want to send a object, you need to send it with this client variable
     public void init(Client client, MPClient mpClient) {
@@ -82,6 +84,7 @@ public class NetworkListener extends Listener {
             }
             */
         }
+
         if (o instanceof Packet.StandByOrder) {
             System.out.println("in NetworkListener: standby");
 
@@ -117,6 +120,13 @@ public class NetworkListener extends Listener {
             }
             System.out.println("VibrationPattern: "+pattern.toString());
             Gdx.input.vibrate(pattern,((Packet.PulseVibrateClient) o).repeat);
+        }
+
+        if (o instanceof Packet.ChangeController) {
+
+            controller = ((Packet.ChangeController) o).controller;
+            changeController = true;
+
         }
     }
 }

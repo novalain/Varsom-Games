@@ -1,6 +1,7 @@
 package com.controller_app.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Net;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -98,6 +99,9 @@ public class ControllerScreen extends ScaledScreen {
         Gdx.gl.glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        //changes screen if the server has told us to
+        main.handleController();
+
         printName();
 
         stage.draw();
@@ -177,9 +181,7 @@ public class ControllerScreen extends ScaledScreen {
         buttonHome.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-        // TODO: Fel under merge, ta bort helt om den inte behövs
-                main.getConnectionScreen().disconnect();
-                main.changeScreen(Commons.CONNECTION_SCREEN);
+                main.changeScreen(Commons.NAVIGATION_SCREEN);
             }
         });
 
