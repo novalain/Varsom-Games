@@ -8,6 +8,12 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.InterfaceAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
 
 public class BroadcastServerThread extends Thread {
 
@@ -31,8 +37,8 @@ public class BroadcastServerThread extends Thread {
             ip = ip.substring(0, ip.indexOf(" "));
         }
         System.out.println("IP is " + ip);
-        // gets the broadcast subgroup
-        broadip = ip.substring(0,ip.lastIndexOf(".")) +  ".255";
+
+        broadip = getBroadcastIP();
 
         socket = new DatagramSocket(4447);
     }
@@ -57,6 +63,27 @@ public class BroadcastServerThread extends Thread {
         }
 
         socket.close();
+    }
+
+    private String getBroadcastIP() throws SocketException {
+
+        Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces();
+        while (en.hasMoreElements()) {
+            NetworkInterface ni = en.nextElement();
+
+            List<InterfaceAddress> list = ni.getInterfaceAddresses();
+            Iterator<InterfaceAddress> it = list.iterator();
+
+            while (it.hasNext()) {
+                InterfaceAddress ia = it.next();
+                if(ia.getBroadcast() != null) {
+                    broadip = ia.getBroadcast().toString();
+                    broadip = broadip.replace("/", "");
+                    //System.out.println(" Broadcast = " + broadip);
+                }
+            }
+        }
+        return broadip;
     }
 
 }
