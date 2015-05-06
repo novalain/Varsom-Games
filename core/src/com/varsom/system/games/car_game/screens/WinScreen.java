@@ -16,6 +16,8 @@ import com.badlogic.gdx.utils.Array;
 import com.varsom.system.Commons;
 import com.varsom.system.VarsomSystem;
 import com.varsom.system.games.car_game.gameobjects.Car;
+import com.varsom.system.games.car_game.helpers.GameCommons;
+import com.varsom.system.network.NetworkListener;
 
 import java.util.ArrayList;
 import java.util.StringTokenizer;
@@ -45,8 +47,9 @@ public class WinScreen extends ScaledScreen {
         while(st.hasMoreTokens()){
             carOrder.add(st.nextToken());
         }
-        //carList = varsomSystem.getActiveGame().getGameScreen().getTrack().getCars();
-        //Gdx.app.log("carList-length", carList.length());
+
+        //Switch screen on the controller to NavigationScreen
+        varsomSystem.getMPServer().changeScreen(GameCommons.NAVIGATION_SCREEN);
     }
 
     @Override
@@ -85,14 +88,7 @@ public class WinScreen extends ScaledScreen {
         Gdx.gl.glClearColor(122 / 255.0f, 209 / 255.0f, 255 / 255.0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        /*for(Car car : carList) {
-            //Ranking order
-            playerScores += varsomSystem.getServer().getConnections()[car.getID()].toString() + " : ";
-            //Points or time
-            playerScores += car.getTraveledDistance() + " : ";
-            //Knockouts
-            playerScores += "- : ";
-        }*/
+        handleDpad();
 
         stage.act();
         stage.draw();
@@ -123,6 +119,17 @@ public class WinScreen extends ScaledScreen {
         stage.dispose();
         skin.dispose();
     }
+    public void handleDpad() {
+
+        if (NetworkListener.dPadSelect) {
+            Gdx.app.log("clicked", "pressed the OK button.");
+            varsomSystem.getMPServer().setJoinable(true);
+            ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu(varsomSystem));
+
+            NetworkListener.dPadSelect = false;
+        }
+    }
+
 }
 
 /*

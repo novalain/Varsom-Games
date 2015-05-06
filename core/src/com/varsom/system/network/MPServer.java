@@ -74,6 +74,7 @@ public class MPServer {
         kryo.register(Packet.SendDPadData.class);
         kryo.register(Packet.VibrateClient.class);
         kryo.register(Packet.PulseVibrateClient.class);
+        kryo.register(Packet.ChangeController.class);
     }
 
     public void stop() {
@@ -140,5 +141,11 @@ public class MPServer {
 
     public boolean getJoinable(boolean b){
         return joinable;
+    }
+
+    public void changeScreen(int x) {
+        Packet.ChangeController change = new Packet.ChangeController();
+        change.controller = x;
+        getServer().sendToAllTCP(change);
     }
 }
