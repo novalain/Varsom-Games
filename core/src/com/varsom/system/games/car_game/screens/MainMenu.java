@@ -17,7 +17,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.varsom.system.Commons;
 import com.varsom.system.DPad;
 import com.varsom.system.screens.ScaledScreen;
-import com.varsom.system.games.car_game.helpers.GameCommons;
 
 import java.util.ArrayList;
 
@@ -105,7 +104,7 @@ public class MainMenu extends ScaledScreen {
 
                 ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(1, varsomSystem));
                 //Switch screen on the controller to controllerScreen
-                varsomSystem.getMPServer().changeScreen(GameCommons.CONTROLLER_SCREEN);
+                varsomSystem.getMPServer().changeScreen(Commons.CONTROLLER_SCREEN);
             }
         });
 
@@ -117,7 +116,7 @@ public class MainMenu extends ScaledScreen {
 
                 ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(2, varsomSystem));
                 //Switch screen on the controller to controllerScreen
-                varsomSystem.getMPServer().changeScreen(GameCommons.CONTROLLER_SCREEN);
+                varsomSystem.getMPServer().changeScreen(Commons.CONTROLLER_SCREEN);
             }
         });
 

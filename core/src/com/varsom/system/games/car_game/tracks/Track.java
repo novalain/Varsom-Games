@@ -258,6 +258,7 @@ public abstract class Track {
     public Car[] getCars(){
         return cars;
     }
+    public int getNoOfPlayers() { return NUMBER_OF_PLAYERS; }
 
     public Pixmap getPixmap(){
         return pixmap;

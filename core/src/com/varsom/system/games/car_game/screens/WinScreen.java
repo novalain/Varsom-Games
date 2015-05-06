@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -16,19 +17,37 @@ import com.badlogic.gdx.utils.Array;
 import com.varsom.system.Commons;
 import com.varsom.system.VarsomSystem;
 import com.varsom.system.games.car_game.gameobjects.Car;
-import com.varsom.system.games.car_game.helpers.GameCommons;
 import com.varsom.system.network.NetworkListener;
 
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
+import java.util.Comparator;
+
 public class WinScreen extends ScaledScreen {
+
+    public class CarComparator implements Comparator<Car>{
+        @Override
+        public int compare(Car c1, Car c2) {
+            if (c1.getTraveledDistance() < c2.getTraveledDistance()) {
+                return -1;
+            } else if (c1.getTraveledDistance() == c2.getTraveledDistance()) {
+                return 0;
+            } else {
+                return 1;
+            }
+        }
+    }
 
     private Table table = new Table();
 
     protected VarsomSystem varsomSystem;
 
     private ArrayList<String> carOrder;
+    /*
+    protected Array<Car> carList = new Array<Car>(8);
+    private CarComparator carComparator = new CarComparator();
+*/
 
     //TODO Load files from AssetLoader
 
@@ -37,6 +56,7 @@ public class WinScreen extends ScaledScreen {
 
     private TextButton btnOK;
     private Label result;
+    private Label score;
 
     private String playerScores;
 
@@ -49,7 +69,7 @@ public class WinScreen extends ScaledScreen {
         }
 
         //Switch screen on the controller to NavigationScreen
-        varsomSystem.getMPServer().changeScreen(GameCommons.NAVIGATION_SCREEN);
+        varsomSystem.getMPServer().changeScreen(Commons.NAVIGATION_SCREEN);
     }
 
     @Override
@@ -75,8 +95,11 @@ public class WinScreen extends ScaledScreen {
         //result = new Label(playerScores, style);
         result = new Label(carOrder.get(0) + " is VICTORIOUS!!", style);
         result.setPosition(Commons.WORLD_WIDTH / 2 - result.getWidth() / 2, Commons.WORLD_HEIGHT * 0.8f - result.getHeight());
+        score = new Label(playerScores, style);
+        score.setPosition(Commons.WORLD_WIDTH / 2 - score.getWidth() / 2, Commons.WORLD_HEIGHT * 0.6f - score.getHeight());
 
         stage.addActor(result);
+        stage.addActor(score);
         stage.addActor(btnOK);
 
         Gdx.input.setInputProcessor(stage);
@@ -89,6 +112,7 @@ public class WinScreen extends ScaledScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         handleDpad();
+        handleScore();
 
         stage.act();
         stage.draw();
@@ -119,6 +143,7 @@ public class WinScreen extends ScaledScreen {
         stage.dispose();
         skin.dispose();
     }
+
     public void handleDpad() {
 
         if (NetworkListener.dPadSelect) {
@@ -130,6 +155,23 @@ public class WinScreen extends ScaledScreen {
         }
     }
 
+    private void handleScore(){
+
+        /*playerScores = ": Name : Time/Score/Dist : Knockouts :\n";
+
+        for(String car : carOrder) {
+            Gdx.app.log("handleScore " + carOrder., varsomSystem.getServer().getConnections()[carList.get(i).getID()].toString());
+            //Ranking order
+            playerScores += varsomSystem.getServer().getConnections()[carList.get(i).getID()].toString() + " : ";
+            //Points or time
+            playerScores += carList.get(i).getTraveledDistance() + " : ";
+            //Knockouts
+            playerScores += "- : \n";
+        }
+
+        score.setText(playerScores);*/
+
+    }
 }
 
 /*
