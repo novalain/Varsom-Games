@@ -296,7 +296,7 @@ public class ConnectionScreen extends ScaledScreen {
 
         // Shows animation
         if(showGif)
-            spriteBatch.draw(anim.getKeyFrame(frameCounter, true), Gdx.graphics.getWidth() / 2 - new Texture(Gdx.files.internal("system/img/loading.gif")).getWidth() / 2 + 10, 150);
+            spriteBatch.draw(anim.getKeyFrame(frameCounter, true), Commons.WORLD_WIDTH / 2 - new Texture(Gdx.files.internal("system/img/loading.gif")).getWidth() / 2, 150);
 
         spriteBatch.end();
 
