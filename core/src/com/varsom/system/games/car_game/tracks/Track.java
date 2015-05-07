@@ -50,6 +50,7 @@ public abstract class Track {
     private Vector2[] points;
     private Array<Vector2> path;
     private int NUM_INTERPOLATED_POINTS;
+    private float trackLength;
 
     //FOR RENDERING
     protected Vector<Body> backLayer;
@@ -99,7 +100,6 @@ public abstract class Track {
 
         bgMask.getTexture().getTextureData().prepare();
         pixmap = bgMask.getTexture().getTextureData().consumePixmap();
-        //pixmap.dispose();
 
         //Create walls around the background sprite
         createWalls();
@@ -128,32 +128,16 @@ public abstract class Track {
         }
 
         NUM_INTERPOLATED_POINTS = waypoints.length * smoothCurve;
-//        Gdx.app.log("CATMULL", "SmoothCurve : "+ smoothCurve + ", WayPoints.lenght : " + waypoints.length);
-//        Gdx.app.log("CATMULL", "Total: " + NUM_INTERPOLATED_POINTS);
 
 
         // Allocate number of total points
         points = new Vector2[NUM_INTERPOLATED_POINTS];
 
-        // Create Catmull-Rom spline
-        //myCatmull = new CatmullRomSpline<Vector2>(waypoints, true);
-
         // Calculate the new interpolated points
         for(int i = 0; i < NUM_INTERPOLATED_POINTS; i++)
         {
-            //points[i] = new Vector2();
             points[i] = waypoints[i];
-            //Gdx.app.log("CATMULL", "SmoothCurve : "+ smoothCurve + ", WayPoints.lenght : " + waypoints.length);
-            //Gdx.app.log("CATMULL", "At position: " + i + ", out of total: " + NUM_INTERPOLATED_POINTS);
-            //myCatmull.valueAt(points[i], ((float)i)/((float)NUM_INTERPOLATED_POINTS-1));
         }
-
-        /* DEBUG WAYPOINTS */
-       /* for(int i = 0; (i+1) < waypoints.length; i+=2){
-            path.add(new Vector2(waypoints[i], waypoints[i+1]));
-            Gdx.app.log("In chosen path", "point : "+waypoints[i] + " and " + waypoints[i+1]);
-            Gdx.app.log("In chosen path", "size: "+i);
-        }*/
 
         // Same as before
         for(int i = 0 ; i < NUM_INTERPOLATED_POINTS; i++){
@@ -162,6 +146,7 @@ public abstract class Track {
 
         startLine = new Vector2[]{path.get(0), path.get(1)};
         Gdx.app.log("StartLine", "startLine[0]: (" + startLine[0].toString() + "), startLine[1] = (" + startLine[1].toString() + ")");
+        calcTrackLength(path);
     }
 
     /**
@@ -213,18 +198,6 @@ public abstract class Track {
         shapeRenderer.setProjectionMatrix(camera.combined);
         //drawWayPoints();
 
-        /*
-        TextureRegion txtRegion = carAnimation.getKeyFrame(elapsedTime, true);
-        Sprite sprite = new Sprite(txtRegion);
-
-        // For the animation, could probably be done in a cleaner way
-        sprite.setSize(cars[0].width, cars[0].length);
-        sprite.setOriginCenter();
-        sprite.setPosition(cars[0].getBody().getPosition().x - sprite.getWidth()/2, cars[0].getBody().getPosition().y - sprite.getHeight()/2);
-        sprite.setRotation(cars[0].getBody().getAngle() * MathUtils.radiansToDegrees);
-        sprite.draw(inBatch);
-        */
-
         inBatch.end();
     }
 
@@ -253,6 +226,9 @@ public abstract class Track {
             shapeRenderer.circle(points[i].x, points[i].y, 0.5f);
             shapeRenderer.end();
         }
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.circle(points[points.length-1].x, points[points.length-1].y, 0.5f);
+        shapeRenderer.end();
     }
 
     public Car[] getCars(){
@@ -293,6 +269,7 @@ public abstract class Track {
     public VarsomSystem getVarsomSystem() {
         return varsomSystem;
     }
+
     public Car getCarByConnectionID (int conID) {
         int i = 0;
         for( ; i < NUMBER_OF_PLAYERS; i++) {
@@ -310,6 +287,25 @@ public abstract class Track {
         System.out.println("ERRRRROOOORRR: There's something wrong in the getCarByConnectionID function");
         System.out.println("The connectionID is probably wrong! Some car might be without a controlling device");
         return cars[i];
+    }
+
+    private void calcTrackLength(Array<Vector2> p){
+        trackLength = 0;
+        int i = 0;
+        while(i < p.size-1){
+            trackLength += lengthBetweenPoints(p.get(i),p.get(i+1));
+            i++;
+        }
+        trackLength += lengthBetweenPoints(p.get(i),p.get(0));
+        System.out.println("TRACK LENGTH IS: " + trackLength);
+    }
+
+    private float lengthBetweenPoints(Vector2 a, Vector2 b) {
+        return (float) Math.sqrt(Math.pow(a.x-b.x,2) + Math.pow(a.y-b.y,2));
+    }
+
+    public float getTrackLength(){
+        return trackLength;
     }
 
 }
