@@ -40,9 +40,9 @@ public class VarsomSystem extends /*ApplicationAdapter*/Game {
 	public void create () {
         activeGame = null;
         skin = new Skin(Gdx.files.internal("data/uiskin.json"));
-        startServer();
+        startServers();
         setScreen(new VarsomSplash(this));
-        //setScreen(new VarsomMenu());
+
 
         //TODO ful-lösning, vi borde inte behöva berätta vilka spel eller hur många utan systemet ska känna av det
         //Handle games
@@ -59,8 +59,8 @@ public class VarsomSystem extends /*ApplicationAdapter*/Game {
         mpServer.stop();
         super.dispose();
     }
-
-    private void startServer(){
+// starServer starts the MPServer and the broadcastServer
+    private void startServers(){
 
         try {
             mpServer = new MPServer(this);
@@ -101,6 +101,7 @@ public class VarsomSystem extends /*ApplicationAdapter*/Game {
 
     //a function to show a popup message when a player is disconnected
     //
+    //TODO lägga in en error message funktion för om man är mindra än 2 spelare
     public void errorMessage(Connection c){
         final Connection myC = c;
 

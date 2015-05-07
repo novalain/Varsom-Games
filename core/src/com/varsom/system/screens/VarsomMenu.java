@@ -26,7 +26,6 @@ import java.util.Vector;
 
 public class VarsomMenu extends ScaledScreen {
 
-    // private Stage stage = new Stage();
     private Table table = new Table();
     private Vector2 lastTouch = new Vector2();
     private int currentButton = 1;
@@ -35,9 +34,6 @@ public class VarsomMenu extends ScaledScreen {
     //TODO Load files from a SystemAssetLoader. Also, create a folder and skin for the varsom system
     private Skin skin = new Skin(Gdx.files.internal("system/skins/menuSkin.json"), new TextureAtlas(Gdx.files.internal("system/skins/menuSkin.pack")));
     private Skin skin2 = new Skin(Gdx.files.internal("data/uiskin.json"));
-    /*private TextButton buttonExit;
-    private TextButton buttonPlayOtherGame;
-    private TextButton buttonPlayCarGame;*/
     private Image imagePlayCarGame;
     private Image imagePlayOtherGame;
     private Image imageExit;
@@ -48,7 +44,6 @@ public class VarsomMenu extends ScaledScreen {
 
     protected VarsomSystem varsomSystem;
 
-    private int addedClients = 0;
     private int middleImageX = -150;
 
     public VarsomMenu(VarsomSystem varsomSystem) {
@@ -77,11 +72,6 @@ public class VarsomMenu extends ScaledScreen {
                 Vector2 delta = newTouch.cpy().sub(lastTouch);
                 lastTouch = newTouch;
 
-                System.out.println("curr button"  + currentButton);
-                System.out.println("swipedleft " + swipedLeft);
-                System.out.println("swipedRight" + swipedRight);
-
-
                 if (delta.x > 20 && currentButton > 0 && !swipedRight && !swipedLeft) {
 
                     swipedRight = true;
@@ -90,7 +80,6 @@ public class VarsomMenu extends ScaledScreen {
 
                 } else if (delta.x < -20 && currentButton < 2 && !swipedRight && !swipedLeft) {
 
-                    System.out.println("ASDASD");
                     swipedLeft = true;
                     currentButton++;
                     stage.cancelTouchFocus();
@@ -104,7 +93,7 @@ public class VarsomMenu extends ScaledScreen {
             }
 
         });
-
+        //TODO lägga in detta i separata funktioner
         //label that shows all connected players
         clientNames = "Connected players:";
         connectedClientNames = new Label(clientNames, style);
@@ -132,7 +121,7 @@ public class VarsomMenu extends ScaledScreen {
             }
         }
     }
-
+    //TODO fix hardcoded values
     public void handleSwipedImages() {
 
         // Move to the swipedLeft
@@ -225,30 +214,6 @@ public class VarsomMenu extends ScaledScreen {
         skin.dispose();
     }
 
-    public static class AlertDialog extends Dialog {
-
-        public AlertDialog(String title, Skin skin, String windowStyleName) {
-            super(title, skin, windowStyleName);
-        }
-
-        public AlertDialog(String title, Skin skin) {
-            super(title, skin);
-        }
-
-        public AlertDialog(String title, WindowStyle windowStyle) {
-            super(title, windowStyle);
-        }
-
-        {
-            text("CarGame requiers at least two connected players");
-            button("OK");
-        }
-
-        @Override
-        protected void result(Object object) {
-
-        }
-    }
 
     //make sure that all connected clients are displayed in a label
     //if a new client is connected add it
@@ -281,7 +246,6 @@ public class VarsomMenu extends ScaledScreen {
             Gdx.app.log("in varsommenu", "The value of dpadTouched is: " + NetworkListener.dpadTouched);
             if (NetworkListener.dpadx == DPad.RIGHT && !swipedLeft && !swipedRight && currentButton < 2) {
                 swipedLeft = true;
-               // currentButton += NetworkListener.dpadx;
                 currentButton++;
                 Gdx.app.log("Right selected, Currentbutton is ", ""+currentButton);
                 if (currentButton > images.size()) {
@@ -291,7 +255,6 @@ public class VarsomMenu extends ScaledScreen {
             } else if(NetworkListener.dpadx == DPad.LEFT && !swipedLeft && !swipedRight && currentButton > 0){
                 Gdx.app.log("Left selected, Currentbutton is ", ""+currentButton);
                 swipedRight = true;
-                //currentButton += NetworkListener.dpadx;
                 currentButton--;
                 if (currentButton < 0) {
                     Gdx.app.log("CurrentButton value max", "is " + 0);

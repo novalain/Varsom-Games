@@ -30,7 +30,7 @@ import com.varsom.system.network.NetworkListener;
 import java.util.ArrayList;
 import java.util.Collections;
 
-
+// TODO Should be an abstract class
 public class GameScreen implements Screen {
 
     public static int level;
@@ -49,17 +49,13 @@ public class GameScreen implements Screen {
     final float CAMERA_ROT_INTERPOLATION = 0.015f;
 
     private final float TIMESTEP = 1 / 60f;
-    private final int VELOCITY_ITERATIONS = 8,
-            POSITION_ITERATIONS = 3;
+    private final int VELOCITY_ITERATIONS = 8, POSITION_ITERATIONS = 3;
 
     private SpriteBatch batch;
 
     private Track track;
     private float trackLength;
-
-    //    private Pixmap pixmap;
     private Car leaderCar;
-    //private Comparator<Car> carComparator;
     private ArrayList<Car> activeCars, sortedCars;
 
     private Stage stage = new Stage();
@@ -73,7 +69,7 @@ public class GameScreen implements Screen {
     private Label labelPause;
     private String pauseMessage = "Paused";
 
-    //temp
+    // Only for development - carlbaum
     private Label carsTraveled;
     private Label lapsLabel;
     private int maxLaps = 1, currentLap = 1;
@@ -121,7 +117,6 @@ public class GameScreen implements Screen {
         sortedCars = new ArrayList<Car>();
         addActiveCars();
         createDiePulse();
-        //sortCars();
 
         // Init camera
         //TODO /100 should probably be changed
@@ -138,7 +133,7 @@ public class GameScreen implements Screen {
         // pause menu button
         table.top().left();
         table.add(buttonLeave).size(400, 75).row();
-        // connected devices text thingys....
+        // connected devices text things....
         lapsLabel = new Label("Lap:\n", skin);
         lapsLabel.setFontScaleX(0.75f);
         lapsLabel.setFontScaleY(0.75f);
@@ -162,7 +157,6 @@ public class GameScreen implements Screen {
         labelPause.setPosition(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
         stage.addActor(labelPause);
 
-        //TODO Denna behövs för att man ska kunna klicka på knappen  men gör att vi inte längre kan gasa
         Gdx.input.setInputProcessor(stage);
 
         buttonLeave.addListener(new ClickListener() {
@@ -172,12 +166,10 @@ public class GameScreen implements Screen {
                 weHaveAWinner();
             }
         });
-        //end pause menu button
 
     }
 
-    //TODO handles count down timer and pause, should the name change or pause be moved?
-    private void handleCountDownTimer() {
+    private void handleCountdownAndPause() {
         paused = NetworkListener.pause;
 
         countDownTimer -= Gdx.graphics.getDeltaTime();
@@ -194,6 +186,7 @@ public class GameScreen implements Screen {
 
     }
 
+    // TODO keep render loop clean...
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0.7f, 0.2f, 0.2f, 1);
@@ -212,20 +205,23 @@ public class GameScreen implements Screen {
             //dispose(); ??
         }
 
-        handleCountDownTimer();
+        handleCountdownAndPause();
         batch.setProjectionMatrix(camera.combined);
         track.addToRenderBatch(batch, camera);
 
         //debugRenderer.render(world, camera.combined);
 
-       // Here goes the all the updating / game logic
+        // Here goes the all the updating / game logic
         if(!paused){
 
             world.step(TIMESTEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 
             String temp = "Standings:\n";
 
+            // Check if cars is inside the boundaries of the camera
             for(int i = 0; i < activeCars.size(); i++){
+
+                //TODO Fix hardcoded values of frustum
                 if(!camera.frustum.boundsInFrustum(activeCars.get(i).getPosition().x,activeCars.get(i).getPosition().y,0,0.5f,1f,0.1f)){
                     carLost(i);
 
@@ -239,12 +235,15 @@ public class GameScreen implements Screen {
             }
             sortCars();
             temp += sortedCars2String();
+
+            // Next lap incoming
             if(leaderCar.getTraveledDistance() > trackLength * currentLap){
                 currentLap++;
                 if(currentLap == maxLaps+1){
                     weHaveAWinner();
                 }
             }
+
             String lapText = "Lap " + currentLap + "/" + maxLaps;
             System.out.println();
             lapsLabel.setText(lapText);
@@ -345,7 +344,6 @@ public class GameScreen implements Screen {
         } catch (Exception e) {
             System.out.println("unconnected car left the screen");
         }
-        //varsomSystem.getMPServer().vibrateClient(1000,carID+1);
         varsomSystem.getMPServer().PulseVibrateClient(diePulse,-1,conID);
         varsomSystem.getMPServer().gameRunning(false,conID);
         car.setActive(false);
@@ -385,9 +383,8 @@ public class GameScreen implements Screen {
         for(int i = 0; i < sortedCars.size() ; i++){
             try{
                 temp += /*i+1 + ". " +*/ sortedCars.get(i).getConnectionName()+"\n";
-                //varsomSystem.getServer().getConnections()[NUMBER_OF_PLAYERS-1-sortedCars.get(i).getID()].toString() + "\n";
-            }
-            catch(Exception e){
+
+            } catch(Exception e){
                 temp += /*i+1 + ". */"*NoConnection*\n";
             }
         }
@@ -405,6 +402,5 @@ public class GameScreen implements Screen {
         }
         System.out.println("PULSE: = " + diePulse);
     }
-
 
 }

@@ -23,7 +23,6 @@ public class MPServer {
         server = new Server();
         registerPackets();
 
-
         server.addListener(new NetworkListener(varsomSystem));
 
         //TCP, UDP
@@ -39,7 +38,7 @@ public class MPServer {
         try {
             // Sends the message to all clients
             server.sendToAllTCP(sGD);
-            System.out.println("Sent package");
+            //System.out.println("Sent package");
         } catch (Exception e)
         {
             e.printStackTrace();
@@ -54,13 +53,14 @@ public class MPServer {
         try {
             // Sends the message to client with connectionID cID
             server.sendToTCP(carID,sGD);
-            System.out.println("Sent package");
+            //System.out.println("Sent package");
         } catch (Exception e)
         {
             e.printStackTrace();
         }
     }
 
+    /** DO NOT CHANGE THE ORDER HERE **/
     private void registerPackets() {
         Kryo kryo = server.getKryo();
         // Register packets in the same order as in Packet.java
@@ -87,7 +87,9 @@ public class MPServer {
         return server;
     }
 
+    // TODO Set joinable to true when winscreen is called
     public void setJoinable(boolean b){
+
         joinable = b;
 
         //if the server is joinable tell all clients
@@ -134,8 +136,7 @@ public class MPServer {
             // Sends the message to client with connectionID cID
             server.sendToTCP(connectionID,vibPack);
             System.out.println("Sent package");
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

@@ -14,60 +14,39 @@ import com.varsom.system.games.car_game.screens.Splash;
 import java.util.StringTokenizer;
 
 public class CarGame extends VarsomGame {
-    public static final String TITLE= "Crapp!";
 
-    public static final int WIDTH = 800;
-    public static final int HEIGHT= 480; // used later to set window size
+    // TODO Kom på ett namn
+    public static final String TITLE= "Crapp!";
     protected VarsomSystem varsomSystem;
     protected GameScreen gameScreen;
+    // TODO Sjukt oklart namn här
     public static int ID = 1;
 
     public CarGame(VarsomSystem varsomSystem){
-        Gdx.app.log("CarGame", "Creates cargame");
+
         this.varsomSystem = varsomSystem;
-        //Gdx.app.log("CarGame", "Creates cargame");
         varsomSystem.setScreen(new Splash(this.varsomSystem));
 
-
-        // load assets
         AssetLoader.load();
         gameScreen = null;
     }
 
 	@Override
 	public void create () {
-        //Gdx.app.log("CarGame", "Creates cargame");
-        //varsomSystem.setScreen(new Splash());
 
-        // load assets
-        //AssetLoader.load();
 	}
-/*
-    @Override
-    public void dispose() {
-        super.dispose();
-        AssetLoader.dispose();
-    }*/
 
     @Override
     public void handleDataFromClients(Connection c, String s) {
 
-      //  int carNumber = c.getID() - 1;
-
         StringTokenizer st = new StringTokenizer(s, " ");
-        //while (st.hasMoreTokens()) {
+
         boolean is_driving = st.nextToken().equalsIgnoreCase("true");
         boolean is_breaking = st.nextToken().equalsIgnoreCase("true");
         float angle = Float.parseFloat(st.nextToken());
 
-        //System.out.println("Player " + carNumber + " has the angle: " + angle);
-        //System.out.println("Does player " + carNumber + " accelerate: " + is_driving);
-        //}
-
-     //   System.out.println
-      // gameScreen.getTrack().getCars()[carNumber].handleDataFromClients(is_driving,is_breaking, angle);
-       gameScreen.getTrack().getCarByConnectionID(c.getID()).handleDataFromClients(is_driving,is_breaking, angle);
-
+        // Updates car in class Car
+        gameScreen.getTrack().getCarByConnectionID(c.getID()).handleDataFromClients(is_driving,is_breaking, angle);
 
     }
 

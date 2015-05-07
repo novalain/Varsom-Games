@@ -26,7 +26,7 @@ import com.varsom.system.games.car_game.gameobjects.BackgroundObject;
 import com.varsom.system.network.NetworkListener;
 import com.varsom.system.screens.*;
 
-
+// TODO Change name of class
 public class MainMenu extends ScaledScreen {
 
     //TODO: This is quite rushed. Refactor it all!

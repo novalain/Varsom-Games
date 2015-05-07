@@ -40,6 +40,7 @@ public class BroadcastServerThread extends Thread {
 
         byte[] buf = ip.getBytes();
 
+        // TODO fixa forloopen - christoph
         for (int i = 0; i < 50; i++) {
             try {
                 InetAddress broadcastaddress = InetAddress.getByName(broadip);

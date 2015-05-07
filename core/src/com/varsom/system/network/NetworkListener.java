@@ -29,11 +29,11 @@ public class  NetworkListener extends Listener {
     }
 
     public void connected(Connection c) {
-        Log.info("[SERVER] Someone has connect.");
+        Log.info("[SERVER] Someone has connected.");
     }
 
     public void disconnected(Connection c) {
-        Log.info("[SERVER] Someone have disconnect.");
+        Log.info("[SERVER] Someone has disconnected.");
         varsomSystem.errorMessage(c);
     }
 
@@ -72,11 +72,8 @@ public class  NetworkListener extends Listener {
         }
 
         else if (o instanceof GamePacket) {
-            //System.out.println("NETWORK: " + "Recieved GamePacket");
             String toDeCode = ((GamePacket) o).message;
-            //System.out.println("Connection " + c.getID() + " says " + toDeCode);
             varsomSystem.getActiveGame().handleDataFromClients(c, toDeCode);
-            //varsomGame.handleDataFromClients();
         }
 
         else if (o instanceof SendDPadData) {
@@ -84,9 +81,6 @@ public class  NetworkListener extends Listener {
             dpadx = ((SendDPadData) o).dataX;
             dpady = ((SendDPadData) o).dataY;
             dpadTouched = true;
-            System.out.println("dpadx is " + dpadx);
-            System.out.println("dpady is " + dpady);
-            System.out.println("select is " + dPadSelect);
         }
 
     }

@@ -26,31 +26,10 @@ import java.util.Comparator;
 
 public class WinScreen extends ScaledScreen {
 
-    public class CarComparator implements Comparator<Car>{
-        @Override
-        public int compare(Car c1, Car c2) {
-            if (c1.getTraveledDistance() < c2.getTraveledDistance()) {
-                return -1;
-            } else if (c1.getTraveledDistance() == c2.getTraveledDistance()) {
-                return 0;
-            } else {
-                return 1;
-            }
-        }
-    }
-
-    private Table table = new Table();
-
     protected VarsomSystem varsomSystem;
-
     private ArrayList<String> carOrder;
-    /*
-    protected Array<Car> carList = new Array<Car>(8);
-    private CarComparator carComparator = new CarComparator();
-*/
 
     //TODO Load files from AssetLoader
-
     private Skin skin = new Skin(Gdx.files.internal("car_game_assets/skins/menuSkin.json"),
             new TextureAtlas(Gdx.files.internal("car_game_assets/skins/menuSkin.pack")));
 
