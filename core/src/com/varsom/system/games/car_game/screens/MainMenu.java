@@ -26,7 +26,10 @@ import com.varsom.system.games.car_game.gameobjects.BackgroundObject;
 import com.varsom.system.network.NetworkListener;
 import com.varsom.system.screens.*;
 
+
 public class MainMenu extends ScaledScreen {
+
+    //TODO: This is quite rushed. Refactor it all!
 
     private Table table = new Table();
 
@@ -38,13 +41,13 @@ public class MainMenu extends ScaledScreen {
 
     // Select buttons
     private ArrayList<TextButton> buttonList = new ArrayList<TextButton>();
+    private String buttonTexts[] = {"Play level 1", "Play level 2", "Settings", "About", "Exit"};
     private int selectedButtonIndex = 0;
 
     protected VarsomSystem varsomSystem;
     // keeping track of which button is hovered by the controller app (Dpad)
     // Button has x and y index, where index 0,0 is the button on top to the left and
     // sizeX, sizeY (where size is amout of buttons) is bottom right
-    private Vector2 currentButton = new Vector2(0,0);
     //TODO Load files from AssetLoader
 
     private Skin defaultSkin = new Skin(Gdx.files.internal("car_game_assets/skins/menuSkin.json"),
@@ -53,19 +56,18 @@ public class MainMenu extends ScaledScreen {
     private Skin selectedSkin = new Skin(Gdx.files.internal("car_game_assets/skins/selectedSkin.json"),
             new TextureAtlas(Gdx.files.internal("car_game_assets/skins/selectedSkin.pack")));
 
-
-    private TextButton buttonPlay = new TextButton("Play level 1", selectedSkin),
-            buttonPlay2 = new TextButton("Play level 2", defaultSkin),
-            buttonSettings = new TextButton("Settings", defaultSkin),
-            buttonAbout = new TextButton("About", defaultSkin),
-            buttonExit = new TextButton("Exit", defaultSkin);
+    private TextButton buttonPlay = new TextButton(buttonTexts[0], selectedSkin),
+            buttonPlay2 = new TextButton(buttonTexts[1], defaultSkin),
+            buttonSettings = new TextButton(buttonTexts[2], defaultSkin),
+            buttonAbout = new TextButton(buttonTexts[3], defaultSkin),
+            buttonExit = new TextButton(buttonTexts[4], defaultSkin);
 
     private Label title = new Label(CarGame.TITLE, defaultSkin);
     private Label connectedClientNames;
 
     private String clientNames;
 
-    public MainMenu(VarsomSystem varsomSystem) {
+    public MainMenu(final VarsomSystem varsomSystem) {
         this.varsomSystem = varsomSystem;
         varsomSystem.setActiveStage(stage);
         objectList = new ArrayList<BackgroundObject>();
@@ -73,7 +75,44 @@ public class MainMenu extends ScaledScreen {
             Vector2 temp = new Vector2((float) (Math.random() * WIDTH), (float) (Math.random() * HEIGHT));
             objectList.add(new BackgroundObject(temp, "car_game_assets/img/cloud.png"));
         }
-        // add to ArrayList
+
+        // add listeners to buttons
+        buttonPlay.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.log("clicked", "pressed the PLAY button.");
+                pressedButtonPlay();
+            }
+        });
+
+        buttonPlay2.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                pressedButtonPlay2();
+            }
+        });
+
+        buttonSettings.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                pressedButtonSettings();
+            }
+        });
+
+        buttonAbout.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                pressedButtonAbout();
+            }
+        });
+
+        buttonExit.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                pressedButtonExit();
+            }
+        });
+        // end of adding listeners
 
         buttonList.add(buttonPlay);
         buttonList.add(buttonPlay2);
@@ -84,65 +123,8 @@ public class MainMenu extends ScaledScreen {
 
     @Override
     public void show() {
-        // Vill kolla om NetworkListener fått in ett SendDpadData.dpad,
-        // Om något nytt kommit in, sätt dpad.x med currentButton
-        // TODO: Gör dpad-datan till 2D, alltså en x och en y-koordinat
-        // Avkommentera när det är fixat
-        if(NetworkListener.dPadSelect == true) {
-            //   currentButton.x += NetworkListener.dpad.x;
-            // currentButton.y = NetworkListener.dpad.y;
-            Gdx.app.log("in Main Menu", "dPad input catched!");
-            NetworkListener.dPadSelect = false;
-        }
 
         Gdx.input.setCatchBackKey(false);
-        buttonPlay.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.log("clicked", "pressed the PLAY button.");
-                varsomSystem.getMPServer().setJoinable(false);
-
-                ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(1, varsomSystem));
-                //Switch screen on the controller to controllerScreen
-                varsomSystem.getMPServer().changeScreen(Commons.CONTROLLER_SCREEN);
-            }
-        });
-
-        buttonPlay2.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.log("clicked", "pressed the PLAY 2 button.");
-                varsomSystem.getMPServer().setJoinable(false);
-
-                ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(2, varsomSystem));
-                //Switch screen on the controller to controllerScreen
-                varsomSystem.getMPServer().changeScreen(Commons.CONTROLLER_SCREEN);
-            }
-        });
-
-        buttonSettings.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.log("clicked", "pressed the SETTINGS CARGAME button.");
-            }
-        });
-
-        buttonAbout.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.log("clicked", "pressed the ABOUT CARGAME button.");
-            }
-        });
-
-        buttonExit.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                //   Boolean isKeyPressed = true;
-                Gdx.app.log("clicked", "pressed the EXIT CARGAME button.");
-                ((Game) Gdx.app.getApplicationListener()).setScreen(new VarsomMenu(varsomSystem));
-                // or System.exit(0);
-            }
-        });
 
         //TODO Fix hardcoded values on buttons
 
@@ -178,12 +160,15 @@ public class MainMenu extends ScaledScreen {
         if (NetworkListener.goBack) {
             Gdx.app.log("in GameScreen", "go back to main menu");
             //TODO ska vi skapa en ny meny eller gå tillbaka till den gamla?
-            //TODO om va gör en ny, när tar vi bort den gamla?
+            //TODO om vi gör en ny, när tar vi bort den gamla?
             ((Game) Gdx.app.getApplicationListener()).setScreen(new VarsomMenu(varsomSystem));
             NetworkListener.goBack = false;
-            //dispose(); ??
         }
 
+        if (NetworkListener.dpadTouched) {
+            processDPad();
+            NetworkListener.dpadTouched = false;
+        }
         updateBackground();
 
         Gdx.gl.glClearColor(122 / 255.0f, 209 / 255.0f, 255 / 255.0f, 1);
@@ -259,30 +244,91 @@ public class MainMenu extends ScaledScreen {
         connectedClientNames.setText(clientNames);
     }
 
-    private void processDPad(int upOrDown) {
+    private void processDPad() {
 
-        if (upOrDown == DPad.UP) {
-            if (selectedButtonIndex <= 0) {
-                selectedButtonIndex = buttonList.size() - 1;
-            } else {
-                selectedButtonIndex--;
+        if (NetworkListener.dpady == DPad.UP || NetworkListener.dpady == DPad.DOWN || NetworkListener.dPadSelect) {
+
+
+            int prevIndex = selectedButtonIndex;
+
+            // Does not work
+            buttonList.get(prevIndex).setSkin(defaultSkin);
+
+
+            if (NetworkListener.dpady == DPad.UP) {
+                if (selectedButtonIndex <= 0) {
+                    selectedButtonIndex = buttonList.size() - 1;
+                } else {
+                    selectedButtonIndex--;
+                }
+            } else if (NetworkListener.dpady == DPad.DOWN) {
+                if (selectedButtonIndex >= buttonList.size() - 1) {
+                    selectedButtonIndex = 0;
+                } else {
+                    selectedButtonIndex++;
+                }
             }
-        } else if (upOrDown == DPad.DOWN) {
-            if (selectedButtonIndex >= buttonList.size() - 1) {
-                selectedButtonIndex = 0;
-            } else {
-                selectedButtonIndex++;
+
+            // The newly selected button's skin is set to "selectedSkin". Does not work ATM
+
+            buttonList.get(selectedButtonIndex).setText("<" + buttonTexts[selectedButtonIndex] + ">");
+            buttonList.get(prevIndex).setText(buttonTexts[prevIndex]);
+            buttonList.get(selectedButtonIndex).setSkin(selectedSkin);
+
+            Gdx.app.log("button selected: ", selectedButtonIndex + "");
+
+            if (NetworkListener.dPadSelect) {
+                switch (selectedButtonIndex) {
+                    case 0:
+                        pressedButtonPlay();
+                        break;
+                    case 1:
+                        pressedButtonPlay2();
+                        break;
+                    case 2:
+                        pressedButtonSettings();
+                        break;
+                    case 3:
+                        pressedButtonAbout();
+                        break;
+                    case 4:
+                        pressedButtonExit();
+                    default:
+                        break;
+                }
+                NetworkListener.dPadSelect = false;
             }
+
         }
     }
 
-    private void setSelectedButtonSkin() {
-        for (int i = 0; i < buttonList.size(); i++) {
-            if (i == selectedButtonIndex) {
-                buttonList.get(i).setSkin(selectedSkin);
-            } else {
-                buttonList.get(i).setSkin(defaultSkin);
-            }
-        }
+    private void pressedButtonPlay() {
+        varsomSystem.getMPServer().setJoinable(false);
+
+        ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(1, varsomSystem));
+        //Switch screen on the controller to controllerScreen
+        varsomSystem.getMPServer().changeScreen(Commons.CONTROLLER_SCREEN);
+    }
+
+    private void pressedButtonPlay2() {
+        Gdx.app.log("clicked", "pressed the PLAY 2 button.");
+        varsomSystem.getMPServer().setJoinable(false);
+
+        ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(2, varsomSystem));
+        //Switch screen on the controller to controllerScreen
+        varsomSystem.getMPServer().changeScreen(Commons.CONTROLLER_SCREEN);
+    }
+
+    private void pressedButtonSettings() {
+
+    }
+
+    private void pressedButtonAbout() {
+
+    }
+
+    private void pressedButtonExit() {
+        Gdx.app.log("clicked", "pressed the EXIT CARGAME button.");
+        ((Game) Gdx.app.getApplicationListener()).setScreen(new VarsomMenu(varsomSystem));
     }
 }
