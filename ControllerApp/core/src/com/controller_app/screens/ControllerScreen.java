@@ -20,6 +20,7 @@ import com.controller_app.helper.Commons;
 /**
  *
  */
+//TODO ändra namn på class
 public class ControllerScreen extends ScaledScreen {
 
     private TextButton buttonDrive;
@@ -233,7 +234,7 @@ public class ControllerScreen extends ScaledScreen {
 
                 reversePressed = true;
 
-                vibrate(200);
+
 
                 return true;
             }
@@ -244,12 +245,7 @@ public class ControllerScreen extends ScaledScreen {
         });
     }
 
-    // Vibrate the controller where time is in milliseconds
-    public void vibrate(int time){
 
-        Gdx.input.vibrate(time);
-
-    }
 
     private void generateTextButtonStyle() {
         textButtonStyle = new TextButton.TextButtonStyle();

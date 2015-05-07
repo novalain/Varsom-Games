@@ -17,7 +17,7 @@ import com.controller_app.helper.Commons;
 import com.controller_app.helper.DPad;
 import com.controller_app.helper_classes.ScaledScreen;
 import com.controller_app.network.MPClient;
-
+//TODO ändra till varsomsysytemscreen eller något....
 public class NavigationScreen extends ScaledScreen {
     private TextButton btnUp, btnDown, btnRight, btnLeft, btnSettings, btnSelect, btnDisconnect, btnController;
     private Table table;

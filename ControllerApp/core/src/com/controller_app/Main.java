@@ -149,6 +149,7 @@ public class Main extends Game {
      * and changes screen in main
      */
     public void handleController(){
+        //TODO gör get och set funktion för changeController i networklistener istället
         if(NetworkListener.changeController) {
             changeScreen(NetworkListener.controller);
             NetworkListener.changeController = false;

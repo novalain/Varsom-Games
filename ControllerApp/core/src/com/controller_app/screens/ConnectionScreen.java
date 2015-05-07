@@ -80,6 +80,8 @@ public class ConnectionScreen extends ScaledScreen {
 
 
     void generateFonts() {
+
+        //TODO gör ett nytt skin pack, Kallis fattar
         generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.color = Color.WHITE;
@@ -92,16 +94,6 @@ public class ConnectionScreen extends ScaledScreen {
             Gdx.app.log("font", "failed adding font");
         }
         generator.dispose();
-    }
-
-    void generateTextButtonStyle() {
-/*        textButtonStyle = new TextButton.TextButtonStyle();
-        textButtonStyle.font = font;
-        textButtonStyle.up = skin.getDrawable("up");
-        textButtonStyle.down = skin.getDrawable("down");
-
-        textButtonStyle.up = skin.getDrawable("up");
-        textButtonStyle.down = skin.getDrawable("down"); */
     }
 
     void generateUI() {
@@ -136,7 +128,7 @@ public class ConnectionScreen extends ScaledScreen {
         anim = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("system/img/loading.gif").read());
 
         // Adds listener to the whole screen
-        // TODO Obviusly overrides settings clicklistener.. fix this
+        // TODO Obviusly overrides settings clicklistener.. fix this göra så att listener läggs till i en ny actor istället
         stage.addListener(new ClickListener() {
 
             @Override
@@ -172,23 +164,7 @@ public class ConnectionScreen extends ScaledScreen {
 
         });
 
-        Image reinerImage = new Image(logo);
-       // textField = new TextField("", skin);
-       /* buttonController = new TextButton("Connect Controller", skin);
-        btnSettings = new TextButton("Settings", skin);
-        buttonExit = new TextButton("Exit", skin);*/
-/*
-        buttonController.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.log("in MenuScreen", "pressed controller");
-                connect();
-                if(mpClient.client.isConnected()){
-                        main.changeScreen(Commons.NAVIGATION_SCREEN);
-                    }
-                }
-        });
-*/
+
         // TODO Not working properly because we are listening to event on the whole screen
         settingsImage.addListener(new ClickListener() {
             @Override
@@ -207,12 +183,6 @@ public class ConnectionScreen extends ScaledScreen {
             }
         });*/
 
-        // table.debug();
-        //table.add(reinerImage).padTop(10).padBottom(40).row();
-      //  table.add(textField).size(800, 200).row();
-       // table.add(buttonController).size(800, 200).padBottom(20).row();
-       // table.add(btnSettings).size(800, 200).row();
-       // table.add(buttonExit).size(800, 200).row();
 
         table.add(varsomLogo).pad(80).row();
         table.add(text).row();
@@ -228,7 +198,7 @@ public class ConnectionScreen extends ScaledScreen {
     }
 
     public void errorMessage(int s){
-
+        //TODO lägg in i main som en klass, om vi har tid
         main.changeScreen(Commons.CONNECTION_SCREEN);
 
         switch(s){
@@ -352,6 +322,7 @@ public class ConnectionScreen extends ScaledScreen {
     }
 
     // Connect to server
+    //TODO lägg in en funktion för att hantera namn
     private void connect() {
         //Get the customized player name
         //if the name id "Player -1" the user hasn't chosen a name and we don't change connection name

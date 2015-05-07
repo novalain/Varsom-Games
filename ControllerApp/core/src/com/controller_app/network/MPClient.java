@@ -68,8 +68,9 @@ public class MPClient {
         }
 
         else {
-            connectionScreen.errorMessage(2);
 
+            //TODO commons errormessage konstanter
+            connectionScreen.errorMessage(2);
         }
 
 

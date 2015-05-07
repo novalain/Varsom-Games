@@ -29,22 +29,14 @@ public class BroadcastClient {
 
             try{
                 socket.receive(packet);
-            }
-            catch(SocketTimeoutException e)
-            {
+            }catch(SocketTimeoutException e){
                 break;
             }
 
-            System.out.println("CONTROLLER TRYING TO CONNECT TO " + IP);
-
-            System.out.println("packet getData()" + packet.getData());
-            System.out.println("packet getLength()" + packet.getLength());
 
             IP = new String(packet.getData(), 0, packet.getLength());
 
         }
-
-        //socket.leaveGroup(address);
         socket.close();
     }
 
