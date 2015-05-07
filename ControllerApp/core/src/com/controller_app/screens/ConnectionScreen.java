@@ -116,9 +116,10 @@ public class ConnectionScreen extends ScaledScreen {
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.log("in MenuScreen", "pressed controller");
                 connect();
-                main.changeScreen(Commons.NAVIGATION_SCREEN);
-
-            }
+                if(mpClient.client.isConnected()){
+                        main.changeScreen(Commons.NAVIGATION_SCREEN);
+                    }
+                }
         });
 
         btnSettings.addListener(new ClickListener() {
@@ -132,8 +133,9 @@ public class ConnectionScreen extends ScaledScreen {
         buttonExit.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.exit();
-                dispose();
+
+                errorMessage(3);
+
             }
         });
 
@@ -174,10 +176,9 @@ public class ConnectionScreen extends ScaledScreen {
                 break;
 
             case 2:
-                //main.changeScreen(1);
                 new Dialog("Error", skin) {
                     {
-                        text("Please enter a correct IP");
+                        text("Could not find a server");
                         button("Ok");
                     }
 
@@ -186,6 +187,30 @@ public class ConnectionScreen extends ScaledScreen {
 
                     }
 
+                }.show(stage);
+                break;
+
+            case 3:
+                new Dialog("Exit", skin){
+                    {
+                        text("Are you sure you want to exit?");
+                        button("No", "hide");
+                        button("Yes", "Exit");
+
+
+                    }
+
+                    @Override
+                    protected void result(Object object) {
+                        if (object.toString() == "Exit") {
+                            Gdx.app.exit();
+                            dispose();
+                        }
+                        else if(object.toString() == "hide") {
+                            hide();
+
+                        }
+                    }
                 }.show(stage);
                 break;
         }
