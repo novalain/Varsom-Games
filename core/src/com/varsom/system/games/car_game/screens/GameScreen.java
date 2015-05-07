@@ -8,31 +8,27 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
-
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.varsom.system.VarsomSystem;
 import com.varsom.system.games.car_game.gameobjects.Car;
 import com.varsom.system.games.car_game.tracks.Track;
 import com.varsom.system.games.car_game.tracks.Track1;
 import com.varsom.system.games.car_game.tracks.Track2;
-
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.varsom.system.network.NetworkListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 
 
 public class GameScreen implements Screen {
@@ -59,6 +55,7 @@ public class GameScreen implements Screen {
     private SpriteBatch batch;
 
     private Track track;
+    private float trackLength;
 
     //    private Pixmap pixmap;
     private Car leaderCar;
@@ -77,7 +74,9 @@ public class GameScreen implements Screen {
     private String pauseMessage = "Paused";
 
     //temp
-    Label carsTraveled;
+    private Label carsTraveled;
+    private Label lapsLabel;
+    private int maxLaps = 1, currentLap = 1;
 
     protected VarsomSystem varsomSystem;
     protected int NUMBER_OF_PLAYERS;
@@ -114,6 +113,9 @@ public class GameScreen implements Screen {
         }
         varsomSystem.getActiveGame().setGameScreen(this);
         varsomSystem.getMPServer().gameRunning(true);
+
+        trackLength = track.getTrackLength();
+
         leaderCar = track.getCars()[0];
         activeCars = new ArrayList<Car>();
         sortedCars = new ArrayList<Car>();
@@ -127,7 +129,7 @@ public class GameScreen implements Screen {
         //TODO camera.position.set(leaderCar.getPointOnTrack(), 0);
         camera.position.set(leaderCar.getPointOnTrack(), 0);
         camera.rotate((float)Math.toDegrees(leaderCar.getRotationTrack())-180);
-        camera.zoom = 3.f; // can be used to see the entire track
+        camera.zoom = 2.f; // can be used to see the entire track
         camera.update();
 
         batch = new SpriteBatch();
@@ -137,6 +139,11 @@ public class GameScreen implements Screen {
         table.top().left();
         table.add(buttonLeave).size(400, 75).row();
         // connected devices text thingys....
+        lapsLabel = new Label("Lap:\n", skin);
+        lapsLabel.setFontScaleX(0.75f);
+        lapsLabel.setFontScaleY(0.75f);
+        table.add(lapsLabel).size(400, 200).row();
+
         carsTraveled = new Label("CarDist:\n", skin);
         carsTraveled.setFontScaleX(0.75f);
         carsTraveled.setFontScaleY(0.75f);
@@ -214,19 +221,13 @@ public class GameScreen implements Screen {
        // Here goes the all the updating / game logic
         if(!paused){
 
-           world.step(TIMESTEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
+            world.step(TIMESTEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 
-           String temp = "Standings:\n";
-           /*for(Car car : track.getCars()) {
-               if(car.isActive() && !camera.frustum.boundsInFrustum(car.getPosition().x,car.getPosition().y,0,0.5f,1f,0.1f)){
-                   carLost(car.getID());
-               }
-               car.update(Gdx.app.getGraphics().getDeltaTime());
-               temp += car.getTraveledDistance() + "\n";
-           }*/
+            String temp = "Standings:\n";
+
             for(int i = 0; i < activeCars.size(); i++){
                 if(!camera.frustum.boundsInFrustum(activeCars.get(i).getPosition().x,activeCars.get(i).getPosition().y,0,0.5f,1f,0.1f)){
-                    carLost(activeCars.get(i).getID(),i);
+                    carLost(i);
 
                     if(i != 0){
                         i--;
@@ -238,12 +239,21 @@ public class GameScreen implements Screen {
             }
             sortCars();
             temp += sortedCars2String();
+            if(leaderCar.getTraveledDistance() > trackLength * currentLap){
+                currentLap++;
+                if(currentLap == maxLaps+1){
+                    weHaveAWinner();
+                }
+            }
+            String lapText = "Lap " + currentLap + "/" + maxLaps;
+            System.out.println();
+            lapsLabel.setText(lapText);
             carsTraveled.setText(temp);
             updateCamera();
         }
 
         //If paused pause menu is displayed, else it is not
-        displayPauseMenu(true);
+        displayPauseMenu(paused);
 
         stage.act();
         stage.draw();
@@ -251,7 +261,6 @@ public class GameScreen implements Screen {
 
     private void updateCamera() {
         leaderCar = track.getLeaderCar();
-        //leaderCar = track.getCars()[0];
         float newCamPosX = (leaderCar.getPointOnTrack().x - camera.position.x);
         float newCamPosY = (leaderCar.getPointOnTrack().y - camera.position.y);
         Vector2 newPos = new Vector2(camera.position.x + newCamPosX * CAMERA_POS_INTERPOLATION, camera.position.y + newCamPosY * CAMERA_POS_INTERPOLATION);
@@ -328,24 +337,31 @@ public class GameScreen implements Screen {
         return track;
     }
 
-    private void carLost(int carID, int activeCarIndex){
-        System.out.println("Car # " + carID +" left the screen");
+    private void carLost(int activeCarIndex){
+        Car car = activeCars.get(activeCarIndex);
+        int conID = car.getConnectionID();
+        try {
+            System.out.println(varsomSystem.getServer().getConnections()[car.getID()].toString() + " left the screen");
+        } catch (Exception e) {
+            System.out.println("unconnected car left the screen");
+        }
         //varsomSystem.getMPServer().vibrateClient(1000,carID+1);
-        varsomSystem.getMPServer().PulseVibrateClient(diePulse,-1,carID+1);
-        varsomSystem.getMPServer().gameRunning(false,carID+1);
-        track.getCars()[carID].setActive(false);
-        activeCars.remove(activeCarIndex);
+        varsomSystem.getMPServer().PulseVibrateClient(diePulse,-1,conID);
+        varsomSystem.getMPServer().gameRunning(false,conID);
+        car.setActive(false);
+
         //System.out.println("activeCars contains " + activeCars.size() + " items");
-        track.getCars()[carID].handleDataFromClients(false,false,0);
+        car.handleDataFromClients(false,false,0);
+        activeCars.remove(activeCarIndex);
         if(activeCars.size() == 1) {
             weHaveAWinner();
         }
     }
 
     private void weHaveAWinner(){
+        varsomSystem.getMPServer().gameRunning(false);
         ((Game) Gdx.app.getApplicationListener()).setScreen(new WinScreen(varsomSystem,sortedCars2String()));
 
-        varsomSystem.getMPServer().gameRunning(false);
     }
 
     private void addActiveCars(){
@@ -357,20 +373,19 @@ public class GameScreen implements Screen {
     }
     private void sortCars(){
         Collections.sort(sortedCars);
+        String a = "Car order";
+        for(int i = 0; i < sortedCars.size(); i++){
+            a += sortedCars.get(i).getID() + " ";
+        }
+        System.out.println(a);
     }
 
     private String sortedCars2String(){
         String temp = "";
         for(int i = 0; i < sortedCars.size() ; i++){
-            /*if(i < varsomSystem.getServer().getConnections().length){
-                System.out.println("i = " + i + "No. of connections: " + varsomSystem.getServer().getConnections().length);
-                temp += i+1 + ". " + varsomSystem.getServer().getConnections()[sortedCars.get(i).getID()].toString() + "\n";
-            }
-            else {
-                temp += i+1 + ". *NoConnection*\n";
-            }*/
             try{
-                temp += /*i+1 + ". " +*/ varsomSystem.getServer().getConnections()[sortedCars.get(i).getID()].toString() + "\n";
+                temp += /*i+1 + ". " +*/ sortedCars.get(i).getConnectionName()+"\n";
+                //varsomSystem.getServer().getConnections()[NUMBER_OF_PLAYERS-1-sortedCars.get(i).getID()].toString() + "\n";
             }
             catch(Exception e){
                 temp += /*i+1 + ". */"*NoConnection*\n";
@@ -381,12 +396,12 @@ public class GameScreen implements Screen {
 
     private void createDiePulse(){
         diePulse = "0 125 125 125 350 125 125 125 350";
-        int paus = 0;
+        int pause = 0;
         for(int i = 0 ; i < 200; i++){
             if(i % 10 == 0 ){
-                paus++;
+                pause++;
             }
-            diePulse += " 5 " + paus;
+            diePulse += " 5 " + pause;
         }
         System.out.println("PULSE: = " + diePulse);
     }

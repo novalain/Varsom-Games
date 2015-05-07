@@ -31,11 +31,12 @@ public class Car extends DynamicObject implements Comparable<Car> {
     private WaypointHandler wpHandler;
     private Vector2 pointOnTrack;
     //temp
-    private int ID;
+    private int ID,connectionID;
+    private String connectionName;
     private boolean active;
-    private Sprite pathTrackingSprite;
+    public Sprite pathTrackingSprite;
 
-    public Car(float width, float length, Vector2 position, World world, Sprite carSprite, float angle, float power, float maxSteerAngle, float maxSpeed,Track inTrack,int ID) {
+    public Car(float width, float length, Vector2 position, World world, Sprite carSprite, float angle, float power, float maxSteerAngle, float maxSpeed,Track inTrack,int ID/*,int conID*/) { //TODO remove the comment before game is finished.. lolzzz
         super(position, angle, new PolygonShape(), carSprite, world);
 
         this.width = width;
@@ -48,6 +49,9 @@ public class Car extends DynamicObject implements Comparable<Car> {
         this.ID = ID; //temp.. i think..
         this.active = true;
         this.track = inTrack;
+
+        //TODO this should be uncommented, but for developing purposes it could be beneficial to use the setConnectionID funciton instead
+        //connectionID = conID
 
         bodyDef.angle = angle; //start angle
 
@@ -235,7 +239,7 @@ public class Car extends DynamicObject implements Comparable<Car> {
             //System.out.println("offTrack");
             this.setSpeed(this.getSpeedKMH() * track.getOffTrackSpeed());
             if(getSpeedKMH() != 0){
-                track.getVarsomSystem().getMPServer().vibrateClient(50,ID+1);
+                track.getVarsomSystem().getMPServer().vibrateClient(50,connectionID);
             }
         }
 
@@ -266,7 +270,23 @@ public class Car extends DynamicObject implements Comparable<Car> {
         steeringSensitivity = sens;
     }
 
+    public void setConnectionID(int id){
+        connectionID = id;
+    }
+
+    public int getConnectionID(){
+        return connectionID;
+    }
+
     public int compareTo(Car c) {
         return Float.compare(c.getTraveledDistance(),getTraveledDistance());
+    }
+
+    public void setConnectionName(String s){
+        connectionName = s;
+    }
+
+    public String getConnectionName(){
+        return connectionName;
     }
 }
