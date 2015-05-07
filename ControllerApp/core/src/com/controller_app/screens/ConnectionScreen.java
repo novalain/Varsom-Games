@@ -151,8 +151,9 @@ public class ConnectionScreen extends ScaledScreen {
 
                         System.out.println("In new thread loading...");
                         connect();
-                        main.changeScreen(Commons.NAVIGATION_SCREEN);
-
+                        if(mpClient.client.isConnected()) {
+                            main.changeScreen(Commons.NAVIGATION_SCREEN);
+                        }
                     }
                 }).start();
 
@@ -182,9 +183,10 @@ public class ConnectionScreen extends ScaledScreen {
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.log("in MenuScreen", "pressed controller");
                 connect();
-                main.changeScreen(Commons.NAVIGATION_SCREEN);
-
-            }
+                if(mpClient.client.isConnected()){
+                        main.changeScreen(Commons.NAVIGATION_SCREEN);
+                    }
+                }
         });
 */
         // TODO Not working properly because we are listening to event on the whole screen
@@ -199,8 +201,9 @@ public class ConnectionScreen extends ScaledScreen {
         buttonExit.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.exit();
-                dispose();
+
+                errorMessage(3);
+
             }
         });*/
 
@@ -226,7 +229,7 @@ public class ConnectionScreen extends ScaledScreen {
 
     public void errorMessage(int s){
 
-        main.changeScreen(0);
+        main.changeScreen(Commons.CONNECTION_SCREEN);
 
         switch(s){
             case 1:
@@ -245,18 +248,43 @@ public class ConnectionScreen extends ScaledScreen {
                 break;
 
             case 2:
-                //main.changeScreen(1);
+                showGif = false;
                 new Dialog("Error", skin) {
                     {
-                        text("Please enter a correct IP");
+                        text("Could not find a server");
                         button("Ok");
                     }
 
                     @Override
                     protected void result(final Object object) {
 
+
                     }
 
+                }.show(stage);
+                break;
+
+            case 3:
+                new Dialog("Exit", skin){
+                    {
+                        text("Are you sure you want to exit?");
+                        button("No", "hide");
+                        button("Yes", "Exit");
+
+
+                    }
+
+                    @Override
+                    protected void result(Object object) {
+                        if (object.toString() == "Exit") {
+                            Gdx.app.exit();
+                            dispose();
+                        }
+                        else if(object.toString() == "hide") {
+                            hide();
+
+                        }
+                    }
                 }.show(stage);
                 break;
         }
@@ -280,9 +308,9 @@ public class ConnectionScreen extends ScaledScreen {
         varsomLogo.setPosition(varsomLogo.getX(), varsomLogo.getY() + 0.3f * (float) Math.sin(frameCounter));
 
         //Check if we have connected we should change to the controllerScreen
-        if(NetworkListener.connected)
+        if(NetworkListener.connected && mpClient.client.isConnected()) {
             main.changeScreen(Commons.NAVIGATION_SCREEN);
-
+        }
         // Sprite renders
         spriteBatch.setProjectionMatrix(camera.combined);
 

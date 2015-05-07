@@ -47,7 +47,7 @@ public class MPClient {
             broadcastClient = new BroadcastClient();
         } catch (IOException e) {
             e.printStackTrace();
-            connectionScreen.errorMessage(2);
+
         }
 
         //Gets ip from broadcast
@@ -66,6 +66,14 @@ public class MPClient {
                 connectionScreen.errorMessage(2);
             }
         }
+
+        else {
+            connectionScreen.errorMessage(2);
+
+        }
+
+
+
     }
 
     // Register packets to a kryo
