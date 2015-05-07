@@ -143,9 +143,6 @@ public class ConnectionScreen extends ScaledScreen {
 
                         System.out.println("In new thread loading...");
                         connect();
-                        if(mpClient.client.isConnected()) {
-                            main.changeScreen(Commons.NAVIGATION_SCREEN);
-                        }
                     }
                 }).start();
 
@@ -278,7 +275,7 @@ public class ConnectionScreen extends ScaledScreen {
         varsomLogo.setPosition(varsomLogo.getX(), varsomLogo.getY() + 0.3f * (float) Math.sin(frameCounter));
 
         //Check if we have connected we should change to the controllerScreen
-        if(NetworkListener.connected && mpClient.client.isConnected()) {
+        if(NetworkListener.connected) {// && mpClient.client.isConnected()) {
             main.changeScreen(Commons.NAVIGATION_SCREEN);
         }
         // Sprite renders

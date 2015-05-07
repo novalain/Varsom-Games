@@ -127,6 +127,7 @@ public class ControllerScreen extends ScaledScreen {
 
     @Override
     public void dispose() {
+        Gdx.app.log("in controllerScreen", "in dispose");
 
     }
 

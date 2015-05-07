@@ -18,6 +18,8 @@ public class MPClient {
     private Thread networkThread;
     private ConnectionScreen connectionScreen;
     private boolean closeThread;
+    private boolean changeController = false;
+    private int activeScreen;
 
 
     public MPClient() throws IOException {
@@ -189,5 +191,21 @@ public class MPClient {
             }
         });
         return nT;
+    }
+
+    public boolean getChangeController(){
+        return changeController;
+    }
+
+    public void setChangeController(boolean b){
+        changeController = b;
+    }
+
+    public int getActiveScreenIndex(){
+        return activeScreen;
+    }
+
+    public void setActiveScreenIndex(int i){
+        activeScreen = i;
     }
 }

@@ -2,6 +2,7 @@ package com.controller_app;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.controller_app.network.NetworkListener;
 import com.controller_app.helper.Commons;
 import com.controller_app.screens.ConnectionScreen;
@@ -40,6 +41,7 @@ public class Main extends Game {
     private ControllerScreen controllerScreen;
     private StandbyScreen standbyScreen;
     private MPClient mpClient;
+    private Screen activeScreen;
 
     /**
      * The create-function opens a mpClient, creates the
@@ -74,28 +76,35 @@ public class Main extends Game {
      * @return Nothing.
      */
     public void changeScreen(int s) {
+        System.out.println("in changeScreen");
         switch (s) {
 
             case Commons.CONNECTION_SCREEN:
+                System.out.println("change to connectionScreen");
                 Gdx.input.setInputProcessor(connectionScreen.getStage());
                // connectionScreen.check = 1;
                 setScreen(connectionScreen);
+                activeScreen = connectionScreen;
                 break;
             case Commons.NAVIGATION_SCREEN:
+                navScreen = new NavigationScreen(this, mpClient);
                 Gdx.input.setInputProcessor(navScreen.getStage());
                // connectionScreen.check = 2;
                 setScreen(navScreen);
+                activeScreen = navScreen;
                 break;
             case Commons.SETTINGS_SCREEN:
-                //TODO: Settings Screen
                 Gdx.input.setInputProcessor(settingsScreen.getStage());
               //  connectionScreen.check = 2;
                 setScreen(settingsScreen);
+                activeScreen = settingsScreen;
                 break;
             case Commons.CONTROLLER_SCREEN:
+                controllerScreen = new ControllerScreen(this, mpClient);
                 Gdx.input.setInputProcessor(controllerScreen.getStage());
                // connectionScreen.check = 2;
                 setScreen(controllerScreen);
+                activeScreen = controllerScreen;
                 break;
 
             default: System.out.println("Error in changeScreen");
@@ -145,14 +154,15 @@ public class Main extends Game {
     }
 
     /**
-     * Handles input from the controller
-     * and changes screen in main
+     * Handles the change of screens on the controller that the server issued
      */
     public void handleController(){
-        //TODO gör get och set funktion för changeController i networklistener istället
-        if(NetworkListener.changeController) {
-            changeScreen(NetworkListener.controller);
-            NetworkListener.changeController = false;
+        if(mpClient.getChangeController()) {
+            //ControllerScreen and NavigationScreen should not be reused
+            if(activeScreen == controllerScreen || activeScreen == navScreen)
+                activeScreen.dispose();
+            changeScreen(mpClient.getActiveScreenIndex());
+            mpClient.setChangeController(false);
         }
     }
 

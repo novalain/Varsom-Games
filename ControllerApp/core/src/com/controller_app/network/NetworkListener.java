@@ -19,7 +19,6 @@ public class NetworkListener extends Listener {
     public static boolean standby = false;
     public static int paddir;
     public static int controller;
-    public static boolean changeController = false;
 
     // If you want to send a object, you need to send it with this client variable
     public void init(Client client, MPClient mpClient) {
@@ -68,7 +67,7 @@ public class NetworkListener extends Listener {
 
         }
 
-        if (o instanceof Packet.SendGameData) {
+        else if (o instanceof Packet.SendGameData) {
             message += "SendGameData";
             Gdx.app.log("NETWORK", message);
             start = ((Packet.SendGameData) o).send;
@@ -85,14 +84,14 @@ public class NetworkListener extends Listener {
             */
         }
 
-        if (o instanceof Packet.StandByOrder) {
+        else if (o instanceof Packet.StandByOrder) {
             System.out.println("in NetworkListener: standby");
 
             standby = ((Packet.StandByOrder) o).standby;
 
         }
 
-        if (o instanceof Packet.SendDPadData) {
+        else if (o instanceof Packet.SendDPadData) {
             System.out.println("in NetworkListener: standby");
 
             paddir = ((Packet.SendDPadData) o).dataX;
@@ -101,12 +100,12 @@ public class NetworkListener extends Listener {
 
         }
 
-        if (o instanceof Packet.VibrateClient) {
+        else if (o instanceof Packet.VibrateClient) {
             System.out.println("in NetworkListener: vibrate");
             Gdx.input.vibrate(((Packet.VibrateClient) o).vibTime);
         }
 
-        if (o instanceof Packet.PulseVibrateClient) {
+        else if (o instanceof Packet.PulseVibrateClient) {
             System.out.println("in NetworkListener: pulse vibrate");
             ArrayList<Long> temp = new ArrayList<Long>();
             StringTokenizer st = new StringTokenizer(((Packet.PulseVibrateClient) o).pattern, " ");
@@ -122,10 +121,10 @@ public class NetworkListener extends Listener {
             Gdx.input.vibrate(pattern,((Packet.PulseVibrateClient) o).repeat);
         }
 
-        if (o instanceof Packet.ChangeController) {
+        else if (o instanceof Packet.ChangeController) {
 
-            controller = ((Packet.ChangeController) o).controller;
-            changeController = true;
+            mpClient.setActiveScreenIndex(((Packet.ChangeController) o).controller);
+            mpClient.setChangeController(true);
 
         }
     }

@@ -173,14 +173,14 @@ public class NavigationScreen extends ScaledScreen {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        //changes screen if the server has told us to
-        main.handleController();
-
         // Sprite renders
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
 
         batch.end();
+
+        //changes screen if the server has told us to
+        main.handleController();
 
         stage.draw();
     }
@@ -210,5 +210,9 @@ public class NavigationScreen extends ScaledScreen {
         font.dispose();
         atlas.dispose();
         skin.dispose();
+    }
+
+    public void reset(){
+
     }
 }

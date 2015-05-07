@@ -100,6 +100,7 @@ public class SettingsScreen extends ScaledScreen {
 
     @Override
     public void dispose() {
+        Gdx.app.log("in settingsScreen", "in dispose");
 
     }
 
