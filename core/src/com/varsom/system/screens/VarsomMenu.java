@@ -66,11 +66,11 @@ public class VarsomMenu extends ScaledScreen {
 
         Label.LabelStyle style = new Label.LabelStyle(fontType, Color.WHITE);
 
-        ips = new Label("IP: " + this.varsomSystem.getServerIP(), style);
+        //ips = new Label("IP: " + this.varsomSystem.getServerIP(), style);
 
         //Position IP at middle top of the screen
-        ips.setPosition(Commons.WORLD_WIDTH / 2 - ips.getWidth() / 2, Commons.WORLD_HEIGHT - 200);
-        stage.addActor(ips);
+        //ips.setPosition(Commons.WORLD_WIDTH / 2 - ips.getWidth() / 2, Commons.WORLD_HEIGHT - 200);
+        //stage.addActor(ips);
 
         //For every VarsomeGame in the game array create an image
         createMenuItems();

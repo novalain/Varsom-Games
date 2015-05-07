@@ -15,14 +15,6 @@ import com.varsom.system.network.MPServer;
 import com.varsom.system.screens.VarsomSplash;
 
 import java.io.IOException;
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.List;
 
 public class VarsomSystem extends /*ApplicationAdapter*/Game {
     public static final String TITLE= "Varsom-System";
@@ -72,6 +64,7 @@ public class VarsomSystem extends /*ApplicationAdapter*/Game {
     }
 
     private void startServer(){
+        /*
         // The following code loops through the available network interfaces
         // Keep in mind, there can be multiple interfaces per device, for example
         // one per NIC, one per active wireless and the loopback
@@ -99,6 +92,7 @@ public class VarsomSystem extends /*ApplicationAdapter*/Game {
         }
         serverIPAddress = ipAddress;//addresses.get(1) + "\n" +addresses.get(0);
         Gdx.app.log("NETWORK", "NETWORK: IP-address is " + ipAddress);
+        */
         try {
             mpServer = new MPServer(this);
         } catch (IOException e) {
@@ -111,11 +105,11 @@ public class VarsomSystem extends /*ApplicationAdapter*/Game {
             e.printStackTrace();
         }
     }
-
+/*
     public String getServerIP(){
         return serverIPAddress;
     }
-
+*/
     public MPServer getMPServer(){
         return mpServer;
     }
