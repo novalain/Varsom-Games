@@ -16,7 +16,26 @@ import com.controller_app.screens.SettingsScreen;
 import com.esotericsoftware.kryonet.Client;
 import com.controller_app.screens.StandbyScreen;
 
+/**
+ * <h1>ControllerApp Main Class</h1>
+ *
+ * @author  VarsomGames
+ * @version 1.0
+ * @since   2015-05-07
+ */
 public class Main extends Game {
+    /**
+     * This main class holds reference to all other screens,
+     * and a switch case to change between them.
+     * @param settingsScreen This calls to the SettingsScreen
+     * @param connectionScreen This calls to the ConnectionScreen
+     * @param navigationScreen This calls to the NavigationScreen
+     * @param controllerScreen This calls to the ControllerScreen
+     * @param standbyScreen This calls to the StandbyScreen
+     * @param mpClient This calls to the MPClient to start a new network connection
+     * @exception IOException on MPClient
+     * @return Nothing.
+     */
 
     private SettingsScreen settingsScreen;
     private ConnectionScreen connectionScreen;
@@ -45,7 +64,12 @@ public class Main extends Game {
         changeScreen(Commons.CONNECTION_SCREEN);
 
     }
-
+    /**
+     * This function changes screen based on an index passed
+     * on by the program.
+     * @param s The index for switching screens
+     * @return Nothing.
+     */
     public void changeScreen(int s) {
         switch (s) {
 
@@ -74,31 +98,53 @@ public class Main extends Game {
             default: System.out.println("Error in changeScreen");
         }
     }
+    // TODO: Maybe delete this function if not used!
+    /**
+     * @return The created mpClient
+     */
     public MPClient getMpClient(){
         return mpClient;
     }
 
+    /**
+     * @return The created client of mpClient
+     */
     public Client getClient(){
         return mpClient.client;
     }
 
+    /**
+     * @return The created settingsScreen
+     */
     public SettingsScreen getSettingsScreen(){
         return settingsScreen;
     }
 
+    /**
+     * @return The created ConnectionScreen
+     */
     public ConnectionScreen getConnectionScreen(){
         return connectionScreen;
     }
 
+    /**
+     * @return The created NavigationScreen
+     */
     public NavigationScreen getNavigationScreen(){
         return navScreen;
     }
 
+    /**
+     * @return The created ControllerScreen
+     */
     public ControllerScreen getControllerScreen(){
         return controllerScreen;
     }
 
-    //changes screen if the server has told us to
+    /**
+     * Handles input from the controller
+     * and changes screen in main
+     */
     public void handleController(){
         if(NetworkListener.changeController) {
             changeScreen(NetworkListener.controller);
