@@ -151,8 +151,9 @@ public class ConnectionScreen extends ScaledScreen {
 
                         System.out.println("In new thread loading...");
                         connect();
-                        main.changeScreen(Commons.NAVIGATION_SCREEN);
-
+                        if(mpClient.client.isConnected()) {
+                            main.changeScreen(Commons.NAVIGATION_SCREEN);
+                        }
                     }
                 }).start();
 
