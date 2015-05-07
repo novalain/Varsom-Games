@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -20,11 +19,27 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.controller_app.Main;
 import com.controller_app.helper.Commons;
-import com.controller_app.helper.DPad;
-import com.controller_app.network.MPClient;
+import com.controller_app.helper_classes.ScaledScreen;
 
+/**
+ * <h1>ControllerApp Settings Screen</h1>
+ * This main class holds reference to all other screens,
+ * and a switch case to change between them.
+ *
+ * @author  VarsomGames
+ * @version 1.0
+ * @since   2015-05-07
+ */
 public class SettingsScreen extends ScaledScreen {
-
+    /**
+     * @param main Calls to the active main class
+     * @param skin Skin where textureatlas and fonts are added
+     * @param atlas Textureatlas for gathering all textures
+     * @param generator Generates fonts
+     * @param font Bitmapfont for current font
+     * @param table Table collecting all objects on screen and structuring them
+     * @param checkVibration 
+     */
     private Main main;
     private Skin skin;
     private TextureAtlas atlas;

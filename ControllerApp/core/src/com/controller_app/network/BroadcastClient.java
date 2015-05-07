@@ -7,6 +7,7 @@ package com.controller_app.network;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.MulticastSocket;
+import java.net.SocketTimeoutException;
 
 public class BroadcastClient {
 
@@ -24,7 +25,15 @@ public class BroadcastClient {
         while (packet == null) {
             byte[] buf = new byte[256];
             packet = new DatagramPacket(buf, buf.length);
-            socket.receive(packet);
+            socket.setSoTimeout(10000);
+
+            try{
+                socket.receive(packet);
+            }
+            catch(SocketTimeoutException e)
+            {
+                break;
+            }
 
             System.out.println("CONTROLLER TRYING TO CONNECT TO " + IP);
 

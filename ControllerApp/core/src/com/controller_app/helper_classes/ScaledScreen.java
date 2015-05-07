@@ -1,4 +1,4 @@
-package com.controller_app.screens;
+package com.controller_app.helper_classes;
 
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
