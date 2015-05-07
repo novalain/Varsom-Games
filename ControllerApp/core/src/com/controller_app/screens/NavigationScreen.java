@@ -15,9 +15,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.controller_app.Main;
 import com.controller_app.helper.Commons;
 import com.controller_app.helper.DPad;
+import com.controller_app.helper_classes.ScaledScreen;
 import com.controller_app.network.MPClient;
 
-public class NavigationScreen extends ScaledScreen{
+public class NavigationScreen extends ScaledScreen {
     private TextButton btnUp, btnDown, btnRight, btnLeft, btnSettings, btnSelect, btnDisconnect, btnController;
     private Table table;
     private TextureAtlas atlas;
@@ -171,6 +172,9 @@ public class NavigationScreen extends ScaledScreen{
 
         Gdx.gl.glClearColor(0f, 0f, 0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        //changes screen if the server has told us to
+        main.handleController();
 
         // Sprite renders
         batch.setProjectionMatrix(camera.combined);

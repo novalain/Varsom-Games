@@ -20,5 +20,8 @@ public class Packet {
         int dataY = 0; 
         boolean select = false;
     }
+    public static class VibrateClient { int vibTime; }
+    public static class PulseVibrateClient { String pattern; int repeat; }
+    public static class ChangeController { int controller; }
 
 }

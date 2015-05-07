@@ -1,10 +1,12 @@
 package com.controller_app.network;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+
+import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 public class NetworkListener extends Listener {
 
@@ -16,6 +18,8 @@ public class NetworkListener extends Listener {
     public static boolean connected = false;
     public static boolean standby = false;
     public static int paddir;
+    public static int controller;
+    public static boolean changeController = false;
 
     // If you want to send a object, you need to send it with this client variable
     public void init(Client client, MPClient mpClient) {
@@ -80,6 +84,7 @@ public class NetworkListener extends Listener {
             }
             */
         }
+
         if (o instanceof Packet.StandByOrder) {
             System.out.println("in NetworkListener: standby");
 
@@ -93,6 +98,34 @@ public class NetworkListener extends Listener {
             paddir = ((Packet.SendDPadData) o).dataX;
             boolean padSelected = ((Packet.SendDPadData) o).select;
             System.out.println("Paddir is " + paddir + " and select is " + padSelected );
+
+        }
+
+        if (o instanceof Packet.VibrateClient) {
+            System.out.println("in NetworkListener: vibrate");
+            Gdx.input.vibrate(((Packet.VibrateClient) o).vibTime);
+        }
+
+        if (o instanceof Packet.PulseVibrateClient) {
+            System.out.println("in NetworkListener: pulse vibrate");
+            ArrayList<Long> temp = new ArrayList<Long>();
+            StringTokenizer st = new StringTokenizer(((Packet.PulseVibrateClient) o).pattern, " ");
+            while (st.hasMoreTokens()) {
+                temp.add(Long.parseLong(st.nextToken()));
+            }
+
+            long[] pattern = new long[ temp.size() ];
+            for(int i =0 ; i < pattern.length; i++) {
+                pattern[i] = temp.get(i);
+            }
+            System.out.println("VibrationPattern: "+pattern.toString());
+            Gdx.input.vibrate(pattern,((Packet.PulseVibrateClient) o).repeat);
+        }
+
+        if (o instanceof Packet.ChangeController) {
+
+            controller = ((Packet.ChangeController) o).controller;
+            changeController = true;
 
         }
     }

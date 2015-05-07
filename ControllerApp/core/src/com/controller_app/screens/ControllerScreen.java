@@ -12,10 +12,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.controller_app.Main;
 
+import com.controller_app.helper_classes.ScaledScreen;
 import com.controller_app.network.MPClient;
 
 import com.controller_app.helper.Commons;
-import com.controller_app.network.NetworkListener;
 
 /**
  *
@@ -61,8 +61,6 @@ public class ControllerScreen extends ScaledScreen {
         this.main = m;
         mpClient = mpc;
 
-
-
         skin = new Skin();
 
         generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
@@ -97,6 +95,9 @@ public class ControllerScreen extends ScaledScreen {
     public void render(float delta) {
         Gdx.gl.glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        //changes screen if the server has told us to
+        main.handleController();
 
         printName();
 
@@ -177,9 +178,7 @@ public class ControllerScreen extends ScaledScreen {
         buttonHome.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-        // TODO: Fel under merge, ta bort helt om den inte behövs
-                main.getConnectionScreen().disconnect();
-                main.changeScreen(Commons.CONNECTION_SCREEN);
+                main.changeScreen(Commons.NAVIGATION_SCREEN);
             }
         });
 
