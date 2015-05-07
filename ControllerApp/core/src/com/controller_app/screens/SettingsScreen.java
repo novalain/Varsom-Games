@@ -1,6 +1,7 @@
 package com.controller_app.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -150,7 +151,6 @@ public class SettingsScreen extends ScaledScreen {
 
         playerName = new TextField("Player " + main.getClient().getID(), skin);
 
-
         //Add elements to table
 
         table = new Table(skin);
@@ -159,9 +159,9 @@ public class SettingsScreen extends ScaledScreen {
         checkVibration.getImage().setScale(5);
 
         table.add(lblTitle).padTop(10).padBottom(40).row();
+        table.add(playerName).size(800, 200).padBottom(20).row();
         table.add(checkTest).size(1000, 200).padBottom(20).row();
         table.add(checkVibration).size(1000, 200).padBottom(100).row();
-        table.add(playerName).size(800, 200).padBottom(20).row();
 
         table.setX(Commons.WORLD_WIDTH / 2 - table.getPrefWidth() / 2);
         table.setY(Commons.WORLD_HEIGHT / 2 - table.getPrefHeight() / 2);
