@@ -13,6 +13,7 @@ public class MPServer {
     private Server server;
     int TCP = 54555, UDP = 64555;
     private VarsomSystem varsomSystem;
+    static private String IP;
 
     //Shows if new clients are permitted to join at the moment
     public static boolean joinable = true;
