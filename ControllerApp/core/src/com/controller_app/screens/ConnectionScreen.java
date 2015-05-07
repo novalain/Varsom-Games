@@ -229,7 +229,7 @@ public class ConnectionScreen extends ScaledScreen {
 
     public void errorMessage(int s){
 
-        main.changeScreen(0);
+        main.changeScreen(Commons.CONNECTION_SCREEN);
 
         switch(s){
             case 1:
@@ -248,6 +248,7 @@ public class ConnectionScreen extends ScaledScreen {
                 break;
 
             case 2:
+                showGif = false;
                 new Dialog("Error", skin) {
                     {
                         text("Could not find a server");
@@ -256,6 +257,7 @@ public class ConnectionScreen extends ScaledScreen {
 
                     @Override
                     protected void result(final Object object) {
+
 
                     }
 
@@ -306,9 +308,9 @@ public class ConnectionScreen extends ScaledScreen {
         varsomLogo.setPosition(varsomLogo.getX(), varsomLogo.getY() + 0.3f * (float) Math.sin(frameCounter));
 
         //Check if we have connected we should change to the controllerScreen
-        if(NetworkListener.connected)
+        if(NetworkListener.connected && mpClient.client.isConnected()) {
             main.changeScreen(Commons.NAVIGATION_SCREEN);
-
+        }
         // Sprite renders
         spriteBatch.setProjectionMatrix(camera.combined);
 
