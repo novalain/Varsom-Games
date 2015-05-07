@@ -1,7 +1,6 @@
 package com.controller_app.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Net;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -13,10 +12,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.controller_app.Main;
 
+import com.controller_app.helper_classes.ScaledScreen;
 import com.controller_app.network.MPClient;
 
 import com.controller_app.helper.Commons;
-import com.controller_app.network.NetworkListener;
 
 /**
  *
@@ -61,8 +60,6 @@ public class ControllerScreen extends ScaledScreen {
 
         this.main = m;
         mpClient = mpc;
-
-
 
         skin = new Skin();
 

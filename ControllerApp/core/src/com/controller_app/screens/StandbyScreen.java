@@ -9,24 +9,20 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.controller_app.Main;
 import com.controller_app.helper.Commons;
+import com.controller_app.helper_classes.ScaledScreen;
 import com.controller_app.network.MPClient;
 import com.controller_app.network.NetworkListener;
 
 public class StandbyScreen extends ScaledScreen {
 
     private TextField textField;
-
     private Table table;
-
     private TextureAtlas atlas;
 
     private Texture logo;
@@ -79,10 +75,6 @@ public class StandbyScreen extends ScaledScreen {
             Gdx.app.log("font", "failed adding font");
         }
         generator.dispose();
-    }
-
-    void generateTextButtonStyle() {
-
     }
 
     void generateUI() {

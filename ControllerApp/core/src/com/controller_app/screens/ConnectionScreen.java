@@ -16,21 +16,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.controller_app.Main;
 
 import com.controller_app.helper_classes.GifDecoder;
+import com.controller_app.helper_classes.ScaledScreen;
 import com.controller_app.network.MPClient;
 
 import com.controller_app.helper.Commons;
 import com.controller_app.network.NetworkListener;
 
 public class ConnectionScreen extends ScaledScreen {
-
-   // private TextButton buttonController, buttonExit, btnSettings;
-    //private TextField textField;
 
     private Table table;
     private TextureAtlas atlas;
@@ -40,7 +36,7 @@ public class ConnectionScreen extends ScaledScreen {
     private MPClient mpClient;
     private Label text, text2;
     private Animation anim;
-    private float frameCounter=0;
+    private float frameCounter = 0;
 
     private Main main;
     private Skin skin;
@@ -51,9 +47,10 @@ public class ConnectionScreen extends ScaledScreen {
     private SpriteBatch spriteBatch;
 
     // TODO Maybe a better name for this variable????
-    public int check;
+    //public int check;
 
     public ConnectionScreen(Main m, MPClient mpc) {
+
         super();
 
         spriteBatch = new SpriteBatch();
@@ -62,8 +59,7 @@ public class ConnectionScreen extends ScaledScreen {
         mpClient = mpc;
         mpClient.setConnectionScreen(this);
 
-        //logo
-       // logo = new Texture(Gdx.files.internal("images/logo.png"));
+        logo = new Texture(Gdx.files.internal("images/logo.png"));
 
         // font generator
         generateFonts();
@@ -116,7 +112,6 @@ public class ConnectionScreen extends ScaledScreen {
         Texture splashTexture = new Texture(Gdx.files.internal("system/img/varsomsplash.png"));
         varsomLogo = new Image(splashTexture);
 
-
         Texture settingsTexture = new Texture(Gdx.files.internal("system/img/settings.png"));
         Image settingsImage = new Image(settingsTexture);
         settingsImage.setScale(0.1f);
@@ -126,7 +121,6 @@ public class ConnectionScreen extends ScaledScreen {
         stage.addActor(settingsImage);
 
         // stage = new Stage();
-        table.add(varsomLogo).pad(80).row();
 
         // This font is too ugly when scaled up
         BitmapFont fontType = new BitmapFont();
@@ -137,8 +131,7 @@ public class ConnectionScreen extends ScaledScreen {
         text2 = new Label("Set up server and touch anywhere to connect", style);
         //text.setPosition(Commons.WORLD_WIDTH / 2 - text.getWidth() / 2, Commons.WORLD_HEIGHT - 200);
 
-        table.add(text).row();
-        table.add(text2).row();
+
 
         anim = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("system/img/loading.gif").read());
 
@@ -148,6 +141,7 @@ public class ConnectionScreen extends ScaledScreen {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+
                 Gdx.app.log("in MenuScreen", "pressed controller");
 
                 new Thread(new Runnable() {
@@ -177,9 +171,7 @@ public class ConnectionScreen extends ScaledScreen {
 
         });
 
-
-
-       // Image image = new Image(logo);
+        Image reinerImage = new Image(logo);
        // textField = new TextField("", skin);
        /* buttonController = new TextButton("Connect Controller", skin);
         btnSettings = new TextButton("Settings", skin);
@@ -213,11 +205,15 @@ public class ConnectionScreen extends ScaledScreen {
         });*/
 
         // table.debug();
-       // table.add(image).padTop(10).padBottom(40).row();
+        //table.add(reinerImage).padTop(10).padBottom(40).row();
       //  table.add(textField).size(800, 200).row();
        // table.add(buttonController).size(800, 200).padBottom(20).row();
        // table.add(btnSettings).size(800, 200).row();
        // table.add(buttonExit).size(800, 200).row();
+
+        table.add(varsomLogo).pad(80).row();
+        table.add(text).row();
+        table.add(text2).row();
 
         table.setX(Commons.WORLD_WIDTH / 2 - table.getPrefWidth() / 2);
         table.setY(Commons.WORLD_HEIGHT / 2 - table.getPrefHeight() / 2);
@@ -230,7 +226,7 @@ public class ConnectionScreen extends ScaledScreen {
 
     public void errorMessage(int s){
 
-            main.changeScreen(0);
+        main.changeScreen(0);
 
         switch(s){
             case 1:
@@ -274,8 +270,6 @@ public class ConnectionScreen extends ScaledScreen {
 
     @Override
     public void render(float delta) {
-
-        check = 1;
 
         Gdx.gl.glClearColor(0.137f, 0.121f, 0.125f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -335,14 +329,12 @@ public class ConnectionScreen extends ScaledScreen {
         //if the name id "Player -1" the user hasn't chosen a name and we don't change connection name
         //if the user has changed the name we change the connection name
 
-        if(main.getSettingsScreen().getPlayerName().equals("Player -1")){
-            //Kryonet gives the automatic name "Connection X"
-        }
-        else
+        if(!main.getSettingsScreen().getPlayerName().equals("Player -1")){
             main.getClient().setName(main.getSettingsScreen().getPlayerName());
+        }//else Kryonet gives the automatic name "Connection X"
 
-        /** Removed the value from textfield here, because it's always empty anyway **/
-        // TODO Ask user to enter adress manually if not able to find any servers..
+        // Removed the value from textfield here, because it's always empty anyway
+        // TODO-carlbaum Ask user to enter adress manually if not able to find any servers..
         mpClient.connectToServer("");
     }
 
