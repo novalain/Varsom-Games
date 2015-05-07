@@ -84,13 +84,20 @@ public class VarsomMenu extends ScaledScreen {
                 Vector2 delta = newTouch.cpy().sub(lastTouch);
                 lastTouch = newTouch;
 
-                if (delta.x > 50 && currentButton > 0 && !swipedRight) {
+                System.out.println("curr button"  + currentButton);
+                System.out.println("swipedleft " + swipedLeft);
+                System.out.println("swipedRight" + swipedRight);
+
+
+                if (delta.x > 20 && currentButton > 0 && !swipedRight && !swipedLeft) {
 
                     swipedRight = true;
                     currentButton--;
                     stage.cancelTouchFocus();
 
-                } else if (delta.x < -50 && currentButton < 2 && !swipedLeft) {
+                } else if (delta.x < -20 && currentButton < 2 && !swipedRight && !swipedLeft) {
+
+                    System.out.println("ASDASD");
                     swipedLeft = true;
                     currentButton++;
                     stage.cancelTouchFocus();
@@ -113,7 +120,6 @@ public class VarsomMenu extends ScaledScreen {
         // place the table in the middle of the screen.
         table.setPosition(Commons.WORLD_WIDTH / 2 - table.getWidth() / 2, Commons.WORLD_HEIGHT / 2 - table.getHeight() / 2);
         stage.addActor(table);
-
         table.addAction(Actions.sequence(Actions.alpha(0), Actions.fadeIn(1.2f)));
 
         stage.addActor(connectedClientNames);
@@ -137,7 +143,7 @@ public class VarsomMenu extends ScaledScreen {
     public void handleSwipedImages() {
 
         // Move to the swipedLeft
-        if (swipedRight && currentButton < 2) {
+        if (swipedRight && !swipedLeft && currentButton < 2) {
 
             //Fade down
             images.elementAt(currentButton + 1).addAction(Actions.sequence(Actions.alpha(0.3f, 1.f)));
@@ -161,7 +167,7 @@ public class VarsomMenu extends ScaledScreen {
 
         }
         //Same but the other way
-        else if (swipedLeft && currentButton > 0) {
+        else if (swipedLeft && !swipedRight && currentButton > 0) {
 
             images.elementAt(currentButton - 1).addAction(Actions.sequence(Actions.alpha(0.3f, 1.f)));
             images.elementAt(currentButton).addAction(Actions.sequence(Actions.alpha(1.f, 1.f)));
@@ -271,10 +277,6 @@ public class VarsomMenu extends ScaledScreen {
 
         if(NetworkListener.dPadSelect){
 
-            System.out.println("HALLOJ");
-            System.out.println("swipedLeft" + swipedLeft);
-            System.out.println("swipedright" + swipedRight);
-
             if(!swipedLeft && !swipedRight)
                 selectMenuItem();
 
@@ -284,18 +286,20 @@ public class VarsomMenu extends ScaledScreen {
         if (NetworkListener.dpadTouched == true) {
             NetworkListener.dpadTouched = false;
             Gdx.app.log("in varsommenu", "The value of dpadTouched is: " + NetworkListener.dpadTouched);
-            if (NetworkListener.dpadx == DPad.RIGHT) {
+            if (NetworkListener.dpadx == DPad.RIGHT && !swipedLeft && !swipedRight && currentButton < 2) {
                 swipedLeft = true;
-                currentButton += NetworkListener.dpadx;
+               // currentButton += NetworkListener.dpadx;
+                currentButton++;
                 Gdx.app.log("Right selected, Currentbutton is ", ""+currentButton);
                 if (currentButton > images.size()) {
                     Gdx.app.log("CurrentButton value max", "is " + images.size());
                     currentButton = images.size();
                 }
-            } else {
+            } else if(NetworkListener.dpadx == DPad.LEFT && !swipedLeft && !swipedRight && currentButton > 0){
                 Gdx.app.log("Left selected, Currentbutton is ", ""+currentButton);
                 swipedRight = true;
-                currentButton += NetworkListener.dpadx;
+                //currentButton += NetworkListener.dpadx;
+                currentButton--;
                 if (currentButton < 0) {
                     Gdx.app.log("CurrentButton value max", "is " + 0);
                     currentButton = 0;
@@ -304,8 +308,8 @@ public class VarsomMenu extends ScaledScreen {
 
         }
 
-
     }
+
     public void createMenuItems(){
 
         // creating first game - the car game
@@ -350,8 +354,8 @@ public class VarsomMenu extends ScaledScreen {
             }
         });
         table.add(imageExit).size(300, 300);
-        // If more games, add them here!
 
+        // If more games, add them here!
         // add everything to table
         images = new Vector();
         images.add(imagePlayCarGame);
