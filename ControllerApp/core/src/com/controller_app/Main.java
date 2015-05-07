@@ -33,8 +33,6 @@ public class Main extends Game {
      * @param controllerScreen This calls to the ControllerScreen
      * @param standbyScreen This calls to the StandbyScreen
      * @param mpClient This calls to the MPClient to start a new network connection
-     * @exception IOException on MPClient
-     * @return Nothing.
      */
     private SettingsScreen settingsScreen;
     private ConnectionScreen connectionScreen;
