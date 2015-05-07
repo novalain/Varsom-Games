@@ -116,12 +116,14 @@ public class Track1 extends Track{
                 spawnPosRotation, carPower, maxSteerAngle, maxSpeed,this,i);
 
             try {
-                connectionIDs[i] = varsomSystem.getServer().getConnections()[i].getID();
+                connectionIDs[i] = varsomSystem.getServer().getConnections()[NUMBER_OF_PLAYERS-1-i].getID();
+                cars[i].setConnectionID(varsomSystem.getServer().getConnections()[NUMBER_OF_PLAYERS-1-i].getID());
+                cars[i].setConnectionName(varsomSystem.getServer().getConnections()[NUMBER_OF_PLAYERS-1-i].toString());
             }
             catch(Exception e) {
                 System.out.print("FAILED TO ACCESS CONNECTED DEVICE");
             }
-            //sprites.addElement(cars[i].pathTrackingSprite);
+          //  sprites.addElement(cars[i].pathTrackingSprite);
 
             //TODO fix input
              //Gdx.input.setInputProcessor(new InputHandler(cars[i]));
@@ -173,8 +175,7 @@ public class Track1 extends Track{
     private Vector2[] hardcodedWayPoints() {
         int hrf = 5; // higher res factor
         Vector2[] wPs = {
-            new Vector2( -95*hrf, -131*hrf),
-            new Vector2(-180*hrf, -131*hrf),
+            new Vector2(-190*hrf, -131*hrf),
             new Vector2(-220*hrf, -131*hrf),
             new Vector2(-230*hrf, -111*hrf),
             new Vector2(-220*hrf,  -90*hrf),
@@ -193,7 +194,8 @@ public class Track1 extends Track{
             new Vector2( 216*hrf,  -40*hrf),
             new Vector2( 239*hrf,  -60*hrf),
             new Vector2( 239*hrf, -110*hrf),
-            new Vector2( 210*hrf, -131*hrf)}; // these need to be scaled by 10
+            new Vector2( 210*hrf, -131*hrf),
+            new Vector2( -95*hrf, -131*hrf)}; // these need to be scaled by 10
         return wPs;
     }
 }
