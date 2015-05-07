@@ -18,6 +18,8 @@ import com.controller_app.screens.StandbyScreen;
 
 /**
  * <h1>ControllerApp Main Class</h1>
+ * This main class holds reference to all other screens,
+ * and a switch case to change between them.
  *
  * @author  VarsomGames
  * @version 1.0
@@ -25,8 +27,6 @@ import com.controller_app.screens.StandbyScreen;
  */
 public class Main extends Game {
     /**
-     * This main class holds reference to all other screens,
-     * and a switch case to change between them.
      * @param settingsScreen This calls to the SettingsScreen
      * @param connectionScreen This calls to the ConnectionScreen
      * @param navigationScreen This calls to the NavigationScreen
@@ -36,7 +36,6 @@ public class Main extends Game {
      * @exception IOException on MPClient
      * @return Nothing.
      */
-
     private SettingsScreen settingsScreen;
     private ConnectionScreen connectionScreen;
     private NavigationScreen navScreen;
@@ -44,6 +43,12 @@ public class Main extends Game {
     private StandbyScreen standbyScreen;
     private MPClient mpClient;
 
+    /**
+     * The create-function opens a mpClient, creates the
+     * screens and calls on function changeScreen
+     * @exception IOException on MPClient
+     * @return Nothing.
+     */
     @Override
     public void create() {
 
@@ -65,7 +70,7 @@ public class Main extends Game {
 
     }
     /**
-     * This function changes screen based on an index passed
+     * The changeScreen-function changes screen based on an index passed
      * on by the program.
      * @param s The index for switching screens
      * @return Nothing.
