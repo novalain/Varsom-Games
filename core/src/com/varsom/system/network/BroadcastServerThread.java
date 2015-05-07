@@ -26,23 +26,10 @@ public class BroadcastServerThread extends Thread {
     private String broadip;
 
     private long FIVE_SECONDS = 5000;
-    public DatagramSocket socket = new DatagramSocket(4446);
+    private DatagramSocket socket;
 
-    public BroadcastServerThread(String serverip) throws IOException {
-        /*
-        if(serverip.equals(""))
-        {
-            System.out.println("ip is empty");
-        }
+    public BroadcastServerThread() throws IOException {
 
-        ip = serverip;
-
-        // Removes unneeded ip addresses
-        if(ip.contains(" ")) {
-            ip = ip.substring(0, ip.indexOf(" "));
-        }
-        System.out.println("IP is " + ip);
-        */
         ip = getServerIP();
         broadip = getBroadcastIP();
 
@@ -51,7 +38,7 @@ public class BroadcastServerThread extends Thread {
 
     public void run() {
 
-        byte[] buf = ip.getBytes();;
+        byte[] buf = ip.getBytes();
 
         for (int i = 0; i < 50; i++) {
             try {

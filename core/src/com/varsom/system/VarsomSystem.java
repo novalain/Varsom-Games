@@ -25,9 +25,6 @@ public class VarsomSystem extends /*ApplicationAdapter*/Game {
     public static int[] games = new int[SIZE];
 
     static protected MPServer mpServer;
-    static protected Server server;
-
-    private String serverIPAddress;
 
     private VarsomGame activeGame;
 
@@ -64,35 +61,7 @@ public class VarsomSystem extends /*ApplicationAdapter*/Game {
     }
 
     private void startServer(){
-        /*
-        // The following code loops through the available network interfaces
-        // Keep in mind, there can be multiple interfaces per device, for example
-        // one per NIC, one per active wireless and the loopback
-        // In this case we only care about IPv4 address ( x.x.x.x format )
-        List<String> addresses = new ArrayList<String>();
-        try {
-            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
-            for(NetworkInterface ni : Collections.list(interfaces)){
-                for(InetAddress address : Collections.list(ni.getInetAddresses()))
-                {
-                    if(address instanceof Inet4Address && !address.isLoopbackAddress()){ //&& !address.isSiteLocalAddress()){
-                        addresses.add(address.getHostAddress());
-                    }
-                }
-            }
-        } catch (SocketException e) {
-            e.printStackTrace();
-        }
 
-        // Print the contents of our array to a string.  Yeah, should have used StringBuilder
-        String ipAddress = new String("");
-        for(String str:addresses)
-        {
-            ipAddress = ipAddress + str + "\n";
-        }
-        serverIPAddress = ipAddress;//addresses.get(1) + "\n" +addresses.get(0);
-        Gdx.app.log("NETWORK", "NETWORK: IP-address is " + ipAddress);
-        */
         try {
             mpServer = new MPServer(this);
         } catch (IOException e) {
@@ -100,16 +69,12 @@ public class VarsomSystem extends /*ApplicationAdapter*/Game {
         }
         //Broadcast sender
         try {
-            new BroadcastServerThread(serverIPAddress).start();
+            new BroadcastServerThread().start();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-/*
-    public String getServerIP(){
-        return serverIPAddress;
-    }
-*/
+
     public MPServer getMPServer(){
         return mpServer;
     }
