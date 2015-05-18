@@ -93,6 +93,7 @@ public class MPClient {
         kryo.register(Packet.VibrateClient.class);
         kryo.register(Packet.PulseVibrateClient.class);
         kryo.register(Packet.ChangeController.class);
+        kryo.register(Packet.NameUpdate.class);
     }
 
     public void sendPacket(boolean send) {
@@ -205,5 +206,12 @@ public class MPClient {
 
     public void setActiveScreenIndex(int i){
         activeScreen = i;
+    }
+
+    public void updateNameOnServer(String name){
+        //Update name on server
+        Packet.NameUpdate nameUpdate = new Packet.NameUpdate();
+        nameUpdate.name = name;
+        client.sendTCP(nameUpdate);
     }
 }

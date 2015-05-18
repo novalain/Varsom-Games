@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.controller_app.Main;
 import com.controller_app.helper.Commons;
 import com.controller_app.helper_classes.ScaledScreen;
+import com.controller_app.network.Packet;
 
 /**
  * <h1>ControllerApp Settings Screen</h1>
@@ -54,6 +55,7 @@ public class SettingsScreen extends ScaledScreen {
     private TextButton btnBack;
     private TextField playerName;
     private String strPlayerName = "Player -1";
+    private boolean update = true;
 
     public SettingsScreen(Main main) {
         super();
@@ -75,7 +77,7 @@ public class SettingsScreen extends ScaledScreen {
         Gdx.gl.glClearColor(0f, 0f, 0.3f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        updateName();
+        update = updateNameField(update);
 
         // Sprite renders
         stage.draw();
@@ -145,6 +147,9 @@ public class SettingsScreen extends ScaledScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.input.vibrate(main.getVarsomSystemScreen().getVibTime());
+                updateConnectionName();
+                update = true;
+                main.getMpClient().updateNameOnServer(playerName.getText());
                 main.changeScreen(Commons.CONNECTION_SCREEN);
             }
         });
@@ -195,10 +200,21 @@ public class SettingsScreen extends ScaledScreen {
        return playerName.getText();
    }
 
-    public void updateName(){
-        if(main.getClient().getID() != -1) {
-            //this clint is connected and was given an automatic name
-            strPlayerName = main.getClient().toString();
+    public boolean updateNameField(boolean b){
+        //we only want to update once when we switch to this screen
+        if(b) {
+            if (main.getClient().getID() != -1) {
+                //this clint is connected and was given an automatic name
+                strPlayerName = main.getClient().toString();
+            }
+
+            playerName.setText(strPlayerName);
         }
+        return false;
+    }
+
+    public void updateConnectionName(){
+        main.getClient().setName(playerName.getText());
+        System.out.println("Name: " + playerName.getText());
     }
 }
