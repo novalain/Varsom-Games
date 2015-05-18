@@ -1,17 +1,17 @@
 package com.controller_app.network;
 
 import com.badlogic.gdx.Gdx;
+import com.controller_app.helper.Commons;
 import com.controller_app.screens.ConnectionScreen;
-import com.controller_app.screens.ControllerScreen;
+import com.controller_app.screens.CarGameScreen;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
-import com.esotericsoftware.kryonet.Connection;
 
 import java.io.IOException;
 
 public class MPClient {
     public Client client;
-    public ControllerScreen controllerScreen;
+    public CarGameScreen carGameScreen;
     private BroadcastClient broadcastClient;
     public boolean correctIP;
     private String serverIP;
@@ -65,14 +65,12 @@ public class MPClient {
             } catch (IOException e) {
                 e.printStackTrace();
                 client.stop();
-                connectionScreen.errorMessage(2);
+                connectionScreen.errorMessage(Commons.NO_SERVER_FOUND);
             }
         }
 
         else {
-
-            //TODO commons errormessage konstanter
-            connectionScreen.errorMessage(2);
+            connectionScreen.errorMessage(Commons.NO_SERVER_FOUND);
         }
 
 
@@ -165,7 +163,7 @@ public class MPClient {
     }
 
     public void errorHandler() {
-          connectionScreen.errorMessage(1);
+          connectionScreen.errorMessage(Commons.BAD_CONNECTION);
         closeThread = false;
     }
     public Thread newThread(){
@@ -182,7 +180,7 @@ public class MPClient {
                         Gdx.app.log("Thread", "DATA IS BEING SENT!!");
                         Packet.GamePacket packet = new Packet.GamePacket();
 
-                        packet.message = controllerScreen.getDrive() + " " + controllerScreen.getReverse() + " " + controllerScreen.getRotation();
+                        packet.message = carGameScreen.getDrive() + " " + carGameScreen.getReverse() + " " + carGameScreen.getRotation();
                         client.sendUDP(packet);
                     }
                 } catch (InterruptedException e) {

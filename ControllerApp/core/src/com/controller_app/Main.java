@@ -3,16 +3,14 @@ package com.controller_app;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.controller_app.network.NetworkListener;
 import com.controller_app.helper.Commons;
 import com.controller_app.screens.ConnectionScreen;
-import com.controller_app.screens.ControllerScreen;
+import com.controller_app.screens.CarGameScreen;
 
 import java.io.IOException;
-import java.sql.Connection;
 
 import com.controller_app.network.MPClient;
-import com.controller_app.screens.NavigationScreen;
+import com.controller_app.screens.VarsomSystemScreen;
 import com.controller_app.screens.SettingsScreen;
 import com.esotericsoftware.kryonet.Client;
 import com.controller_app.screens.StandbyScreen;
@@ -37,8 +35,8 @@ public class Main extends Game {
      */
     private SettingsScreen settingsScreen;
     private ConnectionScreen connectionScreen;
-    private NavigationScreen navScreen;
-    private ControllerScreen controllerScreen;
+    private VarsomSystemScreen navScreen;
+    private CarGameScreen carGameScreen;
     private StandbyScreen standbyScreen;
     private MPClient mpClient;
     private Screen activeScreen;
@@ -61,10 +59,10 @@ public class Main extends Game {
         Gdx.app.log("check", "created app");
         settingsScreen = new SettingsScreen(this);
         connectionScreen = new ConnectionScreen(this, mpClient);
-        controllerScreen = new ControllerScreen(this, mpClient);
-        navScreen = new NavigationScreen(this, mpClient);
+        carGameScreen = new CarGameScreen(this, mpClient);
+        navScreen = new VarsomSystemScreen(this, mpClient);
         standbyScreen = new StandbyScreen(this, mpClient);
-        mpClient.controllerScreen = controllerScreen;
+        mpClient.carGameScreen = carGameScreen;
 
         changeScreen(Commons.CONNECTION_SCREEN);
 
@@ -87,7 +85,7 @@ public class Main extends Game {
                 activeScreen = connectionScreen;
                 break;
             case Commons.NAVIGATION_SCREEN:
-                navScreen = new NavigationScreen(this, mpClient);
+                navScreen = new VarsomSystemScreen(this, mpClient);
                 Gdx.input.setInputProcessor(navScreen.getStage());
                // connectionScreen.check = 2;
                 setScreen(navScreen);
@@ -100,11 +98,11 @@ public class Main extends Game {
                 activeScreen = settingsScreen;
                 break;
             case Commons.CONTROLLER_SCREEN:
-                controllerScreen = new ControllerScreen(this, mpClient);
-                Gdx.input.setInputProcessor(controllerScreen.getStage());
+                carGameScreen = new CarGameScreen(this, mpClient);
+                Gdx.input.setInputProcessor(carGameScreen.getStage());
                // connectionScreen.check = 2;
-                setScreen(controllerScreen);
-                activeScreen = controllerScreen;
+                setScreen(carGameScreen);
+                activeScreen = carGameScreen;
                 break;
 
             default: System.out.println("Error in changeScreen");
@@ -142,15 +140,15 @@ public class Main extends Game {
     /**
      * @return The created NavigationScreen
      */
-    public NavigationScreen getNavigationScreen(){
+    public VarsomSystemScreen getNavigationScreen(){
         return navScreen;
     }
 
     /**
      * @return The created ControllerScreen
      */
-    public ControllerScreen getControllerScreen(){
-        return controllerScreen;
+    public CarGameScreen getCarGameScreen(){
+        return carGameScreen;
     }
 
     /**
@@ -159,7 +157,7 @@ public class Main extends Game {
     public void handleController(){
         if(mpClient.getChangeController()) {
             //ControllerScreen and NavigationScreen should not be reused
-            if(activeScreen == controllerScreen || activeScreen == navScreen)
+            if(activeScreen == carGameScreen || activeScreen == navScreen)
                 activeScreen.dispose();
             changeScreen(mpClient.getActiveScreenIndex());
             mpClient.setChangeController(false);

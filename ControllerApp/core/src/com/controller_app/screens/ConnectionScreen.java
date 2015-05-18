@@ -175,7 +175,7 @@ public class ConnectionScreen extends ScaledScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                errorMessage(3);
+                errorMessage(Commons.DO_YOU_WANT_TO_EXIT);
 
             }
         });*/
@@ -199,7 +199,7 @@ public class ConnectionScreen extends ScaledScreen {
         main.changeScreen(Commons.CONNECTION_SCREEN);
 
         switch(s){
-            case 1:
+            case Commons.BAD_CONNECTION:
             new Dialog("Error", skin) {
                 {
                     text("It's seems that your connection sucks");
@@ -214,7 +214,7 @@ public class ConnectionScreen extends ScaledScreen {
             }.show(stage);
                 break;
 
-            case 2:
+            case Commons.NO_SERVER_FOUND:
                 showGif = false;
                 new Dialog("Error", skin) {
                     {
@@ -231,7 +231,7 @@ public class ConnectionScreen extends ScaledScreen {
                 }.show(stage);
                 break;
 
-            case 3:
+            case Commons.DO_YOU_WANT_TO_EXIT:
                 new Dialog("Exit", skin){
                     {
                         text("Are you sure you want to exit?");

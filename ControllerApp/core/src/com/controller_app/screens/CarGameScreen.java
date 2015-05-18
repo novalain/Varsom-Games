@@ -20,15 +20,14 @@ import com.controller_app.helper.Commons;
 /**
  *
  */
-//TODO ändra namn på class
-public class ControllerScreen extends ScaledScreen {
+
+public class CarGameScreen extends ScaledScreen {
 
     private TextButton buttonDrive;
     private TextButton buttonReverse;
     private TextButton buttonHome;
     private TextButton buttonExit;
     private TextButton buttonPause;
-    private TextButton buttonUnpause;
     private TextButton btnName;
     private TextButton buttonPlay;
 
@@ -55,7 +54,7 @@ public class ControllerScreen extends ScaledScreen {
 
     private float tiltAngle;
 
-    public ControllerScreen(Main m, MPClient mpc) {
+    public CarGameScreen(Main m, MPClient mpc) {
 
         super();
 
@@ -70,9 +69,6 @@ public class ControllerScreen extends ScaledScreen {
         buttonAtlas = new TextureAtlas(Gdx.files.internal("skins/menuSkin.pack"));
         skin.addRegions(buttonAtlas);
 
-        //playerName = main.getSettingsScreen().getPlayerName();
-        //main.getClient().setName(playerName);
-
         generateFonts();
         generateTextButtonStyle();
         generateUI();
@@ -85,7 +81,7 @@ public class ControllerScreen extends ScaledScreen {
         stage.addActor(btnName);
         stage.addActor(buttonPlay);
 
-        mpc.controllerScreen = this;
+        mpc.carGameScreen = this;
     }
 
     @Override

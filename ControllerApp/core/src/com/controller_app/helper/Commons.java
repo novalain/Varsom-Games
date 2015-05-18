@@ -13,4 +13,10 @@ public interface Commons{
     public static final int NAVIGATION_SCREEN = 1;
     public final static int SETTINGS_SCREEN = 2;
     public static final int CONTROLLER_SCREEN = 3;
+
+    // Error message
+    public static final int BAD_CONNECTION = 1;
+    public static final int NO_SERVER_FOUND = 2;
+    public static final int DO_YOU_WANT_TO_EXIT = 3;
+
 }
