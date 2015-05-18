@@ -4,16 +4,15 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.controller_app.helper.Commons;
-import com.controller_app.screens.ConnectionScreen;
+import com.controller_app.network.MPClient;
 import com.controller_app.screens.CarGameScreen;
+import com.controller_app.screens.ConnectionScreen;
+import com.controller_app.screens.SettingsScreen;
+import com.controller_app.screens.StandbyScreen;
+import com.controller_app.screens.VarsomSystemScreen;
+import com.esotericsoftware.kryonet.Client;
 
 import java.io.IOException;
-
-import com.controller_app.network.MPClient;
-import com.controller_app.screens.VarsomSystemScreen;
-import com.controller_app.screens.SettingsScreen;
-import com.esotericsoftware.kryonet.Client;
-import com.controller_app.screens.StandbyScreen;
 
 /**
  * <h1>ControllerApp Main Class</h1>

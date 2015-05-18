@@ -18,12 +18,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.controller_app.Main;
-
+import com.controller_app.helper.Commons;
 import com.controller_app.helper_classes.GifDecoder;
 import com.controller_app.helper_classes.ScaledScreen;
 import com.controller_app.network.MPClient;
-
-import com.controller_app.helper.Commons;
 import com.controller_app.network.NetworkListener;
 
 public class ConnectionScreen extends ScaledScreen {
@@ -104,6 +102,7 @@ public class ConnectionScreen extends ScaledScreen {
         Texture splashTexture = new Texture(Gdx.files.internal("system/img/varsomsplash.png"));
         varsomLogo = new Image(splashTexture);
 
+        /*
         Texture settingsTexture = new Texture(Gdx.files.internal("system/img/settings.png"));
         Image settingsImage = new Image(settingsTexture);
         settingsImage.setScale(0.1f);
@@ -111,6 +110,9 @@ public class ConnectionScreen extends ScaledScreen {
         settingsImage.setY(Commons.WORLD_HEIGHT - settingsTexture.getHeight()*0.1f - 20 );
 
         stage.addActor(settingsImage);
+
+        */
+        // stage = new Stage();
 
         // This font is too ugly when scaled up
         BitmapFont fontType = new BitmapFont();
@@ -160,7 +162,7 @@ public class ConnectionScreen extends ScaledScreen {
 
         });
 
-
+        /*
         // TODO Not working properly because we are listening to event on the whole screen
         settingsImage.addListener(new ClickListener() {
             @Override
@@ -169,7 +171,8 @@ public class ConnectionScreen extends ScaledScreen {
                 main.changeScreen(Commons.SETTINGS_SCREEN);
             }
         });
-/*
+        */
+        /*
         buttonExit.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
