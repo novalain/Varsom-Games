@@ -35,7 +35,7 @@ public class Main extends Game {
      */
     private SettingsScreen settingsScreen;
     private ConnectionScreen connectionScreen;
-    private VarsomSystemScreen navScreen;
+    private VarsomSystemScreen varsomSystemScreen;
     private CarGameScreen carGameScreen;
     private StandbyScreen standbyScreen;
     private MPClient mpClient;
@@ -60,7 +60,7 @@ public class Main extends Game {
         settingsScreen = new SettingsScreen(this);
         connectionScreen = new ConnectionScreen(this, mpClient);
         carGameScreen = new CarGameScreen(this, mpClient);
-        navScreen = new VarsomSystemScreen(this, mpClient);
+        varsomSystemScreen = new VarsomSystemScreen(this, mpClient);
         standbyScreen = new StandbyScreen(this, mpClient);
         mpClient.carGameScreen = carGameScreen;
 
@@ -85,11 +85,11 @@ public class Main extends Game {
                 activeScreen = connectionScreen;
                 break;
             case Commons.VARSOM_SYSTEM_SCREEN:
-                navScreen = new VarsomSystemScreen(this, mpClient);
-                Gdx.input.setInputProcessor(navScreen.getStage());
+                varsomSystemScreen = new VarsomSystemScreen(this, mpClient);
+                Gdx.input.setInputProcessor(varsomSystemScreen.getStage());
                // connectionScreen.check = 2;
-                setScreen(navScreen);
-                activeScreen = navScreen;
+                setScreen(varsomSystemScreen);
+                activeScreen = varsomSystemScreen;
                 break;
             case Commons.SETTINGS_SCREEN:
                 Gdx.input.setInputProcessor(settingsScreen.getStage());
@@ -144,8 +144,8 @@ public class Main extends Game {
     /**
      * @return The created NavigationScreen
      */
-    public VarsomSystemScreen getNavigationScreen(){
-        return navScreen;
+    public VarsomSystemScreen getVarsomSystemScreen(){
+        return varsomSystemScreen;
     }
 
     /**
@@ -161,7 +161,7 @@ public class Main extends Game {
     public void handleController(){
         if(mpClient.getChangeController()) {
             //ControllerScreen and NavigationScreen should not be reused
-            if(activeScreen == carGameScreen || activeScreen == navScreen)
+            if(activeScreen == carGameScreen || activeScreen == varsomSystemScreen)
                 activeScreen.dispose();
             changeScreen(mpClient.getActiveScreenIndex());
             mpClient.setChangeController(false);

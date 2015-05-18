@@ -26,6 +26,7 @@ public class VarsomSystemScreen extends ScaledScreen {
     private BitmapFont font;
     private FreeTypeFontGenerator generator;
     private SpriteBatch batch;
+    private int vibTime = 30;
 
     private MPClient mpClient;
     private Main main;
@@ -87,45 +88,49 @@ public class VarsomSystemScreen extends ScaledScreen {
         btnUp.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-               // inputHandler.setUpPressed();
+                Gdx.input.vibrate(vibTime);
                 mpClient.sendDPadData(0, DPad.UP, false);
             }
         });
         btnDown.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                Gdx.input.vibrate(vibTime);
                 mpClient.sendDPadData(0, DPad.DOWN, false);
             }
         });
         btnLeft.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                Gdx.input.vibrate(vibTime);
                 mpClient.sendDPadData(DPad.LEFT,0, false);
             }
         });
         btnRight.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                Gdx.input.vibrate(vibTime);
                 mpClient.sendDPadData(DPad.RIGHT,0, false);
             }
         });
         btnSelect.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                Gdx.input.vibrate(vibTime);
                 mpClient.sendDPadData(0,0,DPad.SELECT);
             }
         });
         btnSettings.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.log("input", "settings pressed");
+                Gdx.input.vibrate(vibTime);
                 main.changeScreen(Commons.SETTINGS_SCREEN);
             }
         });
         btnDisconnect.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.log("input", "disconnect pressed");
+                Gdx.input.vibrate(vibTime);
                 main.getConnectionScreen().disconnect();
                 main.changeScreen(Commons.CONNECTION_SCREEN);
             }
@@ -133,7 +138,7 @@ public class VarsomSystemScreen extends ScaledScreen {
         btnController.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.log("input", "controller pressed");
+                Gdx.input.vibrate(vibTime);
                 main.changeScreen(Commons.CAR_GAME_SCREEN);
             }
         });
@@ -214,5 +219,9 @@ public class VarsomSystemScreen extends ScaledScreen {
 
     public void reset(){
 
+    }
+
+    public int getVibTime(){
+        return vibTime;
     }
 }

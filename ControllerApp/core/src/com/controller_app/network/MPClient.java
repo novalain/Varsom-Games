@@ -154,7 +154,7 @@ public class MPClient {
         dp.dataY = y;
         dp.select = bool;
         client.sendTCP(dp);
-        Gdx.app.log("in MPClient", "sent dPadInfo");
+        //Gdx.app.log("in MPClient", "sent dPadInfo");
     }
 
     public void setConnectionScreen(ConnectionScreen cs){
@@ -177,7 +177,7 @@ public class MPClient {
                 try {
                     while (!Thread.currentThread().isInterrupted() && closeThread) {
                         Thread.sleep(1000 /  TICKS_PER_SECOND );
-                        Gdx.app.log("Thread", "DATA IS BEING SENT!!");
+                        //Gdx.app.log("Thread", "DATA IS BEING SENT!!");
                         Packet.GamePacket packet = new Packet.GamePacket();
 
                         packet.message = carGameScreen.getDrive() + " " + carGameScreen.getReverse() + " " + carGameScreen.getRotation();
