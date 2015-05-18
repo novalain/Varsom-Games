@@ -176,7 +176,7 @@ public class CarGameScreen extends ScaledScreen {
         buttonHome.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                main.changeScreen(Commons.NAVIGATION_SCREEN);
+                main.changeScreen(Commons.VARSOM_SYSTEM_SCREEN);
             }
         });
 

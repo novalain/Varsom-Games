@@ -10,9 +10,10 @@ public interface Commons{
 
     // Screen ID:s
     public static final int CONNECTION_SCREEN = 0;
-    public static final int NAVIGATION_SCREEN = 1;
+    public static final int VARSOM_SYSTEM_SCREEN = 1;
     public final static int SETTINGS_SCREEN = 2;
-    public static final int CONTROLLER_SCREEN = 3;
+    public static final int CAR_GAME_SCREEN = 3;
+    public static final int STANDBY_SCREEN = 4;
 
     // Error message
     public static final int BAD_CONNECTION = 1;

@@ -4,16 +4,15 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.controller_app.helper.Commons;
-import com.controller_app.screens.ConnectionScreen;
+import com.controller_app.network.MPClient;
 import com.controller_app.screens.CarGameScreen;
+import com.controller_app.screens.ConnectionScreen;
+import com.controller_app.screens.SettingsScreen;
+import com.controller_app.screens.StandbyScreen;
+import com.controller_app.screens.VarsomSystemScreen;
+import com.esotericsoftware.kryonet.Client;
 
 import java.io.IOException;
-
-import com.controller_app.network.MPClient;
-import com.controller_app.screens.VarsomSystemScreen;
-import com.controller_app.screens.SettingsScreen;
-import com.esotericsoftware.kryonet.Client;
-import com.controller_app.screens.StandbyScreen;
 
 /**
  * <h1>ControllerApp Main Class</h1>
@@ -84,7 +83,7 @@ public class Main extends Game {
                 setScreen(connectionScreen);
                 activeScreen = connectionScreen;
                 break;
-            case Commons.NAVIGATION_SCREEN:
+            case Commons.VARSOM_SYSTEM_SCREEN:
                 navScreen = new VarsomSystemScreen(this, mpClient);
                 Gdx.input.setInputProcessor(navScreen.getStage());
                // connectionScreen.check = 2;
@@ -97,13 +96,17 @@ public class Main extends Game {
                 setScreen(settingsScreen);
                 activeScreen = settingsScreen;
                 break;
-            case Commons.CONTROLLER_SCREEN:
+            case Commons.CAR_GAME_SCREEN:
                 carGameScreen = new CarGameScreen(this, mpClient);
                 Gdx.input.setInputProcessor(carGameScreen.getStage());
                // connectionScreen.check = 2;
                 setScreen(carGameScreen);
                 activeScreen = carGameScreen;
                 break;
+            case Commons.STANDBY_SCREEN:
+                Gdx.input.setInputProcessor(standbyScreen.getStage());
+                setScreen(standbyScreen);
+                activeScreen = standbyScreen;
 
             default: System.out.println("Error in changeScreen");
         }
