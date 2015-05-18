@@ -40,8 +40,8 @@ public class BroadcastServerThread extends Thread {
 
         byte[] buf = ip.getBytes();
 
-        // TODO fixa forloopen - christoph
-        for (int i = 0; i < 50; i++) {
+        while(true) {
+        //for (int i = 0; i < 50; i++) {
             try {
                 InetAddress broadcastaddress = InetAddress.getByName(broadip);
                 DatagramPacket packet = new DatagramPacket(buf, buf.length, broadcastaddress, 4446);
@@ -55,8 +55,8 @@ public class BroadcastServerThread extends Thread {
                 e.printStackTrace();
             }
         }
-
-        socket.close();
+        // Never reached -> while(true)
+        //socket.close();
     }
 
     private String getBroadcastIP() throws SocketException {

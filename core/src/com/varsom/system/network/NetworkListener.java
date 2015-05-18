@@ -4,13 +4,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 import com.varsom.system.VarsomSystem;
-import com.varsom.system.network.Packet.ExitRequest;
-import com.varsom.system.network.Packet.LoginAnswer;
-import com.varsom.system.network.Packet.LoginRequest;
-import com.varsom.system.network.Packet.PauseRequest;
-import com.varsom.system.network.Packet.SendDPadData;
-
-import static com.varsom.system.network.Packet.GamePacket;
+import com.varsom.system.network.Packet.*;
 
 
 public class  NetworkListener extends Listener {
@@ -81,6 +75,10 @@ public class  NetworkListener extends Listener {
             dpadx = ((SendDPadData) o).dataX;
             dpady = ((SendDPadData) o).dataY;
             dpadTouched = true;
+        }
+
+        else if (o instanceof NameUpdate) {
+            c.setName(((NameUpdate) o).name);
         }
 
     }

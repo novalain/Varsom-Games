@@ -76,6 +76,7 @@ public class MPServer {
         kryo.register(Packet.VibrateClient.class);
         kryo.register(Packet.PulseVibrateClient.class);
         kryo.register(Packet.ChangeController.class);
+        kryo.register(Packet.NameUpdate.class);
     }
 
     public void stop() {
