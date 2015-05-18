@@ -154,17 +154,13 @@ public class StandbyScreen extends ScaledScreen {
         //did we connect
         if(NetworkListener.connected){
             //check if the server asks the client to stand by
-            if(NetworkListener.standby) {
-                Gdx.app.log("in standbyScreen", "standby");
-            }
-            else {
-                Gdx.app.log("in standbyScreen", "don't standby");
-                main.changeScreen(2);
+            if(!NetworkListener.standby) {
+                main.changeScreen(Commons.VARSOM_SYSTEM_SCREEN);
             }
         }
         else {
             Gdx.app.log("in standbyScreen", "not connected");
-            main.changeScreen(1);
+            main.changeScreen(Commons.CONNECTION_SCREEN);
         }
     }
 

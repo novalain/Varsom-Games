@@ -84,7 +84,7 @@ public class Main extends Game {
                 setScreen(connectionScreen);
                 activeScreen = connectionScreen;
                 break;
-            case Commons.NAVIGATION_SCREEN:
+            case Commons.VARSOM_SYSTEM_SCREEN:
                 navScreen = new VarsomSystemScreen(this, mpClient);
                 Gdx.input.setInputProcessor(navScreen.getStage());
                // connectionScreen.check = 2;
@@ -97,13 +97,17 @@ public class Main extends Game {
                 setScreen(settingsScreen);
                 activeScreen = settingsScreen;
                 break;
-            case Commons.CONTROLLER_SCREEN:
+            case Commons.CAR_GAME_SCREEN:
                 carGameScreen = new CarGameScreen(this, mpClient);
                 Gdx.input.setInputProcessor(carGameScreen.getStage());
                // connectionScreen.check = 2;
                 setScreen(carGameScreen);
                 activeScreen = carGameScreen;
                 break;
+            case Commons.STANDBY_SCREEN:
+                Gdx.input.setInputProcessor(standbyScreen.getStage());
+                setScreen(standbyScreen);
+                activeScreen = standbyScreen;
 
             default: System.out.println("Error in changeScreen");
         }

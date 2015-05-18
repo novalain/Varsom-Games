@@ -134,7 +134,7 @@ public class VarsomSystemScreen extends ScaledScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.log("input", "controller pressed");
-                main.changeScreen(Commons.CONTROLLER_SCREEN);
+                main.changeScreen(Commons.CAR_GAME_SCREEN);
             }
         });
 

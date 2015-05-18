@@ -112,8 +112,6 @@ public class ConnectionScreen extends ScaledScreen {
 
         stage.addActor(settingsImage);
 
-        // stage = new Stage();
-
         // This font is too ugly when scaled up
         BitmapFont fontType = new BitmapFont();
         fontType.scale(1.3f);
@@ -274,9 +272,13 @@ public class ConnectionScreen extends ScaledScreen {
         // Makes logo bounce a little bit so that user knows that game hasn't freezed or crashed :)
         varsomLogo.setPosition(varsomLogo.getX(), varsomLogo.getY() + 0.3f * (float) Math.sin(frameCounter));
 
-        //Check if we have connected we should change to the controllerScreen
+        //Check if we have connected
         if(NetworkListener.connected) {// && mpClient.client.isConnected()) {
-            main.changeScreen(Commons.NAVIGATION_SCREEN);
+            //Check if the server is joinable
+            if(NetworkListener.standby)
+                main.changeScreen(Commons.STANDBY_SCREEN);
+            else
+                main.changeScreen(Commons.VARSOM_SYSTEM_SCREEN);
         }
         // Sprite renders
         spriteBatch.setProjectionMatrix(camera.combined);
