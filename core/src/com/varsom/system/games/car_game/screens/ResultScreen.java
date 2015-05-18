@@ -24,7 +24,7 @@ import java.util.StringTokenizer;
 
 import java.util.Comparator;
 
-public class WinScreen extends ScaledScreen {
+public class ResultScreen extends ScaledScreen {
 
     protected VarsomSystem varsomSystem;
     private ArrayList<String> carOrder;
@@ -39,7 +39,7 @@ public class WinScreen extends ScaledScreen {
 
     private String playerScores;
 
-    public WinScreen(VarsomSystem varsomSystem, String names) {
+    public ResultScreen(VarsomSystem varsomSystem, String names) {
         this.varsomSystem = varsomSystem;
         carOrder = new ArrayList<String>();
         StringTokenizer st = new StringTokenizer(names, "\n");

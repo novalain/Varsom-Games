@@ -358,7 +358,10 @@ public class GameScreen implements Screen {
 
     private void weHaveAWinner(){
         varsomSystem.getMPServer().gameRunning(false);
-        ((Game) Gdx.app.getApplicationListener()).setScreen(new WinScreen(varsomSystem,sortedCars2String()));
+        ((Game) Gdx.app.getApplicationListener()).setScreen(new ResultScreen(varsomSystem,sortedCars2String()));
+
+        //new clients can join now when the game is over
+        varsomSystem.getMPServer().setJoinable(true);
 
     }
 
