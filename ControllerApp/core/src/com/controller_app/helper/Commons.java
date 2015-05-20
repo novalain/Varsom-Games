@@ -20,4 +20,7 @@ public interface Commons{
     public static final int NO_SERVER_FOUND = 2;
     public static final int DO_YOU_WANT_TO_EXIT = 3;
 
+    // Vibration time for clicks (in millis)
+    public static final int VIBRATION_TIME = 30;
+
 }

@@ -192,7 +192,7 @@ public class CarGameScreen extends ScaledScreen {
         btnPause.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.input.vibrate(main.getVarsomSystemScreen().getVibTime());
+                Gdx.input.vibrate(Commons.VIBRATION_TIME);
                 //send pause request to server with true
                 mpClient.sendPause(true);
 

@@ -138,7 +138,7 @@ public class ConnectionScreen extends ScaledScreen {
         anim = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("system/img/loading.gif").read());
 
         // Adds listener to the whole screen
-        // TODO Obviusly overrides settings clicklistener.. fix this göra så att listener läggs till i en ny actor istället
+        // TODO Obviously overrides settings clicklistener.. fix this göra så att listener läggs till i en ny actor istället
         background.addListener(new ClickListener() {
 
             @Override
@@ -146,8 +146,7 @@ public class ConnectionScreen extends ScaledScreen {
 
                 Gdx.app.log("in MenuScreen", "pressed controller");
 
-                Gdx.input.vibrate(main.getVarsomSystemScreen().getVibTime());
-
+                Gdx.input.vibrate(Commons.VIBRATION_TIME);
 
                 testThread = new Thread(new Runnable() {
                     @Override
@@ -264,8 +263,6 @@ public class ConnectionScreen extends ScaledScreen {
                         text("Are you sure you want to exit?");
                         button("No", "hide");
                         button("Yes", "Exit");
-
-
                     }
 
                     @Override
@@ -302,7 +299,7 @@ public class ConnectionScreen extends ScaledScreen {
         varsomLogo.setPosition(varsomLogo.getX(), varsomLogo.getY() + 0.3f * (float) Math.sin(frameCounter));
 
         //Check if we have connected
-        if(NetworkListener.connected) {// && mpClient.client.isConnected()) {
+        if(mpClient.client.isConnected()) {
             //Check if the server is joinable
             if(NetworkListener.standby)
                 main.changeScreen(Commons.STANDBY_SCREEN);

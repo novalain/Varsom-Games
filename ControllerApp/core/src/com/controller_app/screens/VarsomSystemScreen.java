@@ -3,14 +3,14 @@ package com.controller_app.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.controller_app.Main;
 import com.controller_app.helper.Commons;
@@ -18,30 +18,41 @@ import com.controller_app.helper.DPad;
 import com.controller_app.helper_classes.ScaledScreen;
 import com.controller_app.network.MPClient;
 
+//TODO: Set the alpha values of the masks to 0.
+//TODO: Fix absolute pixel values.
+
 public class VarsomSystemScreen extends ScaledScreen {
-    private TextButton btnUp, btnDown, btnRight, btnLeft, btnSettings, btnSelect, btnDisconnect, btnController;
-    private Table table;
+
     private TextureAtlas atlas;
     private Skin skin;
     private BitmapFont font;
     private FreeTypeFontGenerator generator;
-    private SpriteBatch batch;
-    private int vibTime = 30;
 
     private MPClient mpClient;
     private Main main;
 
-    public VarsomSystemScreen(Main m, MPClient mpc){
+    // temporary solution with Images as masks
+    private Image btnDPad, btnSettings, btnSelect, btnBack;
+    private Image logo, maskUp, maskDown, maskRight, maskLeft;
+
+    public VarsomSystemScreen(Main m, MPClient mpc) {
         super();
         this.main = m;
         mpClient = mpc;
-
-        batch = new SpriteBatch();
 
         generateFonts(); // call to all generating functions, have to be called in this order!
         generateSkin();
         generateUI();
 
+        stage.addActor(btnDPad);
+        stage.addActor(btnSettings);
+        stage.addActor(btnSelect);
+        stage.addActor(btnBack);
+        stage.addActor(logo);
+        stage.addActor(maskUp);
+        stage.addActor(maskDown);
+        stage.addActor(maskRight);
+        stage.addActor(maskLeft);
     }
 
     void generateFonts() {
@@ -72,104 +83,131 @@ public class VarsomSystemScreen extends ScaledScreen {
     }
 
     void generateUI() {
+        // The dPad-image
+        btnDPad = new Image(new Texture(Gdx.files.internal("system/img/varsom_dpad_gray_center_25.png")));
+        btnDPad.setPosition(40, 102);
 
-        skin.getFont("default-font").scale(4f);
-        table = new Table(skin);
 
-        btnUp = new TextButton("Up", skin);
-        btnDown = new TextButton("Down", skin);
-        btnLeft = new TextButton("Left", skin);
-        btnRight = new TextButton("Right", skin);
-        btnSelect = new TextButton("Select", skin);
-        btnSettings = new TextButton("Settings", skin);
-        btnDisconnect = new TextButton("Disc", skin);
-        btnController = new TextButton("Cont", skin);
-
-        btnUp.addListener(new ClickListener() {
+        // The back button w. functionality
+        btnBack = new Image(new Texture(Gdx.files.internal("system/img/varsom_backButton_25.png")));
+        btnBack.setPosition(1055, 16);
+        btnBack.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.input.vibrate(vibTime);
-                mpClient.sendDPadData(0, DPad.UP, false);
-            }
-        });
-        btnDown.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Gdx.input.vibrate(vibTime);
-                mpClient.sendDPadData(0, DPad.DOWN, false);
-            }
-        });
-        btnLeft.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Gdx.input.vibrate(vibTime);
-                mpClient.sendDPadData(DPad.LEFT,0, false);
-            }
-        });
-        btnRight.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Gdx.input.vibrate(vibTime);
-                mpClient.sendDPadData(DPad.RIGHT,0, false);
-            }
-        });
-        btnSelect.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Gdx.input.vibrate(vibTime);
-                mpClient.sendDPadData(0,0,DPad.SELECT);
-            }
-        });
-        btnSettings.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Gdx.input.vibrate(vibTime);
-                main.changeScreen(Commons.SETTINGS_SCREEN);
-            }
-        });
-        btnDisconnect.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Gdx.input.vibrate(vibTime);
+                Gdx.input.vibrate(10);
                 main.getConnectionScreen().disconnect();
                 main.changeScreen(Commons.CONNECTION_SCREEN);
             }
         });
-        btnController.addListener(new ClickListener() {
+
+
+        // The select button w. functionality
+        btnSelect = new Image(new Texture(Gdx.files.internal("system/img/varsom_checkButton_25.png")));
+        btnSelect.setPosition(Commons.WORLD_WIDTH - btnSelect.getWidth(), 400);
+        btnSelect.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.input.vibrate(vibTime);
-                main.changeScreen(Commons.CAR_GAME_SCREEN);
+                Gdx.input.vibrate(10);
+                mpClient.sendDPadData(0, 0, DPad.SELECT);
             }
         });
 
-        table.debug();
-        table.row();
-        table.add(btnDisconnect).padBottom(50).colspan(2).size(200, 200).left();
-        table.add(btnController).padBottom(50).colspan(1).size(200, 200).center();
-        table.add(btnSettings).padBottom(50).colspan(2).size(200, 200).right();
 
-        table.row();
-        table.add(btnUp).padBottom(10).colspan(5).center().size(200,200);
-        table.row();
-        table.add(btnLeft).size(200, 200).colspan(2).right();
-        table.add(btnSelect).size(200, 200).colspan(1).center().padBottom(10);
-        table.add(btnRight).size(200, 200).colspan(2).right();
-        table.row();
-        table.add(btnDown).colspan(5).center().size(200, 200);
+        // The settings button w. functionality
+        btnSettings = new Image(new Texture(Gdx.files.internal("system/img/varsom_settingsButton_25.png")));
+        btnSettings.setPosition(910, 880);
+        btnSettings.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
 
-        table.setX(Commons.WORLD_WIDTH / 2 - table.getPrefWidth() / 2);
-        table.setY(Commons.WORLD_HEIGHT / 2 - table.getPrefHeight() / 2);
+                main.changeScreen(Commons.SETTINGS_SCREEN);
+            }
+        });
 
-        table.pack();
-        stage.addActor(table);
 
-        System.out.println("image: " + table.getPrefWidth() + " , " + table.getPrefHeight());
+        // The logo
+        logo = new Image(new Texture(Gdx.files.internal("system/img/varsom_logo_dassig_25.png")));
+        logo.setPosition(Commons.WORLD_WIDTH - logo.getWidth(), 0);
+
+
+        // The clickable mask for left
+        maskLeft = new Image(new Texture(Gdx.files.internal("system/img/varsom_logo_dassig_25.png")));
+        maskLeft.setWidth(300);
+        maskLeft.setHeight(300);
+        maskLeft.setPosition(40, 420);
+        maskLeft.addAction(Actions.alpha(0.0f, 0.0f));
+        maskLeft.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                Gdx.input.vibrate(Commons.VIBRATION_TIME);
+                return false;
+            }
+
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                mpClient.sendDPadData(DPad.LEFT, 0, false);
+            }
+        });
+
+
+        // The clickable mask for right
+        maskRight = new Image(new Texture(Gdx.files.internal("system/img/varsom_logo_dassig_25.png")));
+        maskRight.setWidth(300);
+        maskRight.setHeight(300);
+        maskRight.setPosition(653, 420);
+        maskRight.addAction(Actions.alpha(0.0f, 0.0f));
+        maskRight.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                Gdx.input.vibrate(Commons.VIBRATION_TIME);
+                return false;
+            }
+
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                mpClient.sendDPadData(DPad.RIGHT, 0, false);
+            }
+        });
+
+
+        // The clickable mask for up
+        maskUp = new Image(new Texture(Gdx.files.internal("system/img/varsom_logo_dassig_25.png")));
+        maskUp.setWidth(300);
+        maskUp.setHeight(300);
+        maskUp.setPosition(340, 700);
+        maskUp.addAction(Actions.alpha(0.0f, 0.0f));
+        maskUp.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                Gdx.input.vibrate(Commons.VIBRATION_TIME);
+                return false;
+            }
+
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                mpClient.sendDPadData(0, DPad.UP, false);
+            }
+        });
+
+
+        // The clickable mask for down
+        maskDown = new Image(new Texture(Gdx.files.internal("system/img/varsom_logo_dassig_25.png")));
+        maskDown.setWidth(300);
+        maskDown.setHeight(300);
+        maskDown.setPosition(340, 120);
+        maskDown.addAction(Actions.alpha(0.0f, 0.0f));
+        maskDown.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                Gdx.input.vibrate(Commons.VIBRATION_TIME);
+                return false;
+            }
+
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                mpClient.sendDPadData(0, DPad.DOWN, false);
+            }
+        });
     }
 
     @Override
     public void show() {
-
     }
 
     @Override
@@ -177,12 +215,6 @@ public class VarsomSystemScreen extends ScaledScreen {
 
         Gdx.gl.glClearColor(0f, 0f, 0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        // Sprite renders
-        batch.setProjectionMatrix(camera.combined);
-        batch.begin();
-
-        batch.end();
 
         //changes screen if the server has told us to
         main.handleController();
@@ -192,22 +224,18 @@ public class VarsomSystemScreen extends ScaledScreen {
 
     @Override
     public void resize(int width, int height) {
-
     }
 
     @Override
     public void pause() {
-
     }
 
     @Override
     public void resume() {
-
     }
 
     @Override
     public void hide() {
-
     }
 
     @Override
@@ -215,13 +243,5 @@ public class VarsomSystemScreen extends ScaledScreen {
         font.dispose();
         atlas.dispose();
         skin.dispose();
-    }
-
-    public void reset(){
-
-    }
-
-    public int getVibTime(){
-        return vibTime;
     }
 }

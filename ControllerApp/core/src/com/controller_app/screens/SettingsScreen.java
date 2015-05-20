@@ -146,7 +146,7 @@ public class SettingsScreen extends ScaledScreen {
         btnBack.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.input.vibrate(main.getVarsomSystemScreen().getVibTime());
+                Gdx.input.vibrate(Commons.VIBRATION_TIME);
                 updateConnectionName();
                 update = true;
                 main.getMpClient().updateNameOnServer(playerName.getText());
