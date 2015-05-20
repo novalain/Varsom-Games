@@ -73,68 +73,28 @@ public class VarsomMenu extends ScaledScreen{
                 if (delta.x > 20 && !swipedRight && !swipedLeft) {
 
                     stage.cancelTouchFocus();
-
                     handleMenuLeft();
-
-                    swipedRight = true;
-
-
-                    if(row == 0)
-                        return;
-
-                    if(currentGame == 0)
-                        currentGame = 4;
-                    else if(currentGame == 5)
-                        currentGame = 9;
-                    else
-                        currentGame--;
 
                 }
                 // Swiped left
                 else if (delta.x < -20 && !swipedRight && !swipedLeft) {
 
                     stage.cancelTouchFocus();
-
                     handleMenuRight();
-
-                    swipedLeft = true;
-
-
-                    if(row == 0)
-                        return;
-
-                    if(currentGame == 4)
-                        currentGame = 0;
-                    else if(currentGame == 9)
-                        currentGame = 5;
-                    else
-                        currentGame++;
-
 
                 }
                 // Swiped down
                 else if (delta.y < -20 && !swipedRight && !swipedLeft && row > 0){
 
-                    handleMenuDown();
-
-                    if(row == 2)
-                        currentGame-=5;
-
-                    swipedDown = true;
                     stage.cancelTouchFocus();
+                    handleMenuUp();
 
                 }
                 // Swiped up
                 else if(delta.y > 20 && !swipedRight && !swipedLeft && row < 2){
 
-                    handleMenuUp();
-
-                    if(row == 1)
-                        currentGame+=5;
-
-                    //row++;
-                    swipedUp = true;
                     stage.cancelTouchFocus();
+                    handleMenuDown();
 
                 }
 
