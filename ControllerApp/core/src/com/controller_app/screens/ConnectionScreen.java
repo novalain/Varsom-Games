@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
@@ -32,7 +33,7 @@ public class ConnectionScreen extends ScaledScreen {
 
     private Texture logo;
     private MPClient mpClient;
-    private Label text, text2;
+    private Label text, text2, text3;
     private Animation anim;
     private float frameCounter = 0;
 
@@ -40,6 +41,7 @@ public class ConnectionScreen extends ScaledScreen {
     private Skin skin;
     private Image varsomLogo;
     private BitmapFont font;
+    private Actor background;
 
     private FreeTypeFontGenerator generator;
     private SpriteBatch spriteBatch;
@@ -58,6 +60,9 @@ public class ConnectionScreen extends ScaledScreen {
         mpClient.setConnectionScreen(this);
 
         logo = new Texture(Gdx.files.internal("images/logo.png"));
+        background = new Actor();
+        background.setSize(Commons.WORLD_WIDTH, Commons.WORLD_HEIGHT);
+        stage.addActor(background);
 
         // font generator
         generateFonts();
@@ -121,6 +126,7 @@ public class ConnectionScreen extends ScaledScreen {
         Label.LabelStyle style = new Label.LabelStyle(fontType, Color.WHITE);
         text = new Label("Welcome!", style);
         text2 = new Label("Set up server and touch anywhere to connect", style);
+        text3 = new Label("Press to reconnect", style);
         //text.setPosition(Commons.WORLD_WIDTH / 2 - text.getWidth() / 2, Commons.WORLD_HEIGHT - 200);
 
 
@@ -129,12 +135,13 @@ public class ConnectionScreen extends ScaledScreen {
 
         // Adds listener to the whole screen
         // TODO Obviusly overrides settings clicklistener.. fix this göra så att listener läggs till i en ny actor istället
-        stage.addListener(new ClickListener() {
+        background.addListener(new ClickListener() {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
                 Gdx.app.log("in MenuScreen", "pressed controller");
+                mpClient.newThread();
 
                 new Thread(new Runnable() {
                     @Override
@@ -225,7 +232,7 @@ public class ConnectionScreen extends ScaledScreen {
 
                     @Override
                     protected void result(final Object object) {
-
+                        text2.addAction(Actions.sequence(Actions.alpha(1f, 0.4f)));
 
                     }
 
