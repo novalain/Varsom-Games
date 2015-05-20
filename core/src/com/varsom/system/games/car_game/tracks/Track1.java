@@ -38,7 +38,7 @@ public class Track1 extends Track{
     // Create objects that are unique for this track
     private void createObstacles(){
         int hrf = 5; //higherResFactor
-      //Static physical objects
+        //Static physical objects
         TireObstacle tire  = new TireObstacle(new Vector2(  0.0f, -6.0f), 0, 1.5f, world);
         TireObstacle tire2 = new TireObstacle(new Vector2(  0.0f,  1.6f), 0, 0.5f, world);
         TireObstacle tire3 = new TireObstacle(new Vector2(-13.0f,  0.2f), 0, 0.5f, world);

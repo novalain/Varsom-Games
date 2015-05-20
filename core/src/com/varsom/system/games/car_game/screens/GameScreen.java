@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -20,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.varsom.system.Commons;
 import com.varsom.system.VarsomSystem;
 import com.varsom.system.games.car_game.gameobjects.Car;
 import com.varsom.system.games.car_game.tracks.Track;
@@ -47,6 +49,9 @@ public class GameScreen implements Screen {
     private OrthographicCamera camera;
     final float CAMERA_POS_INTERPOLATION = 0.1f;
     final float CAMERA_ROT_INTERPOLATION = 0.015f;
+
+    private float newCamPosX;
+    private float newCamPosY;
 
     private final float TIMESTEP = 1 / 60f;
     private final int VELOCITY_ITERATIONS = 8, POSITION_ITERATIONS = 3;
@@ -78,15 +83,21 @@ public class GameScreen implements Screen {
     protected int NUMBER_OF_PLAYERS;
     private String diePulse;
 
+    int SCREEN_WIDTH = Gdx.graphics.getWidth();
+    int SCREEN_HEIGHT = Gdx.graphics.getHeight();
+
+    //for start sequence
+    private boolean zoomedIn = false;
+    private boolean startSequenceDone = false;
+    private int NoOfCarToShowName = 0;
+    private Label labelPlayerName;
+
     public GameScreen(int level, final VarsomSystem varsomSystem) {
         this.varsomSystem = varsomSystem;
         varsomSystem.setActiveStage(stage);
         this.level = level;
         world = new World(new Vector2(0f, 0f), true);
         debugRenderer = new Box2DDebugRenderer();
-
-        int SCREEN_WIDTH = Gdx.graphics.getWidth();
-        int SCREEN_HEIGHT = Gdx.graphics.getHeight();
 
         NUMBER_OF_PLAYERS = this.varsomSystem.getServer().getConnections().length;
 
@@ -122,7 +133,7 @@ public class GameScreen implements Screen {
         //TODO /100 should probably be changed
         camera = new OrthographicCamera(SCREEN_WIDTH/100,SCREEN_HEIGHT/100);
         //TODO camera.position.set(leaderCar.getPointOnTrack(), 0);
-        camera.position.set(leaderCar.getPointOnTrack(), 0);
+        camera.position.set(activeCars.get(0).getPosition().x, activeCars.get(0).getPosition().y, 0);
         camera.rotate((float)Math.toDegrees(leaderCar.getRotationTrack())-180);
         camera.zoom = 2.f; // can be used to see the entire track
         camera.update();
@@ -152,10 +163,13 @@ public class GameScreen implements Screen {
         Label.LabelStyle style = new Label.LabelStyle(fontType, Color.WHITE);
 
         labelPause = new Label(pauseMessage, style);
-        labelPause.setPosition(0, 0);
+        labelPause.setPosition(SCREEN_WIDTH / 2 - labelPause.getWidth() / 2, SCREEN_HEIGHT / 2 - labelPause.getHeight() / 2);
 
-        labelPause.setPosition(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+        labelPlayerName = new Label("Player name", style);
+        labelPlayerName.setPosition(SCREEN_WIDTH / 2 - labelPlayerName.getWidth() / 2, SCREEN_HEIGHT / 2 + labelPlayerName.getHeight());
+
         stage.addActor(labelPause);
+        stage.addActor(labelPlayerName);
 
         Gdx.input.setInputProcessor(stage);
 
@@ -192,19 +206,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0.7f, 0.2f, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // If Exit was pressed on a client
-        if (NetworkListener.goBack) {
-            Gdx.app.log("in GameScreen", "go back to main menu");
-            NetworkListener.goBack = false;
-
-            //new clients can join now when the game is over
-            varsomSystem.getMPServer().setJoinable(true);
-
-            ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu(varsomSystem));
-
-            //dispose(); ??
-        }
-
+        handleExit();
         handleCountdownAndPause();
         batch.setProjectionMatrix(camera.combined);
         track.addToRenderBatch(batch, camera);
@@ -213,6 +215,7 @@ public class GameScreen implements Screen {
 
         // Here goes the all the updating / game logic
         if(!paused){
+            handleStartSequence();
 
             world.step(TIMESTEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 
@@ -260,8 +263,18 @@ public class GameScreen implements Screen {
 
     private void updateCamera() {
         leaderCar = track.getLeaderCar();
-        float newCamPosX = (leaderCar.getPointOnTrack().x - camera.position.x);
-        float newCamPosY = (leaderCar.getPointOnTrack().y - camera.position.y);
+
+        //if start sequence is done, use the normal game logic for the camera
+        if(startSequenceDone) {
+            newCamPosX = (leaderCar.getPointOnTrack().x - camera.position.x);
+            newCamPosY = (leaderCar.getPointOnTrack().y - camera.position.y);
+        }
+        //else focus on the cars one by one
+        else {
+            newCamPosX = (activeCars.get(NoOfCarToShowName).getPosition().x - camera.position.x);
+            newCamPosY = (activeCars.get(NoOfCarToShowName).getPosition().y - camera.position.y);
+        }
+
         Vector2 newPos = new Vector2(camera.position.x + newCamPosX * CAMERA_POS_INTERPOLATION, camera.position.y + newCamPosY * CAMERA_POS_INTERPOLATION);
         //Gdx.app.log("CAMERA","Camera position: " + camera.position);
         if (newPos.x == Float.NaN || newPos.y == Float.NaN) {
@@ -378,7 +391,7 @@ public class GameScreen implements Screen {
         for(int i = 0; i < sortedCars.size(); i++){
             a += sortedCars.get(i).getID() + " ";
         }
-        System.out.println(a);
+        //System.out.println(a);
     }
 
     private String sortedCars2String(){
@@ -404,6 +417,60 @@ public class GameScreen implements Screen {
             diePulse += " 5 " + pause;
         }
         System.out.println("PULSE: = " + diePulse);
+    }
+
+    public void handleExit(){
+        // If Exit was pressed on a client
+        if (NetworkListener.goBack) {
+            Gdx.app.log("in GameScreen", "go back to main menu");
+            NetworkListener.goBack = false;
+
+            //new clients can join now when the game is over
+            varsomSystem.getMPServer().setJoinable(true);
+
+            ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu(varsomSystem));
+
+            //dispose(); ??
+        }
+    }
+
+    public void handleStartSequence(){
+        //When track is created
+        //for each car in the array
+        if(!startSequenceDone) {
+            //display name
+            labelPlayerName.setText(activeCars.get(NoOfCarToShowName).getConnectionName());
+
+            //zoom in
+            if (!zoomedIn) {
+                camera.zoom = camera.zoom - 0.7f * Gdx.graphics.getDeltaTime();
+                //stop zooming
+                if (camera.zoom < 0.5f) {
+                    zoomedIn = true;
+                    //vibrate players controller
+                    Car car = activeCars.get(NoOfCarToShowName);
+                    int conID = car.getConnectionID();
+                    varsomSystem.getMPServer().vibrateClient(200, conID);
+                }
+            }
+            else {
+                //zoom out
+                camera.zoom = camera.zoom + 0.7f * Gdx.graphics.getDeltaTime();
+
+                if(camera.zoom >= 2.0f) {
+                    camera.zoom = 2.0f;
+                    //switch focus to next car
+                    NoOfCarToShowName++;
+                    zoomedIn = false;
+                }
+            }
+        }
+
+        //when all cars have been shown the sequence is done
+        if(NoOfCarToShowName == activeCars.size()) {
+            startSequenceDone = true;
+            labelPlayerName.setText("");
+        }
     }
 
 }
