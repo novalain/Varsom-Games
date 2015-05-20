@@ -136,6 +136,8 @@ public class MainMenu extends ScaledScreen {
         table.add(buttonAbout).size(500, 150).padBottom(20).row();
         table.add(buttonExit).size(500, 150).padBottom(20).row();
 
+        
+
         BitmapFont fontType = new BitmapFont();
         fontType.scale(2.f);
         Label.LabelStyle style = new Label.LabelStyle(fontType, Color.WHITE);
@@ -171,7 +173,7 @@ public class MainMenu extends ScaledScreen {
         }
         updateBackground();
 
-        Gdx.gl.glClearColor(122 / 255.0f, 209 / 255.0f, 255 / 255.0f, 1);
+        Gdx.gl.glClearColor(24 / 255.0f, 102 / 255.0f, 115 / 255.0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         handleClients();
