@@ -25,6 +25,8 @@ import com.controller_app.helper_classes.ScaledScreen;
 import com.controller_app.network.MPClient;
 import com.controller_app.network.NetworkListener;
 
+import java.io.IOException;
+
 public class ConnectionScreen extends ScaledScreen {
 
     private Table table;
@@ -42,6 +44,8 @@ public class ConnectionScreen extends ScaledScreen {
     private Image varsomLogo;
     private BitmapFont font;
     private Actor background;
+
+    private Thread testThread;
 
     private FreeTypeFontGenerator generator;
     private SpriteBatch spriteBatch;
@@ -145,7 +149,7 @@ public class ConnectionScreen extends ScaledScreen {
                 Gdx.input.vibrate(main.getVarsomSystemScreen().getVibTime());
 
 
-                new Thread(new Runnable() {
+                testThread = new Thread(new Runnable() {
                     @Override
                     public void run() {
                         // do something important here, asynchronously to the rendering thread
@@ -153,7 +157,9 @@ public class ConnectionScreen extends ScaledScreen {
                         System.out.println("In new thread loading...");
                         connect();
                     }
-                }).start();
+                });
+
+                testThread.start();
 
                 text.addAction(Actions.sequence(Actions.alpha(0f, 0.4f)));
                 text2.addAction(Actions.sequence(Actions.alpha(0, 0.4f), Actions.run(new Runnable() {
@@ -199,6 +205,7 @@ public class ConnectionScreen extends ScaledScreen {
         table.setY(Commons.WORLD_HEIGHT / 2 - table.getPrefHeight() / 2);
 
         table.pack();
+        table.addListener(background.getListeners().get(0));
         stage.addActor(table);
 
         System.out.println("image: " + table.getPrefWidth() + " , " + table.getPrefHeight());
@@ -210,14 +217,23 @@ public class ConnectionScreen extends ScaledScreen {
 
         switch(s){
             case Commons.BAD_CONNECTION:
+                showGif = false;
             new Dialog("Error", skin) {
                 {
                     text("It's seems that your connection sucks");
-                    button("Ok");
+                    button("Reconnect");
                 }
 
                 @Override
                 protected void result(final Object object) {
+                    //mpClient.client.start();
+                    text2.addAction(Actions.sequence(Actions.alpha(1f, 0.4f)));
+                    testThread.interrupt();
+                    try {
+                        mpClient.reconnect();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
                 }
 
@@ -235,7 +251,8 @@ public class ConnectionScreen extends ScaledScreen {
                     @Override
                     protected void result(final Object object) {
                         text2.addAction(Actions.sequence(Actions.alpha(1f, 0.4f)));
-
+                        testThread.interrupt();
+                        //mpClient.client.start();
                     }
 
                 }.show(stage);
