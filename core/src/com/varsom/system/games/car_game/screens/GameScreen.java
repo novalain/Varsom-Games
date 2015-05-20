@@ -6,9 +6,12 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -22,6 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.varsom.system.VarsomSystem;
 import com.varsom.system.games.car_game.gameobjects.Car;
+import com.varsom.system.games.car_game.helpers.AssetLoader;
 import com.varsom.system.games.car_game.tracks.Track;
 import com.varsom.system.games.car_game.tracks.Track1;
 import com.varsom.system.games.car_game.tracks.Track2;
@@ -51,7 +55,7 @@ public class GameScreen implements Screen {
     private final float TIMESTEP = 1 / 60f;
     private final int VELOCITY_ITERATIONS = 8, POSITION_ITERATIONS = 3;
 
-    private SpriteBatch batch;
+    private SpriteBatch batch, redlightBatch;
 
     private Track track;
     private float trackLength;
@@ -77,6 +81,12 @@ public class GameScreen implements Screen {
     protected VarsomSystem varsomSystem;
     protected int NUMBER_OF_PLAYERS;
     private String diePulse;
+
+    private float stateTime;
+
+   // for redlights
+    private Animation redlightAnimation;
+    private TextureRegion currentFrame;
 
     public GameScreen(int level, final VarsomSystem varsomSystem) {
         this.varsomSystem = varsomSystem;
@@ -130,6 +140,13 @@ public class GameScreen implements Screen {
         batch = new SpriteBatch();
         batch.setProjectionMatrix(camera.combined);
 
+        // handling batch and animation time for redlights
+        redlightBatch = new SpriteBatch();
+        redlightBatch.setProjectionMatrix(camera.combined);
+        stateTime = 0f;
+        redlightAnimation = new Animation(1.f, AssetLoader.redlightsFrames);
+        currentFrame = new TextureRegion();
+
         // pause menu button
         table.top().left();
         table.add(buttonLeave).size(400, 75).row();
@@ -171,6 +188,7 @@ public class GameScreen implements Screen {
 
     private void handleCountdownAndPause() {
         paused = NetworkListener.pause;
+        stateTime += Gdx.graphics.getDeltaTime();
 
         countDownTimer -= Gdx.graphics.getDeltaTime();
         float secondsLeft = (int) countDownTimer % 60;
@@ -178,11 +196,16 @@ public class GameScreen implements Screen {
         // Render some kick-ass countdown label
         if (secondsLeft > 0) {
             paused = true;
-            //Gdx.app.log("COUNTDOWN: ", (int)secondsLeft + "");
+            currentFrame = redlightAnimation.getKeyFrame(stateTime, true);
+            redlightBatch.begin();
+            redlightBatch.draw(currentFrame, Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
+            redlightBatch.end();
+            // render redlight here!
+         //   currentFrame = walkAnimation.getKeyFrame(stateTime, true);
         }
         /*else if(secondsLeft == 0){
-            paused = false;
-        }*/
+        paused = false;
+    }*/
 
     }
 
@@ -194,7 +217,7 @@ public class GameScreen implements Screen {
 
         // If Exit was pressed on a client
         if (NetworkListener.goBack) {
-            Gdx.app.log("in GameScreen", "go back to main menu");
+         //   Gdx.app.log("in GameScreen", "go back to main menu");
             NetworkListener.goBack = false;
 
             //new clients can join now when the game is over
