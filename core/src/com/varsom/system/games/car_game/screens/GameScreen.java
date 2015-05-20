@@ -222,22 +222,24 @@ public class GameScreen implements Screen {
             String temp = "Standings:\n";
 
             // Check if cars is inside the boundaries of the camera
-            for(int i = 0; i < activeCars.size(); i++){
+            //but not if the start sequence is playing
+            if(startSequenceDone) {
+                for (int i = 0; i < activeCars.size(); i++) {
 
-                //TODO Fix hardcoded values of frustum
-                if(!camera.frustum.boundsInFrustum(activeCars.get(i).getPosition().x,activeCars.get(i).getPosition().y,0,0.5f,1f,0.1f)){
-                    carLost(i);
+                    //TODO Fix hardcoded values of frustum
+                    if (!camera.frustum.boundsInFrustum(activeCars.get(i).getPosition().x, activeCars.get(i).getPosition().y, 0, 0.5f, 1f, 0.1f)) {
+                        carLost(i);
 
-                    if(i != 0){
-                        i--;
+                        if (i != 0) {
+                            i--;
+                        }
+                    } else {
+                        activeCars.get(i).update(Gdx.app.getGraphics().getDeltaTime());
                     }
                 }
-                else {
-                    activeCars.get(i).update(Gdx.app.getGraphics().getDeltaTime());
-                }
+                sortCars();
+                temp += sortedCars2String();
             }
-            sortCars();
-            temp += sortedCars2String();
 
             // Next lap incoming
             if(leaderCar.getTraveledDistance() > trackLength * currentLap){
