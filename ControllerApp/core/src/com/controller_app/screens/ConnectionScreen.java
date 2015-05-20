@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
@@ -24,6 +25,8 @@ import com.controller_app.helper_classes.ScaledScreen;
 import com.controller_app.network.MPClient;
 import com.controller_app.network.NetworkListener;
 
+import java.io.IOException;
+
 public class ConnectionScreen extends ScaledScreen {
 
     private Table table;
@@ -32,7 +35,7 @@ public class ConnectionScreen extends ScaledScreen {
 
     private Texture logo;
     private MPClient mpClient;
-    private Label text, text2;
+    private Label text, text2, text3;
     private Animation anim;
     private float frameCounter = 0;
 
@@ -40,6 +43,9 @@ public class ConnectionScreen extends ScaledScreen {
     private Skin skin;
     private Image varsomLogo;
     private BitmapFont font;
+    private Actor background;
+
+    private Thread testThread;
 
     private FreeTypeFontGenerator generator;
     private SpriteBatch spriteBatch;
@@ -58,6 +64,9 @@ public class ConnectionScreen extends ScaledScreen {
         mpClient.setConnectionScreen(this);
 
         logo = new Texture(Gdx.files.internal("images/logo.png"));
+        background = new Actor();
+        background.setSize(Commons.WORLD_WIDTH, Commons.WORLD_HEIGHT);
+        stage.addActor(background);
 
         // font generator
         generateFonts();
@@ -121,6 +130,7 @@ public class ConnectionScreen extends ScaledScreen {
         Label.LabelStyle style = new Label.LabelStyle(fontType, Color.WHITE);
         text = new Label("Welcome!", style);
         text2 = new Label("Set up server and touch anywhere to connect", style);
+        text3 = new Label("Press to reconnect", style);
         //text.setPosition(Commons.WORLD_WIDTH / 2 - text.getWidth() / 2, Commons.WORLD_HEIGHT - 200);
 
 
@@ -129,15 +139,17 @@ public class ConnectionScreen extends ScaledScreen {
 
         // Adds listener to the whole screen
         // TODO Obviusly overrides settings clicklistener.. fix this göra så att listener läggs till i en ny actor istället
-        stage.addListener(new ClickListener() {
+        background.addListener(new ClickListener() {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
                 Gdx.app.log("in MenuScreen", "pressed controller");
+
                 Gdx.input.vibrate(main.getVarsomSystemScreen().getVibTime());
 
-                new Thread(new Runnable() {
+
+                testThread = new Thread(new Runnable() {
                     @Override
                     public void run() {
                         // do something important here, asynchronously to the rendering thread
@@ -145,7 +157,9 @@ public class ConnectionScreen extends ScaledScreen {
                         System.out.println("In new thread loading...");
                         connect();
                     }
-                }).start();
+                });
+
+                testThread.start();
 
                 text.addAction(Actions.sequence(Actions.alpha(0f, 0.4f)));
                 text2.addAction(Actions.sequence(Actions.alpha(0, 0.4f), Actions.run(new Runnable() {
@@ -191,6 +205,7 @@ public class ConnectionScreen extends ScaledScreen {
         table.setY(Commons.WORLD_HEIGHT / 2 - table.getPrefHeight() / 2);
 
         table.pack();
+        table.addListener(background.getListeners().get(0));
         stage.addActor(table);
 
         System.out.println("image: " + table.getPrefWidth() + " , " + table.getPrefHeight());
@@ -202,14 +217,23 @@ public class ConnectionScreen extends ScaledScreen {
 
         switch(s){
             case Commons.BAD_CONNECTION:
+                showGif = false;
             new Dialog("Error", skin) {
                 {
                     text("It's seems that your connection sucks");
-                    button("Ok");
+                    button("Reconnect");
                 }
 
                 @Override
                 protected void result(final Object object) {
+                    //mpClient.client.start();
+                    text2.addAction(Actions.sequence(Actions.alpha(1f, 0.4f)));
+                    testThread.interrupt();
+                    try {
+                        mpClient.reconnect();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
                 }
 
@@ -226,8 +250,9 @@ public class ConnectionScreen extends ScaledScreen {
 
                     @Override
                     protected void result(final Object object) {
-
-
+                        text2.addAction(Actions.sequence(Actions.alpha(1f, 0.4f)));
+                        testThread.interrupt();
+                        //mpClient.client.start();
                     }
 
                 }.show(stage);

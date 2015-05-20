@@ -41,6 +41,7 @@ public class NetworkListener extends Listener {
 
         client.sendTCP(login);
         System.out.println("You have connected.");
+        //connected = true;
 
     }
 

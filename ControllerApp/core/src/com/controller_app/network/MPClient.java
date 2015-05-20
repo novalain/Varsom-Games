@@ -37,14 +37,14 @@ public class MPClient {
         nl.init(client, this);
         client.addListener(nl);
 
-        client.start();
+
 
         System.setProperty("java.net.preferIPv4Stack", "true");
     }
 
     // get IP from user input and connects
     public void connectToServer(String ip) {
-        // Start a broadcast receiver
+        // Start a broadcast receive
         try {
             broadcastClient = new BroadcastClient();
         } catch (IOException e) {
@@ -56,6 +56,7 @@ public class MPClient {
         serverIP = broadcastClient.getServerIP();
 
         System.out.print("\nIP is " + serverIP + "\n");
+        client.start();
 
         if (serverIP != null && !serverIP.isEmpty()) {
 
@@ -72,8 +73,6 @@ public class MPClient {
         else {
             connectionScreen.errorMessage(Commons.NO_SERVER_FOUND);
         }
-
-
 
     }
 
@@ -213,5 +212,12 @@ public class MPClient {
         Packet.NameUpdate nameUpdate = new Packet.NameUpdate();
         nameUpdate.name = name;
         client.sendTCP(nameUpdate);
+    }
+
+    public void reconnect() throws IOException {
+        client.start();
+
+        client.reconnect();
+
     }
 }
