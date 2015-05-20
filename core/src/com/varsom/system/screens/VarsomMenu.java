@@ -418,6 +418,15 @@ public class VarsomMenu extends ScaledScreen{
 
         // Add all games
         gamesList.add(cargameImage);
+        cargameImage.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (currentGame == 0 && !swipedLeft && !swipedRight) {
+                    selectMenuItem();
+                    //Gdx.app.log("clicked", "pressed OtherGame.");
+                }
+            }
+        });
 
         for(int i = 1; i < NR_OF_GAMES; i++){
 
