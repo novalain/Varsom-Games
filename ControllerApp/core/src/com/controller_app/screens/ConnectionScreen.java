@@ -141,7 +141,9 @@ public class ConnectionScreen extends ScaledScreen {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
                 Gdx.app.log("in MenuScreen", "pressed controller");
-                mpClient.newThread();
+
+                Gdx.input.vibrate(main.getVarsomSystemScreen().getVibTime());
+
 
                 new Thread(new Runnable() {
                     @Override

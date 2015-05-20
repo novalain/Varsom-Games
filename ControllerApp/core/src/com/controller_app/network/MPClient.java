@@ -93,6 +93,7 @@ public class MPClient {
         kryo.register(Packet.VibrateClient.class);
         kryo.register(Packet.PulseVibrateClient.class);
         kryo.register(Packet.ChangeController.class);
+        kryo.register(Packet.NameUpdate.class);
     }
 
     public void sendPacket(boolean send) {
@@ -154,7 +155,7 @@ public class MPClient {
         dp.dataY = y;
         dp.select = bool;
         client.sendTCP(dp);
-        Gdx.app.log("in MPClient", "sent dPadInfo");
+        //Gdx.app.log("in MPClient", "sent dPadInfo");
     }
 
     public void setConnectionScreen(ConnectionScreen cs){
@@ -177,7 +178,7 @@ public class MPClient {
                 try {
                     while (!Thread.currentThread().isInterrupted() && closeThread) {
                         Thread.sleep(1000 /  TICKS_PER_SECOND );
-                        Gdx.app.log("Thread", "DATA IS BEING SENT!!");
+                        //Gdx.app.log("Thread", "DATA IS BEING SENT!!");
                         Packet.GamePacket packet = new Packet.GamePacket();
 
                         packet.message = carGameScreen.getDrive() + " " + carGameScreen.getReverse() + " " + carGameScreen.getRotation();
@@ -205,5 +206,12 @@ public class MPClient {
 
     public void setActiveScreenIndex(int i){
         activeScreen = i;
+    }
+
+    public void updateNameOnServer(String name){
+        //Update name on server
+        Packet.NameUpdate nameUpdate = new Packet.NameUpdate();
+        nameUpdate.name = name;
+        client.sendTCP(nameUpdate);
     }
 }

@@ -176,6 +176,7 @@ public class CarGameScreen extends ScaledScreen {
         buttonHome.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                Gdx.input.vibrate(main.getVarsomSystemScreen().getVibTime());
                 main.changeScreen(Commons.VARSOM_SYSTEM_SCREEN);
             }
         });
@@ -183,9 +184,9 @@ public class CarGameScreen extends ScaledScreen {
         buttonPause.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                Gdx.input.vibrate(main.getVarsomSystemScreen().getVibTime());
                 //send pause request to server with true
                 mpClient.sendPause(true);
-                Gdx.app.log("in ControllerScreen", "pressed Pause");
 
             }
         });
@@ -193,18 +194,17 @@ public class CarGameScreen extends ScaledScreen {
         buttonPlay.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                Gdx.input.vibrate(main.getVarsomSystemScreen().getVibTime());
                 //send pause request to server with false
                 mpClient.sendPause(false);
-                Gdx.app.log("in ControllerScreen", "pressed Play");
             }
         });
 
         buttonExit.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-
+                Gdx.input.vibrate(main.getVarsomSystemScreen().getVibTime());
                 mpClient.sendExit(true);
-                Gdx.app.log("in ControllerScreen", "pressed Exit");
                 //Go back to main menu on the server
 
             }
