@@ -21,6 +21,8 @@ public class AssetLoader {
     public static Texture tireObstacleTexture,wallTexture;
     //backgrounds
     public static Texture bgTexture, testTrackTexture, testTrackMask, track2Texture, track2Mask;
+    //redlight
+    public static Texture redlightTexture;
 
     public static TextureRegion bg;
     public static TextureRegion car,tracks1,tracks2,tracks3;
@@ -28,6 +30,8 @@ public class AssetLoader {
     public static TextureRegion tex1, tex2, tex3;
 
     public static FileHandle particleFile, particleImg;
+    // animation of redlights
+    public static TextureRegion[] redlightsFrames;
 
     //KRAZY RACY MENU
     public static Texture krazyTitleTexture,
@@ -53,7 +57,7 @@ public class AssetLoader {
         pathCircleTexture = new Texture(Gdx.files.internal("car_game_assets/img/colorwheel.png"));
         // loading texture for car
         carTexture = new Texture(Gdx.files.internal("car_game_assets/img/ambulance_animation/1c.png"));
-        carTexture1 = new Texture(Gdx.files.internal("car_game_assets/img/car2.png"));
+        carTexture1 = new Texture(Gdx.files.internal("car_game_assets/img/TurtleCar.png"));
         carTexture2 = new Texture(Gdx.files.internal("car_game_assets/img/car2.png"));
         //carTexture = new Texture(Gdx.files.internal("car_game_assets/img/car.png"));
         //carTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
@@ -84,6 +88,14 @@ public class AssetLoader {
         tex1 = new TextureRegion(new Texture("car_game_assets/img/ambulance_animation/1c.png"));
         tex2 = new TextureRegion(new Texture("car_game_assets/img/ambulance_animation/2c.png"));
         tex3 = new TextureRegion(new Texture("car_game_assets/img/ambulance_animation/3c.png"));
+
+        // For animation of redlights
+        redlightTexture = new Texture(Gdx.files.internal("car_game_assets/img/trafficLights.png"));
+        redlightsFrames = new TextureRegion[4];
+        redlightsFrames[3] = new TextureRegion(redlightTexture, 0,0,redlightTexture.getWidth(), redlightTexture.getHeight()/4);
+        redlightsFrames[2] = new TextureRegion(redlightTexture, 0,redlightTexture.getHeight()/4,redlightTexture.getWidth(), redlightTexture.getHeight()/4);
+        redlightsFrames[1] = new TextureRegion(redlightTexture, 0, redlightTexture.getHeight()/2, redlightTexture.getWidth(), redlightTexture.getHeight()/4);
+        redlightsFrames[0] = new TextureRegion(redlightTexture, 0, 3*(redlightTexture.getHeight()/4), redlightTexture.getWidth(), redlightTexture.getHeight()/4);
 
         // Texture size of tire-tracks.jpg is 112*289 px
        /* tracks1 = new TextureRegion(tireTrackTexture, 0,      0, 112, 96f);
