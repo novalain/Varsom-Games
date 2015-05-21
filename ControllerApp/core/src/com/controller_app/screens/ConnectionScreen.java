@@ -217,7 +217,7 @@ public class ConnectionScreen extends ScaledScreen {
         switch(s){
             case Commons.BAD_CONNECTION:
                 showGif = false;
-            new Dialog("Error", skin) {
+            new Dialog("", skin) {
                 {
                     text("It's seems that your connection sucks");
                     button("Reconnect");
@@ -241,7 +241,7 @@ public class ConnectionScreen extends ScaledScreen {
 
             case Commons.NO_SERVER_FOUND:
                 showGif = false;
-                new Dialog("Error", skin) {
+                new Dialog("", skin) {
                     {
                         text("Could not find a server");
                         button("Ok");
@@ -258,7 +258,7 @@ public class ConnectionScreen extends ScaledScreen {
                 break;
 
             case Commons.DO_YOU_WANT_TO_EXIT:
-                new Dialog("Exit", skin){
+                new Dialog("", skin){
                     {
                         text("Are you sure you want to exit?");
                         button("No", "hide");
