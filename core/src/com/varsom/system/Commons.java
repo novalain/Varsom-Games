@@ -1,5 +1,7 @@
 package com.varsom.system;
 
+import com.badlogic.gdx.Gdx;
+
 public class Commons {
 
     // A nice singleton
