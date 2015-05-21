@@ -1,6 +1,6 @@
 {
     "com.badlogic.gdx.graphics.g2d.BitmapFont": {
-        "font": { "file": "car_game_assets/fonts/font2.fnt" },
+        "font": { "file": "car_game_assets/fonts/badaboom.fnt" },
     },
     "com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle": {
         "default": { "down": "blue_button01.9" , "up": "red_button12", "font": font, "pressedOffsetY": -4 }

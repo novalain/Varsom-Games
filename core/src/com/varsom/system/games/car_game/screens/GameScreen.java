@@ -6,24 +6,26 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.varsom.system.Commons;
 import com.varsom.system.VarsomSystem;
 import com.varsom.system.games.car_game.gameobjects.Car;
+import com.varsom.system.games.car_game.helpers.AssetLoader;
 import com.varsom.system.games.car_game.tracks.Track;
 import com.varsom.system.games.car_game.tracks.Track1;
 import com.varsom.system.games.car_game.tracks.Track2;
@@ -38,8 +40,10 @@ public class GameScreen implements Screen {
     public static int level;
 
     // For countdown
-    private static float countDownTimer = 1.0f;
+    final static float COUNTDOWNTIME = 8;
+    private static float countDownTimer = COUNTDOWNTIME;
     private static boolean paused = true;
+    private boolean driving = false;
 
     // Class variables
     private World world;
@@ -67,8 +71,7 @@ public class GameScreen implements Screen {
     private Table table = new Table();
 
     //TODO Load files from AssetLoader
-    private Skin skin = new Skin(Gdx.files.internal("system/skins/menuSkin.json"),
-            new TextureAtlas(Gdx.files.internal("system/skins/menuSkin.pack")));
+    private Skin skin = AssetLoader.skin;
 
     private TextButton buttonLeave = new TextButton("Win screen", skin);
     private Label labelPause;
@@ -83,6 +86,12 @@ public class GameScreen implements Screen {
     protected int NUMBER_OF_PLAYERS;
     private String diePulse;
 
+   // variables for redlights
+    private Animation redlightAnimation;
+    private Image redLight;
+    private float stateTime;
+
+    // constants for screen
     int SCREEN_WIDTH = Gdx.graphics.getWidth();
     int SCREEN_HEIGHT = Gdx.graphics.getHeight();
 
@@ -181,22 +190,49 @@ public class GameScreen implements Screen {
             }
         });
 
+        // handling batch and animation time for redlights
+        stateTime = 0f; // setting a timer for accessing the images from assetloader
+        redlightAnimation = new Animation(1.f, AssetLoader.redlightsFrames); // importing redlight images to animation
+        redLight = new Image(); // this is the actor that will put animations on the stage
     }
 
     private void handleCountdownAndPause() {
         paused = NetworkListener.pause;
-
-        countDownTimer -= Gdx.graphics.getDeltaTime();
-        float secondsLeft = (int) countDownTimer % 60;
-
-        // Render some kick-ass countdown label
-        if (secondsLeft > 0) {
-            paused = true;
-            //Gdx.app.log("COUNTDOWN: ", (int)secondsLeft + "");
+        stateTime += Gdx.graphics.getDeltaTime();
+        if(startSequenceDone == true)
+        {
+            countDownTimer -= Gdx.graphics.getDeltaTime();
         }
-        /*else if(secondsLeft == 0){
+        else
+        {
+            countDownTimer = COUNTDOWNTIME; // the countdown should start when the zooming introduction of the cars has finished
+        }
+
+        float secondsLeft = (int) countDownTimer % 60;
+        // rendering the trafficlight
+/*        if(secondsLeft >= 5 && secondsLeft < COUNTDOWNTIME)
+        {
+            paused = true;
+            redLight.remove();
+            redLight = new Image(redlightAnimation.getKeyFrame(0, true));
+            redLight.setPosition(SCREEN_WIDTH/2 - (redLight.getWidth()/2), SCREEN_HEIGHT/2- (redLight.getHeight()/2));
+            redLight.addAction(Actions.moveBy( Gdx.graphics.getDeltaTime(),  Gdx.graphics.getDeltaTime()));
+            stage.addActor(redLight);
+        } */
+        if (secondsLeft > 0 && secondsLeft < 6)
+        {
+            paused = true;
+          //  Gdx.app.log("Secondsleft: ",""+ secondsLeft);
+            redLight.remove(); // remove the previous image if there is any
+            redLight = new Image(redlightAnimation.getKeyFrame(stateTime-1, true));
+            redLight.setPosition(SCREEN_WIDTH/2 - (redLight.getWidth()/2), SCREEN_HEIGHT/2- (redLight.getHeight()/2));
+            stage.addActor(redLight);
+        }
+        else
+        {
+            redLight.setVisible(false);
             paused = false;
-        }*/
+        }
 
     }
 
@@ -211,10 +247,12 @@ public class GameScreen implements Screen {
         batch.setProjectionMatrix(camera.combined);
         track.addToRenderBatch(batch, camera);
 
-        //debugRenderer.render(world, camera.combined);
-
         // Here goes the all the updating / game logic
         if(!paused){
+            driving = true;
+            //TODO Erase this if it is not used
+//            redLight.setVisible(false);;
+
             handleStartSequence();
 
             world.step(TIMESTEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
@@ -342,8 +380,13 @@ public class GameScreen implements Screen {
     //makes the pause menu visible if pause == true and invisible if not
     public void displayPauseMenu(boolean pause) {
         //TODO display who paused
-        labelPause.setVisible(pause);
-        buttonLeave.setVisible(pause);
+        if(driving)
+        {
+            labelPause.setVisible(pause);
+            buttonLeave.setVisible(pause);
+            driving = false;
+        }
+
 
     }
 
@@ -393,7 +436,7 @@ public class GameScreen implements Screen {
         for(int i = 0; i < sortedCars.size(); i++){
             a += sortedCars.get(i).getID() + " ";
         }
-        //System.out.println(a);
+    //    System.out.println(a);
     }
 
     private String sortedCars2String(){
@@ -424,6 +467,7 @@ public class GameScreen implements Screen {
     public void handleExit(){
         // If Exit was pressed on a client
         if (NetworkListener.goBack) {
+            driving = false;
             Gdx.app.log("in GameScreen", "go back to main menu");
             NetworkListener.goBack = false;
 
