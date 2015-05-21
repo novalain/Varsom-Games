@@ -71,8 +71,7 @@ public class GameScreen implements Screen {
     private Table table = new Table();
 
     //TODO Load files from AssetLoader
-    private Skin skin = new Skin(Gdx.files.internal("system/skins/menuSkin.json"),
-            new TextureAtlas(Gdx.files.internal("system/skins/menuSkin.pack")));
+    private Skin skin = AssetLoader.skin;
 
     private TextButton buttonLeave = new TextButton("Win screen", skin);
     private Label labelPause;

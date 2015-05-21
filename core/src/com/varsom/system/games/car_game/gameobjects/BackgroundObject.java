@@ -5,31 +5,47 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.varsom.system.Commons;
+import com.varsom.system.games.car_game.helpers.AssetLoader;
 
 public class BackgroundObject {
 
     private Vector2 pos;
-    private double speed;
+    private float speed,xdir,ydir;
+    private float rotSpeed;
 
-    private Sprite sprite;
+    private Image image;
     private Texture texture;
 
-    public BackgroundObject(Vector2 pos, String image_url) {
-        this.pos = pos;
-        speed = 0.5f;
-
+    public BackgroundObject(Image s) {
+        pos = new Vector2();
 
         try {
-            texture = new Texture(Gdx.files.internal(image_url));
-            sprite = new Sprite(texture);
-
+            image = s;
+            image.setOrigin(image.getWidth()/2,image.getHeight()/2);
         } catch (Exception e) {
             Gdx.app.error("error", "error while loading file");
         }
+
+
+
+        allNewValues();
     }
 
     public void update() {
-        pos.x += speed;
+        //image.setPosition(image.getX()+xdir*speed,image.getY()+ydir*speed);
+        image.moveBy(xdir*speed,ydir*speed);
+        image.rotateBy(rotSpeed);
+    }
+
+    public void allNewValues(){
+        speed = (float) Math.random();//0.5f;
+        xdir = 2 * (float) Math.random() -1;
+        ydir = 2 * (float) Math.random() -1;
+        image.setPosition((float) Math.random() * Commons.WORLD_WIDTH, (float) Math.random() * Commons.WORLD_HEIGHT);
+        image.setRotation((float)(360*Math.random()));
+        rotSpeed = (float) Math.random() * 3.0f;
     }
 
     public Vector2 getPos() {
@@ -40,13 +56,17 @@ public class BackgroundObject {
         this.pos = pos;
     }
 
-    public void draw(SpriteBatch sb) {
-        sb.draw(texture, pos.x, pos.y);
-    }
+    /*public void draw(SpriteBatch sb) {
+        //sb.draw(sprite, pos.x, pos.y);
+        sprite.draw(sb);
+    }*/
 
     public void setX(float x){pos.x = x;}
     public void setY(float y){pos.y = y;}
 
     public int getWidth(){return texture.getWidth();}
     public int getHeight(){return texture.getHeight();}
+    public Image getImage(){
+        return image;
+    }
 }

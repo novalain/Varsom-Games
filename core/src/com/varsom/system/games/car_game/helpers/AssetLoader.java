@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 
 /**
@@ -31,8 +33,27 @@ public class AssetLoader {
     // animation of redlights
     public static TextureRegion[] redlightsFrames;
 
+    //KRAZY RACY MENU
+    public static Texture krazyTitleTexture,
+                         krazyPlayTexture,krazyPlayDownTexture,
+                         krazyExitTexture,krazyExitDownTexture,
+                         krazyThingyTexture;
+
+    public static Skin skin;
+
 
     public static void load() {
+        //NEW MENU
+        skin = new Skin(Gdx.files.internal("car_game_assets/skins/menuSkin.json"),
+                new TextureAtlas(Gdx.files.internal("system/skins/menuSkin.pack")));
+        krazyTitleTexture = new Texture(Gdx.files.internal("car_game_assets/menu/krazyRacyText.png"));
+        krazyPlayTexture = new Texture(Gdx.files.internal("car_game_assets/menu/krazyRacyMenuPlay.png"));
+        krazyPlayDownTexture = new Texture(Gdx.files.internal("car_game_assets/menu/krazyRacyMenuPlayHover.png"));
+        krazyExitTexture = new Texture(Gdx.files.internal("car_game_assets/menu/krazyRacyMenuExit.png"));
+        krazyExitDownTexture = new Texture(Gdx.files.internal("car_game_assets/menu/krazyRacyMenuExitHover.png"));
+        krazyThingyTexture = new Texture(Gdx.files.internal("car_game_assets/menu/crazythingy.png"));
+
+
         pathCircleTexture = new Texture(Gdx.files.internal("car_game_assets/img/colorwheel.png"));
         // loading texture for car
         carTexture = new Texture(Gdx.files.internal("car_game_assets/img/ambulance_animation/1c.png"));
