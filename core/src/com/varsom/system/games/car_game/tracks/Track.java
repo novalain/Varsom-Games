@@ -184,6 +184,14 @@ public abstract class Track {
 
         bgSprite.draw(inBatch);
 
+        // Draw smoke effects
+        for(int i = 0; i < cars.length; i++){
+
+            cars[i].getSmokeEffect().draw(inBatch, Gdx.graphics.getDeltaTime());
+
+        }
+
+
         // Draw sprites that are not connected to a physical body
         for (Sprite sprite : sprites) {
             sprite.draw(inBatch);

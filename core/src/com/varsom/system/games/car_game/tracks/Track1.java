@@ -18,8 +18,6 @@ import com.varsom.system.games.car_game.helpers.AssetLoader;
 public class Track1 extends Track{
 
     //Particleeffects..
-    // TODO shouldn't this be within the 'Car' class?
-    public ParticleEffect effect;
     // This one is needed if we want to access several layers in our particlesystem
     //public ParticleEmitter emitter;
 
@@ -150,13 +148,18 @@ public class Track1 extends Track{
             for(Wheel tempWheel : cars[0].wheels) {
                 backLayer.addElement(tempWheel.body);
             }
+
+
             // Set up particlesystem, smoke.p is created in i build-in software in libgdx
             // "Smoke.p" is linked together with a sample particle.png that is found in img folder
+
             effect = new ParticleEffect();
             effect.load(AssetLoader.particleFile, AssetLoader.particleImg);
             effect.setPosition(cars[0].getBody().getPosition().x, cars[0].getBody().getPosition().y);
             effect.scaleEffect(0.01f);
             effect.start();
+
+
             */
     }
 
