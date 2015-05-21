@@ -16,7 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
  */
 public class AssetLoader {
     //car
-    public static Texture carTexture,carTexture1,carTexture2, tireTrackTexture,pathCircleTexture;
+    public static Texture carTexture,carTexture1,carTexture2, carTexture3, tireTrackTexture,pathCircleTexture;
     //obstacles
     public static Texture tireObstacleTexture,wallTexture;
     //backgrounds
@@ -59,6 +59,7 @@ public class AssetLoader {
         carTexture = new Texture(Gdx.files.internal("car_game_assets/img/ambulance_animation/1c.png"));
         carTexture1 = new Texture(Gdx.files.internal("car_game_assets/img/TurtleCar.png"));
         carTexture2 = new Texture(Gdx.files.internal("car_game_assets/img/car2.png"));
+        carTexture3 = new Texture(Gdx.files.internal("car_game_assets/img/coffinCar.png"));
         //carTexture = new Texture(Gdx.files.internal("car_game_assets/img/car.png"));
         //carTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
