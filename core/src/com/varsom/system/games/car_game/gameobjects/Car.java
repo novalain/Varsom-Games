@@ -35,8 +35,9 @@ public class Car extends DynamicObject implements Comparable<Car> {
     private String connectionName;
     private boolean active;
     public Sprite pathTrackingSprite;
+    private int carType;
 
-    public Car(float width, float length, Vector2 position, World world, Sprite carSprite, float angle, float power, float maxSteerAngle, float maxSpeed,Track inTrack,int ID/*,int conID*/) { //TODO remove the comment before game is finished.. lolzzz
+    public Car(float width, float length, Vector2 position, World world, Sprite carSprite, float angle, float power, float maxSteerAngle, float maxSpeed,Track inTrack,int ID/*,int conID*/, int carType) { //TODO remove the comment before game is finished.. lolzzz
         super(position, angle, new PolygonShape(), carSprite, world);
 
         this.width = width;
@@ -49,6 +50,7 @@ public class Car extends DynamicObject implements Comparable<Car> {
         this.ID = ID; //temp.. i think..
         this.active = true;
         this.track = inTrack;
+        this.carType = carType;
 
         //TODO this should be uncommented, but for developing purposes it could be beneficial to use the setConnectionID funciton instead
         //connectionID = conID
@@ -289,4 +291,6 @@ public class Car extends DynamicObject implements Comparable<Car> {
     public String getConnectionName(){
         return connectionName;
     }
+
+    public int getCarType() { return carType; }
 }

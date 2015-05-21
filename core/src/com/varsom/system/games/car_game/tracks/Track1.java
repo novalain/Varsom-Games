@@ -11,11 +11,11 @@ import com.varsom.system.games.car_game.gameobjects.Car;
 import com.varsom.system.games.car_game.gameobjects.TireObstacle;
 import com.varsom.system.games.car_game.gameobjects.Wheel;
 import com.varsom.system.games.car_game.helpers.AssetLoader;
+import com.varsom.system.games.car_game.helpers.KrazyRazyCommons;
 
-/**
- * Created by oskarcarlbaum on 18/03/15.
- */
 public class Track1 extends Track{
+
+    float TURTLE_WIDTH = 1.5f;
 
     //Particleeffects..
     // TODO shouldn't this be within the 'Car' class?
@@ -76,6 +76,7 @@ public class Track1 extends Track{
         float carWidth = 0.5f, carLength = 1.0f;
         float spawnPosRotation = (float) -Math.PI/2;
         float carPower = 60, maxSteerAngle = 20, maxSpeed = 25;
+        int carType = KrazyRazyCommons.CAR;
 
         //TODO. Fix when the game can be started from the server, DO NOT REMOVE THE COMMENTED FUNCTION
         cars = new Car[NUMBER_OF_PLAYERS];
@@ -85,35 +86,55 @@ public class Track1 extends Track{
             switch(i){
                 case 0:
                     carSprite = new Sprite(AssetLoader.carTexture1);
+                    carWidth = TURTLE_WIDTH;
+                    carType = KrazyRazyCommons.TURTLE;
                     break;
                 case 1:
                     carSprite = new Sprite(AssetLoader.carTexture2);
+                    carWidth = 0.5f;
+                    carType = KrazyRazyCommons.CAR;
                     break;
                 case 2:
                     carSprite = new Sprite(AssetLoader.carTexture);
+                    carWidth = 0.5f;
+                    carType = KrazyRazyCommons.CAR;
                     break;
                 case 3:
                     carSprite = new Sprite(AssetLoader.carTexture1);
+                    carWidth = TURTLE_WIDTH;
+                    carType = KrazyRazyCommons.TURTLE;
                     break;
                 case 4:
                     carSprite = new Sprite(AssetLoader.carTexture2);
+                    carWidth = 0.5f;
+                    carType = KrazyRazyCommons.CAR;
                     break;
                 case 5:
                     carSprite = new Sprite(AssetLoader.carTexture);
+                    carWidth = 0.5f;
+                    carType = KrazyRazyCommons.CAR;
                     break;
                 case 6:
                     carSprite = new Sprite(AssetLoader.carTexture1);
+                    carWidth = TURTLE_WIDTH;
+                    carType = KrazyRazyCommons.TURTLE;
                     break;
                 case 7:
                     carSprite = new Sprite(AssetLoader.carTexture2);
+                    carWidth = 0.5f;
+                    carType = KrazyRazyCommons.CAR;
                     break;
                 default:
                     System.out.println("Mega Error");
                     carSprite = new Sprite(AssetLoader.carTexture2);
+                    carWidth = 0.5f;
+                    carType = KrazyRazyCommons.CAR;
             }
 
             cars[i] = new Car(carWidth, carLength, hardcodedSpawnPoints()[i], world, carSprite,
-                spawnPosRotation, carPower, maxSteerAngle, maxSpeed,this,i);
+                spawnPosRotation, carPower, maxSteerAngle, maxSpeed,this,i, carType);
+
+
 
             try {
                 connectionIDs[i] = varsomSystem.getServer().getConnections()[NUMBER_OF_PLAYERS-1-i].getID();
@@ -129,8 +150,13 @@ public class Track1 extends Track{
              //Gdx.input.setInputProcessor(new InputHandler(cars[i]));
 
             //add car to the frontLayer and all its wheels to the backLayer
-            for(Wheel tempWheel : cars[i].getWheels()) {
-                backLayer.addElement(tempWheel.body);
+            //if hte car is a turtle we don't want wheels
+            //TODO gör huvudet till wheel ??
+            if(cars[i].getCarType() != KrazyRazyCommons.TURTLE) {
+                for (Wheel tempWheel : cars[i].getWheels()) {
+
+                    backLayer.addElement(tempWheel.body);
+                }
             }
             frontLayer.addElement(cars[i].getBody());
         }

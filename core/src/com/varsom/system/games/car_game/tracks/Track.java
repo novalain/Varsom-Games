@@ -22,9 +22,6 @@ import com.varsom.system.games.car_game.gameobjects.BoxObstacle;
 import com.varsom.system.games.car_game.gameobjects.Car;
 import com.varsom.system.games.car_game.helpers.AssetLoader;
 
-/**
- * Created by oskarcarlbaum on 15/04/15.
- */
 public abstract class Track {
 
     protected float offTrackSpeed;

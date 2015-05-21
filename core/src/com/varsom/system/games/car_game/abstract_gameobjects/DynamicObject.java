@@ -6,9 +6,6 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 
-/**
- * Created by oskarcarlbaum on 13/03/15.
- */
 public abstract class DynamicObject extends PhysicalGameObject {
 
     public DynamicObject(Vector2 position, float angle, Shape shape, Sprite sprite, World world){
