@@ -2,12 +2,8 @@ package com.varsom.system.games.car_game.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -15,19 +11,16 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.varsom.system.Commons;
 import com.varsom.system.DPad;
 import com.varsom.system.games.car_game.helpers.AssetLoader;
+import com.varsom.system.games.car_game.helpers.SoundHandler;
 import com.varsom.system.screens.ScaledScreen;
 
 import java.util.ArrayList;
 
 import com.varsom.system.VarsomSystem;
-import com.varsom.system.games.car_game.com.varsomgames.cargame.CarGame;
 import com.varsom.system.games.car_game.gameobjects.BackgroundObject;
 import com.varsom.system.network.NetworkListener;
 import com.varsom.system.screens.*;
@@ -89,10 +82,20 @@ public class MainMenu extends ScaledScreen {
         this.varsomSystem = varsomSystem;
         varsomSystem.setActiveStage(stage);
         objectList = new ArrayList<BackgroundObject>();
-        for (int i = 0; i < 10; i++) {
-            objectList.add(new BackgroundObject(new Image(AssetLoader.krazyThingyTexture)));
+        for (int i = 0; i < 20; i++) {
+
+            if(Math.random() < 0.5){
+                objectList.add(new BackgroundObject(new Image(AssetLoader.krazyThingyTexture_1)));
+            }else{
+                objectList.add(new BackgroundObject(new Image(AssetLoader.krazyThingyTexture_2)));
+            }
+
             stage.addActor(objectList.get(i).getImage());
         }
+
+        SoundHandler.MUSIC.setLooping(true);
+        SoundHandler.MUSIC.play();
+
 /*
         // add listeners to buttons
         buttonPlay.addListener(new ClickListener() {
@@ -141,7 +144,6 @@ public class MainMenu extends ScaledScreen {
         buttonList.add(buttonExit);
         */
 
-
     // NEW MENU
         //SET POSITIONS
         krazyTitle.setPosition( WIDTH/2 - krazyTitle.getWidth()/2,  HEIGHT -krazyTitle.getHeight());
@@ -180,8 +182,6 @@ public class MainMenu extends ScaledScreen {
                 exitBtn.addAction(Actions.alpha(1));
             }
         });
-
-
     }
 
     @Override
@@ -289,7 +289,7 @@ public class MainMenu extends ScaledScreen {
             BackgroundObject temp = objectList.get(i);
             temp.update();
             int ww =  WIDTH/*Gdx.graphics.getWidth()*/, wh =  WIDTH/*Gdx.graphics.getWidth()*/,
-                    sw = AssetLoader.krazyThingyTexture.getWidth(), sh = AssetLoader.krazyThingyTexture.getHeight();
+                    sw = AssetLoader.krazyThingyTexture_1.getWidth(), sh = AssetLoader.krazyThingyTexture_1.getHeight();
 
             if (temp.getPos().x > ww + sw || temp.getPos().x < 0 - sw || temp.getPos().y > wh + sh || temp.getPos().y < 0 - sh ){
                 Vector2 tempVec = new Vector2((float) (Math.random() *  WIDTH), (float) (Math.random() *  HEIGHT));
@@ -299,6 +299,10 @@ public class MainMenu extends ScaledScreen {
                 temp.setX(-10 - temp.getWidth());
                 temp.setY((float) (Math.random() *  HEIGHT));
             }*/
+        }
+
+        if(Math.random() < 0.001){
+            playWackySound();
         }
     }
 
@@ -393,6 +397,7 @@ public class MainMenu extends ScaledScreen {
     private void pressedButtonPlay() {
         varsomSystem.getMPServer().setJoinable(false);
 
+        SoundHandler.stopAll();
         ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(1, varsomSystem));
         //Switch screen on the controller to controllerScreen
         varsomSystem.getMPServer().changeScreen(Commons.CONTROLLER_SCREEN);
@@ -417,6 +422,19 @@ public class MainMenu extends ScaledScreen {
 
     private void pressedButtonExit() {
         Gdx.app.log("clicked", "pressed the EXIT CARGAME button.");
+        SoundHandler.stopAll();
         ((Game) Gdx.app.getApplicationListener()).setScreen(new VarsomMenu(varsomSystem));
+    }
+
+    private void playWackySound(){
+        double d = Math.random();
+
+        if(d < 0.333){
+            SoundHandler.WACKY_1.play();
+        }else if(d < 0.666){
+            SoundHandler.WACKY_2.play();
+        }else{
+            SoundHandler.WACKY_3.play();
+        }
     }
 }
