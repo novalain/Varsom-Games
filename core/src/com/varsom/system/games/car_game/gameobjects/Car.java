@@ -51,7 +51,7 @@ public class Car extends DynamicObject implements Comparable<Car> {
         this.maxSpeed = maxSpeed;
         this.power = power;
         this.wheelAngle = 0;
-        this.steeringSensitivity = 0.9f; // a value less than 1 makes ta car less sensitive to device rotation
+        this.steeringSensitivity = 0.36f; // a value less than 1 makes ta car less sensitive to device rotation
         this.ID = ID; //temp.. i think..
         this.active = true;
         this.track = inTrack;

@@ -158,14 +158,14 @@ public class GameScreen implements Screen {
         table.setFillParent(true);
         stage.addActor(table);
 
-        BitmapFont fontType = new BitmapFont();
+        /*BitmapFont fontType = new BitmapFont();
         fontType.scale(2.f);
         Label.LabelStyle style = new Label.LabelStyle(fontType, Color.WHITE);
-
-        labelPause = new Label(pauseMessage, style);
+*/
+        labelPause = new Label(pauseMessage, skin);
         labelPause.setPosition(SCREEN_WIDTH / 2 - labelPause.getWidth() / 2, SCREEN_HEIGHT / 2 - labelPause.getHeight() / 2);
 
-        labelPlayerName = new Label("Player name", style);
+        labelPlayerName = new Label("Player name", skin);
         labelPlayerName.setPosition(SCREEN_WIDTH / 2 - labelPlayerName.getWidth() / 2, SCREEN_HEIGHT / 2 + labelPlayerName.getHeight());
 
         stage.addActor(labelPause);
