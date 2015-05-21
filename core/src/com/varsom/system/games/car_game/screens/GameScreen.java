@@ -8,16 +8,15 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -41,8 +40,10 @@ public class GameScreen implements Screen {
     public static int level;
 
     // For countdown
-    private static float countDownTimer = 7.0f;
+    final static float COUNTDOWNTIME = 8;
+    private static float countDownTimer = COUNTDOWNTIME;
     private static boolean paused = true;
+    private boolean driving = false;
 
     // Class variables
     private World world;
@@ -53,10 +54,13 @@ public class GameScreen implements Screen {
     final float CAMERA_POS_INTERPOLATION = 0.1f;
     final float CAMERA_ROT_INTERPOLATION = 0.015f;
 
+    private float newCamPosX;
+    private float newCamPosY;
+
     private final float TIMESTEP = 1 / 60f;
     private final int VELOCITY_ITERATIONS = 8, POSITION_ITERATIONS = 3;
 
-    private SpriteBatch batch, redlightBatch;
+    private SpriteBatch batch;
 
     private Track track;
     private float trackLength;
@@ -88,15 +92,22 @@ public class GameScreen implements Screen {
     private Image redLight;
     private float stateTime;
 
+    // constants for screen
+    int SCREEN_WIDTH = Gdx.graphics.getWidth();
+    int SCREEN_HEIGHT = Gdx.graphics.getHeight();
+
+    //for start sequence
+    private boolean zoomedIn = false;
+    private boolean startSequenceDone = false;
+    private int NoOfCarToShowName = 0;
+    private Label labelPlayerName;
+
     public GameScreen(int level, final VarsomSystem varsomSystem) {
         this.varsomSystem = varsomSystem;
         varsomSystem.setActiveStage(stage);
         this.level = level;
         world = new World(new Vector2(0f, 0f), true);
         debugRenderer = new Box2DDebugRenderer();
-
-        int SCREEN_WIDTH = Gdx.graphics.getWidth();
-        int SCREEN_HEIGHT = Gdx.graphics.getHeight();
 
         NUMBER_OF_PLAYERS = this.varsomSystem.getServer().getConnections().length;
 
@@ -132,7 +143,7 @@ public class GameScreen implements Screen {
         //TODO /100 should probably be changed
         camera = new OrthographicCamera(SCREEN_WIDTH/100,SCREEN_HEIGHT/100);
         //TODO camera.position.set(leaderCar.getPointOnTrack(), 0);
-        camera.position.set(leaderCar.getPointOnTrack(), 0);
+        camera.position.set(activeCars.get(0).getPosition().x, activeCars.get(0).getPosition().y, 0);
         camera.rotate((float)Math.toDegrees(leaderCar.getRotationTrack())-180);
         camera.zoom = 2.f; // can be used to see the entire track
         camera.update();
@@ -162,10 +173,13 @@ public class GameScreen implements Screen {
         Label.LabelStyle style = new Label.LabelStyle(fontType, Color.WHITE);
 
         labelPause = new Label(pauseMessage, style);
-        labelPause.setPosition(0, 0);
+        labelPause.setPosition(SCREEN_WIDTH / 2 - labelPause.getWidth() / 2, SCREEN_HEIGHT / 2 - labelPause.getHeight() / 2);
 
-        labelPause.setPosition(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+        labelPlayerName = new Label("Player name", style);
+        labelPlayerName.setPosition(SCREEN_WIDTH / 2 - labelPlayerName.getWidth() / 2, SCREEN_HEIGHT / 2 + labelPlayerName.getHeight());
+
         stage.addActor(labelPause);
+        stage.addActor(labelPlayerName);
 
         Gdx.input.setInputProcessor(stage);
 
@@ -186,16 +200,33 @@ public class GameScreen implements Screen {
     private void handleCountdownAndPause() {
         paused = NetworkListener.pause;
         stateTime += Gdx.graphics.getDeltaTime();
+        if(startSequenceDone == true)
+        {
+            countDownTimer -= Gdx.graphics.getDeltaTime();
+        }
+        else
+        {
+            countDownTimer = COUNTDOWNTIME; // the countdown should start when the zooming introduction of the cars has finished
+        }
 
-        countDownTimer -= Gdx.graphics.getDeltaTime();
         float secondsLeft = (int) countDownTimer % 60;
-
         // rendering the trafficlight
-        if (secondsLeft > 0 && secondsLeft < 5) {
+/*        if(secondsLeft >= 5 && secondsLeft < COUNTDOWNTIME)
+        {
+            paused = true;
+            redLight.remove();
+            redLight = new Image(redlightAnimation.getKeyFrame(0, true));
+            redLight.setPosition(SCREEN_WIDTH/2 - (redLight.getWidth()/2), SCREEN_HEIGHT/2- (redLight.getHeight()/2));
+            redLight.addAction(Actions.moveBy( Gdx.graphics.getDeltaTime(),  Gdx.graphics.getDeltaTime()));
+            stage.addActor(redLight);
+        } */
+        if (secondsLeft > 0 && secondsLeft < 6)
+        {
             paused = true;
           //  Gdx.app.log("Secondsleft: ",""+ secondsLeft);
             redLight.remove(); // remove the previous image if there is any
             redLight = new Image(redlightAnimation.getKeyFrame(stateTime-1, true));
+            redLight.setPosition(SCREEN_WIDTH/2 - (redLight.getWidth()/2), SCREEN_HEIGHT/2- (redLight.getHeight()/2));
             stage.addActor(redLight);
         }
         else
@@ -203,10 +234,6 @@ public class GameScreen implements Screen {
             redLight.setVisible(false);
             paused = false;
         }
-
-        /*else if(secondsLeft == 0){
-        paused = false;
-    }*/
 
     }
 
@@ -216,50 +243,42 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0.7f, 0.2f, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // If Exit was pressed on a client
-        if (NetworkListener.goBack) {
-         //   Gdx.app.log("in GameScreen", "go back to main menu");
-            NetworkListener.goBack = false;
-
-            //new clients can join now when the game is over
-            varsomSystem.getMPServer().setJoinable(true);
-
-            ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu(varsomSystem));
-
-            //dispose(); ??
-        }
-
-      //  handleCountdownAndPause();
-       // batch.setProjectionMatrix(camera.combined);
-        track.addToRenderBatch(batch, camera);
+        handleExit();
         handleCountdownAndPause();
         batch.setProjectionMatrix(camera.combined);
-        //debugRenderer.render(world, camera.combined);
+        track.addToRenderBatch(batch, camera);
 
         // Here goes the all the updating / game logic
         if(!paused){
-            redLight.setVisible(false);;
+            driving = true;
+            //TODO Erase this if it is not used
+//            redLight.setVisible(false);;
+
+            handleStartSequence();
+
             world.step(TIMESTEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 
             String temp = "Standings:\n";
 
             // Check if cars is inside the boundaries of the camera
-            for(int i = 0; i < activeCars.size(); i++){
+            //but not if the start sequence is playing
+            if(startSequenceDone) {
+                for (int i = 0; i < activeCars.size(); i++) {
 
-                //TODO Fix hardcoded values of frustum
-                if(!camera.frustum.boundsInFrustum(activeCars.get(i).getPosition().x,activeCars.get(i).getPosition().y,0,0.5f,1f,0.1f)){
-                    carLost(i);
+                    //TODO Fix hardcoded values of frustum
+                    if (!camera.frustum.boundsInFrustum(activeCars.get(i).getPosition().x, activeCars.get(i).getPosition().y, 0, 0.5f, 1f, 0.1f)) {
+                        carLost(i);
 
-                    if(i != 0){
-                        i--;
+                        if (i != 0) {
+                            i--;
+                        }
+                    } else {
+                        activeCars.get(i).update(Gdx.app.getGraphics().getDeltaTime());
                     }
                 }
-                else {
-                    activeCars.get(i).update(Gdx.app.getGraphics().getDeltaTime());
-                }
+                sortCars();
+                temp += sortedCars2String();
             }
-            sortCars();
-            temp += sortedCars2String();
 
             // Next lap incoming
             if(leaderCar.getTraveledDistance() > trackLength * currentLap){
@@ -285,8 +304,18 @@ public class GameScreen implements Screen {
 
     private void updateCamera() {
         leaderCar = track.getLeaderCar();
-        float newCamPosX = (leaderCar.getPointOnTrack().x - camera.position.x);
-        float newCamPosY = (leaderCar.getPointOnTrack().y - camera.position.y);
+
+        //if start sequence is done, use the normal game logic for the camera
+        if(startSequenceDone) {
+            newCamPosX = (leaderCar.getPointOnTrack().x - camera.position.x);
+            newCamPosY = (leaderCar.getPointOnTrack().y - camera.position.y);
+        }
+        //else focus on the cars one by one
+        else {
+            newCamPosX = (activeCars.get(NoOfCarToShowName).getPosition().x - camera.position.x);
+            newCamPosY = (activeCars.get(NoOfCarToShowName).getPosition().y - camera.position.y);
+        }
+
         Vector2 newPos = new Vector2(camera.position.x + newCamPosX * CAMERA_POS_INTERPOLATION, camera.position.y + newCamPosY * CAMERA_POS_INTERPOLATION);
         //Gdx.app.log("CAMERA","Camera position: " + camera.position);
         if (newPos.x == Float.NaN || newPos.y == Float.NaN) {
@@ -352,8 +381,13 @@ public class GameScreen implements Screen {
     //makes the pause menu visible if pause == true and invisible if not
     public void displayPauseMenu(boolean pause) {
         //TODO display who paused
-          labelPause.setVisible(pause);
-          buttonLeave.setVisible(pause);
+        if(driving)
+        {
+            labelPause.setVisible(pause);
+            buttonLeave.setVisible(pause);
+            driving = false;
+        }
+
 
     }
 
@@ -429,6 +463,61 @@ public class GameScreen implements Screen {
             diePulse += " 5 " + pause;
         }
         System.out.println("PULSE: = " + diePulse);
+    }
+
+    public void handleExit(){
+        // If Exit was pressed on a client
+        if (NetworkListener.goBack) {
+            driving = false;
+            Gdx.app.log("in GameScreen", "go back to main menu");
+            NetworkListener.goBack = false;
+
+            //new clients can join now when the game is over
+            varsomSystem.getMPServer().setJoinable(true);
+
+            ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu(varsomSystem));
+
+            //dispose(); ??
+        }
+    }
+
+    public void handleStartSequence(){
+        //When track is created
+        //for each car in the array
+        if(!startSequenceDone) {
+            //display name
+            labelPlayerName.setText(activeCars.get(NoOfCarToShowName).getConnectionName());
+
+            //zoom in
+            if (!zoomedIn) {
+                camera.zoom = camera.zoom - 0.7f * Gdx.graphics.getDeltaTime();
+                //stop zooming
+                if (camera.zoom < 0.5f) {
+                    zoomedIn = true;
+                    //vibrate players controller
+                    Car car = activeCars.get(NoOfCarToShowName);
+                    int conID = car.getConnectionID();
+                    varsomSystem.getMPServer().vibrateClient(200, conID);
+                }
+            }
+            else {
+                //zoom out
+                camera.zoom = camera.zoom + 0.7f * Gdx.graphics.getDeltaTime();
+
+                if(camera.zoom >= 2.0f) {
+                    camera.zoom = 2.0f;
+                    //switch focus to next car
+                    NoOfCarToShowName++;
+                    zoomedIn = false;
+                }
+            }
+        }
+
+        //when all cars have been shown the sequence is done
+        if(NoOfCarToShowName == activeCars.size()) {
+            startSequenceDone = true;
+            labelPlayerName.setText("");
+        }
     }
 
 }
