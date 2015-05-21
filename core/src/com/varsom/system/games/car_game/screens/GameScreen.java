@@ -18,6 +18,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -40,7 +41,7 @@ public class GameScreen implements Screen {
     public static int level;
 
     // For countdown
-    private static float countDownTimer = 1.0f;
+    private static float countDownTimer = 7.0f;
     private static boolean paused = true;
 
     // Class variables
@@ -82,11 +83,10 @@ public class GameScreen implements Screen {
     protected int NUMBER_OF_PLAYERS;
     private String diePulse;
 
-    private float stateTime;
-
-   // for redlights
+   // variables for redlights
     private Animation redlightAnimation;
-    private TextureRegion currentFrame;
+    private Image redLight;
+    private float stateTime;
 
     public GameScreen(int level, final VarsomSystem varsomSystem) {
         this.varsomSystem = varsomSystem;
@@ -140,13 +140,6 @@ public class GameScreen implements Screen {
         batch = new SpriteBatch();
         batch.setProjectionMatrix(camera.combined);
 
-        // handling batch and animation time for redlights
-        redlightBatch = new SpriteBatch();
-        redlightBatch.setProjectionMatrix(camera.combined);
-        stateTime = 0f;
-        redlightAnimation = new Animation(1.f, AssetLoader.redlightsFrames);
-        currentFrame = new TextureRegion();
-
         // pause menu button
         table.top().left();
         table.add(buttonLeave).size(400, 75).row();
@@ -184,6 +177,10 @@ public class GameScreen implements Screen {
             }
         });
 
+        // handling batch and animation time for redlights
+        stateTime = 0f; // setting a timer for accessing the images from assetloader
+        redlightAnimation = new Animation(1.f, AssetLoader.redlightsFrames); // importing redlight images to animation
+        redLight = new Image(); // this is the actor that will put animations on the stage
     }
 
     private void handleCountdownAndPause() {
@@ -193,16 +190,20 @@ public class GameScreen implements Screen {
         countDownTimer -= Gdx.graphics.getDeltaTime();
         float secondsLeft = (int) countDownTimer % 60;
 
-        // Render some kick-ass countdown label
-        if (secondsLeft > 0) {
+        // rendering the trafficlight
+        if (secondsLeft > 0 && secondsLeft < 5) {
             paused = true;
-            currentFrame = redlightAnimation.getKeyFrame(stateTime, true);
-            redlightBatch.begin();
-            redlightBatch.draw(currentFrame, Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
-            redlightBatch.end();
-            // render redlight here!
-         //   currentFrame = walkAnimation.getKeyFrame(stateTime, true);
+          //  Gdx.app.log("Secondsleft: ",""+ secondsLeft);
+            redLight.remove(); // remove the previous image if there is any
+            redLight = new Image(redlightAnimation.getKeyFrame(stateTime-1, true));
+            stage.addActor(redLight);
         }
+        else
+        {
+            redLight.setVisible(false);
+            paused = false;
+        }
+
         /*else if(secondsLeft == 0){
         paused = false;
     }*/
@@ -228,15 +229,16 @@ public class GameScreen implements Screen {
             //dispose(); ??
         }
 
+      //  handleCountdownAndPause();
+       // batch.setProjectionMatrix(camera.combined);
+        track.addToRenderBatch(batch, camera);
         handleCountdownAndPause();
         batch.setProjectionMatrix(camera.combined);
-        track.addToRenderBatch(batch, camera);
-
         //debugRenderer.render(world, camera.combined);
 
         // Here goes the all the updating / game logic
         if(!paused){
-
+            redLight.setVisible(false);;
             world.step(TIMESTEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 
             String temp = "Standings:\n";
@@ -350,8 +352,8 @@ public class GameScreen implements Screen {
     //makes the pause menu visible if pause == true and invisible if not
     public void displayPauseMenu(boolean pause) {
         //TODO display who paused
-        labelPause.setVisible(pause);
-        buttonLeave.setVisible(pause);
+          labelPause.setVisible(pause);
+          buttonLeave.setVisible(pause);
 
     }
 
@@ -401,7 +403,7 @@ public class GameScreen implements Screen {
         for(int i = 0; i < sortedCars.size(); i++){
             a += sortedCars.get(i).getID() + " ";
         }
-        System.out.println(a);
+    //    System.out.println(a);
     }
 
     private String sortedCars2String(){

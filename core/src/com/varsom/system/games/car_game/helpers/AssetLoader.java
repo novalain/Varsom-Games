@@ -70,12 +70,12 @@ public class AssetLoader {
 
         // For animation of redlights
         redlightTexture = new Texture(Gdx.files.internal("car_game_assets/img/trafficLights.png"));
-        TextureRegion[][] tmp =  TextureRegion.split(redlightTexture, redlightTexture.getWidth(), redlightTexture.getHeight() / 3);
-        redlightsFrames = new TextureRegion[3];
-        int index = 0;
-        for (int i = 0; i < 3; i++) {
-            redlightsFrames[index++] = tmp[i][1];
-        }
+        redlightsFrames = new TextureRegion[5];
+        redlightsFrames[3] = new TextureRegion(redlightTexture, 0,0,redlightTexture.getWidth(), redlightTexture.getHeight()/4);
+        redlightsFrames[2] = new TextureRegion(redlightTexture, 0,redlightTexture.getHeight()/4,redlightTexture.getWidth(), redlightTexture.getHeight()/4);
+        redlightsFrames[1] = new TextureRegion(redlightTexture, 0, redlightTexture.getHeight()/2, redlightTexture.getWidth(), redlightTexture.getHeight()/4);
+        redlightsFrames[0] = new TextureRegion(redlightTexture, 0, 3*(redlightTexture.getHeight()/4), redlightTexture.getWidth(), redlightTexture.getHeight()/4);
+        redlightsFrames[4] = new TextureRegion(redlightTexture, 0, 0, 0, 0);
 
         // Texture size of tire-tracks.jpg is 112*289 px
        /* tracks1 = new TextureRegion(tireTrackTexture, 0,      0, 112, 96f);
