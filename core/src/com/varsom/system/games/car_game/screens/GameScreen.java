@@ -40,7 +40,7 @@ public class GameScreen implements Screen {
     public static int level;
 
     // For countdown
-    final static float COUNTDOWNTIME = 8;
+    final static float COUNTDOWNTIME = 6;
     private static float countDownTimer = COUNTDOWNTIME;
     private static boolean paused = true;
     private boolean driving = false;
@@ -206,32 +206,36 @@ public class GameScreen implements Screen {
         else
         {
             countDownTimer = COUNTDOWNTIME; // the countdown should start when the zooming introduction of the cars has finished
+            redLight = new Image(redlightAnimation.getKeyFrame(0, true)); // if zooming sequence is on, the traffic light is drawn above the screen
+            redLight.setPosition(SCREEN_WIDTH/2 - (redLight.getWidth()/2), SCREEN_HEIGHT);
         }
 
         float secondsLeft = (int) countDownTimer % 60;
-        // rendering the trafficlight
-/*        if(secondsLeft >= 5 && secondsLeft < COUNTDOWNTIME)
+
+        // if the countdown has started and the position of the redlight is not yet i position, move it downwards
+        if(secondsLeft < COUNTDOWNTIME && redLight.getY() > SCREEN_HEIGHT/2- (redLight.getHeight()/2))
         {
             paused = true;
+            float posY = redLight.getY(); // save the previous Y-position before removing the actor from stage
             redLight.remove();
-            redLight = new Image(redlightAnimation.getKeyFrame(0, true));
-            redLight.setPosition(SCREEN_WIDTH/2 - (redLight.getWidth()/2), SCREEN_HEIGHT/2- (redLight.getHeight()/2));
-            redLight.addAction(Actions.moveBy( Gdx.graphics.getDeltaTime(),  Gdx.graphics.getDeltaTime()));
-            stage.addActor(redLight);
-        } */
-        if (secondsLeft > 0 && secondsLeft < 6)
+            redLight = new Image(redlightAnimation.getKeyFrame(0, true)); // show only the first image in the animation array
+            redLight.setPosition(SCREEN_WIDTH/2 - (redLight.getWidth()/2), posY - 500*Gdx.graphics.getDeltaTime()); // decrease y-position
+            stage.addActor(redLight); // add to stage
+            stateTime = 0; // set the statetime to 0 so it will start counting when redlight is in the right place
+        }
+        // when the redlight is in the right position and the countdown is not finished, show the countdown
+        else if(secondsLeft < COUNTDOWNTIME && secondsLeft > 0)
         {
             paused = true;
-          //  Gdx.app.log("Secondsleft: ",""+ secondsLeft);
             redLight.remove(); // remove the previous image if there is any
-            redLight = new Image(redlightAnimation.getKeyFrame(stateTime-1, true));
-            redLight.setPosition(SCREEN_WIDTH/2 - (redLight.getWidth()/2), SCREEN_HEIGHT/2- (redLight.getHeight()/2));
+            redLight = new Image(redlightAnimation.getKeyFrame(stateTime, true)); // loop through the animation array
+            redLight.setPosition(SCREEN_WIDTH/2 - (redLight.getWidth()/2), SCREEN_HEIGHT/2- (redLight.getHeight()/2)); // position in the middle of the screen
             stage.addActor(redLight);
         }
         else
         {
-            redLight.setVisible(false);
-            paused = false;
+            redLight.setVisible(false); // if redlight hasn't been removed, set it to unvisible
+            paused = false; // return to the game
         }
 
     }
@@ -249,9 +253,7 @@ public class GameScreen implements Screen {
 
         // Here goes the all the updating / game logic
         if(!paused){
-            driving = true;
-            //TODO Erase this if it is not used
-//            redLight.setVisible(false);;
+            driving = true; // checks if game is paused or if countdown is running
 
             handleStartSequence();
 
