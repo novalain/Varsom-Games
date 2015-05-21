@@ -456,12 +456,12 @@ public class GameScreen implements Screen {
 
     private void createDiePulse(){
         diePulse = "0 125 125 125 350 125 125 125 350";
-        int pause = 0;
+        int pauseInt = 0;
         for(int i = 0 ; i < 200; i++){
             if(i % 10 == 0 ){
-                pause++;
+                pauseInt++;
             }
-            diePulse += " 5 " + pause;
+            diePulse += " 5 " + pauseInt;
         }
         System.out.println("PULSE: = " + diePulse);
     }
