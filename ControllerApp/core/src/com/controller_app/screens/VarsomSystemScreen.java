@@ -18,7 +18,6 @@ import com.controller_app.helper.DPad;
 import com.controller_app.helper_classes.ScaledScreen;
 import com.controller_app.network.MPClient;
 
-//TODO: Set the alpha values of the masks to 0.
 //TODO: Fix absolute pixel values.
 
 public class VarsomSystemScreen extends ScaledScreen {
@@ -94,7 +93,7 @@ public class VarsomSystemScreen extends ScaledScreen {
         btnBack.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.input.vibrate(10);
+                Gdx.input.vibrate(Commons.VIBRATION_TIME);
                 main.getConnectionScreen().disconnect();
                 main.changeScreen(Commons.CONNECTION_SCREEN);
             }
@@ -106,9 +105,14 @@ public class VarsomSystemScreen extends ScaledScreen {
         btnSelect.setPosition(Commons.WORLD_WIDTH - btnSelect.getWidth(), 400);
         btnSelect.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Gdx.input.vibrate(10);
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                Gdx.input.vibrate(Commons.VIBRATION_TIME);
                 mpClient.sendDPadData(0, 0, DPad.SELECT);
+                return false;
+            }
+
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+
             }
         });
 
@@ -140,11 +144,12 @@ public class VarsomSystemScreen extends ScaledScreen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 Gdx.input.vibrate(Commons.VIBRATION_TIME);
+                mpClient.sendDPadData(DPad.LEFT, 0, false);
                 return false;
             }
 
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                mpClient.sendDPadData(DPad.LEFT, 0, false);
+
             }
         });
 
@@ -159,14 +164,14 @@ public class VarsomSystemScreen extends ScaledScreen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 Gdx.input.vibrate(Commons.VIBRATION_TIME);
+                mpClient.sendDPadData(DPad.RIGHT, 0, false);
                 return false;
             }
 
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                mpClient.sendDPadData(DPad.RIGHT, 0, false);
+
             }
         });
-
 
         // The clickable mask for up
         maskUp = new Image(new Texture(Gdx.files.internal("system/img/varsom_logo_dassig_25.png")));
@@ -178,11 +183,12 @@ public class VarsomSystemScreen extends ScaledScreen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 Gdx.input.vibrate(Commons.VIBRATION_TIME);
+                mpClient.sendDPadData(0, DPad.UP, false);
                 return false;
             }
 
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                mpClient.sendDPadData(0, DPad.UP, false);
+
             }
         });
 
@@ -197,11 +203,13 @@ public class VarsomSystemScreen extends ScaledScreen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 Gdx.input.vibrate(Commons.VIBRATION_TIME);
+                mpClient.sendDPadData(0, DPad.DOWN, false);
+                System.out.println("Adam, kolla här!!");
                 return false;
             }
 
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                mpClient.sendDPadData(0, DPad.DOWN, false);
+
             }
         });
     }
@@ -219,6 +227,7 @@ public class VarsomSystemScreen extends ScaledScreen {
         //changes screen if the server has told us to
         main.handleController();
 
+        stage.act();
         stage.draw();
     }
 

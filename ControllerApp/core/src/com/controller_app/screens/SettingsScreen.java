@@ -32,6 +32,7 @@ import com.controller_app.network.Packet;
  * @since   2015-05-07
  */
 public class SettingsScreen extends ScaledScreen {
+
     /**
      * @param main Calls to the active main class
      * @param skin Skin where textureatlas and fonts are added
@@ -41,6 +42,7 @@ public class SettingsScreen extends ScaledScreen {
      * @param table Table collecting all objects on screen and structuring them
      * @param checkVibration 
      */
+
     private Main main;
     private Skin skin;
     private TextureAtlas atlas;
