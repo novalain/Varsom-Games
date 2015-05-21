@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.varsom.system.VarsomSystem;
 import com.varsom.system.games.car_game.gameobjects.Car;
+import com.varsom.system.games.car_game.helpers.AssetLoader;
 import com.varsom.system.games.car_game.tracks.Track;
 import com.varsom.system.games.car_game.tracks.Track1;
 import com.varsom.system.games.car_game.tracks.Track2;
@@ -62,8 +63,7 @@ public class GameScreen implements Screen {
     private Table table = new Table();
 
     //TODO Load files from AssetLoader
-    private Skin skin = new Skin(Gdx.files.internal("system/skins/menuSkin.json"),
-            new TextureAtlas(Gdx.files.internal("system/skins/menuSkin.pack")));
+    private Skin skin = AssetLoader.skin;
 
     private TextButton buttonLeave = new TextButton("Win screen", skin);
     private Label labelPause;

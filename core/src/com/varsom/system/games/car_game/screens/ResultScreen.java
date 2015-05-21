@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.Array;
 import com.varsom.system.Commons;
 import com.varsom.system.VarsomSystem;
 import com.varsom.system.games.car_game.gameobjects.Car;
+import com.varsom.system.games.car_game.helpers.AssetLoader;
 import com.varsom.system.network.NetworkListener;
 
 import java.util.ArrayList;
@@ -30,8 +31,7 @@ public class ResultScreen extends ScaledScreen {
     private ArrayList<String> carOrder;
 
     //TODO Load files from AssetLoader
-    private Skin skin = new Skin(Gdx.files.internal("car_game_assets/skins/menuSkin.json"),
-            new TextureAtlas(Gdx.files.internal("car_game_assets/skins/menuSkin.pack")));
+    private Skin skin = AssetLoader.skin;
 
     private TextButton btnOK;
     private Label result;
@@ -65,16 +65,16 @@ public class ResultScreen extends ScaledScreen {
             }
         });
 
-        BitmapFont fontType = new BitmapFont();
+        /*BitmapFont fontType = new BitmapFont();
         fontType.scale(2.f);
         Label.LabelStyle style = new Label.LabelStyle(fontType, Color.WHITE);
-
+*/
         //label that shows all connected players
         //playerScores = ": Name : Time/Score/Dist : Knockouts :\n";
         //result = new Label(playerScores, style);
-        result = new Label(carOrder.get(0) + " is VICTORIOUS!!", style);
+        result = new Label(carOrder.get(0) + " is VICTORIOUS!!", skin);
         result.setPosition(Commons.WORLD_WIDTH / 2 - result.getWidth() / 2, Commons.WORLD_HEIGHT * 0.8f - result.getHeight());
-        score = new Label(playerScores, style);
+        score = new Label(playerScores, skin);
         score.setPosition(Commons.WORLD_WIDTH / 2 - score.getWidth() / 2, Commons.WORLD_HEIGHT * 0.6f - score.getHeight());
 
         stage.addActor(result);
