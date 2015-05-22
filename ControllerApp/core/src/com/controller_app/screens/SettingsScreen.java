@@ -236,7 +236,7 @@ public class SettingsScreen extends ScaledScreen {
        return strPlayerName;
    }
 
-    public boolean updateNameField(boolean b){
+    private boolean updateNameField(boolean b){
         //we only want to update once when we switch to this screen
         if(b) {
             if (main.getClient().getID() != -1) {
@@ -249,7 +249,7 @@ public class SettingsScreen extends ScaledScreen {
         return false;
     }
 
-    public void updateConnectionName(){
+    private void updateConnectionName(){
         main.getClient().setName(playerName.getText());
         System.out.println("Name: " + playerName.getText());
 

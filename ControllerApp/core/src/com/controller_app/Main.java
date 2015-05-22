@@ -59,7 +59,7 @@ public class Main extends Game {
         settingsScreen = new SettingsScreen(this);
         connectionScreen = new ConnectionScreen(this, mpClient);
         carGameScreen = new CarGameScreen(this, mpClient);
-        varsomSystemScreen = new VarsomSystemScreen(this, mpClient);
+        varsomSystemScreen = new VarsomSystemScreen(this, mpClient, settingsScreen);
         standbyScreen = new StandbyScreen(this, mpClient);
         mpClient.carGameScreen = carGameScreen;
 
@@ -83,7 +83,7 @@ public class Main extends Game {
                 activeScreen = connectionScreen;
                 break;
             case Commons.VARSOM_SYSTEM_SCREEN:
-                varsomSystemScreen = new VarsomSystemScreen(this, mpClient);
+                varsomSystemScreen = new VarsomSystemScreen(this, mpClient, settingsScreen);
                 Gdx.input.setInputProcessor(varsomSystemScreen.getStage());
                // connectionScreen.check = 2;
                 setScreen(varsomSystemScreen);
