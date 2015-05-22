@@ -16,6 +16,7 @@ import com.varsom.system.games.car_game.helpers.KrazyRazyCommons;
 public class Track1 extends Track{
 
     float TURTLE_WIDTH = 1.5f;
+    public static ParticleEffect firePit;
 
     //Particleeffects..
     // This one is needed if we want to access several layers in our particlesystem
@@ -25,6 +26,13 @@ public class Track1 extends Track{
         super(inWorld,new Sprite(AssetLoader.testTrackTexture),new Sprite(AssetLoader.testTrackMask),50f,NUMBER_OF_PLAYERS,vS);
         createTestTrack();
         offTrackSpeed = 0.95f;
+
+        firePit = new ParticleEffect();
+        firePit.load(AssetLoader.firepitFile, AssetLoader.particleImg);
+        firePit.setPosition(-16.f, -1.f);
+        firePit.scaleEffect(0.008f);
+        firePit.start();
+
     }
 
     private void createTestTrack(){

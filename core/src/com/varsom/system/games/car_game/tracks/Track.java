@@ -188,6 +188,10 @@ public abstract class Track {
 
         }
 
+        Track1.firePit.draw(inBatch, Gdx.graphics.getDeltaTime());
+        Track1.firePit.update(Gdx.graphics.getDeltaTime());
+        Track1.firePit.start();
+        //Track1.firePit.reset();
 
         // Draw sprites that are not connected to a physical body
         for (Sprite sprite : sprites) {
