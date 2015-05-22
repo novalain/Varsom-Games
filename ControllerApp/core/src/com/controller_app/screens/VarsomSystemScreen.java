@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.controller_app.Main;
@@ -18,8 +19,6 @@ import com.controller_app.helper.DPad;
 import com.controller_app.helper_classes.ScaledScreen;
 import com.controller_app.network.MPClient;
 
-//TODO: Fix absolute pixel values.
-
 public class VarsomSystemScreen extends ScaledScreen {
 
     private TextureAtlas atlas;
@@ -27,8 +26,13 @@ public class VarsomSystemScreen extends ScaledScreen {
     private BitmapFont font;
     private FreeTypeFontGenerator generator;
 
+    private Label playerNameLabel;
+
     private MPClient mpClient;
     private Main main;
+
+    // TODO ONLY to get player name, function should be static
+    private SettingsScreen settingsScreen;
 
     // temporary solution with Images as masks
     private Image btnDPad, btnSettings, btnSelect, btnBack;
@@ -43,6 +47,7 @@ public class VarsomSystemScreen extends ScaledScreen {
         generateSkin();
         generateUI();
 
+        stage.addActor(playerNameLabel);
         stage.addActor(btnDPad);
         stage.addActor(btnSettings);
         stage.addActor(btnSelect);
@@ -86,6 +91,12 @@ public class VarsomSystemScreen extends ScaledScreen {
         btnDPad = new Image(new Texture(Gdx.files.internal("system/img/varsom_dpad_gray_center_25.png")));
         btnDPad.setPosition(40, 102);
 
+        BitmapFont font = Commons.getFont(102, Gdx.files.internal("system/fonts/Impact.ttf"));
+        Label.LabelStyle style = new Label.LabelStyle(font, Color.DARK_GRAY);
+
+        // String playerName = settingsScreen.getPlayerName(); ??
+        playerNameLabel = new Label("Namn här TACK!", style);
+        playerNameLabel.setPosition(Commons.WORLD_WIDTH - playerNameLabel.getWidth() - 30, Commons.WORLD_HEIGHT - playerNameLabel.getHeight() - 30);
 
         // The back button w. functionality
         btnBack = new Image(new Texture(Gdx.files.internal("system/img/varsom_backButton_25.png")));
@@ -128,11 +139,9 @@ public class VarsomSystemScreen extends ScaledScreen {
             }
         });
 
-
         // The logo
         logo = new Image(new Texture(Gdx.files.internal("system/img/varsom_logo_dassig_25.png")));
         logo.setPosition(Commons.WORLD_WIDTH - logo.getWidth(), 0);
-
 
         // The clickable mask for left
         maskLeft = new Image(new Texture(Gdx.files.internal("system/img/varsom_logo_dassig_25.png")));

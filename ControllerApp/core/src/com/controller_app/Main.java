@@ -63,7 +63,7 @@ public class Main extends Game {
         standbyScreen = new StandbyScreen(this, mpClient);
         mpClient.carGameScreen = carGameScreen;
 
-        changeScreen(Commons.CONNECTION_SCREEN);
+        changeScreen(Commons.VARSOM_SYSTEM_SCREEN);
     }
     /**
      * The changeScreen-function changes screen based on an index passed

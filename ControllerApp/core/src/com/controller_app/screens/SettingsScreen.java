@@ -147,7 +147,12 @@ public class SettingsScreen extends ScaledScreen {
     }
 
     private void generateUI() {
-        skin.getFont("default-font").scale(4f);
+
+        // Added new font
+        //BitmapFont font = Commons.getFont(52, Gdx.files.internal("system/fonts/Futura.ttc"));
+        //Label.LabelStyle style = new Label.LabelStyle(font,Color.WHITE);
+
+       // skin.getFont("default-font").scale(4f);
 
         btnBack = new TextButton("Back", skin);
         btnBack.setSize(200, 100);
