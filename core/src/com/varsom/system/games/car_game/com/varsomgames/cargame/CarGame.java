@@ -1,13 +1,8 @@
 package com.varsom.system.games.car_game.com.varsomgames.cargame;
 
-import com.badlogic.gdx.Game;
-
-import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Connection;
 import com.varsom.system.VarsomSystem;
 import com.varsom.system.abstract_gameobjects.VarsomGame;
-import com.varsom.system.games.car_game.gameobjects.Car;
-import com.varsom.system.games.car_game.helpers.AssetLoader;
 import com.varsom.system.games.car_game.screens.GameScreen;
 import com.varsom.system.games.car_game.screens.Splash;
 
@@ -23,11 +18,8 @@ public class CarGame extends VarsomGame {
     public static int ID = 1;
 
     public CarGame(VarsomSystem varsomSystem){
-
         this.varsomSystem = varsomSystem;
         varsomSystem.setScreen(new Splash(this.varsomSystem));
-
-        AssetLoader.load();
         gameScreen = null;
     }
 

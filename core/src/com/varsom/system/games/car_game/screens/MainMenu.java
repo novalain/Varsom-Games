@@ -2,8 +2,13 @@ package com.varsom.system.games.car_game.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -15,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.varsom.system.Commons;
 import com.varsom.system.DPad;
 import com.varsom.system.games.car_game.helpers.AssetLoader;
+import com.varsom.system.games.car_game.helpers.KrazyRazyCommons;
 import com.varsom.system.games.car_game.helpers.SoundHandler;
 import com.varsom.system.screens.ScaledScreen;
 
@@ -193,17 +199,22 @@ public class MainMenu extends ScaledScreen {
         */
 
 
-        /*
-        BitmapFont fontType = new BitmapFont();
-        fontType.scale(2.f);
-        Label.LabelStyle style = new Label.LabelStyle(fontType, Color.WHITE);
-        */
+
+        //BitmapFont fontType = new BitmapFont(new FileHandle("system/fonts/badaboom64w.fnt"));
+        //fontType.scale(2.f);
+
+        BitmapFont font = Commons.getFont(52,AssetLoader.krazyFontFile,KrazyRazyCommons.KRAZY_BLUE,3f,KrazyRazyCommons.KRAZY_GREEN);
+        Label.LabelStyle style = new Label.LabelStyle(font,Color.WHITE);
+
+
+
+
         //label that shows all connected players
-        clientNames = "Connected players:";
-        connectedClientNames = new Label(clientNames, skin);
+        clientNames = "Connected players";
+        connectedClientNames = new Label(clientNames, style);
         connectedClientNames.setAlignment(Align.topLeft);
         connectedClientNames.setPosition(8,  HEIGHT - connectedClientNames.getHeight());
-        connectedClientNames.setScale(2.0f,2.0f);
+        connectedClientNames.setFontScale(1.5f);
 
         //table.setPosition( WIDTH / 2 - table.getWidth() / 2,  HEIGHT / 2 - table.getHeight() / 2);
 
@@ -238,7 +249,7 @@ public class MainMenu extends ScaledScreen {
         }
         updateBackground();
 
-        Gdx.gl.glClearColor(164 / 255.0f, 242 / 255.0f, 245 / 255.0f, 1);
+        Gdx.gl.glClearColor(24 / 255.0f, 102 / 255.0f, 105 / 255.0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         handleClients();
@@ -311,7 +322,7 @@ public class MainMenu extends ScaledScreen {
     //if a new client is connected add it
     //if a client is disconnected remove it
     public void handleClients() {
-        clientNames = "Connected players:";
+        clientNames = "Connected players";
 
         //update the client names label with clients connected at the moment
         for (int i = 0; i < varsomSystem.getServer().getConnections().length; i++) {

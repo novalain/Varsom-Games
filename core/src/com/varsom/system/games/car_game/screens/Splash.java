@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-
 import com.varsom.system.VarsomSystem;
 import com.varsom.system.games.car_game.helpers.AssetLoader;
 
@@ -16,6 +15,7 @@ public class Splash implements Screen {
     private Texture splashTexture;
     private Image splashImage;
     private Stage stage;
+    private boolean loaded = false;
     protected VarsomSystem varsomSystem;
 
     public Splash(VarsomSystem varsomSystem) {
@@ -37,6 +37,10 @@ public class Splash implements Screen {
         splashImage.addAction(Actions.sequence(Actions.alpha(0), Actions.fadeIn(0.0f), Actions.delay(0), Actions.run(new Runnable() {
             @Override
             public void run() {
+                if(!loaded){
+                    AssetLoader.load();
+                    loaded = true;
+                }
                 ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu(varsomSystem));
             }
         })));
