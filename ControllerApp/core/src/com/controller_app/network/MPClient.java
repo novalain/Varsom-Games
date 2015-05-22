@@ -1,6 +1,7 @@
 package com.controller_app.network;
 
 import com.badlogic.gdx.Gdx;
+import com.controller_app.Main;
 import com.controller_app.helper.Commons;
 import com.controller_app.screens.ConnectionScreen;
 import com.controller_app.screens.CarGameScreen;
@@ -20,6 +21,7 @@ public class MPClient {
     private boolean closeThread;
     private boolean changeController = false;
     private int activeScreen;
+    private Main ourMain;
 
 
     public MPClient() throws IOException {
@@ -147,12 +149,13 @@ public class MPClient {
         Gdx.app.log("in MPClient", "sent Exit");
     }
 
-    public void sendDPadData(int x, int y, boolean bool) {
+    public void sendDPadData(int x, int y, boolean bool, boolean back) {
         Packet.SendDPadData dp = new Packet.SendDPadData();
         // TODO: Put dataX and dataY together to an array or string for efficiency
         dp.dataX = x;
         dp.dataY = y;
         dp.select = bool;
+        dp.back = back;
         client.sendTCP(dp);
         //Gdx.app.log("in MPClient", "sent dPadInfo");
     }
@@ -219,5 +222,14 @@ public class MPClient {
 
         client.reconnect();
 
+    }
+
+    public void setMain(Main main){
+        ourMain = main;
+
+    }
+
+    public Main getMain(){
+        return ourMain;
     }
 }

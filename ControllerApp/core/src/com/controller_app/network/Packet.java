@@ -19,6 +19,7 @@ public class Packet {
         int dataX = 0;
         int dataY = 0; 
         boolean select = false;
+        boolean back = false;
     }
     public static class VibrateClient { int vibTime; }
     public static class PulseVibrateClient { String pattern; int repeat; }

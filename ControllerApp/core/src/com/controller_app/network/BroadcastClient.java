@@ -30,6 +30,7 @@ public class BroadcastClient {
             try{
                 socket.receive(packet);
             }catch(SocketTimeoutException e){
+                System.out.println("Cant get broadcast");
                 break;
             }
 

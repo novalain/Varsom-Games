@@ -166,4 +166,9 @@ public class Main extends Game {
         }
     }
 
+    public Screen getActiveScreen(){
+
+        return activeScreen;
+
+    }
 }
