@@ -105,7 +105,7 @@ public class ConnectionScreen extends ScaledScreen {
 
     void generateUI() {
 
-        skin.getFont("default-font").scale(4f);
+//        skin.getFont("default-font").scale(4f);
         table = new Table(skin);
 
         Texture splashTexture = new Texture(Gdx.files.internal("system/img/varsomsplash.png"));
@@ -124,8 +124,12 @@ public class ConnectionScreen extends ScaledScreen {
         // stage = new Stage();
 
         // This font is too ugly when scaled up
-        BitmapFont fontType = new BitmapFont();
-        fontType.scale(1.3f);
+        //BitmapFont fontType = new BitmapFont();
+
+
+        BitmapFont fontType = Commons.getFont(42, Gdx.files.internal("system/fonts/Futura.ttc"));
+        //Label.LabelStyle style = new Label.LabelStyle(font,Color.WHITE);
+        //fontType.scale(0.02f);
 
         Label.LabelStyle style = new Label.LabelStyle(fontType, Color.WHITE);
         text = new Label("Welcome!", style);

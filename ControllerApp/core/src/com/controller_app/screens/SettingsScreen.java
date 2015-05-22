@@ -1,7 +1,7 @@
 package com.controller_app.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -20,7 +20,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.controller_app.Main;
 import com.controller_app.helper.Commons;
 import com.controller_app.helper_classes.ScaledScreen;
-import com.controller_app.network.Packet;
 
 /**
  * <h1>ControllerApp Settings Screen</h1>
@@ -59,6 +58,9 @@ public class SettingsScreen extends ScaledScreen {
     private String strPlayerName = "Player -1";
     private boolean update = true;
 
+    private static Preferences prefs;
+    private final static String NAME = "name";
+
     public SettingsScreen(Main main) {
         super();
 
@@ -67,6 +69,10 @@ public class SettingsScreen extends ScaledScreen {
         generateFonts();
         generateSkin();
         generateUI();
+
+        //get a preferences instance
+        prefs = Gdx.app.getPreferences("My Preferences");
+
     }
 
     @Override
@@ -147,7 +153,12 @@ public class SettingsScreen extends ScaledScreen {
     }
 
     private void generateUI() {
-        skin.getFont("default-font").scale(4f);
+
+        // Added new font
+        //BitmapFont font = Commons.getFont(52, Gdx.files.internal("system/fonts/Futura.ttc"));
+        //Label.LabelStyle style = new Label.LabelStyle(font,Color.WHITE);
+
+       // skin.getFont("default-font").scale(4f);
 
         btnBack = new TextButton("Back", skin);
         btnBack.setSize(200, 100);
@@ -183,7 +194,13 @@ public class SettingsScreen extends ScaledScreen {
             }
         });
 
-        playerName = new TextField(strPlayerName, skin);
+        try{
+            playerName = new TextField(getPlayerName(), skin);
+        }catch (NullPointerException e){
+            playerName = new TextField(strPlayerName, skin);
+        }
+
+
         playerName.setMaxLength(16);
 
         //Add elements to table
@@ -211,11 +228,15 @@ public class SettingsScreen extends ScaledScreen {
         stage.addActor(btnBack);
     }
 
-    public String getPlayerName(){
-        return playerName.getText();
-    }
+   public String getPlayerName(){
 
-    public boolean updateNameField(boolean b){
+        //get name from preferences, Player -1 is the default.
+       strPlayerName = prefs.getString(NAME);
+
+       return strPlayerName;
+   }
+
+    private boolean updateNameField(boolean b){
         //we only want to update once when we switch to this screen
         if(b) {
             if (main.getClient().getID() != -1) {
@@ -228,8 +249,13 @@ public class SettingsScreen extends ScaledScreen {
         return false;
     }
 
-    public void updateConnectionName(){
+    private void updateConnectionName(){
         main.getClient().setName(playerName.getText());
         System.out.println("Name: " + playerName.getText());
+
+        //Store name
+        prefs.putString(NAME, playerName.getText());
+        //persist preferences
+        prefs.flush();
     }
 }
