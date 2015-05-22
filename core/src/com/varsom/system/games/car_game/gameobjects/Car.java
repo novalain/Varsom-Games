@@ -229,12 +229,11 @@ public class Car extends DynamicObject implements Comparable<Car> {
             wheel.body.applyForce(wheel.body.getWorldVector(new Vector2(forceVector.x, forceVector.y)), position, true);
         }
 
+        //update the projection on the way point lines
         wpHandler.getProjectionPoint(getPosition());
         pathTrackingSprite.setPosition(pointOnTrack.x, pointOnTrack.y);
         pathTrackingSprite.setRotation((float)Math.toDegrees(wpHandler.getCurrentLineAngle()));
         pathTrackingSprite.setOriginCenter();
-        //Gdx.app.log("CarUpdate","pointOnTrack = " + pointOnTrack + "\tangleOfCurrentLine = " + angleOfCurrentLine + "\n");
-        //Gdx.app.log("CarUpdate","waypoint = " + waypoint + "\tNumOfWPs = " + track.getPath().size + "\n");
 
         setCarSpeed();
 
@@ -258,6 +257,11 @@ public class Car extends DynamicObject implements Comparable<Car> {
     public Vector2 getPointOnTrack() {
         return pointOnTrack;
     }
+
+    public Vector2 getOffsetPoint(float dist) {
+        return wpHandler.getOffsetPositionOnCurrentLine(pointOnTrack, dist);
+    }
+
     public float getRotationTrack() {
         return wpHandler.getCurrentLineAngle();
     }
