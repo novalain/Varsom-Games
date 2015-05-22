@@ -92,9 +92,13 @@ public class GameScreen implements Screen {
     // constants for screen
     int SCREEN_WIDTH = Gdx.graphics.getWidth();
     int SCREEN_HEIGHT = Gdx.graphics.getHeight();
+    float ZOOM = 1.75f;
+    float SHOW_CAR_ZOOM = 0.5f;
+    float SWITCH_WHICH_CAR_TO_SHOW_ZOOM = 1.0f;
 
     //for start sequence
     private boolean zoomedIn = false;
+    private boolean presentedAllCars = false;
     private boolean startSequenceDone = false;
     private int NoOfCarToShowName = 0;
     private Label labelPlayerName;
@@ -142,7 +146,7 @@ public class GameScreen implements Screen {
         //TODO camera.position.set(leaderCar.getPointOnTrack(), 0);
         camera.position.set(activeCars.get(0).getPosition().x, activeCars.get(0).getPosition().y, 0);
         camera.rotate((float) Math.toDegrees(leaderCar.getRotationTrack()) - 180);
-        camera.zoom = 2.f; // can be used to see the entire track
+        camera.zoom = ZOOM; // can be used to see the entire track
         camera.update();
 
         batch = new SpriteBatch();
@@ -298,7 +302,7 @@ public class GameScreen implements Screen {
         leaderCar = track.getLeaderCar();
 
         //if start sequence is done, use the normal game logic for the camera
-        if (startSequenceDone) {
+        if (presentedAllCars) {
             newCamPosX = (leaderCar.getPointOnTrack().x - camera.position.x);
             newCamPosY = (leaderCar.getPointOnTrack().y - camera.position.y);
         }
@@ -475,38 +479,49 @@ public class GameScreen implements Screen {
         //When track is created
         //for each car in the array
         if (!startSequenceDone) {
-            //display name
-            labelPlayerName.setText(activeCars.get(NoOfCarToShowName).getConnectionName());
+            if(!presentedAllCars) {
+                //display name
+                labelPlayerName.setText(activeCars.get(NoOfCarToShowName).getConnectionName());
 
-            //zoom in
-            if (!zoomedIn) {
-                camera.zoom = camera.zoom - 0.7f * Gdx.graphics.getDeltaTime();
+                //zoom in
+                if (!zoomedIn) {
+                    camera.zoom = camera.zoom - 0.7f * Gdx.graphics.getDeltaTime();
 
-                //stop zooming
-                if (camera.zoom < 0.5f) {
-                    zoomedIn = true;
-                    //vibrate players controller
-                    Car car = activeCars.get(NoOfCarToShowName);
-                    int conID = car.getConnectionID();
-                    varsomSystem.getMPServer().vibrateClient(200, conID);
-                }
-            } else {
-                //zoom out
-                camera.zoom = camera.zoom + 0.7f * Gdx.graphics.getDeltaTime();
+                    //stop zooming
+                    if (camera.zoom < SHOW_CAR_ZOOM) {
+                        zoomedIn = true;
+                        //vibrate players controller
+                        Car car = activeCars.get(NoOfCarToShowName);
+                        int conID = car.getConnectionID();
+                        varsomSystem.getMPServer().vibrateClient(200, conID);
+                    }
+                } else {
+                    //zoom out
+                    camera.zoom = camera.zoom + 0.5f * Gdx.graphics.getDeltaTime();
 
-                if (camera.zoom >= 2.0f) {
-                    camera.zoom = 2.0f;
-                    //switch focus to next car
-                    NoOfCarToShowName++;
-                    zoomedIn = false;
+                    if (camera.zoom >= SWITCH_WHICH_CAR_TO_SHOW_ZOOM) {
+                        camera.zoom = SWITCH_WHICH_CAR_TO_SHOW_ZOOM;
+                        //switch focus to next car
+                        NoOfCarToShowName++;
+                        zoomedIn = false;
+                    }
                 }
             }
-        }
 
-        //when all cars have been shown the sequence is done
-        if (NoOfCarToShowName == activeCars.size()) {
-            startSequenceDone = true;
-            labelPlayerName.setText("");
+            //when all cars have been shown we zoom out
+            if (NoOfCarToShowName == activeCars.size()) {
+                labelPlayerName.setText("");
+                presentedAllCars = true;
+
+                if (camera.zoom >= ZOOM) {
+                    camera.zoom = ZOOM;
+                    startSequenceDone = true;
+                    System.out.println("Sequence done")
+                } else {
+                    //zoom out
+                    camera.zoom = camera.zoom + 0.7f * Gdx.graphics.getDeltaTime();
+                }
+            }
         }
     }
 }
