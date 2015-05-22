@@ -516,7 +516,6 @@ public class GameScreen implements Screen {
                 if (camera.zoom >= ZOOM) {
                     camera.zoom = ZOOM;
                     startSequenceDone = true;
-                    System.out.println("Sequence done")
                 } else {
                     //zoom out
                     camera.zoom = camera.zoom + 0.7f * Gdx.graphics.getDeltaTime();
