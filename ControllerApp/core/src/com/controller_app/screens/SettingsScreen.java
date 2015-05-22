@@ -176,6 +176,7 @@ public class SettingsScreen extends ScaledScreen {
         });
 
         playerName = new TextField(strPlayerName, skin);
+        playerName.setMaxLength(16);
 
         //Add elements to table
 
