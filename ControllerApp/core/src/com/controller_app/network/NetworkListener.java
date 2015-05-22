@@ -1,6 +1,10 @@
 package com.controller_app.network;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.controller_app.Main;
+import com.controller_app.helper.Commons;
+import com.controller_app.screens.VarsomSystemScreen;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -12,6 +16,7 @@ public class NetworkListener extends Listener {
 
     private Client client;
     private MPClient mpClient;
+    private Main main;
 
 
     private boolean start;
@@ -97,6 +102,7 @@ public class NetworkListener extends Listener {
 
             paddir = ((Packet.SendDPadData) o).dataX;
             boolean padSelected = ((Packet.SendDPadData) o).select;
+            boolean padBack = ((Packet.SendDPadData) o).back;
             System.out.println("Paddir is " + paddir + " and select is " + padSelected );
 
         }
@@ -127,6 +133,12 @@ public class NetworkListener extends Listener {
             mpClient.setActiveScreenIndex(((Packet.ChangeController) o).controller);
             mpClient.setChangeController(true);
 
+        }
+
+        else if (o instanceof Screen){
+            main = mpClient.getMain();
+            main.getConnectionScreen().disconnect();
+            main.changeScreen(Commons.CONNECTION_SCREEN);
         }
     }
 }

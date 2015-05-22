@@ -220,23 +220,29 @@ public class ConnectionScreen extends ScaledScreen {
             new Dialog("", skin) {
                 {
                     text("It's seems that your connection sucks");
-                    button("Reconnect");
+                    button("Ok");
                 }
 
                 @Override
                 protected void result(final Object object) {
                     //mpClient.client.start();
-                    text2.addAction(Actions.sequence(Actions.alpha(1f, 0.4f)));
-                    testThread.interrupt();
-                    try {
-                        mpClient.reconnect();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    if(main.getActiveScreen() == main.getConnectionScreen()) {
+                        text2.addAction(Actions.sequence(Actions.alpha(1f, 0.4f)));
+                        testThread.interrupt();
+                        mpClient.client.close();
+                       // showGif = true;
                     }
 
                 }
 
             }.show(stage);
+
+//                try {
+//                    mpClient.reconnect();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+                //showGif = false;
                 break;
 
             case Commons.NO_SERVER_FOUND:

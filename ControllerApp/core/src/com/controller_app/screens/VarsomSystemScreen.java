@@ -94,8 +94,8 @@ public class VarsomSystemScreen extends ScaledScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.input.vibrate(Commons.VIBRATION_TIME);
-                main.getConnectionScreen().disconnect();
-                main.changeScreen(Commons.CONNECTION_SCREEN);
+                mpClient.sendDPadData(0,0,false,true);
+                mpClient.setMain(main);
             }
         });
 
@@ -107,7 +107,7 @@ public class VarsomSystemScreen extends ScaledScreen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 Gdx.input.vibrate(Commons.VIBRATION_TIME);
-                mpClient.sendDPadData(0, 0, DPad.SELECT);
+                mpClient.sendDPadData(0, 0, DPad.SELECT,false);
                 return false;
             }
 
@@ -144,7 +144,7 @@ public class VarsomSystemScreen extends ScaledScreen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 Gdx.input.vibrate(Commons.VIBRATION_TIME);
-                mpClient.sendDPadData(DPad.LEFT, 0, false);
+                mpClient.sendDPadData(DPad.LEFT, 0, false, false);
                 return false;
             }
 
@@ -164,7 +164,7 @@ public class VarsomSystemScreen extends ScaledScreen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 Gdx.input.vibrate(Commons.VIBRATION_TIME);
-                mpClient.sendDPadData(DPad.RIGHT, 0, false);
+                mpClient.sendDPadData(DPad.RIGHT, 0, false, false);
                 return false;
             }
 
@@ -183,7 +183,7 @@ public class VarsomSystemScreen extends ScaledScreen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 Gdx.input.vibrate(Commons.VIBRATION_TIME);
-                mpClient.sendDPadData(0, DPad.UP, false);
+                mpClient.sendDPadData(0, DPad.UP, false, false);
                 return false;
             }
 
@@ -203,8 +203,7 @@ public class VarsomSystemScreen extends ScaledScreen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 Gdx.input.vibrate(Commons.VIBRATION_TIME);
-                mpClient.sendDPadData(0, DPad.DOWN, false);
-                System.out.println("Adam, kolla här!!");
+                mpClient.sendDPadData(0, DPad.DOWN, false, false);
                 return false;
             }
 
