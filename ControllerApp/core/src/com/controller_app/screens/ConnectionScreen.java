@@ -129,7 +129,7 @@ public class ConnectionScreen extends ScaledScreen {
 
         Label.LabelStyle style = new Label.LabelStyle(fontType, Color.WHITE);
         text = new Label("Welcome!", style);
-        text2 = new Label("Set up server and touch anywhere to connect", style);
+        text2 = new Label("Set up server device, then touch anywhere to connect", style);
         text3 = new Label("Press to reconnect", style);
         //text.setPosition(Commons.WORLD_WIDTH / 2 - text.getWidth() / 2, Commons.WORLD_HEIGHT - 200);
 
@@ -196,7 +196,7 @@ public class ConnectionScreen extends ScaledScreen {
         });*/
 
 
-        table.add(varsomLogo).pad(80).row();
+        table.add(varsomLogo).row();
         table.add(text).row();
         table.add(text2).row();
 
@@ -313,7 +313,7 @@ public class ConnectionScreen extends ScaledScreen {
 
         // Shows animation
         if(showGif)
-            spriteBatch.draw(anim.getKeyFrame(frameCounter, true), Commons.WORLD_WIDTH / 2 - new Texture(Gdx.files.internal("system/img/loading.gif")).getWidth() / 2, 150);
+            spriteBatch.draw(anim.getKeyFrame(frameCounter, true), Commons.WORLD_WIDTH / 2 - new Texture(Gdx.files.internal("system/img/loading.gif")).getWidth() / 2, Commons.WORLD_HEIGHT / 20);
 
         spriteBatch.end();
 

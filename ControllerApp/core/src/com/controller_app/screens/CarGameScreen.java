@@ -52,7 +52,7 @@ public class CarGameScreen extends ScaledScreen {
 
     private boolean drivePressed = false, reversePressed = false, firePressed = false;
 
-    private float steeringSensitivity = 0.4f;
+    //private float steeringSensitivity = 0.4f;
 
     private String packet;
     private String playerName = "";
@@ -318,7 +318,6 @@ public class CarGameScreen extends ScaledScreen {
         yAxix = Gdx.input.getAccelerometerY();
 
         tiltAngle = (float) (-Math.atan2(yAxix, xAxix));
-        tiltAngle *= steeringSensitivity;
 
         return tiltAngle;
     }
