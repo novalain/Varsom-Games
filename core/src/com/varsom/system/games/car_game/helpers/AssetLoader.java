@@ -40,10 +40,12 @@ public class AssetLoader {
                          krazyThingyTexture;
 
     public static Skin skin;
+    public static FileHandle krazyFontFile;
 
 
     public static void load() {
         //NEW MENU
+        krazyFontFile = Gdx.files.internal("system/fonts/BADABB__.TTF");
         skin = new Skin(Gdx.files.internal("car_game_assets/skins/menuSkin.json"),
                 new TextureAtlas(Gdx.files.internal("system/skins/menuSkin.pack")));
         krazyTitleTexture = new Texture(Gdx.files.internal("car_game_assets/menu/krazyRacyText.png"));

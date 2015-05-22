@@ -414,6 +414,7 @@ public class GameScreen implements Screen {
         if(activeCars.size() == 1) {
             weHaveAWinner();
         }
+        //TODO ADD LOSE SCREEN TO CONTROLLER
     }
 
     private void weHaveAWinner(){

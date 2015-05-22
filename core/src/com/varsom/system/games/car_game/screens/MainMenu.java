@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.varsom.system.Commons;
 import com.varsom.system.DPad;
 import com.varsom.system.games.car_game.helpers.AssetLoader;
+import com.varsom.system.games.car_game.helpers.KrazyRazyCommons;
 import com.varsom.system.screens.ScaledScreen;
 
 import java.util.ArrayList;
@@ -208,17 +209,10 @@ public class MainMenu extends ScaledScreen {
         //BitmapFont fontType = new BitmapFont(new FileHandle("system/fonts/badaboom64w.fnt"));
         //fontType.scale(2.f);
 
+        BitmapFont font = Commons.getFont(52,AssetLoader.krazyFontFile,KrazyRazyCommons.KRAZY_BLUE,3f,KrazyRazyCommons.KRAZY_GREEN);
+        Label.LabelStyle style = new Label.LabelStyle(font,Color.WHITE);
 
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("system/fonts/BADABB__.TTF"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 52;
-        //parameter.color = Color.GREEN;
-        parameter.borderColor = new Color(0.25f,0.75f,0.25f,1);
-        parameter.borderWidth = 2f;
 
-        BitmapFont font12 = generator.generateFont(parameter); // font size 12 pixels
-        generator.dispose(); // don't forget to dispose to avoid memory leaks!
-        Label.LabelStyle style = new Label.LabelStyle(font12,new Color(0.4f,0.4f,1.0f,1));
 
 
         //label that shows all connected players

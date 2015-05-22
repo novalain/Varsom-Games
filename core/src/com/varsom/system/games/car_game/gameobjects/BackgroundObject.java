@@ -49,7 +49,7 @@ public class BackgroundObject {
     }
 
     public Vector2 getPos() {
-        return pos;
+        return new Vector2(image.getX(),image.getY());
     }
 
     public void setPos(Vector2 pos) {

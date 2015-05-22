@@ -3,6 +3,7 @@ package com.varsom.system.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -13,6 +14,7 @@ import com.varsom.system.DPad;
 import com.varsom.system.VarsomSystem;
 import com.varsom.system.abstract_gameobjects.VarsomGame;
 import com.varsom.system.games.car_game.com.varsomgames.cargame.CarGame;
+import com.varsom.system.games.car_game.helpers.AssetLoader;
 import com.varsom.system.network.NetworkListener;
 
 import java.util.Vector;
@@ -31,12 +33,15 @@ public class VarsomMenu extends ScaledScreen{
     private boolean swipedLeft, swipedRight, swipedDown, swipedUp;
     private Image cargameImage, backgroundImage, varsomLogo, shutdownImage, questionmarkImage;
     private Vector2 lastTouch;
+    private BitmapFont playerFont;
 
 
     public VarsomMenu(VarsomSystem varsomSystem) {
 
         this.varsomSystem = varsomSystem;
         varsomSystem.setActiveStage(stage);
+        //TODO We should have an AssetLoader for the VarsomMenu!
+        playerFont = Commons.getFont(20, Gdx.files.internal("system/fonts/Futura.ttc"));
 
         currentHelpButton = 1;
         currentGame = 0;
