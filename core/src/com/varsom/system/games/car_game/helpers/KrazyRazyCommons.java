@@ -2,7 +2,7 @@ package com.varsom.system.games.car_game.helpers;
 
 import com.badlogic.gdx.graphics.Color;
 
-public class KrazyRazyCommons {
+public interface KrazyRazyCommons {
 
     //Type of vehicle
     public final static int CAR = 0;
@@ -14,4 +14,5 @@ public class KrazyRazyCommons {
 
     //FONTS
     //public final static
+    public final static int CHEST = 2;
 }

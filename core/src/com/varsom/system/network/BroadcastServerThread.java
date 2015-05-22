@@ -45,6 +45,7 @@ public class BroadcastServerThread extends Thread {
             try {
                 InetAddress broadcastaddress = InetAddress.getByName(broadip);
                 DatagramPacket packet = new DatagramPacket(buf, buf.length, broadcastaddress, 4446);
+                System.out.println(packet.getSocketAddress().toString());
                 socket.setBroadcast(true);
                 socket.send(packet);
 
@@ -70,7 +71,8 @@ public class BroadcastServerThread extends Thread {
 
             while (it.hasNext()) {
                 InterfaceAddress ia = it.next();
-                if(ia.getBroadcast() != null) {
+                //System.out.println(ia.getAddress());
+                if(ia.getBroadcast() != null && !ia.getAddress().isLoopbackAddress()) {
                     broadip = ia.getBroadcast().toString();
                     broadip = broadip.replace("/", "");
                     //System.out.println(" Broadcast = " + broadip);

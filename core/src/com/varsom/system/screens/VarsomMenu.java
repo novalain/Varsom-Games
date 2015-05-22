@@ -392,7 +392,7 @@ public class VarsomMenu extends ScaledScreen{
     private void init(){
 
         // Create images of games
-        cargameImage = new Image(new Texture(Gdx.files.internal("system/img/next_cargame.png")));
+        cargameImage = new Image(new Texture(Gdx.files.internal("system/img/crazy_razy.png")));
 
         shutdownImage = new Image(new Texture(Gdx.files.internal("system/img/shut_down_icon.png")));
         shutdownImage.setHeight(100);
@@ -558,6 +558,7 @@ public class VarsomMenu extends ScaledScreen{
                     public void run() {
                         VarsomGame carGame = new CarGame((VarsomSystem) Gdx.app.getApplicationListener());
                         varsomSystem.setActiveGame(carGame);
+
 
                     }
                 })));

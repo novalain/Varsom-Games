@@ -88,9 +88,9 @@ public class Track1 extends Track{
                     carType = KrazyRazyCommons.TURTLE;
                     break;
                 case 1:
-                    carSprite = new Sprite(AssetLoader.carTexture2);
+                    carSprite = new Sprite(AssetLoader.carTexture3);
                     carWidth = 0.5f;
-                    carType = KrazyRazyCommons.CAR;
+                    carType = KrazyRazyCommons.CHEST; // carType doesn't do anything in this case
                     break;
                 case 2:
                     carSprite = new Sprite(AssetLoader.carTexture);
