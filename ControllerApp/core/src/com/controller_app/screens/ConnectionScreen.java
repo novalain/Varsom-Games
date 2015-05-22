@@ -195,8 +195,20 @@ public class ConnectionScreen extends ScaledScreen {
             }
         });*/
 
+        varsomLogo.setPosition(Commons.WORLD_WIDTH / 2 - varsomLogo.getPrefWidth() / 2,Commons.WORLD_HEIGHT / 2-varsomLogo.getPrefHeight()/2.5f);
+        text.setWrap(true);
+        text2.setWrap(true);
+        text.setPosition(Commons.WORLD_WIDTH / 2 - text.getWidth() / 2, text.getHeight()+text2.getHeight());
+        text2.setPosition(Commons.WORLD_WIDTH / 2 - text2.getWidth() / 2, text2.getHeight());
 
-        table.add(varsomLogo).row();
+        varsomLogo.addListener(background.getListeners().get(0));
+        varsomLogo.addListener(background.getListeners().get(0));
+        varsomLogo.addListener(background.getListeners().get(0));
+        stage.addActor(varsomLogo);
+        stage.addActor(text);
+        stage.addActor(text2);
+
+        /*table.add(varsomLogo).row();
         table.add(text).row();
         table.add(text2).row();
 
@@ -205,7 +217,7 @@ public class ConnectionScreen extends ScaledScreen {
 
         table.pack();
         table.addListener(background.getListeners().get(0));
-        stage.addActor(table);
+        stage.addActor(table);*/
 
         System.out.println("image: " + table.getPrefWidth() + " , " + table.getPrefHeight());
     }
@@ -307,10 +319,12 @@ public class ConnectionScreen extends ScaledScreen {
         //Check if we have connected
         if(mpClient.client.isConnected()) {
             //Check if the server is joinable
-            if(NetworkListener.standby)
+            if(NetworkListener.standby) {
                 main.changeScreen(Commons.STANDBY_SCREEN);
-            else
+            }
+            else {
                 main.changeScreen(Commons.VARSOM_SYSTEM_SCREEN);
+            }
         }
         // Sprite renders
         spriteBatch.setProjectionMatrix(camera.combined);
@@ -318,8 +332,9 @@ public class ConnectionScreen extends ScaledScreen {
         spriteBatch.begin();
 
         // Shows animation
-        if(showGif)
-            spriteBatch.draw(anim.getKeyFrame(frameCounter, true), Commons.WORLD_WIDTH / 2 - new Texture(Gdx.files.internal("system/img/loading.gif")).getWidth() / 2, Commons.WORLD_HEIGHT / 20);
+        if(showGif) {
+            spriteBatch.draw(anim.getKeyFrame(frameCounter, true), Commons.WORLD_WIDTH / 2 - new Texture(Gdx.files.internal("system/img/loading.gif")).getWidth() / 2, Commons.WORLD_HEIGHT / 21);
+        }
 
         spriteBatch.end();
 
