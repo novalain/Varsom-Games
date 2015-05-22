@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -20,6 +21,8 @@ import com.varsom.system.games.car_game.tracks.Track;
 
 public class Car extends DynamicObject implements Comparable<Car> {
 
+    public static final float SMOKE_SCALE = 0.008f;
+
     private float width, length, maxSteerAngle, maxSpeed, power, wheelAngle;
     private boolean userAccelerate = false, userBreaking = false;
     private boolean smoke = false;
@@ -35,8 +38,12 @@ public class Car extends DynamicObject implements Comparable<Car> {
     private String connectionName;
     private boolean active;
     public Sprite pathTrackingSprite;
+    private int carType;
 
-    public Car(float width, float length, Vector2 position, World world, Sprite carSprite, float angle, float power, float maxSteerAngle, float maxSpeed,Track inTrack,int ID/*,int conID*/) { //TODO remove the comment before game is finished.. lolzzz
+    // Particleeffects
+    public ParticleEffect smokeParticles;
+
+    public Car(float width, float length, Vector2 position, World world, Sprite carSprite, float angle, float power, float maxSteerAngle, float maxSpeed,Track inTrack,int ID/*,int conID*/, int carType) { //TODO remove the comment before game is finished.. lolzzz
         super(position, angle, new PolygonShape(), carSprite, world);
 
         this.width = width;
@@ -49,6 +56,7 @@ public class Car extends DynamicObject implements Comparable<Car> {
         this.ID = ID; //temp.. i think..
         this.active = true;
         this.track = inTrack;
+        this.carType = carType;
 
         //TODO this should be uncommented, but for developing purposes it could be beneficial to use the setConnectionID funciton instead
         //connectionID = conID
@@ -88,6 +96,15 @@ public class Car extends DynamicObject implements Comparable<Car> {
         pathTrackingSprite.setPosition(pointOnTrack.x, pointOnTrack.y);
         pathTrackingSprite.setRotation((float)Math.toDegrees(wpHandler.getCurrentLineAngle()));
         pathTrackingSprite.setOriginCenter();
+
+        // Set up particlesystem, smoke.p is created in i build-in software in libgdx
+        // "Smoke.p" is linked together with a sample particle.png that is found in img folder
+        smokeParticles = new ParticleEffect();
+        smokeParticles.load(AssetLoader.particleFile, AssetLoader.particleImg);
+        smokeParticles.setPosition(getBody().getPosition().x, getBody().getPosition().y);
+        smokeParticles.scaleEffect(SMOKE_SCALE);
+        smokeParticles.start();
+
     }
 
     public List<Wheel> getPoweredWheels() {
@@ -220,6 +237,22 @@ public class Car extends DynamicObject implements Comparable<Car> {
         //Gdx.app.log("CarUpdate","waypoint = " + waypoint + "\tNumOfWPs = " + track.getPath().size + "\n");
 
         setCarSpeed();
+
+        smokeParticles.setPosition(getBody().getPosition().x + length / 2 * getBody().getWorldVector(new Vector2(0, 1)).x, getBody().getPosition().y + length / 2 * getBody().getWorldVector(new Vector2(0, 1)).y);
+
+        if(smoke){
+            if(smokeParticles.isComplete()){
+                smokeParticles.reset();
+            }
+        }
+
+
+    }
+
+    public ParticleEffect getSmokeEffect(){
+
+        return smokeParticles;
+
     }
 
     public Vector2 getPointOnTrack() {
@@ -289,4 +322,6 @@ public class Car extends DynamicObject implements Comparable<Car> {
     public String getConnectionName(){
         return connectionName;
     }
+
+    public int getCarType() { return carType; }
 }

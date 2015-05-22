@@ -22,9 +22,6 @@ import com.varsom.system.games.car_game.gameobjects.BoxObstacle;
 import com.varsom.system.games.car_game.gameobjects.Car;
 import com.varsom.system.games.car_game.helpers.AssetLoader;
 
-/**
- * Created by oskarcarlbaum on 15/04/15.
- */
 public abstract class Track {
 
     protected float offTrackSpeed;
@@ -183,6 +180,14 @@ public abstract class Track {
         inBatch.begin();
 
         bgSprite.draw(inBatch);
+
+        // Draw smoke effects
+        for(int i = 0; i < cars.length; i++){
+
+            cars[i].getSmokeEffect().draw(inBatch, Gdx.graphics.getDeltaTime());
+
+        }
+
 
         // Draw sprites that are not connected to a physical body
         for (Sprite sprite : sprites) {

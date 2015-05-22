@@ -105,7 +105,7 @@ public class VarsomSystem extends /*ApplicationAdapter*/Game {
     public void errorMessage(Connection c){
         final Connection myC = c;
 
-        errorDialog = new Dialog("Error", skin) {
+        errorDialog = new Dialog("", skin) {
             {
                 text(myC.toString() + " has disconnected");
                 button("Ok");

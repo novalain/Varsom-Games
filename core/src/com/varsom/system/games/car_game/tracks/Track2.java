@@ -15,10 +15,8 @@ import com.varsom.system.games.car_game.gameobjects.Wheel;
 
 import com.varsom.system.games.car_game.helpers.AssetLoader;
 import com.varsom.system.games.car_game.helpers.InputHandler;
+import com.varsom.system.games.car_game.helpers.KrazyRazyCommons;
 
-/**
- * Created by oskarcarlbaum on 18/03/15.
- */
 public class Track2 extends Track{
 
     //Particleeffects..
@@ -57,13 +55,14 @@ public class Track2 extends Track{
         float carWidth = 0.5f, carLength = 1.0f;
         float spawnPosRotation = (float) -Math.PI/2;
         float carPower = 60, maxSteerAngle = 20, maxSpeed = 30;
+        int carType = KrazyRazyCommons.CAR;
 
         //TODO. Fix when the game can be started from the server, DO NOT REMOVE THE COMMENTED FUNCTION
 
         cars = new Car[NUMBER_OF_PLAYERS];
         for(int i = 0; i < NUMBER_OF_PLAYERS; i++) {
             cars[i] = new Car(carWidth, carLength, hardcodedSpawnPoints()[i], world, null,
-                spawnPosRotation, carPower, maxSteerAngle, maxSpeed,this,i);
+                spawnPosRotation, carPower, maxSteerAngle, maxSpeed,this,i, carType);
                 Gdx.input.setInputProcessor(new InputHandler(cars[i]));
 
                 //add car to the frontLayer and all its wheels to the backLayer

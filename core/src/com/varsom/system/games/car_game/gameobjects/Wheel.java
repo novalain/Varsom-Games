@@ -19,7 +19,7 @@ public class Wheel {
 	 * Common practice is to use a constant to convert pixels to and from
 	 * "meters".
 	 */
-	public static final float PIXELS_PER_METER = 60.0f;
+	//public static final float PIXELS_PER_METER = 60.0f;
 	
 	public Car car;//car this wheel belongs to
 	private float width; // width in meters
