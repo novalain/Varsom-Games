@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -103,6 +104,9 @@ public class Car extends DynamicObject implements Comparable<Car> {
         smokeParticles.load(AssetLoader.particleFile, AssetLoader.particleImg);
         smokeParticles.setPosition(getBody().getPosition().x, getBody().getPosition().y);
         smokeParticles.scaleEffect(SMOKE_SCALE);
+        //ParticleEmitter emitter = smokeParticles.getEmitters().first();
+        //emitter.getScale().setHigh(5, 20);
+
         smokeParticles.start();
 
     }

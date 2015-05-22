@@ -69,13 +69,13 @@ public class AssetLoader {
         //tireTrackTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
         tireObstacleTexture = new Texture("car_game_assets/img/tire.png");
-        wallTexture = new Texture("car_game_assets/img/wall.jpg");
+        wallTexture = new Texture("car_game_assets/img/wall2.jpg");
 
         // Guessing bg is background
         bgTexture = new Texture(Gdx.files.internal("car_game_assets/img/temp_background.png"));
         bgTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
-        testTrackTexture = new Texture("car_game_assets/img/tracks/temptrack.png");
+        testTrackTexture = new Texture("car_game_assets/img/tracks/newtrack.png");
         testTrackMask = new Texture("car_game_assets/img/tracks/trackmask.png");
 
         track2Texture = new Texture("car_game_assets/img/tracks/track2.png");
@@ -84,7 +84,7 @@ public class AssetLoader {
         bg = new TextureRegion(bgTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         bg.flip(false, true); // Flip the sprite vertically to fit coordinate system Y-down
 
-        particleFile = Gdx.files.internal("car_game_assets/effects/smoke.p");
+        particleFile = Gdx.files.internal("car_game_assets/effects/smoke_cartoon.p");
         particleImg = Gdx.files.internal("car_game_assets/img");
 
         // For animation on ambulance but should probably use an atlas
