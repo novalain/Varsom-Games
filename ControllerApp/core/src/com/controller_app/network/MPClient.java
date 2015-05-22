@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.controller_app.Main;
 import com.controller_app.helper.Commons;
 import com.controller_app.screens.ConnectionScreen;
-import com.controller_app.screens.CarGameScreen;
+import com.controller_app.screens.KrazyRazyControllerScreen;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 
@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class MPClient {
     public Client client;
-    public CarGameScreen carGameScreen;
+    public KrazyRazyControllerScreen krazyRazyControllerScreen;
     private BroadcastClient broadcastClient;
     public boolean correctIP;
     private String serverIP;
@@ -183,7 +183,7 @@ public class MPClient {
                         //Gdx.app.log("Thread", "DATA IS BEING SENT!!");
                         Packet.GamePacket packet = new Packet.GamePacket();
 
-                        packet.message = carGameScreen.getDrive() + " " + carGameScreen.getReverse() + " " + carGameScreen.getRotation();
+                        packet.message = krazyRazyControllerScreen.getDrive() + " " + krazyRazyControllerScreen.getReverse() + " " + krazyRazyControllerScreen.getRotation();
                         client.sendUDP(packet);
                     }
                 } catch (InterruptedException e) {

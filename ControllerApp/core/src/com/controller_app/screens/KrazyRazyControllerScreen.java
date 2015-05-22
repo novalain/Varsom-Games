@@ -26,7 +26,7 @@ import com.controller_app.helper.Commons;
  *
  */
 
-public class CarGameScreen extends ScaledScreen {
+public class KrazyRazyControllerScreen extends ScaledScreen {
 
     private Image btnAccelerate, btnAcceleratePressed;
     private Image btnReverse, btnReversePressed;
@@ -61,7 +61,7 @@ public class CarGameScreen extends ScaledScreen {
 
     private float tiltAngle;
 
-    public CarGameScreen(Main m, MPClient mpc) {
+    public KrazyRazyControllerScreen(Main m, MPClient mpc) {
 
         super();
 
@@ -92,7 +92,7 @@ public class CarGameScreen extends ScaledScreen {
         stage.addActor(btnAmmo1);
         stage.addActor(btnAmmo2);
 
-        mpc.carGameScreen = this;
+        mpc.krazyRazyControllerScreen = this;
     }
 
     @Override
@@ -153,35 +153,35 @@ public class CarGameScreen extends ScaledScreen {
 
     private void generateUI() {
 
-        btnAccelerate = new Image(new Texture(Gdx.files.internal("cargame_controller/krazyRacyAccelerate.png")));
+        btnAccelerate = new Image(new Texture(Gdx.files.internal("krazy_razy_controller/krazyRacyAccelerate.png")));
         btnAccelerate.setPosition(Commons.WORLD_WIDTH - btnAccelerate.getWidth() - 10, Commons.WORLD_HEIGHT - btnAccelerate.getHeight() - 5);
 
-        btnAcceleratePressed = new Image(new Texture(Gdx.files.internal("cargame_controller/krazyRacyAcceleratePressed.png")));
+        btnAcceleratePressed = new Image(new Texture(Gdx.files.internal("krazy_razy_controller/krazyRacyAcceleratePressed.png")));
         btnAcceleratePressed.setPosition(Commons.WORLD_WIDTH - btnAccelerate.getWidth() - 10, Commons.WORLD_HEIGHT - btnAccelerate.getHeight() - 5);
         btnAcceleratePressed.addAction(Actions.sequence(Actions.alpha(0.0f, 0.0f)));
 
-        btnReverse = new Image(new Texture(Gdx.files.internal("cargame_controller/krazyRacyReverse.png")));
+        btnReverse = new Image(new Texture(Gdx.files.internal("krazy_razy_controller/krazyRacyReverse.png")));
         btnReverse.setPosition(Commons.WORLD_WIDTH - btnReverse.getWidth() - btnAccelerate.getWidth()/4 + 50, 10);
 
-        btnReversePressed = new Image(new Texture(Gdx.files.internal("cargame_controller/krazyRacyReversePressed.png")));
+        btnReversePressed = new Image(new Texture(Gdx.files.internal("krazy_razy_controller/krazyRacyReversePressed.png")));
         btnReversePressed.setPosition(Commons.WORLD_WIDTH - btnReverse.getWidth() - btnAccelerate.getWidth()/4 + 50, 10);
         btnReversePressed.addAction(Actions.sequence(Actions.alpha(0.0f, 0.0f)));
 
-        btnPause = new Image(new Texture(Gdx.files.internal("cargame_controller/krazyRacyPause.png")));
+        btnPause = new Image(new Texture(Gdx.files.internal("krazy_razy_controller/krazyRacyPause.png")));
         btnPause.setPosition(Commons.WORLD_WIDTH / 2 - btnPause.getWidth()/2, Commons.WORLD_HEIGHT / 2 - btnPause.getHeight() / 2 );
 
-        btnFire = new Image(new Texture(Gdx.files.internal("cargame_controller/krazyRacyFire.png")));
+        btnFire = new Image(new Texture(Gdx.files.internal("krazy_razy_controller/krazyRacyFire.png")));
         btnFire.setPosition(50, Commons.WORLD_HEIGHT - btnFire.getHeight() - 50);
 
-        btnFirePressed = new Image(new Texture(Gdx.files.internal("cargame_controller/krazyRacyFirePressed.png")));
+        btnFirePressed = new Image(new Texture(Gdx.files.internal("krazy_razy_controller/krazyRacyFirePressed.png")));
         btnFirePressed.setPosition(50, Commons.WORLD_HEIGHT - btnFire.getHeight() - 50);
         btnFirePressed.addAction(Actions.sequence(Actions.alpha(0.0f, 0.0f)));
 
-        logo = new Image(new Texture(Gdx.files.internal("cargame_controller/krazyRacyText.png")));
+        logo = new Image(new Texture(Gdx.files.internal("krazy_razy_controller/krazyRacyText.png")));
         logo.setPosition(Commons.WORLD_WIDTH / 2 - logo.getWidth() / 2, Commons.WORLD_HEIGHT/2 - logo.getHeight() / 2 + 340);
 
-        btnAmmo1 = new Image(new Texture(Gdx.files.internal("cargame_controller/krazyRacyAmmo.png")));
-        btnAmmo2 = new Image(new Texture(Gdx.files.internal("cargame_controller/krazyRacyAmmo.png")));
+        btnAmmo1 = new Image(new Texture(Gdx.files.internal("krazy_razy_controller/krazyRacyAmmo.png")));
+        btnAmmo2 = new Image(new Texture(Gdx.files.internal("krazy_razy_controller/krazyRacyAmmo.png")));
 
         btnAmmo1.setPosition(50, 50);
         btnAmmo2.setPosition(btnAmmo1.getWidth() + 50, 50);

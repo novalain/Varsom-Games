@@ -2,6 +2,7 @@ package com.controller_app.screens;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -40,11 +42,12 @@ public class StandbyScreen extends ScaledScreen {
      * @param main This refers to the mainfunction
      * @param mpClient This calls to the MPClient to start a new network connection
      */
-    private TextField textField;
     private Table table;
     private TextureAtlas atlas;
 
-    private Texture logo;
+    private Texture figure;
+    private Label labelStandby;
+    private Label labelExplanation;
     private MPClient mpClient;
 
     private Main main;
@@ -69,8 +72,8 @@ public class StandbyScreen extends ScaledScreen {
         this.main = m;
         mpClient = mpc;
 
-        //logo
-        logo = new Texture(Gdx.files.internal("images/logo.png"));
+        //figure
+        figure = new Texture(Gdx.files.internal("krazy_razy_controller/crazyThingyMad.png"));
 
         // font generator
         generateFonts();
@@ -112,23 +115,31 @@ public class StandbyScreen extends ScaledScreen {
      */
     void generateUI() {
 
-        skin.getFont("default-font").scale(4f);
-        table = new Table(skin);
+        //Font
+        FileHandle krazyFontFile = Gdx.files.internal("krazy_razy_controller/BADABB__.TTF");
+        BitmapFont fontBig = Commons.getFont(200,krazyFontFile,Commons.KRAZY_BLUE,3f,Commons.KRAZY_GREEN);
+        BitmapFont fontSmall = Commons.getFont(100,krazyFontFile,Commons.KRAZY_BLUE,3f,Commons.KRAZY_GREEN);
+        Label.LabelStyle styleBig = new Label.LabelStyle(fontBig,Color.WHITE);
+        Label.LabelStyle styleSmall = new Label.LabelStyle(fontSmall,Color.WHITE);
 
-        Image image = new Image(logo);
-        textField = new TextField("Standby", skin);
+        //Title
+        labelStandby = new Label("Standby", styleBig);
+        labelStandby.setPosition(Commons.WORLD_WIDTH /2 - labelStandby.getWidth()/2, Commons.WORLD_HEIGHT/2);
 
-        // table.debug();
-        table.add(image).padTop(10).padBottom(40).row();
-        table.add(textField).size(800, 200).padBottom(20).row();
+        //Explanation
+        String explanation = "A game is already running. You have to wait";
+        labelExplanation = new Label(explanation, styleSmall);
+        labelExplanation.setPosition(Commons.WORLD_WIDTH / 2 - labelExplanation.getWidth() / 2, Commons.WORLD_HEIGHT / 2 - labelExplanation.getHeight());
 
-        table.setX(Commons.WORLD_WIDTH / 2 - table.getPrefWidth() / 2);
-        table.setY(Commons.WORLD_HEIGHT / 2 - table.getPrefHeight() / 2);
+        //Mad figure
+        float scale = 2.0f;
+        Image madFigure = new Image(figure);
+        madFigure.setScale(scale,scale);
+        madFigure.setPosition(Commons.WORLD_WIDTH/2 - scale*madFigure.getWidth()/2, Commons.WORLD_HEIGHT/2 - labelExplanation.getHeight() - scale*madFigure.getHeight() - labelExplanation.getHeight());
 
-        table.pack();
-        stage.addActor(table);
-
-        System.out.println("image: " + table.getPrefWidth() + " , " + table.getPrefHeight());
+        stage.addActor(labelStandby);
+        stage.addActor(labelExplanation);
+        stage.addActor(madFigure);
     }
 
     /**
@@ -146,7 +157,7 @@ public class StandbyScreen extends ScaledScreen {
      */
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0f, 0f, 0f, 1.0f);
+        Gdx.gl.glClearColor(24 / 255.0f, 102 / 255.0f, 105 / 255.0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         stage.draw();

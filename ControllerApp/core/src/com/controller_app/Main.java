@@ -5,7 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.controller_app.helper.Commons;
 import com.controller_app.network.MPClient;
-import com.controller_app.screens.CarGameScreen;
+import com.controller_app.screens.KrazyRazyControllerScreen;
 import com.controller_app.screens.ConnectionScreen;
 import com.controller_app.screens.SettingsScreen;
 import com.controller_app.screens.StandbyScreen;
@@ -35,7 +35,7 @@ public class Main extends Game {
     private SettingsScreen settingsScreen;
     private ConnectionScreen connectionScreen;
     private VarsomSystemScreen varsomSystemScreen;
-    private CarGameScreen carGameScreen;
+    private KrazyRazyControllerScreen krazyRazyControllerScreen;
     private StandbyScreen standbyScreen;
     private MPClient mpClient;
     private Screen activeScreen;
@@ -58,10 +58,10 @@ public class Main extends Game {
         Gdx.app.log("check", "created app");
         settingsScreen = new SettingsScreen(this);
         connectionScreen = new ConnectionScreen(this, mpClient);
-        carGameScreen = new CarGameScreen(this, mpClient);
+        krazyRazyControllerScreen = new KrazyRazyControllerScreen(this, mpClient);
         varsomSystemScreen = new VarsomSystemScreen(this, mpClient);
         standbyScreen = new StandbyScreen(this, mpClient);
-        mpClient.carGameScreen = carGameScreen;
+        mpClient.krazyRazyControllerScreen = krazyRazyControllerScreen;
 
         changeScreen(Commons.CONNECTION_SCREEN);
     }
@@ -96,11 +96,11 @@ public class Main extends Game {
                 activeScreen = settingsScreen;
                 break;
             case Commons.CAR_GAME_SCREEN:
-                carGameScreen = new CarGameScreen(this, mpClient);
-                Gdx.input.setInputProcessor(carGameScreen.getStage());
+                krazyRazyControllerScreen = new KrazyRazyControllerScreen(this, mpClient);
+                Gdx.input.setInputProcessor(krazyRazyControllerScreen.getStage());
                // connectionScreen.check = 2;
-                setScreen(carGameScreen);
-                activeScreen = carGameScreen;
+                setScreen(krazyRazyControllerScreen);
+                activeScreen = krazyRazyControllerScreen;
                 break;
             case Commons.STANDBY_SCREEN:
                 Gdx.input.setInputProcessor(standbyScreen.getStage());
@@ -149,8 +149,8 @@ public class Main extends Game {
     /**
      * @return The created ControllerScreen
      */
-    public CarGameScreen getCarGameScreen(){
-        return carGameScreen;
+    public KrazyRazyControllerScreen getKrazyRazyControllerScreen(){
+        return krazyRazyControllerScreen;
     }
 
     /**
@@ -159,7 +159,7 @@ public class Main extends Game {
     public void handleController(){
         if(mpClient.getChangeController()) {
             //ControllerScreen and NavigationScreen should not be reused
-            if(activeScreen == carGameScreen || activeScreen == varsomSystemScreen)
+            if(activeScreen == krazyRazyControllerScreen || activeScreen == varsomSystemScreen)
                 activeScreen.dispose();
             changeScreen(mpClient.getActiveScreenIndex());
             mpClient.setChangeController(false);
