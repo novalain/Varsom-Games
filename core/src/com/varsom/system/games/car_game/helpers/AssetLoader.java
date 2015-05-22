@@ -75,7 +75,7 @@ public class AssetLoader {
         bgTexture = new Texture(Gdx.files.internal("car_game_assets/img/temp_background.png"));
         bgTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
-        testTrackTexture = new Texture("car_game_assets/img/tracks/temptrack.png");
+        testTrackTexture = new Texture("car_game_assets/img/tracks/newtrack2.png");
         testTrackMask = new Texture("car_game_assets/img/tracks/trackmask.png");
 
         track2Texture = new Texture("car_game_assets/img/tracks/track2.png");
