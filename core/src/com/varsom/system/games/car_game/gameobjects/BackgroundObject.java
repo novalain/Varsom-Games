@@ -43,17 +43,8 @@ public class BackgroundObject {
     }
 
     public Vector2 getPos() {
-        return pos;
+        return new Vector2(image.getX(),image.getY());
     }
-
-    public void setPos(Vector2 pos) {
-        this.pos = pos;
-    }
-
-    /*public void draw(SpriteBatch sb) {
-        //sb.draw(sprite, pos.x, pos.y);
-        sprite.draw(sb);
-    }*/
 
     public void setX(float x){pos.x = x;}
     public void setY(float y){pos.y = y;}
