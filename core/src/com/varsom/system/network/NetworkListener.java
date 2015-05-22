@@ -4,7 +4,9 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 import com.varsom.system.VarsomSystem;
+import com.varsom.system.games.car_game.com.varsomgames.cargame.CarGame;
 import com.varsom.system.network.Packet.*;
+import com.varsom.system.screens.VarsomMenu;
 
 
 public class  NetworkListener extends Listener {
@@ -71,10 +73,13 @@ public class  NetworkListener extends Listener {
         }
 
         else if (o instanceof SendDPadData) {
+            System.out.println("Tar emot information om knapparna");
             dPadSelect = ((SendDPadData) o).select;
             dpadx = ((SendDPadData) o).dataX;
             dpady = ((SendDPadData) o).dataY;
+            goBack = ((SendDPadData) o).back;
             dpadTouched = true;
+
         }
 
         else if (o instanceof NameUpdate) {
