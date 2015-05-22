@@ -40,7 +40,7 @@ public class SettingsScreen extends ScaledScreen {
      * @param generator Generates fonts
      * @param font Bitmapfont for current font
      * @param table Table collecting all objects on screen and structuring them
-     * @param checkVibration 
+     * @param checkVibration
      */
 
     private Main main;
@@ -76,10 +76,12 @@ public class SettingsScreen extends ScaledScreen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0f, 0f, 0.3f, 1.0f);
+        Gdx.gl.glClearColor(0.137f, 0.121f, 0.125f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         update = updateNameField(update);
+
+        // table.debug();
 
         // Sprite renders
         stage.draw();
@@ -93,15 +95,21 @@ public class SettingsScreen extends ScaledScreen {
     @Override
     public void pause() {
 
+
     }
 
     @Override
     public void resume() {
 
+
+
     }
 
     @Override
     public void hide() {
+
+        // For hiding the keyboard when user goes back without closing keyboard. little ugly
+        playerName.next(true);
 
     }
 
@@ -143,7 +151,7 @@ public class SettingsScreen extends ScaledScreen {
 
         btnBack = new TextButton("Back", skin);
         btnBack.setSize(200, 100);
-        btnBack.setPosition(Commons.WORLD_WIDTH - btnBack.getPrefWidth() - 10, Commons.WORLD_HEIGHT - btnBack.getPrefHeight());
+        btnBack.setPosition(Commons.WORLD_WIDTH - btnBack.getWidth() - 20, Commons.WORLD_HEIGHT - btnBack.getHeight()- 20);
 
         btnBack.addListener(new ClickListener() {
             @Override
@@ -179,14 +187,18 @@ public class SettingsScreen extends ScaledScreen {
         playerName.setMaxLength(16);
 
         //Add elements to table
-
         table = new Table(skin);
 
-        checkTest.getImage().setScale(5);
+        checkVibration.getImage().setOrigin(checkTest.getImage().getWidth() / 2, checkTest.getImage().getHeight() / 2);
         checkVibration.getImage().setScale(5);
+        checkVibration.getImageCell().padRight(60);
+
+        checkTest.getImage().setOrigin(checkTest.getImage().getWidth() / 2, checkTest.getImage().getHeight() / 2);
+        checkTest.getImage().setScale(5);
+        checkTest.getImageCell().padRight(60);
 
         table.add(lblTitle).padTop(10).padBottom(40).row();
-        table.add(playerName).size(800, 200).padBottom(20).row();
+        table.add(playerName).size(800, 150).padBottom(20).row();
         table.add(checkTest).size(1000, 200).padBottom(20).row();
         table.add(checkVibration).size(1000, 200).padBottom(100).row();
 
@@ -199,9 +211,9 @@ public class SettingsScreen extends ScaledScreen {
         stage.addActor(btnBack);
     }
 
-   public String getPlayerName(){
-       return playerName.getText();
-   }
+    public String getPlayerName(){
+        return playerName.getText();
+    }
 
     public boolean updateNameField(boolean b){
         //we only want to update once when we switch to this screen
