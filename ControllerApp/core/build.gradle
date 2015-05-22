@@ -7,4 +7,5 @@ eclipse.project {
 }
 dependencies {
     compile files('build/libs/kryonet-2.21-all.jar')
+    compile files('libs/kryonet-2.21-all.jar')
 }

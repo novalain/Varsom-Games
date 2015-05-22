@@ -264,7 +264,7 @@ public class ConnectionScreen extends ScaledScreen {
                 break;
 
             case Commons.DO_YOU_WANT_TO_EXIT:
-                new Dialog("Exit", skin){
+                new Dialog("", skin){
                     {
                         text("Are you sure you want to exit?");
                         button("No", "hide");
