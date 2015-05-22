@@ -36,6 +36,7 @@ import java.util.Collections;
 public class GameScreen implements Screen {
 
     public static int level;
+    private float CAMERA_OFFSET_FROM_LEADER_CAR = 5;
 
     // For countdown
     final static float COUNTDOWN_TIME = 6;
@@ -303,8 +304,10 @@ public class GameScreen implements Screen {
 
         //if start sequence is done, use the normal game logic for the camera
         if (presentedAllCars) {
-            newCamPosX = (leaderCar.getPointOnTrack().x - camera.position.x);
-            newCamPosY = (leaderCar.getPointOnTrack().y - camera.position.y);
+            newCamPosX = (-leaderCar.getOffsetPoint(CAMERA_OFFSET_FROM_LEADER_CAR).x - camera.position.x);
+            newCamPosY = (-leaderCar.getOffsetPoint(CAMERA_OFFSET_FROM_LEADER_CAR).y - camera.position.y);
+            System.out.println("leadercarPos: x " + newCamPosX + " y " + newCamPosY);
+            //System.out.println("cameraPos: x " + leaderCar.getOffsetPoint(CAMERA_OFFSET_FROM_LEADER_CAR).x + " y " + leaderCar.getOffsetPoint(CAMREA_OFFSET_FROM_LEADER_CAR).y);
         }
         //else focus on the cars one by one
         else {

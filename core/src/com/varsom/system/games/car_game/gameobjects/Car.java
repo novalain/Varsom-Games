@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -103,6 +104,9 @@ public class Car extends DynamicObject implements Comparable<Car> {
         smokeParticles.load(AssetLoader.particleFile, AssetLoader.particleImg);
         smokeParticles.setPosition(getBody().getPosition().x, getBody().getPosition().y);
         smokeParticles.scaleEffect(SMOKE_SCALE);
+        //ParticleEmitter emitter = smokeParticles.getEmitters().first();
+        //emitter.getScale().setHigh(5, 20);
+
         smokeParticles.start();
 
     }
@@ -229,12 +233,11 @@ public class Car extends DynamicObject implements Comparable<Car> {
             wheel.body.applyForce(wheel.body.getWorldVector(new Vector2(forceVector.x, forceVector.y)), position, true);
         }
 
+        //update the projection on the way point lines
         wpHandler.getProjectionPoint(getPosition());
         pathTrackingSprite.setPosition(pointOnTrack.x, pointOnTrack.y);
         pathTrackingSprite.setRotation((float)Math.toDegrees(wpHandler.getCurrentLineAngle()));
         pathTrackingSprite.setOriginCenter();
-        //Gdx.app.log("CarUpdate","pointOnTrack = " + pointOnTrack + "\tangleOfCurrentLine = " + angleOfCurrentLine + "\n");
-        //Gdx.app.log("CarUpdate","waypoint = " + waypoint + "\tNumOfWPs = " + track.getPath().size + "\n");
 
         setCarSpeed();
 
@@ -258,6 +261,11 @@ public class Car extends DynamicObject implements Comparable<Car> {
     public Vector2 getPointOnTrack() {
         return pointOnTrack;
     }
+
+    public Vector2 getOffsetPoint(float dist) {
+        return wpHandler.getOffsetPositionOnCurrentLine(pointOnTrack, dist);
+    }
+
     public float getRotationTrack() {
         return wpHandler.getCurrentLineAngle();
     }
