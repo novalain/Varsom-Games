@@ -134,15 +134,6 @@ public class MainMenu extends ScaledScreen {
             }
         });
         */
-        // end of adding listeners
-
-        /*
-        buttonList.add(buttonPlay);
-        buttonList.add(buttonPlay2);
-        buttonList.add(buttonSettings);
-        buttonList.add(buttonAbout);
-        buttonList.add(buttonExit);
-        */
 
     // NEW MENU
         //SET POSITIONS

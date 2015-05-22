@@ -1,9 +1,5 @@
 package com.varsom.system.games.car_game.screens;
 
-/**
- * Created by oskarcarlbaum on 06/03/15.
- */
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;

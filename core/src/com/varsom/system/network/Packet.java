@@ -39,6 +39,7 @@ public class Packet {
     public static class SendDPadData {
         int dataX, dataY;
         boolean select;
+        boolean back;
     }
 
     public static class VibrateClient {
