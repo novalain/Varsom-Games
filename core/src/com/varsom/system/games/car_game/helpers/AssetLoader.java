@@ -69,7 +69,7 @@ public class AssetLoader {
         //tireTrackTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
         tireObstacleTexture = new Texture("car_game_assets/img/tire.png");
-        wallTexture = new Texture("car_game_assets/img/wall2.jpg");
+        wallTexture = new Texture("car_game_assets/img/wall.jpg");
 
         // Guessing bg is background
         bgTexture = new Texture(Gdx.files.internal("car_game_assets/img/temp_background.png"));
