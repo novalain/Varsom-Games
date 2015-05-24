@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -53,6 +54,7 @@ public abstract class Track {
     protected Vector<Body> backLayer;
     protected Vector<Body> frontLayer;
     protected Vector<Sprite> sprites;
+    protected Vector<ParticleEffect> particleEffectsInTrack;
 
     //CARS
     protected int MAXIMUM_PLAYERS;
@@ -87,6 +89,7 @@ public abstract class Track {
         sprites = new Vector<Sprite>();
         frontLayer = new Vector<Body>();
         backLayer = new Vector<Body>();
+        particleEffectsInTrack = new Vector<ParticleEffect>();
         createBackground();
     }
 
@@ -188,10 +191,14 @@ public abstract class Track {
 
         }
 
-        Track1.firePit.draw(inBatch, Gdx.graphics.getDeltaTime());
-        Track1.firePit.update(Gdx.graphics.getDeltaTime());
-        Track1.firePit.start();
-        //Track1.firePit.reset();
+        // Draw all particle effects in track (right now only the fire pit)
+        for(ParticleEffect effect : particleEffectsInTrack){
+
+            effect.draw(inBatch, Gdx.graphics.getDeltaTime());
+            effect.update(Gdx.graphics.getDeltaTime());
+            effect.start();
+
+        }
 
         // Draw sprites that are not connected to a physical body
         for (Sprite sprite : sprites) {

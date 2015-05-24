@@ -16,7 +16,6 @@ import com.varsom.system.games.car_game.helpers.KrazyRazyCommons;
 public class Track1 extends Track{
 
     float TURTLE_WIDTH = 1.5f;
-    public static ParticleEffect firePit;
 
     //Particleeffects..
     // This one is needed if we want to access several layers in our particlesystem
@@ -26,12 +25,6 @@ public class Track1 extends Track{
         super(inWorld,new Sprite(AssetLoader.testTrackTexture),new Sprite(AssetLoader.testTrackMask),50f,NUMBER_OF_PLAYERS,vS);
         createTestTrack();
         offTrackSpeed = 0.95f;
-
-        firePit = new ParticleEffect();
-        firePit.load(AssetLoader.firepitFile, AssetLoader.particleImg);
-        firePit.setPosition(-16.f, -1.f);
-        firePit.scaleEffect(0.008f);
-        firePit.start();
 
     }
 
@@ -43,6 +36,16 @@ public class Track1 extends Track{
 
     // Create objects that are unique for this track
     private void createObstacles(){
+
+        // Create and set up firepit
+        ParticleEffect firePit = new ParticleEffect();
+        firePit.load(AssetLoader.firepitFile, AssetLoader.particleImg);
+        firePit.setPosition(471 / 50.f, 842 / 50.f);
+        firePit.scaleEffect(0.008f);
+        firePit.start();
+
+        particleEffectsInTrack.addElement(firePit);
+
         int hrf = 5; //higherResFactor
         //Static physical objects
         TireObstacle tire  = new TireObstacle(new Vector2(  0.0f, -6.0f), 0, 1.5f, world);
@@ -235,4 +238,5 @@ public class Track1 extends Track{
             new Vector2( -95*hrf, -131*hrf)}; // these need to be scaled by 10
         return wPs;
     }
+
 }
