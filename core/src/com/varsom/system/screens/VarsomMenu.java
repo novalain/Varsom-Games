@@ -4,10 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.varsom.system.Commons;
 import com.varsom.system.DPad;
@@ -30,10 +33,11 @@ public class VarsomMenu extends ScaledScreen{
     protected VarsomSystem varsomSystem;
     private Vector<Image> gamesList, devicesGray, devicesActive;
     private int currentGame, row, currentHelpButton;
-    private boolean swipedLeft, swipedRight, swipedDown, swipedUp;
+    private boolean swipedLeft, swipedRight, swipedDown, swipedUp, shutDownReady;
     private Image cargameImage, backgroundImage, varsomLogo, shutdownImage, questionmarkImage;
     private Vector2 lastTouch;
     private BitmapFont playerFont;
+    private Dialog errorDialog;
 
 
     public VarsomMenu(VarsomSystem varsomSystem) {
@@ -316,6 +320,11 @@ public class VarsomMenu extends ScaledScreen{
 
         }
 
+        else if(shutDownReady && NetworkListener.goBack){
+            errorDialog.hide();
+            shutDownReady = false;
+        }
+
     }
 
     @Override
@@ -356,7 +365,7 @@ public class VarsomMenu extends ScaledScreen{
     @Override
     public void dispose() {
         stage.dispose();
-        skin.dispose();
+        //skin.dispose();
     }
 
     @Override
@@ -390,6 +399,8 @@ public class VarsomMenu extends ScaledScreen{
     }
 
     private void init(){
+
+        shutDownReady = false;
 
         // Create images of games
         cargameImage = new Image(new Texture(Gdx.files.internal("system/img/crazy_razy.png")));
@@ -541,6 +552,40 @@ public class VarsomMenu extends ScaledScreen{
             else{
 
                 System.out.println("Shutdown selected");
+                Skin skin2 = new Skin(Gdx.files.internal("data/uiskin.json"));
+                if(!shutDownReady) {
+                    errorDialog =  new Dialog("", skin2){
+                        {
+                            text("Are you sure you want to exit?");
+                            button("No", "hide");
+                            button("Yes", "Exit");
+                        }
+
+                        @Override
+                        protected void result(Object object) {
+                            if (object.toString() == "Exit") {
+                                Gdx.app.exit();
+                                dispose();
+                            }
+                            else if(object.toString() == "hide") {
+                                hide();
+
+                            }
+                        }
+                    };
+                    errorDialog.setSize(errorDialog.getPrefWidth()*5, errorDialog.getPrefHeight()*5);
+                    //errorDialog.getContentTable().
+                    //errorDialog.getButtonTable().setSize(errorDialog.getButtonTable().getPrefWidth()*5,errorDialog.getButtonTable().getPrefHeight()*5);
+                    errorDialog.setPosition(Math.round((stage.getWidth() - errorDialog.getWidth()) / 2), Math.round((stage.getHeight() - errorDialog.getHeight()) / 2));
+                    stage.addActor(errorDialog);
+                    //errorDialog.show(stage);
+                }
+                else if(shutDownReady) {
+                    Gdx.app.exit();
+                    skin2.dispose();
+                    dispose();
+                }
+                shutDownReady = true;
 
             }
 

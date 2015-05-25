@@ -2,7 +2,9 @@ package com.varsom.system;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.esotericsoftware.kryonet.Connection;
@@ -108,7 +110,7 @@ public class VarsomSystem extends /*ApplicationAdapter*/Game {
         errorDialog = new Dialog("", skin) {
             {
                 text(myC.toString() + " has disconnected");
-                button("Ok");
+                //button("Ok");
             }
 
             @Override
@@ -119,13 +121,16 @@ public class VarsomSystem extends /*ApplicationAdapter*/Game {
         };
 
         //this is values that can be modified if the popup window is to big or to small
-        errorDialog.setHeight(errorDialog.getPrefHeight()*2);
-        errorDialog.setWidth(errorDialog.getPrefWidth()*2);
-        errorDialog.setScale(2);
 
+        errorDialog.setSize(errorDialog.getWidth() * 2, errorDialog.getPrefHeight()*2);
+        //errorDialog
+        //errorDialog.setScale(2);
+        errorDialog.setPosition(0, Commons.WORLD_HEIGHT - errorDialog.getPrefHeight()*2);
         activeStage.addActor(errorDialog);
-        activeStage.setKeyboardFocus(errorDialog);
-        activeStage.setScrollFocus(errorDialog);
+
+        errorDialog.hide(Actions.fadeOut(2.0f, Interpolation.fade));
+
+
 
 
 
