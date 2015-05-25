@@ -155,9 +155,7 @@ public class ConnectionScreen extends ScaledScreen {
                 testThread = new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        // do something important here, asynchronously to the rendering thread
-
-                        System.out.println("In new thread loading...");
+                        // connection is done her, asynchronously to the rendering thread
                         connect();
                     }
                 });

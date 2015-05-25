@@ -38,10 +38,11 @@ public class VarsomSystemScreen extends ScaledScreen {
     private Image btnDPad, btnSettings, btnSelect, btnBack;
     private Image logo, maskUp, maskDown, maskRight, maskLeft;
 
-    public VarsomSystemScreen(Main m, MPClient mpc) {
+    public VarsomSystemScreen(Main m, MPClient mpc, SettingsScreen setScreen) {
         super();
         this.main = m;
         mpClient = mpc;
+        settingsScreen = setScreen;
 
         generateFonts(); // call to all generating functions, have to be called in this order!
         generateSkin();
@@ -95,7 +96,7 @@ public class VarsomSystemScreen extends ScaledScreen {
         Label.LabelStyle style = new Label.LabelStyle(font, Color.DARK_GRAY);
 
         // String playerName = settingsScreen.getPlayerName(); ??
-        playerNameLabel = new Label("Namn här TACK!", style);
+        playerNameLabel = new Label(settingsScreen.getPlayerName(), style);
         playerNameLabel.setPosition(Commons.WORLD_WIDTH - playerNameLabel.getWidth() - 30, Commons.WORLD_HEIGHT - playerNameLabel.getHeight() - 30);
 
         // The back button w. functionality
