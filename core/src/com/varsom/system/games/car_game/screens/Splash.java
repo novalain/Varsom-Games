@@ -17,7 +17,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.varsom.system.Commons;
 import com.varsom.system.VarsomSystem;
 import com.varsom.system.games.car_game.helpers.AssetLoader;
-import com.varsom.system.games.car_game.helpers.GifDecoder;
 import com.varsom.system.games.car_game.helpers.KrazyRazyCommons;
 
 public class Splash extends ScaledScreen {
@@ -66,7 +65,7 @@ public class Splash extends ScaledScreen {
         stage.addActor(splashImage); //adds the image as an actor to the stage
         stage.addActor(loadingText);
         stage.addActor(loading);
-/*
+
         splashImage.addAction(Actions.sequence(Actions.alpha(0), Actions.fadeIn(0.0f), Actions.delay(0), Actions.run(new Runnable() {
             @Override
             public void run() {
@@ -76,7 +75,7 @@ public class Splash extends ScaledScreen {
                 }
                 ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu(varsomSystem));
             }
-        })));*/
+        })));
     }
 
     @Override
