@@ -483,7 +483,7 @@ public class GameScreen implements Screen {
         //When track is created
         //for each car in the array
         if (!startSequenceDone) {
-            if(!presentedAllCars) {
+            if (!presentedAllCars) {
                 //display name
                 labelPlayerName.setText(activeCars.get(NoOfCarToShowName).getConnectionName());
 
