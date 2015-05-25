@@ -52,5 +52,4 @@ public class SoundHandler {
         MUSIC.stop();
 
     }
-
 }

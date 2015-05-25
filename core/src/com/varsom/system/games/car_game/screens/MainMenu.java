@@ -2,13 +2,10 @@ package com.varsom.system.games.car_game.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -21,11 +18,8 @@ import com.varsom.system.Commons;
 import com.varsom.system.DPad;
 import com.varsom.system.games.car_game.helpers.AssetLoader;
 import com.varsom.system.games.car_game.helpers.KrazyRazyCommons;
-import com.varsom.system.games.car_game.helpers.SoundHandler;
 import com.varsom.system.screens.ScaledScreen;
-
 import java.util.ArrayList;
-
 import com.varsom.system.VarsomSystem;
 import com.varsom.system.games.car_game.gameobjects.BackgroundObject;
 import com.varsom.system.network.NetworkListener;
@@ -98,9 +92,6 @@ public class MainMenu extends ScaledScreen {
 
             stage.addActor(objectList.get(i).getImage());
         }
-
-        SoundHandler.MUSIC.setLooping(true);
-        SoundHandler.MUSIC.play();
 
 /*
         // add listeners to buttons
@@ -198,16 +189,11 @@ public class MainMenu extends ScaledScreen {
         table.add(buttonExit).size(500, 150).padBottom(20).row();
         */
 
-
-
         //BitmapFont fontType = new BitmapFont(new FileHandle("system/fonts/badaboom64w.fnt"));
         //fontType.scale(2.f);
 
         BitmapFont font = Commons.getFont(52,AssetLoader.krazyFontFile,KrazyRazyCommons.KRAZY_BLUE,3f,KrazyRazyCommons.KRAZY_GREEN);
         Label.LabelStyle style = new Label.LabelStyle(font,Color.WHITE);
-
-
-
 
         //label that shows all connected players
         clientNames = "Connected players";
@@ -304,7 +290,7 @@ public class MainMenu extends ScaledScreen {
         }
 
         if(Math.random() < 0.001){
-            playWackySound();
+          //  playWackySound();
         }
     }
 
@@ -399,7 +385,7 @@ public class MainMenu extends ScaledScreen {
     private void pressedButtonPlay() {
         varsomSystem.getMPServer().setJoinable(false);
 
-        SoundHandler.stopAll();
+       // SoundHandler.stopAll();
         ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(1, varsomSystem));
         //Switch screen on the controller to controllerScreen
         varsomSystem.getMPServer().changeScreen(Commons.CONTROLLER_SCREEN);
@@ -424,12 +410,12 @@ public class MainMenu extends ScaledScreen {
 
     private void pressedButtonExit() {
         Gdx.app.log("clicked", "pressed the EXIT CARGAME button.");
-        SoundHandler.stopAll();
+      //  SoundHandler.stopAll();
         ((Game) Gdx.app.getApplicationListener()).setScreen(new VarsomMenu(varsomSystem));
     }
 
     private void playWackySound(){
-        double d = Math.random();
+ /*       double d = Math.random();
 
         if(d < 0.333){
             SoundHandler.WACKY_1.play();
@@ -438,5 +424,7 @@ public class MainMenu extends ScaledScreen {
         }else{
             SoundHandler.WACKY_3.play();
         }
+        */
     }
+
 }
