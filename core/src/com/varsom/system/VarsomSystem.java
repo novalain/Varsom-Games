@@ -123,10 +123,10 @@ public class VarsomSystem extends /*ApplicationAdapter*/Game {
         //this is values that can be modified if the popup window is to big or to small
 
 
-        errorDialog.setSize(errorDialog.getWidth() * 2, errorDialog.getPrefHeight()*2);
+        errorDialog.setSize(errorDialog.getPrefWidth() , errorDialog.getPrefHeight());
         //errorDialog
         //errorDialog.setScale(2);
-        errorDialog.setPosition(0, Commons.WORLD_HEIGHT - errorDialog.getPrefHeight()*2);
+        errorDialog.setPosition(0, Commons.WORLD_HEIGHT - errorDialog.getPrefHeight());
         activeStage.addActor(errorDialog);
 
         errorDialog.hide(Actions.fadeOut(2.0f, Interpolation.fade));

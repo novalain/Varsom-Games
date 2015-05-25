@@ -609,7 +609,8 @@ public class VarsomMenu extends ScaledScreen{
                             }
                         }
                     };
-                    errorDialog.setSize(errorDialog.getPrefWidth()*5, errorDialog.getPrefHeight()*5);
+                    errorDialog.setSize(errorDialog.getPrefWidth(), errorDialog.getPrefHeight());
+
                     //errorDialog.getContentTable().
                     //errorDialog.getButtonTable().setSize(errorDialog.getButtonTable().getPrefWidth()*5,errorDialog.getButtonTable().getPrefHeight()*5);
                     errorDialog.setPosition(Math.round((stage.getWidth() - errorDialog.getWidth()) / 2), Math.round((stage.getHeight() - errorDialog.getHeight()) / 2));
