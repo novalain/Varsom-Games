@@ -32,8 +32,11 @@ public class BroadcastServerThread extends Thread {
 
         ip = getServerIP();
         broadip = getBroadcastIP();
-
-        socket = new DatagramSocket(4447);
+        try {
+            socket = new DatagramSocket(4447);
+        } catch( Exception e){
+            System.out.println("Socket port is occupied. An other version of the VarsomSystem may already be running! Shutting down");
+        }
     }
 
     public void run() {

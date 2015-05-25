@@ -5,6 +5,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class SoundHandler {
@@ -31,7 +32,7 @@ public class SoundHandler {
         soundMap.put(Sound_ID.HONK_1, Gdx.audio.newSound(Gdx.files.internal("car_game_assets/sounds/sfx/honk_1.wav")));
         soundMap.put(Sound_ID.HONK_2, Gdx.audio.newSound(Gdx.files.internal("car_game_assets/sounds/sfx/honk_2.wav")));
 
-        // soundMap.put(Sound_ID.POP, Gdx.audio.newSound(Gdx.files.internal("car_game_assets/sounds/sfx/pop.wav")));
+        soundMap.put(Sound_ID.POP, Gdx.audio.newSound(Gdx.files.internal("car_game_assets/sounds/sfx/pop.mp3")));
         soundMap.put(Sound_ID.SWOOSH, Gdx.audio.newSound(Gdx.files.internal("car_game_assets/sounds/sfx/swoosh.wav")));
         soundMap.put(Sound_ID.START_LIGHT, Gdx.audio.newSound(Gdx.files.internal("car_game_assets/sounds/sfx/start_light.mp3")));
         soundMap.put(Sound_ID.START_WHISTLE, Gdx.audio.newSound(Gdx.files.internal("car_game_assets/sounds/sfx/start_whistle.wav")));
@@ -67,26 +68,20 @@ public class SoundHandler {
         muteMusic = b;
     }
 
-    public static void stopAll() {
-        // The "smart" loop does apparently not work at the moment.
+    public static void stopAllSFX() {
         for (Map.Entry<Sound_ID, Sound> entry : soundMap.entrySet()) {
             entry.getValue().stop();
         }
+    }
 
-        // Old temporary manual fix
-        soundMap.get(Sound_ID.WIN_1).stop();
-        soundMap.get(Sound_ID.CRASH_1).stop();
-        soundMap.get(Sound_ID.CRAZY_2).stop();
-        soundMap.get(Sound_ID.MONKEY).stop();
-        soundMap.get(Sound_ID.HONK_1).stop();
-        soundMap.get(Sound_ID.HONK_2).stop();
-        soundMap.get(Sound_ID.SWOOSH).stop();
-        soundMap.get(Sound_ID.START_LIGHT).stop();
-        soundMap.get(Sound_ID.START_WHISTLE).stop();
-        soundMap.get(Sound_ID.WACKY_1).stop();
-        soundMap.get(Sound_ID.WACKY_2).stop();
-        soundMap.get(Sound_ID.WACKY_3).stop();
+    public static void stopAllMusic() {
+        for (Map.Entry<Music_ID, Music> entry : musicMap.entrySet()) {
+            entry.getValue().stop();
+        }
+    }
 
-        musicMap.get(Music_ID.MENU).stop();
+    public static void stopAll() {
+        stopAllSFX();
+        stopAllMusic();
     }
 }
