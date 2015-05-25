@@ -26,7 +26,12 @@ public class MPServer {
         server.addListener(new NetworkListener(varsomSystem));
 
         //TCP, UDP
-        server.bind(TCP, UDP);
+        try {
+            server.bind(TCP, UDP);
+        } catch (Exception e) {
+            System.out.println("ERROR: Problem binding server. An other version of the VarsomSystem may already be running! Shutting down");
+            varsomSystem.dispose();
+        }
         server.start();
     }
 
