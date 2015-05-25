@@ -8,13 +8,14 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.varsom.system.Commons;
 import com.varsom.system.DPad;
 import com.varsom.system.VarsomSystem;
 import com.varsom.system.abstract_gameobjects.VarsomGame;
 import com.varsom.system.games.car_game.com.varsomgames.cargame.CarGame;
-import com.varsom.system.games.car_game.helpers.AssetLoader;
 import com.varsom.system.network.NetworkListener;
 
 import java.util.Vector;
@@ -25,15 +26,18 @@ import java.util.Vector;
 public class VarsomMenu extends ScaledScreen{
 
     private static final int NR_OF_GAMES = 10, GAME_SPACING = 260;
-    private static final float GAME_SCALE = 0.36f, GAME_SCALE_SELECTED = 0.37f, GAME_ALPHA = 0.5f, DEVICES_SCALE = 0.25f, FADE_AND_SCALE_TIME = 0.6f, HELPBUTTONS_ALPHA = 0.3f, HELPBUTTONS_SCALE = 1.5f;
+    private static final float GAME_SCALE = 0.34f, GAME_SCALE_SELECTED = 0.37f, GAME_ALPHA = 0.5f, DEVICES_SCALE = 0.15f, FADE_AND_SCALE_TIME = 0.6f, HELPBUTTONS_ALPHA = 0.3f, HELPBUTTONS_SCALE = 1.5f;
 
     protected VarsomSystem varsomSystem;
     private Vector<Image> gamesList, devicesGray, devicesActive;
+    private Vector<String> connectionNames;
+    private Vector<Label> devicesLabels;
     private int currentGame, row, currentHelpButton;
     private boolean swipedLeft, swipedRight, swipedDown, swipedUp;
     private Image cargameImage, backgroundImage, varsomLogo, shutdownImage, questionmarkImage;
     private Vector2 lastTouch;
-    private BitmapFont playerFont;
+    private BitmapFont devicesFont;
+
 
 
     public VarsomMenu(VarsomSystem varsomSystem) {
@@ -41,7 +45,7 @@ public class VarsomMenu extends ScaledScreen{
         this.varsomSystem = varsomSystem;
         varsomSystem.setActiveStage(stage);
         //TODO We should have an AssetLoader for the VarsomMenu!
-        playerFont = Commons.getFont(20, Gdx.files.internal("system/fonts/Futura.ttc"));
+        devicesFont = Commons.getFont(30, Gdx.files.internal("system/fonts/Impact.ttf"));
 
         currentHelpButton = 1;
         currentGame = 0;
@@ -50,6 +54,7 @@ public class VarsomMenu extends ScaledScreen{
         gamesList = new Vector();
         devicesGray = new Vector();
         devicesActive = new Vector();
+        devicesLabels = new Vector();
         lastTouch = new Vector2();
 
     }
@@ -124,6 +129,7 @@ public class VarsomMenu extends ScaledScreen{
 
             stage.addActor(devicesGray.elementAt(i));
             stage.addActor(devicesActive.elementAt(i));
+            stage.addActor(devicesLabels.elementAt(i));
         }
 
 
@@ -328,7 +334,7 @@ public class VarsomMenu extends ScaledScreen{
     @Override
     public void render(float delta) {
 
-        Gdx.gl.glClearColor(0.12f, 0.12f, 0.12f, 1);
+        Gdx.gl.glClearColor(0.11f, 0.11f, 0.11f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         stage.act();
@@ -372,17 +378,22 @@ public class VarsomMenu extends ScaledScreen{
        // System.out.println("NR OF CONNECTIONS" + varsomSystem.getServer().getConnections().length);
 
         //update the client names label with clients connected at the moment
-        for (int i = 0; i < varsomSystem.getServer().getConnections().length; i++) {
+        int n = varsomSystem.getServer().getConnections().length;
+        for (int i = 0; i < n; i++) {
             //TODO show the names
             //clientNames += "\n" + varsomSystem.getServer().getConnections()[i].toString();
             devicesActive.elementAt(i).addAction(Actions.alpha(1.f, FADE_AND_SCALE_TIME));
+            devicesLabels.elementAt(i).addAction(Actions.alpha(1.f, FADE_AND_SCALE_TIME*2));
+            devicesLabels.elementAt(i).setText(varsomSystem.getServer().getConnections()[n-1-i].toString());
 
             //System.out.println("CONNECTED");
         }
 
-        for(int i = varsomSystem.getServer().getConnections().length; i < 8; i++){
+        for(int i = n; i < 8; i++){
 
             devicesActive.elementAt(i).addAction(Actions.alpha(0.f, FADE_AND_SCALE_TIME));
+            //TODO REMOVE NAME
+            devicesLabels.elementAt(i).setText("");
 
         }
 
@@ -416,10 +427,12 @@ public class VarsomMenu extends ScaledScreen{
         backgroundImage.addAction(Actions.sequence(Actions.alpha(0.2f, 0.0f)));
 
         //Varsomlogo at top
-        varsomLogo = new Image(new Texture(Gdx.files.internal("system/img/varsomgames_text.png")));
-        varsomLogo.setPosition(Commons.WORLD_WIDTH / 2 - varsomLogo.getWidth() / 2, Commons.WORLD_HEIGHT - 160);
+        varsomLogo = new Image(new Texture(Gdx.files.internal("system/img/varsomgames_text-02.png")));
+        varsomLogo.setPosition(Commons.WORLD_WIDTH / 2 - varsomLogo.getWidth() / 2, Commons.WORLD_HEIGHT-1.25f*varsomLogo.getHeight());
         varsomLogo.setOrigin(varsomLogo.getWidth()/2, varsomLogo.getHeight()/2);
-        varsomLogo.setScale(0.5f);
+        //varsomLogo.setScale(0.25f);
+        //varsomLogo.setScale(0.25f);
+
 
         // Add all games
         gamesList.add(cargameImage);
@@ -435,7 +448,7 @@ public class VarsomMenu extends ScaledScreen{
 
         for(int i = 1; i < NR_OF_GAMES; i++){
 
-            gamesList.add(new Image(new Texture(Gdx.files.internal("system/img/varsomful.png"))));
+            gamesList.add(new Image(new Texture(Gdx.files.internal("system/img/unavailable_game.png"))));
 
         }
 
@@ -466,20 +479,41 @@ public class VarsomMenu extends ScaledScreen{
 
         gamesList.elementAt(currentGame).addAction(Actions.scaleTo(GAME_SCALE_SELECTED, GAME_SCALE_SELECTED, 0.0f));
 
-        // Create devices as actors
-        for(int i = 0; i < 8; i++){
+        // Create devices as actors.. and labels
+        int devices = 8, maxColumns = 4;
+        int rows, columns;
+        int PAD_CONST = Commons.WORLD_WIDTH/32;
 
-            devicesGray.add(new Image(new Texture(Gdx.files.internal("system/img/device_gray.png"))));
+
+        columns = (devices < maxColumns ? devices : maxColumns);
+
+        rows = (columns == maxColumns ? (devices/maxColumns) : 1);
+
+
+        int maximumDevices = 8, posY = Commons.WORLD_HEIGHT/9;
+        float offsetX = Commons.WORLD_WIDTH / (maximumDevices+1);
+        Texture textureGray = new Texture(Gdx.files.internal("system/img/device_gray.png"));
+        Texture textureRed = new Texture(Gdx.files.internal("system/img/device_red_connected.png"));
+        for (int i = 0; i < maximumDevices ; i++) {
+            devicesGray.add(new Image(textureGray));
             devicesGray.elementAt(i).setScale(DEVICES_SCALE);
-            devicesGray.elementAt(i).setPosition(210 + 200*i, 120);
+            devicesGray.elementAt(i).setPosition(offsetX * (i + 1) - devicesGray.elementAt(i).getWidth() * DEVICES_SCALE / 2, posY);
+            devicesGray.elementAt(i).addAction(Actions.sequence(Actions.alpha(0.25f)));
 
-            devicesActive.add(new Image(new Texture(Gdx.files.internal("system/img/device_red_connected.png"))));
+            devicesActive.add(new Image(textureRed));
             devicesActive.elementAt(i).setScale(DEVICES_SCALE);
-            devicesActive.elementAt(i).setPosition(210 + 200*i, 120);
-            devicesActive.elementAt(i).addAction(Actions.sequence(Actions.alpha(0.0f, 0.0f)));
+            devicesActive.elementAt(i).setPosition(offsetX * (i + 1) - devicesGray.elementAt(i).getWidth() * DEVICES_SCALE / 2, posY);
+            devicesActive.elementAt(i).addAction(Actions.sequence(Actions.alpha(0.0f)));
+
+            devicesLabels.add(new Label("", new Label.LabelStyle(devicesFont, Commons.VARSOM_RED)));
+            devicesLabels.get(i).setPosition(offsetX * (i + 1)-devicesLabels.get(i).getPrefWidth()/2, posY);
+            //devicesLabels.get(i).setOrigin(devicesLabels.get(i).getPrefWidth()/2,devicesLabels.get(i).getHeight()/2);
+            devicesLabels.get(i).setWrap(true);
+            devicesLabels.get(i).setAlignment(Align.top,Align.center);
 
         }
-
+       // textureGray.dispose();
+       // textureRed.dispose();
     }
 
     // Checking if Networklistener have recieved a dPad-package

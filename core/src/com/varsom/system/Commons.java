@@ -23,6 +23,10 @@ public class Commons {
     public static final int SETTINGS_SCREEN = 2;
     public static final int CONTROLLER_SCREEN = 3;
 
+    //COLORS
+    public static final Color VARSOM_RED = new Color(190f/255f, 30f/255f, 45f/255f, 1);
+    public static final Color VARSOM_GRAY = new Color(167f/255f, 169f/255f, 172f/255f, 1);
+
     public static BitmapFont getFont(int size, FileHandle fontFile){
         return getFont(size, fontFile, Color.WHITE);
     }
