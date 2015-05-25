@@ -28,7 +28,7 @@ public class AssetLoader {
     // public static Animation carAnimation;
     public static TextureRegion tex1, tex2, tex3;
 
-    public static FileHandle particleFile, particleImg;
+    public static FileHandle particleFile, particleImg, firepitFile;
     // animation of redlights
     public static TextureRegion[] redlightsFrames;
 
@@ -85,6 +85,7 @@ public class AssetLoader {
         bg.flip(false, true); // Flip the sprite vertically to fit coordinate system Y-down
 
         particleFile = Gdx.files.internal("car_game_assets/effects/smoke_cartoon.p");
+        firepitFile = Gdx.files.internal("car_game_assets/effects/firepit.p");
         particleImg = Gdx.files.internal("car_game_assets/img");
 
         // For animation on ambulance but should probably use an atlas

@@ -2,13 +2,10 @@ package com.varsom.system.games.car_game.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -21,7 +18,9 @@ import com.varsom.system.Commons;
 import com.varsom.system.DPad;
 import com.varsom.system.games.car_game.helpers.AssetLoader;
 import com.varsom.system.games.car_game.helpers.KrazyRazyCommons;
+import com.varsom.system.games.car_game.helpers.Music_ID;
 import com.varsom.system.games.car_game.helpers.SoundHandler;
+import com.varsom.system.games.car_game.helpers.Sound_ID;
 import com.varsom.system.screens.ScaledScreen;
 
 import java.util.ArrayList;
@@ -47,7 +46,7 @@ public class MainMenu extends ScaledScreen {
     // Select buttons
     //private ArrayList<TextButton> buttonList = new ArrayList<TextButton>();
     private ArrayList<Image> buttonList = new ArrayList<Image>();
-   // private String buttonTexts[] = {"Play level 1", "Play level 2", "Settings", "About", "Exit"};
+    // private String buttonTexts[] = {"Play level 1", "Play level 2", "Settings", "About", "Exit"};
     private int selectedButtonIndex = 0;
 
     protected VarsomSystem varsomSystem;
@@ -55,6 +54,7 @@ public class MainMenu extends ScaledScreen {
     // Button has x and y index, where index 0,0 is the button on top to the left and
     // sizeX, sizeY (where size is amout of buttons) is bottom right
     //TODO Load files from AssetLoader
+
 
     /*private Skin defaultSkin = new Skin(Gdx.files.internal("car_game_assets/skins/menuSkin.json"),
             new TextureAtlas(Gdx.files.internal("car_game_assets/skins/menuSkin.pack")));
@@ -77,77 +77,33 @@ public class MainMenu extends ScaledScreen {
     //NEW MENU
     private Skin skin = AssetLoader.skin;
     private Image krazyTitle = new Image(AssetLoader.krazyTitleTexture),
-                  playBtn = new Image(AssetLoader.krazyPlayTexture),
-                  playBtnDown = new Image(AssetLoader.krazyPlayDownTexture),
-                  exitBtn = new Image(AssetLoader.krazyExitTexture),
-                  exitBtnDown = new Image(AssetLoader.krazyExitDownTexture);
-
-
+            playBtn = new Image(AssetLoader.krazyPlayTexture),
+            playBtnDown = new Image(AssetLoader.krazyPlayDownTexture),
+            exitBtn = new Image(AssetLoader.krazyExitTexture),
+            exitBtnDown = new Image(AssetLoader.krazyExitDownTexture);
 
     public MainMenu(final VarsomSystem varsomSystem) {
         this.varsomSystem = varsomSystem;
         varsomSystem.setActiveStage(stage);
+        SoundHandler.load();
         objectList = new ArrayList<BackgroundObject>();
         for (int i = 0; i < 20; i++) {
 
-            if(Math.random() < 0.5){
+            if (Math.random() < 0.5) {
                 objectList.add(new BackgroundObject(new Image(AssetLoader.krazyThingyTexture_1)));
-            }else{
+            } else {
                 objectList.add(new BackgroundObject(new Image(AssetLoader.krazyThingyTexture_2)));
             }
-
             stage.addActor(objectList.get(i).getImage());
         }
 
-        SoundHandler.MUSIC.setLooping(true);
-        SoundHandler.MUSIC.play();
-
-/*
-        // add listeners to buttons
-        buttonPlay.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.log("clicked", "pressed the PLAY button.");
-                pressedButtonPlay();
-            }
-        });
-
-        buttonPlay2.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                pressedButtonPlay2();
-            }
-        });
-
-        buttonSettings.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                pressedButtonSettings();
-            }
-        });
-
-        buttonAbout.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                pressedButtonAbout();
-            }
-        });
-
-        buttonExit.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                pressedButtonExit();
-            }
-        });
-        */
-
-    // NEW MENU
+        // NEW MENU
         //SET POSITIONS
-        krazyTitle.setPosition( WIDTH/2 - krazyTitle.getWidth()/2,  HEIGHT -krazyTitle.getHeight());
-        playBtn.setPosition( WIDTH/2 - playBtn.getWidth()/2,  HEIGHT/16 + exitBtn.getHeight()*(3f/5));
-        exitBtn.setPosition( WIDTH/2 - exitBtn.getWidth()/2,  HEIGHT/16);//-playBtn.getHeight());
-        playBtnDown.setPosition( WIDTH/2 - playBtnDown.getWidth()/2,  HEIGHT/16 + exitBtn.getHeight()*(3f/5));
-        exitBtnDown.setPosition( WIDTH/2 - exitBtnDown.getWidth()/2,  HEIGHT/16);//2-playBtn.getHeight());
+        krazyTitle.setPosition(WIDTH / 2 - krazyTitle.getWidth() / 2, HEIGHT - krazyTitle.getHeight());
+        playBtn.setPosition(WIDTH / 2 - playBtn.getWidth() / 2, HEIGHT / 16 + exitBtn.getHeight() * (3f / 5));
+        exitBtn.setPosition(WIDTH / 2 - exitBtn.getWidth() / 2, HEIGHT / 16);//-playBtn.getHeight());
+        playBtnDown.setPosition(WIDTH / 2 - playBtnDown.getWidth() / 2, HEIGHT / 16 + exitBtn.getHeight() * (3f / 5));
+        exitBtnDown.setPosition(WIDTH / 2 - exitBtnDown.getWidth() / 2, HEIGHT / 16);//2-playBtn.getHeight());
 
         //ADD TO BUTTON LIST
         buttonList.add(playBtn);
@@ -156,29 +112,31 @@ public class MainMenu extends ScaledScreen {
 
         //ADD LISTENERS
         playBtn.addListener(new InputListener() {
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 //Gdx.app.log("Example", "touch started at (" + x + ", " + y + ")");
                 playBtn.addAction(Actions.alpha(0));
                 pressedButtonPlay();
                 return false;
             }
 
-            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 playBtn.addAction(Actions.alpha(1));
                 //Gdx.app.log("Example", "touch done at (" + x + ", " + y + ")");
             }
         });
         exitBtn.addListener(new InputListener() {
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 exitBtn.addAction(Actions.alpha(0));
                 pressedButtonExit();
                 return false;
             }
 
-            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 exitBtn.addAction(Actions.alpha(1));
             }
         });
+
+        SoundHandler.play(Music_ID.MENU);
     }
 
     @Override
@@ -198,22 +156,17 @@ public class MainMenu extends ScaledScreen {
         table.add(buttonExit).size(500, 150).padBottom(20).row();
         */
 
-
-
         //BitmapFont fontType = new BitmapFont(new FileHandle("system/fonts/badaboom64w.fnt"));
         //fontType.scale(2.f);
 
-        BitmapFont font = Commons.getFont(52,AssetLoader.krazyFontFile,KrazyRazyCommons.KRAZY_BLUE,3f,KrazyRazyCommons.KRAZY_GREEN);
-        Label.LabelStyle style = new Label.LabelStyle(font,Color.WHITE);
-
-
-
+        BitmapFont font = Commons.getFont(52, AssetLoader.krazyFontFile, KrazyRazyCommons.KRAZY_BLUE, 3f, KrazyRazyCommons.KRAZY_GREEN);
+        Label.LabelStyle style = new Label.LabelStyle(font, Color.WHITE);
 
         //label that shows all connected players
         clientNames = "Connected players";
         connectedClientNames = new Label(clientNames, style);
         connectedClientNames.setAlignment(Align.topLeft);
-        connectedClientNames.setPosition(8,  HEIGHT - connectedClientNames.getHeight());
+        connectedClientNames.setPosition(8, HEIGHT - connectedClientNames.getHeight());
         connectedClientNames.setFontScale(1.5f);
 
         //table.setPosition( WIDTH / 2 - table.getWidth() / 2,  HEIGHT / 2 - table.getHeight() / 2);
@@ -290,33 +243,20 @@ public class MainMenu extends ScaledScreen {
         for (int i = 0; i < objectList.size(); i++) {
             BackgroundObject temp = objectList.get(i);
             temp.update();
-            int ww =  WIDTH/*Gdx.graphics.getWidth()*/, wh =  WIDTH/*Gdx.graphics.getWidth()*/,
+            int ww = WIDTH/*Gdx.graphics.getWidth()*/, wh = WIDTH/*Gdx.graphics.getWidth()*/,
                     sw = AssetLoader.krazyThingyTexture_1.getWidth(), sh = AssetLoader.krazyThingyTexture_1.getHeight();
 
-            if (temp.getPos().x > ww + sw || temp.getPos().x < 0 - sw || temp.getPos().y > wh + sh || temp.getPos().y < 0 - sh ){
-                Vector2 tempVec = new Vector2((float) (Math.random() *  WIDTH), (float) (Math.random() *  HEIGHT));
+            if (temp.getPos().x > ww + sw || temp.getPos().x < 0 - sw || temp.getPos().y > wh + sh || temp.getPos().y < 0 - sh) {
+                Vector2 tempVec = new Vector2((float) (Math.random() * WIDTH), (float) (Math.random() * HEIGHT));
                 temp.allNewValues();
+                SoundHandler.play(Sound_ID.POP);
             }
-            /*if (temp.getPos().x >  WIDTH + temp.getWidth() + 10) {
-                temp.setX(-10 - temp.getWidth());
-                temp.setY((float) (Math.random() *  HEIGHT));
-            }*/
         }
 
-        if(Math.random() < 0.001){
+        if (Math.random() < 0.001) {
             playWackySound();
         }
     }
-
-    /*public void drawBackground() {
-        spriteBatch.begin();
-
-        for (int i = 0; i < objectList.size(); i++) {
-            objectList.get(i).draw(spriteBatch);
-        }
-
-        spriteBatch.end();
-    }*/
 
     //make sure that all connected clients are displayed in a label
     //if a new client is connected add it
@@ -392,7 +332,6 @@ public class MainMenu extends ScaledScreen {
                 }
                 NetworkListener.dPadSelect = false;
             }
-
         }
     }
 
@@ -401,14 +340,13 @@ public class MainMenu extends ScaledScreen {
 
         SoundHandler.stopAll();
         ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(1, varsomSystem));
-        //Switch screen on the controller to controllerScreen
         varsomSystem.getMPServer().changeScreen(Commons.CONTROLLER_SCREEN);
     }
 
     private void pressedButtonPlay2() {
-        Gdx.app.log("clicked", "pressed the PLAY 2 button.");
         varsomSystem.getMPServer().setJoinable(false);
 
+        SoundHandler.stopAll();
         ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(2, varsomSystem));
         //Switch screen on the controller to controllerScreen
         varsomSystem.getMPServer().changeScreen(Commons.CONTROLLER_SCREEN);
@@ -423,20 +361,19 @@ public class MainMenu extends ScaledScreen {
     }
 
     private void pressedButtonExit() {
-        Gdx.app.log("clicked", "pressed the EXIT CARGAME button.");
         SoundHandler.stopAll();
         ((Game) Gdx.app.getApplicationListener()).setScreen(new VarsomMenu(varsomSystem));
     }
 
-    private void playWackySound(){
+    private void playWackySound() {
         double d = Math.random();
 
-        if(d < 0.333){
-            SoundHandler.WACKY_1.play();
-        }else if(d < 0.666){
-            SoundHandler.WACKY_2.play();
-        }else{
-            SoundHandler.WACKY_3.play();
+        if (d < 0.333) {
+            SoundHandler.play(Sound_ID.WACKY_1);
+        } else if (d < 0.666) {
+            SoundHandler.play(Sound_ID.WACKY_2);
+        } else {
+            SoundHandler.play(Sound_ID.WACKY_3);
         }
     }
 }
