@@ -337,4 +337,12 @@ public class Car extends DynamicObject implements Comparable<Car> {
     }
 
     public int getCarType() { return carType; }
+
+    public void setTraveledDistance(float dist) {
+        wpHandler.setTraveledDistance(dist);
+    }
+
+    public int getCurrentLap() {
+        return wpHandler.getCurrentLap();
+    }
 }
