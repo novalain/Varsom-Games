@@ -22,9 +22,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.varsom.system.Commons;
 import com.varsom.system.VarsomSystem;
 import com.varsom.system.games.car_game.gameobjects.Car;
 import com.varsom.system.games.car_game.helpers.AssetLoader;
+import com.varsom.system.games.car_game.helpers.KrazyRazyCommons;
 import com.varsom.system.games.car_game.tracks.Track;
 import com.varsom.system.games.car_game.tracks.Track1;
 import com.varsom.system.games.car_game.tracks.Track2;
@@ -72,6 +74,7 @@ public class GameScreen implements Screen {
 
     //TODO Load files from AssetLoader
     private Skin skin = AssetLoader.skin;
+    private BitmapFont font;
 
     private TextButton buttonLeave = new TextButton("Win screen", skin);
     private Label labelPause;
@@ -116,7 +119,7 @@ public class GameScreen implements Screen {
 
         //TODO THIS IS ONLY TEMPORARY.. DURING DEVELOPMENT
         if (NUMBER_OF_PLAYERS < 2) {
-            NUMBER_OF_PLAYERS = 2;
+            NUMBER_OF_PLAYERS = 8;
         }
 
         // Create objects and select level
@@ -133,6 +136,9 @@ public class GameScreen implements Screen {
         }
         varsomSystem.getActiveGame().setGameScreen(this);
         varsomSystem.getMPServer().gameRunning(true);
+
+        font = Commons.getFont(52, AssetLoader.krazyFontFile, KrazyRazyCommons.KRAZY_BLUE, 3f, KrazyRazyCommons.KRAZY_GREEN);
+        Label.LabelStyle style = new Label.LabelStyle(font, Color.WHITE);
 
         trackLength = track.getTrackLength();
 
@@ -159,15 +165,15 @@ public class GameScreen implements Screen {
         table.top().left();
         table.add(buttonLeave).size(400, 75).row();
         // connected devices text things....
-        lapsLabel = new Label("Lap:\n", skin);
-        lapsLabel.setFontScaleX(0.75f);
-        lapsLabel.setFontScaleY(0.75f);
-        table.add(lapsLabel).size(400, 200).row();
+        lapsLabel = new Label("Lap:\n", style);
+        lapsLabel.setWrap(true);
+        lapsLabel.setPosition(20,SCREEN_HEIGHT-lapsLabel.getHeight()*1.5f);
+        stage.addActor(lapsLabel);
 
-        carsTraveled = new Label("CarDist:\n", skin);
-        carsTraveled.setFontScaleX(0.75f);
-        carsTraveled.setFontScaleY(0.75f);
-        table.add(carsTraveled).size(400, 200).row();
+        carsTraveled = new Label("Standings:       \n", style);
+        carsTraveled.setWrap(true);
+        carsTraveled.setPosition(20,carsTraveled.getHeight());
+        stage.addActor(carsTraveled);
 
         table.setFillParent(true);
         stage.addActor(table);
@@ -451,10 +457,10 @@ public class GameScreen implements Screen {
         String temp = "";
         for (int i = 0; i < sortedCars.size(); i++) {
             try {
-                temp += /*i+1 + ". " +*/ sortedCars.get(i).getConnectionName() + "\n";
+                temp += i+1 + ". " + sortedCars.get(i).getConnectionName() + "\n";
 
             } catch (Exception e) {
-                temp += /*i+1 + ". */"*NoConnection*\n";
+                temp += i+1 + ". *NoConnection*\n";
             }
         }
         return temp;
