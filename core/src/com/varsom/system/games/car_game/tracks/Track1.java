@@ -154,7 +154,7 @@ public class Track1 extends Track{
             catch(Exception e) {
                 System.out.print("FAILED TO ACCESS CONNECTED DEVICE");
             }
-          //  sprites.addElement(cars[i].pathTrackingSprite);
+            //sprites.addElement(cars[i].pathTrackingSprite);
 
             //TODO fix input
              //Gdx.input.setInputProcessor(new InputHandler(cars[i]));
@@ -188,7 +188,7 @@ public class Track1 extends Track{
     private Vector2[] hardcodedWayPoints() {
         int hrf = 5; // higher res factor
         Vector2[] wPs = {
-            new Vector2(-190*hrf, -131*hrf),
+            new Vector2(-186*hrf, -131*hrf),
             new Vector2(-220*hrf, -131*hrf),
             new Vector2(-230*hrf, -111*hrf),
             new Vector2(-220*hrf,  -90*hrf),

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -84,7 +85,7 @@ public class GameScreen implements Screen {
     // Only for development - carlbaum
     private Label carsTraveled;
     private Label lapsLabel;
-    private int maxLaps = 1, currentLap = 1;
+    private int maxLaps = 2, currentLap = 1;
 
     protected VarsomSystem varsomSystem;
     protected int NUMBER_OF_PLAYERS;
@@ -296,13 +297,16 @@ public class GameScreen implements Screen {
                 temp += sortedCars2String();
             }
 
+
+            leaderCar = track.getLeaderCar();
+
             // Next lap incoming
-            if (leaderCar.getTraveledDistance() > trackLength * currentLap) {
-                currentLap++;
+            //if (leaderCar.getTraveledDistance() > trackLength * currentLap) {
+                currentLap = leaderCar.getCurrentLap();
                 if (currentLap == maxLaps + 1) {
                     weHaveAWinner();
                 }
-            }
+            //}
 
             String lapText = "Lap " + currentLap + "/" + maxLaps;
             lapsLabel.setText(lapText);
@@ -320,7 +324,7 @@ public class GameScreen implements Screen {
     }
 
     private void updateCamera() {
-        leaderCar = track.getLeaderCar();
+
 
         //if start sequence is done, use the normal game logic for the camera
         if (presentedAllCars) {
@@ -425,6 +429,7 @@ public class GameScreen implements Screen {
 
         //System.out.println("activeCars contains " + activeCars.size() + " items");
         car.handleDataFromClients(false, false, 0);
+        activeCars.get(activeCarIndex).setTraveledDistance(-trackLength*activeCars.size());
         activeCars.remove(activeCarIndex);
         if (activeCars.size() == 1) {
             weHaveAWinner();

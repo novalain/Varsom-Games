@@ -15,6 +15,7 @@ public class WaypointHandler {
     private Track track;
     private int waypointIndex;
     private final Array<Vector2> path;
+    private int currentLap = 1;
 
     //CURRENT LINE
     private Vector2 currentLineStartPos, currentLineEndPos, currentLineVec;
@@ -148,6 +149,9 @@ public class WaypointHandler {
         }
         else {
             waypointIndex++;
+            if(waypointIndex==1){
+                currentLap++;
+            }
         }
     }
     private void updateCurrentLine(){
@@ -267,12 +271,13 @@ public class WaypointHandler {
             // 3.3 if car is going the right way or standing still
             else {
                 //update the projection point
-                delta = lengthOfVector2(prevProjPoint, currentLineEndPos) - lengthOfVector2(projectionPoint, currentLineEndPos);
+                delta = lengthOfVector2(prevProjPoint,projectionPoint);
+                //delta = lengthOfVector2(prevProjPoint, currentLineEndPos) - lengthOfVector2(projectionPoint, currentLineEndPos);
                 traveledDistance += delta;
             }
         }
 
-        // make sure the prev is the actual prev next time this function is called
+        // make sure the prev is the actual prev, the next time this function is called
         assignNewVec(prevProjPoint,projectionPoint);
         return projectionPoint;
     }
@@ -308,6 +313,9 @@ public class WaypointHandler {
         return 0;
     }
 
+    public void setTraveledDistance(float dist) {
+        traveledDistance = dist;
+    }
     public float getTraveledDistance(){
         return traveledDistance;
     }
@@ -335,5 +343,9 @@ public class WaypointHandler {
     private void assignNewVec(Vector2 newVec, Vector2 oldVec) {
         newVec.x = oldVec.x;
         newVec.y = oldVec.y;
+    }
+
+    public int getCurrentLap() {
+        return currentLap;
     }
 }

@@ -145,7 +145,7 @@ public abstract class Track {
         }
 
         startLine = new Vector2[]{path.get(0), path.get(1)};
-        Gdx.app.log("StartLine", "startLine[0]: (" + startLine[0].toString() + "), startLine[1] = (" + startLine[1].toString() + ")");
+        //Gdx.app.log("StartLine", "startLine[0]: (" + startLine[0].toString() + "), startLine[1] = (" + startLine[1].toString() + ")");
         calcTrackLength(path);
     }
 
@@ -186,18 +186,14 @@ public abstract class Track {
 
         // Draw smoke effects
         for(int i = 0; i < cars.length; i++){
-
             cars[i].getSmokeEffect().draw(inBatch, Gdx.graphics.getDeltaTime());
-
         }
 
         // Draw all particle effects in track (right now only the fire pit)
         for(ParticleEffect effect : particleEffectsInTrack){
-
             effect.draw(inBatch, Gdx.graphics.getDeltaTime());
             effect.update(Gdx.graphics.getDeltaTime());
             effect.start();
-
         }
 
         // Draw sprites that are not connected to a physical body
@@ -211,7 +207,7 @@ public abstract class Track {
         drawBodySprites(frontLayer,inBatch);
 
         // Set shape renderer to be drawn in world, not on screen
-        shapeRenderer.setProjectionMatrix(camera.combined);
+        //shapeRenderer.setProjectionMatrix(camera.combined);
         //drawWayPoints();
 
         inBatch.end();
