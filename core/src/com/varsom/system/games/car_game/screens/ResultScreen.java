@@ -108,7 +108,7 @@ public class ResultScreen extends ScaledScreen {
 
         //Font
         BitmapFont winningFont = Commons.getFont(150, AssetLoader.krazyFontFile, KrazyRazyCommons.KRAZY_GREEN, 3f, KrazyRazyCommons.KRAZY_BLUE);
-        BitmapFont playerStandingFont = Commons.getFont(80, AssetLoader.krazyFontFile,KrazyRazyCommons.KRAZY_BLUE, 3f, KrazyRazyCommons.KRAZY_GREEN);
+        BitmapFont playerStandingFont = Commons.getFont(70, AssetLoader.krazyFontFile,KrazyRazyCommons.KRAZY_BLUE, 3f, KrazyRazyCommons.KRAZY_GREEN);
 
         Label.LabelStyle styleWinning = new Label.LabelStyle(winningFont, Color.WHITE);
         Label.LabelStyle stylePlayerStanding = new Label.LabelStyle(playerStandingFont, Color.WHITE);
@@ -129,10 +129,10 @@ public class ResultScreen extends ScaledScreen {
         smileyMad.setPosition(Commons.WORLD_WIDTH * 0.8f, Commons.WORLD_HEIGHT / 2 - smileyMad.getHeight() / 2);
         smileyMad.addAction(Actions.alpha(0.f));
 
-        for(int i = 1; i < 7; i++){
+        for(int i = 1; i < carOrder.size(); i++){
 
-            //Label playerStanding = new Label( (i + 1) + ". " + carOrder.get(i), stylePlayerStanding ) ;
-            Label playerStanding = new Label ( (i + 1) + ". " + "Carlbaum", stylePlayerStanding );
+            Label playerStanding = new Label( (i + 1) + ". " + carOrder.get(i), stylePlayerStanding ) ;
+            //Label playerStanding = new Label ( (i + 1) + ". " + "Carlbaum", stylePlayerStanding );
             playerStanding.setPosition(Commons.WORLD_WIDTH / 2 - playerStanding.getWidth() / 2, Commons.WORLD_HEIGHT - winningPlayer.getHeight() - playerStanding.getHeight()*i  );
             playerStanding.addAction(Actions.alpha(0.f));
             playerStandings.add(playerStanding);
