@@ -37,7 +37,7 @@ public class VarsomMenu extends ScaledScreen{
     private Vector<Label> devicesLabels;
     private int currentGame, row, currentHelpButton;
     private boolean swipedLeft, swipedRight, swipedDown, swipedUp, shutDownReady;
-    private Image cargameImage, backgroundImage, varsomLogo, shutdownImage, questionmarkImage;
+    private Image cargameImage, backgroundImage, varsomLogo, shutdownImage, shutdownHover, questionmarkImage, questionmarkHover;
     private Vector2 lastTouch;
 
     private BitmapFont playerFont;
@@ -74,7 +74,9 @@ public class VarsomMenu extends ScaledScreen{
         stage.addActor(backgroundImage);
         stage.addActor(varsomLogo);
         stage.addActor(shutdownImage);
+        stage.addActor(shutdownHover);
         stage.addActor(questionmarkImage);
+        stage.addActor(questionmarkHover);
 
         stage.addListener(new ClickListener() {
 
@@ -157,16 +159,20 @@ public class VarsomMenu extends ScaledScreen{
                 if(currentHelpButton == 1){
 
                     questionmarkImage.addAction(Actions.alpha(HELPBUTTONS_ALPHA, FADE_AND_SCALE_TIME));
-                    shutdownImage.addAction(Actions.alpha(1.f, FADE_AND_SCALE_TIME));
+                    questionmarkHover.addAction(Actions.alpha(0.f, FADE_AND_SCALE_TIME));
+                    shutdownImage.addAction(Actions.alpha(0.f, FADE_AND_SCALE_TIME));
+                    shutdownHover.addAction(Actions.alpha(1.f, FADE_AND_SCALE_TIME));
                    // shutdownImage.addAction(Actions.scaleTo(HELPBUTTONS_SCALE, FADE_AND_SCALE_TIME));
                     //questionmarkImage.addAction(Actions.scaleTo(1.f, FADE_AND_SCALE_TIME));
                     currentHelpButton--;
                 }
 
                 else if (currentHelpButton == 0){
-                    questionmarkImage.addAction(Actions.alpha(1.f, FADE_AND_SCALE_TIME));
-                    //questionmarkImage.addAction(Actions.scaleTo(HELPBUTTONS_SCALE, FADE_AND_SCALE_TIME));
+                    questionmarkImage.addAction(Actions.alpha(0.f, FADE_AND_SCALE_TIME));
+                    questionmarkHover.addAction(Actions.alpha(1.f, FADE_AND_SCALE_TIME));
                     shutdownImage.addAction(Actions.alpha(HELPBUTTONS_ALPHA, FADE_AND_SCALE_TIME));
+                    shutdownHover.addAction(Actions.alpha(0, FADE_AND_SCALE_TIME));
+                    //questionmarkImage.addAction(Actions.scaleTo(HELPBUTTONS_SCALE, FADE_AND_SCALE_TIME));
                   //  shutdownImage.addAction(Actions.scaleTo(1.f, FADE_AND_SCALE_TIME));
                     currentHelpButton++;
                 }
@@ -209,17 +215,21 @@ public class VarsomMenu extends ScaledScreen{
                 if(currentHelpButton == 1){
 
                     questionmarkImage.addAction(Actions.alpha(HELPBUTTONS_ALPHA, FADE_AND_SCALE_TIME));
-                    shutdownImage.addAction(Actions.alpha(1.f, FADE_AND_SCALE_TIME));
+                    questionmarkHover.addAction(Actions.alpha(0.f, FADE_AND_SCALE_TIME));
+                    shutdownImage.addAction(Actions.alpha(0.f, FADE_AND_SCALE_TIME));
+                    shutdownHover.addAction(Actions.alpha(1.f, FADE_AND_SCALE_TIME));
                     //shutdownImage.addAction(Actions.scaleTo(HELPBUTTONS_SCALE, FADE_AND_SCALE_TIME));
                     //questionmarkImage.addAction(Actions.scaleTo(1.f, FADE_AND_SCALE_TIME));
                     currentHelpButton--;
                 }
 
                 else if (currentHelpButton == 0){
-                    questionmarkImage.addAction(Actions.alpha(1.f, FADE_AND_SCALE_TIME));
+                    questionmarkImage.addAction(Actions.alpha(0.f, FADE_AND_SCALE_TIME));
+                    questionmarkHover.addAction(Actions.alpha(1.f, FADE_AND_SCALE_TIME));
+                    shutdownImage.addAction(Actions.alpha(HELPBUTTONS_ALPHA, FADE_AND_SCALE_TIME));
+                    shutdownHover.addAction(Actions.alpha(0, FADE_AND_SCALE_TIME));
                     //questionmarkImage.addAction(Actions.scaleTo(HELPBUTTONS_SCALE, FADE_AND_SCALE_TIME));
                     //shutdownImage.addAction(Actions.scaleTo(1.f, FADE_AND_SCALE_TIME));
-                    shutdownImage.addAction(Actions.alpha(HELPBUTTONS_ALPHA, FADE_AND_SCALE_TIME));
                     currentHelpButton++;
                 }
 
@@ -260,12 +270,14 @@ public class VarsomMenu extends ScaledScreen{
 
             if(row == 0){
 
-                questionmarkImage.addAction(Actions.sequence(Actions.alpha(HELPBUTTONS_ALPHA, FADE_AND_SCALE_TIME)));
-                shutdownImage.addAction(Actions.sequence(Actions.alpha(HELPBUTTONS_ALPHA, FADE_AND_SCALE_TIME)));
-               // questionmarkImage.addAction(Actions.scaleTo(1.f, FADE_AND_SCALE_TIME));
+                questionmarkImage.addAction(Actions.alpha(HELPBUTTONS_ALPHA, FADE_AND_SCALE_TIME));
+                questionmarkHover.addAction(Actions.alpha(0.f, FADE_AND_SCALE_TIME));
+                shutdownImage.addAction(Actions.alpha(HELPBUTTONS_ALPHA, FADE_AND_SCALE_TIME));
+                shutdownHover.addAction(Actions.alpha(0.f, FADE_AND_SCALE_TIME));
+                // questionmarkImage.addAction(Actions.scaleTo(1.f, FADE_AND_SCALE_TIME));
                 //shutdownImage.addAction(Actions.scaleTo(1.f, FADE_AND_SCALE_TIME));
 
-                gamesList.elementAt(currentGame).addAction(Actions.scaleTo(GAME_SCALE_SELECTED, GAME_SCALE, FADE_AND_SCALE_TIME));
+                gamesList.elementAt(currentGame).addAction(Actions.scaleTo(GAME_SCALE_SELECTED, GAME_SCALE_SELECTED, FADE_AND_SCALE_TIME));
                 // Fade up
                 gamesList.elementAt(currentGame).addAction(Actions.sequence(Actions.alpha(1.f, FADE_AND_SCALE_TIME)));
 
@@ -299,7 +311,8 @@ public class VarsomMenu extends ScaledScreen{
             // At top row
             if(row == 1){
 
-                questionmarkImage.addAction(Actions.sequence(Actions.alpha(1.f, FADE_AND_SCALE_TIME)));
+                questionmarkImage.addAction(Actions.alpha(0.f, FADE_AND_SCALE_TIME));
+                questionmarkHover.addAction(Actions.alpha(1.f, FADE_AND_SCALE_TIME));
               //  questionmarkImage.addAction(Actions.scaleTo(HELPBUTTONS_SCALE, FADE_AND_SCALE_TIME));
                 gamesList.elementAt(currentGame).addAction(Actions.scaleTo(GAME_SCALE, GAME_SCALE, FADE_AND_SCALE_TIME));
                 // Fade down
@@ -418,17 +431,29 @@ public class VarsomMenu extends ScaledScreen{
         // Create images of games
         cargameImage = new Image(new Texture(Gdx.files.internal("system/img/crazy_razy.png")));
 
-        shutdownImage = new Image(new Texture(Gdx.files.internal("system/img/shut_down_icon.png")));
+        shutdownImage = new Image(new Texture(Gdx.files.internal("system/img/shut_down_icon2.png")));
         shutdownImage.setHeight(100);
         shutdownImage.setWidth(100);
         shutdownImage.setPosition(35, Commons.WORLD_HEIGHT - shutdownImage.getHeight() - 35);
-        shutdownImage.addAction(Actions.sequence(Actions.alpha(HELPBUTTONS_ALPHA, 0.0f)));
+        shutdownImage.addAction(Actions.alpha(HELPBUTTONS_ALPHA));
 
-        questionmarkImage = new Image(new Texture(Gdx.files.internal("system/img/question_mark_icon.png")));
+        shutdownHover = new Image(new Texture(Gdx.files.internal("system/img/shut_down_icon_hover2.png")));
+        shutdownHover.setHeight(100);
+        shutdownHover.setWidth(100);
+        shutdownHover.setPosition(35, Commons.WORLD_HEIGHT - shutdownHover.getHeight() - 35);
+        shutdownHover.addAction(Actions.alpha(0.0f));
+
+        questionmarkImage = new Image(new Texture(Gdx.files.internal("system/img/question_mark_icon2.png")));
         questionmarkImage.setHeight(100);
-        questionmarkImage.setWidth(59);
+        questionmarkImage.setWidth(100);
         questionmarkImage.setPosition(Commons.WORLD_WIDTH - questionmarkImage.getWidth() - 35, Commons.WORLD_HEIGHT - questionmarkImage.getHeight() - 35);
-        questionmarkImage.addAction(Actions.sequence(Actions.alpha(HELPBUTTONS_ALPHA, 0.0f)));
+        questionmarkImage.addAction(Actions.alpha(HELPBUTTONS_ALPHA));
+
+        questionmarkHover = new Image(new Texture(Gdx.files.internal("system/img/question_mark_icon_hover2.png")));
+        questionmarkHover.setHeight(100);
+        questionmarkHover.setWidth(100);
+        questionmarkHover.setPosition(Commons.WORLD_WIDTH - questionmarkImage.getWidth() - 35, Commons.WORLD_HEIGHT - questionmarkImage.getHeight() - 35);
+        questionmarkHover.addAction(Actions.alpha(0.0f));
 
         //Backgroundimage
         backgroundImage = new Image(new Texture(Gdx.files.internal("system/img/varsomwings_big.png")));

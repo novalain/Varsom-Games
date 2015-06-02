@@ -36,7 +36,7 @@ import java.util.Collections;
 public class GameScreen implements Screen {
 
     public static int level;
-    private float CAMERA_OFFSET_FROM_LEADER_CAR = 5;
+    private float CAMERA_OFFSET_FROM_LEADER_CAR = -1.5f;
 
     // For countdown
     final static float COUNTDOWN_TIME = 6;
@@ -145,7 +145,8 @@ public class GameScreen implements Screen {
         //TODO /100 should probably be changed
         camera = new OrthographicCamera(SCREEN_WIDTH / 100, SCREEN_HEIGHT / 100);
         //TODO camera.position.set(leaderCar.getPointOnTrack(), 0);
-        camera.position.set(activeCars.get(0).getPosition().x, activeCars.get(0).getPosition().y, 0);
+        camera.position.set(activeCars.get(0).getPosition(), 0);
+       // camera.position.set(activeCars.get(0).getPosition().x, activeCars.get(0).getPosition().y, 0);
         camera.rotate((float) Math.toDegrees(leaderCar.getRotationTrack()) - 180);
         camera.zoom = ZOOM; // can be used to see the entire track
         camera.update();
@@ -264,18 +265,18 @@ public class GameScreen implements Screen {
             // Check if cars is inside the boundaries of the camera
             //but not if the start sequence is playing
             if (startSequenceDone) {
-                for (int i = 0; i < activeCars.size(); i++) {
-
+                for (int i = 0; i < NUMBER_OF_PLAYERS/*activeCars.size()*/; i++) {
                     //TODO Fix hardcoded values of frustum
-                    if (!camera.frustum.boundsInFrustum(activeCars.get(i).getPosition().x, activeCars.get(i).getPosition().y, 0, 0.5f, 1f, 0.1f)) {
+                    if (i < activeCars.size() && !camera.frustum.boundsInFrustum(activeCars.get(i).getPosition().x, activeCars.get(i).getPosition().y, 0, 0.5f, 1f, 0.1f)) {
                         carLost(i);
 
                         if (i != 0) {
                             i--;
                         }
-                    } else {
-                        activeCars.get(i).update(Gdx.app.getGraphics().getDeltaTime());
-                    }
+                    } /*else {
+                        //activeCars.get(i).update(Gdx.app.getGraphics().getDeltaTime());
+                    }*/
+                    sortedCars.get(i).update(delta);
                 }
                 sortCars();
                 temp += sortedCars2String();
@@ -308,9 +309,9 @@ public class GameScreen implements Screen {
 
         //if start sequence is done, use the normal game logic for the camera
         if (presentedAllCars) {
-            newCamPosX = (-leaderCar.getOffsetPoint(CAMERA_OFFSET_FROM_LEADER_CAR).x - camera.position.x);
-            newCamPosY = (-leaderCar.getOffsetPoint(CAMERA_OFFSET_FROM_LEADER_CAR).y - camera.position.y);
-            System.out.println("leadercarPos: x " + newCamPosX + " y " + newCamPosY);
+            newCamPosX = (leaderCar.getOffsetPoint(CAMERA_OFFSET_FROM_LEADER_CAR).x - camera.position.x);
+            newCamPosY = (leaderCar.getOffsetPoint(CAMERA_OFFSET_FROM_LEADER_CAR).y - camera.position.y);
+            //System.out.println("leadercarPos: x " + newCamPosX + " y " + newCamPosY);
             //System.out.println("cameraPos: x " + leaderCar.getOffsetPoint(CAMERA_OFFSET_FROM_LEADER_CAR).x + " y " + leaderCar.getOffsetPoint(CAMREA_OFFSET_FROM_LEADER_CAR).y);
         }
         //else focus on the cars one by one

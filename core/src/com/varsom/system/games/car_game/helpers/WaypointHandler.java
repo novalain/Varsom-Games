@@ -108,6 +108,13 @@ public class WaypointHandler {
         return cameraPoint;
     }
 
+    public Vector2 getOffsetPoint(float offset) {
+        Vector2 temp = new Vector2();
+        temp.x = projectionPoint.x + currentLineVec.x/currentLineVec.len()*offset;
+        temp.y = projectionPoint.y + currentLineVec.y/currentLineVec.len()*offset;
+        return temp;
+    }
+
     /** Vector projection following the formula:
      *  ( (a dot b) / (b dot b) ) * b
      *  where a and b are of type Vector2

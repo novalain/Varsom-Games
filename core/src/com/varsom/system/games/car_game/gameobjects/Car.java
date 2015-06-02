@@ -162,6 +162,10 @@ public class Car extends DynamicObject implements Comparable<Car> {
 
     public void update(float deltaTime) {
 
+        if(!active){
+            userAccelerate = false;
+            userBreaking = false;
+        }
         //1. KILL SIDEWAYS VELOCITY
         for (Wheel wheel : wheels) {
             wheel.killSidewaysVelocity();
@@ -263,7 +267,8 @@ public class Car extends DynamicObject implements Comparable<Car> {
     }
 
     public Vector2 getOffsetPoint(float dist) {
-        return wpHandler.getOffsetPositionOnCurrentLine(pointOnTrack, dist);
+        return wpHandler.getOffsetPoint(dist);
+        //return wpHandler.getOffsetPositionOnCurrentLine(pointOnTrack, dist);
     }
 
     public float getRotationTrack() {
