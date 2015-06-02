@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.controller_app.helper.Commons;
+import com.controller_app.helper_classes.SoundHandler;
 import com.controller_app.network.MPClient;
 import com.controller_app.screens.KrazyRazyControllerScreen;
 import com.controller_app.screens.ConnectionScreen;
@@ -54,8 +55,8 @@ public class Main extends Game {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        SoundHandler.load();
 
-        Gdx.app.log("check", "created app");
         settingsScreen = new SettingsScreen(this);
         connectionScreen = new ConnectionScreen(this, mpClient);
         krazyRazyControllerScreen = new KrazyRazyControllerScreen(this, mpClient);
@@ -95,7 +96,7 @@ public class Main extends Game {
                 setScreen(settingsScreen);
                 activeScreen = settingsScreen;
                 break;
-            case Commons.CAR_GAME_SCREEN:
+            case Commons.CRAZY_RAZY_CONTROLLER_SCREEN:
                 krazyRazyControllerScreen = new KrazyRazyControllerScreen(this, mpClient);
                 Gdx.input.setInputProcessor(krazyRazyControllerScreen.getStage());
                // connectionScreen.check = 2;
@@ -106,6 +107,7 @@ public class Main extends Game {
                 Gdx.input.setInputProcessor(standbyScreen.getStage());
                 setScreen(standbyScreen);
                 activeScreen = standbyScreen;
+                break;
 
             default: System.out.println("Error in changeScreen");
         }

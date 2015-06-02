@@ -5,26 +5,22 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.controller_app.Main;
 
 import com.controller_app.helper_classes.ScaledScreen;
+import com.controller_app.helper_classes.SoundHandler;
+import com.controller_app.helper_classes.Sound_ID;
 import com.controller_app.network.MPClient;
 
 import com.controller_app.helper.Commons;
-
-/**
- *
- */
 
 public class KrazyRazyControllerScreen extends ScaledScreen {
 
@@ -71,7 +67,6 @@ public class KrazyRazyControllerScreen extends ScaledScreen {
         skin = new Skin();
 
         generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
-        //backgroundColor = new Color(24.0f/255.f, 102.0f/255.f, 115.0f/255.f, 1.0f);
         backgroundColor = new Color(1.f, 1.f, 1.f, 1.f);
 
         buttonAtlas = new TextureAtlas(Gdx.files.internal("skins/menuSkin.pack"));
@@ -97,8 +92,6 @@ public class KrazyRazyControllerScreen extends ScaledScreen {
 
     @Override
     public void show() {
-
-
     }
 
     @Override
@@ -137,8 +130,6 @@ public class KrazyRazyControllerScreen extends ScaledScreen {
 
     @Override
     public void dispose() {
-        Gdx.app.log("in controllerScreen", "in dispose");
-
     }
 
     private void generateFonts() {
@@ -161,14 +152,14 @@ public class KrazyRazyControllerScreen extends ScaledScreen {
         btnAcceleratePressed.addAction(Actions.sequence(Actions.alpha(0.0f, 0.0f)));
 
         btnReverse = new Image(new Texture(Gdx.files.internal("krazy_razy_controller/krazyRacyReverse.png")));
-        btnReverse.setPosition(Commons.WORLD_WIDTH - btnReverse.getWidth() - btnAccelerate.getWidth()/4 + 50, 10);
+        btnReverse.setPosition(Commons.WORLD_WIDTH - btnReverse.getWidth() - btnAccelerate.getWidth() / 4 + 50, 10);
 
         btnReversePressed = new Image(new Texture(Gdx.files.internal("krazy_razy_controller/krazyRacyReversePressed.png")));
-        btnReversePressed.setPosition(Commons.WORLD_WIDTH - btnReverse.getWidth() - btnAccelerate.getWidth()/4 + 50, 10);
+        btnReversePressed.setPosition(Commons.WORLD_WIDTH - btnReverse.getWidth() - btnAccelerate.getWidth() / 4 + 50, 10);
         btnReversePressed.addAction(Actions.sequence(Actions.alpha(0.0f, 0.0f)));
 
         btnPause = new Image(new Texture(Gdx.files.internal("krazy_razy_controller/krazyRacyPause.png")));
-        btnPause.setPosition(Commons.WORLD_WIDTH / 2 - btnPause.getWidth()/2, Commons.WORLD_HEIGHT / 2 - btnPause.getHeight() / 2 );
+        btnPause.setPosition(Commons.WORLD_WIDTH / 2 - btnPause.getWidth() / 2, Commons.WORLD_HEIGHT / 2 - btnPause.getHeight() / 2);
 
         btnFire = new Image(new Texture(Gdx.files.internal("krazy_razy_controller/krazyRacyFire.png")));
         btnFire.setPosition(50, Commons.WORLD_HEIGHT - btnFire.getHeight() - 50);
@@ -178,15 +169,15 @@ public class KrazyRazyControllerScreen extends ScaledScreen {
         btnFirePressed.addAction(Actions.sequence(Actions.alpha(0.0f, 0.0f)));
 
         logo = new Image(new Texture(Gdx.files.internal("krazy_razy_controller/krazyRacyText.png")));
-        logo.setPosition(Commons.WORLD_WIDTH / 2 - logo.getWidth() / 2, Commons.WORLD_HEIGHT/2 - logo.getHeight() / 2 + 340);
+        logo.setPosition(Commons.WORLD_WIDTH / 2 - logo.getWidth() / 2, Commons.WORLD_HEIGHT / 2 - logo.getHeight() / 2 + 340);
 
-        btnAmmo1 = new Image(new Texture(Gdx.files.internal("krazy_razy_controller/krazyRacyAmmo.png")));
-        btnAmmo2 = new Image(new Texture(Gdx.files.internal("krazy_razy_controller/krazyRacyAmmo.png")));
+        btnAmmo1 = new Image(new Texture(Gdx.files.internal("krazy_razy_controller/krazyRacyAmmo_monkey.png")));
+        btnAmmo2 = new Image(new Texture(Gdx.files.internal("krazy_razy_controller/krazyRacyAmmo_dixie.png")));
 
         btnAmmo1.setPosition(50, 50);
         btnAmmo2.setPosition(btnAmmo1.getWidth() + 50, 50);
         btnAmmo1.setOrigin(btnAmmo1.getWidth() / 2, btnAmmo1.getHeight() / 2);
-        btnAmmo2.setOrigin(btnAmmo2.getWidth()/2, btnAmmo2.getHeight()/2);
+        btnAmmo2.setOrigin(btnAmmo2.getWidth() / 2, btnAmmo2.getHeight() / 2);
         btnAmmo2.setScale(0.5f);
 
         btnPause.addListener(new ClickListener() {
@@ -195,7 +186,6 @@ public class KrazyRazyControllerScreen extends ScaledScreen {
                 Gdx.input.vibrate(Commons.VIBRATION_TIME);
                 //send pause request to server with true
                 mpClient.sendPause(true);
-
             }
         });
 
@@ -205,6 +195,8 @@ public class KrazyRazyControllerScreen extends ScaledScreen {
 
                 drivePressed = true;
                 btnAcceleratePressed.addAction(Actions.alpha(1.f, 0.f));
+
+                Gdx.input.vibrate(Commons.VIBRATION_TIME);
                 return true;
             }
 
@@ -217,9 +209,10 @@ public class KrazyRazyControllerScreen extends ScaledScreen {
         btnReversePressed.addListener(new ClickListener() {
 
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-
                 reversePressed = true;
                 btnReversePressed.addAction(Actions.alpha(1.f, 0.f));
+
+                Gdx.input.vibrate(Commons.VIBRATION_TIME);
                 return true;
             }
 
@@ -232,10 +225,20 @@ public class KrazyRazyControllerScreen extends ScaledScreen {
         btnFirePressed.addListener(new ClickListener() {
 
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-
-                System.out.println("BOOOM!!!!");
                 firePressed = true;
+
                 btnFirePressed.addAction(Actions.alpha(1.f, 0.f));
+
+                switch (ammoSelected) {
+                    case 0:
+                        SoundHandler.play(Sound_ID.MONKEY);
+                        break;
+                    case 1:
+                        SoundHandler.play(Sound_ID.DIXIE);
+                        break;
+                    default:
+                        break;
+                }
                 return true;
             }
 
@@ -250,7 +253,7 @@ public class KrazyRazyControllerScreen extends ScaledScreen {
 
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
-                if(ammoSelected == 1){
+                if (ammoSelected == 1) {
 
                     ammoSelected = 0;
 
@@ -259,10 +262,10 @@ public class KrazyRazyControllerScreen extends ScaledScreen {
                     // Scale up
                     btnAmmo1.addAction(Actions.sequence(Actions.scaleTo(1.0f, 1.0f, 0.3f)));
 
+                    Gdx.input.vibrate(Commons.VIBRATION_TIME);
                 }
 
                 return true;
-
             }
 
         });
@@ -271,8 +274,7 @@ public class KrazyRazyControllerScreen extends ScaledScreen {
 
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
-                if(ammoSelected == 0){
-
+                if (ammoSelected == 0) {
                     ammoSelected = 1;
 
                     // Scale down
@@ -280,14 +282,11 @@ public class KrazyRazyControllerScreen extends ScaledScreen {
                     // Scale up
                     btnAmmo2.addAction(Actions.sequence(Actions.scaleTo(1.0f, 1.0f, 0.3f)));
 
+                    Gdx.input.vibrate(Commons.VIBRATION_TIME);
                 }
-
                 return true;
-
             }
-
         });
-
     }
 
     private void generateTextButtonStyle() {
@@ -299,19 +298,15 @@ public class KrazyRazyControllerScreen extends ScaledScreen {
 
     // Sends a boolean of the state of the variable drive
     public boolean getDrive() {
-
         return drivePressed;
     }
 
-    public boolean getReverse(){
-
+    public boolean getReverse() {
         return reversePressed;
-
     }
 
     // Calculates the rotation of the phone
     public float getRotation() {
-
         float xAxix, yAxix;
 
         xAxix = Gdx.input.getAccelerometerX();
@@ -322,7 +317,7 @@ public class KrazyRazyControllerScreen extends ScaledScreen {
         return tiltAngle;
     }
 
-    public void printName(){
+    public void printName() {
         //btnName.setText(main.getClient().toString());
     }
 }

@@ -17,7 +17,7 @@ public class Commons{
     public static final int CONNECTION_SCREEN = 0;
     public static final int VARSOM_SYSTEM_SCREEN = 1;
     public final static int SETTINGS_SCREEN = 2;
-    public static final int CAR_GAME_SCREEN = 3;
+    public static final int CRAZY_RAZY_CONTROLLER_SCREEN = 3;
     public static final int STANDBY_SCREEN = 4;
 
     // Error message
