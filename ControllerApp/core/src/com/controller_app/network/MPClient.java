@@ -26,7 +26,7 @@ public class MPClient {
 
     public MPClient() throws IOException {
         correctIP = false;
-        closeThread = true;
+        closeThread = false;
 
         client = new Client();
         register();
@@ -45,7 +45,7 @@ public class MPClient {
     }
 
     // get IP from user input and connects
-    public void connectToServer(String ip) {
+    public void connectToServer() {
         // Start a broadcast receive
         try {
             broadcastClient = new BroadcastClient();
@@ -64,6 +64,7 @@ public class MPClient {
 
             try {
                 client.connect(5000, serverIP.trim(), 54555, 64555);
+                closeThread = false;
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -113,7 +114,7 @@ public class MPClient {
                 }
             }
             else if (!send) {
-
+                System.out.println("Something went wrong");
             }
         }
         else{
@@ -167,7 +168,7 @@ public class MPClient {
 
     public void errorHandler() {
           connectionScreen.errorMessage(Commons.BAD_CONNECTION);
-        closeThread = false;
+        closeThread = true;
     }
     public Thread newThread(){
         Thread nT = new Thread(new Runnable() {
@@ -178,13 +179,15 @@ public class MPClient {
 
                 Gdx.app.log("Thread", "NEW THREAD IS RUNNING");
                 try {
-                    while (!Thread.currentThread().isInterrupted() && closeThread) {
+                    while (!Thread.currentThread().isInterrupted() && !closeThread) {
+                        //while (true) {
                         Thread.sleep(1000 /  TICKS_PER_SECOND );
                         //Gdx.app.log("Thread", "DATA IS BEING SENT!!");
                         Packet.GamePacket packet = new Packet.GamePacket();
 
                         packet.message = krazyRazyControllerScreen.getDrive() + " " + krazyRazyControllerScreen.getReverse() + " " + krazyRazyControllerScreen.getRotation();
                         client.sendUDP(packet);
+                        //System.out.println("SEND HEJ");
                     }
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
@@ -215,13 +218,6 @@ public class MPClient {
         Packet.NameUpdate nameUpdate = new Packet.NameUpdate();
         nameUpdate.name = name;
         client.sendTCP(nameUpdate);
-    }
-
-    public void reconnect() throws IOException {
-        client.start();
-
-        client.reconnect();
-
     }
 
     public void setMain(Main main){

@@ -37,7 +37,7 @@ public class Main extends Game {
     private VarsomSystemScreen varsomSystemScreen;
     private KrazyRazyControllerScreen krazyRazyControllerScreen;
     private StandbyScreen standbyScreen;
-    private MPClient mpClient;
+    public MPClient mpClient;
     private Screen activeScreen;
 
     /**
@@ -171,4 +171,11 @@ public class Main extends Game {
         return activeScreen;
 
     }
+
+    @Override
+    public void dispose(){
+        super.dispose();
+
+    }
+
 }

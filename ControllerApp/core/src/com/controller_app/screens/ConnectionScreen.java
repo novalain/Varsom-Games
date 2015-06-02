@@ -25,8 +25,6 @@ import com.controller_app.helper_classes.ScaledScreen;
 import com.controller_app.network.MPClient;
 import com.controller_app.network.NetworkListener;
 
-import java.io.IOException;
-
 public class ConnectionScreen extends ScaledScreen {
 
     private Table table;
@@ -382,7 +380,7 @@ public class ConnectionScreen extends ScaledScreen {
 
         // Removed the value from textfield here, because it's always empty anyway
         // TODO-carlbaum Ask user to enter adress manually if not able to find any servers..
-        mpClient.connectToServer("");
+        mpClient.connectToServer();
     }
 
     // Disconnect from server
