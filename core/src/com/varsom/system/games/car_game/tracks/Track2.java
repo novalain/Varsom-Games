@@ -71,31 +71,6 @@ public class Track2 extends Track{
                 }
                 frontLayer.addElement(cars[i].getBody());
         }
-
-/*
-        //TODO Everything in this following block should be deleted/moved/changed when game can be started from the server
-        cars = new Car[2];
-        TextureRegion[] frames = {AssetLoader.tex1, AssetLoader.tex2, AssetLoader.tex3};
-        carAnimation = new Animation(1/15f, frames);
-        carAnimation.setPlayMode(Animation.PlayMode.LOOP);
-        cars[0] = new Car(carWidth, carLength, hardcodedSpawnPoints()[0], world, null,
-                spawnPosRotation, carPower, maxSteerAngle, maxSpeed,this);
-        sprites.addElement(cars[0].pathTrackingSprite);
-        cars[1] = new Car(carWidth, carLength, hardcodedSpawnPoints()[1],world, new Sprite(AssetLoader.carTexture2),
-                spawnPosRotation, carPower, maxSteerAngle, maxSpeed,this);
-        Gdx.input.setInputProcessor(new InputHandler(cars[0]));
-        //add car to the frontLayer and all wheels to the backLayer
-        for(Wheel tempWheel : cars[0].wheels) {
-            backLayer.addElement(tempWheel.body);
-        }
-        // Set up particlesystem, smoke.p is created in i build-in software in libgdx
-        // "Smoke.p" is linked together with a sample particle.png that is found in img folder
-        effect = new ParticleEffect();
-        effect.load(AssetLoader.particleFile, AssetLoader.particleImg);
-        effect.setPosition(cars[0].getBody().getPosition().x, cars[0].getBody().getPosition().y);
-        effect.scaleEffect(0.01f);
-        effect.start();
-        */
     }
 
     private Vector2[] hardcodedSpawnPoints() {

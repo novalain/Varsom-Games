@@ -94,48 +94,48 @@ public class Track1 extends Track{
             Sprite carSprite;
             switch(i){
                 case 0:
-                    carSprite = new Sprite(AssetLoader.carTexture1);
+                    carSprite = new Sprite(AssetLoader.carTextureTurtle);
                     carWidth = TURTLE_WIDTH;
                     carType = KrazyRazyCommons.TURTLE;
                     break;
                 case 1:
-                    carSprite = new Sprite(AssetLoader.carTexture3);
-                    carWidth = 0.5f;
+                    carSprite = new Sprite(AssetLoader.carTextureHotdog);
+                    carWidth = 0.6f;
                     carType = KrazyRazyCommons.CHEST; // carType doesn't do anything in this case
                     break;
                 case 2:
-                    carSprite = new Sprite(AssetLoader.carTexture);
+                    carSprite = new Sprite(AssetLoader.carTextureAmbulance);
                     carWidth = 0.5f;
                     carType = KrazyRazyCommons.CAR;
                     break;
                 case 3:
-                    carSprite = new Sprite(AssetLoader.carTexture1);
+                    carSprite = new Sprite(AssetLoader.carTextureTurtle);
                     carWidth = TURTLE_WIDTH;
                     carType = KrazyRazyCommons.TURTLE;
                     break;
                 case 4:
-                    carSprite = new Sprite(AssetLoader.carTexture2);
+                    carSprite = new Sprite(AssetLoader.carTextureOld);
                     carWidth = 0.5f;
                     carType = KrazyRazyCommons.CAR;
                     break;
                 case 5:
-                    carSprite = new Sprite(AssetLoader.carTexture);
+                    carSprite = new Sprite(AssetLoader.carTextureAmbulance);
                     carWidth = 0.5f;
                     carType = KrazyRazyCommons.CAR;
                     break;
                 case 6:
-                    carSprite = new Sprite(AssetLoader.carTexture1);
+                    carSprite = new Sprite(AssetLoader.carTextureTurtle);
                     carWidth = TURTLE_WIDTH;
                     carType = KrazyRazyCommons.TURTLE;
                     break;
                 case 7:
-                    carSprite = new Sprite(AssetLoader.carTexture2);
+                    carSprite = new Sprite(AssetLoader.carTextureOld);
                     carWidth = 0.5f;
                     carType = KrazyRazyCommons.CAR;
                     break;
                 default:
                     System.out.println("Mega Error");
-                    carSprite = new Sprite(AssetLoader.carTexture2);
+                    carSprite = new Sprite(AssetLoader.carTextureOld);
                     carWidth = 0.5f;
                     carType = KrazyRazyCommons.CAR;
             }
@@ -170,34 +170,6 @@ public class Track1 extends Track{
             frontLayer.addElement(cars[i].getBody());
         }
 
-        //TODO Everything in this following block should be deleted/moved/changed when game can be started from the server
-        /*    cars = new Car[2];
-            TextureRegion[] frames = {AssetLoader.tex1, AssetLoader.tex2, AssetLoader.tex3};
-            carAnimation = new Animation(1/15f, frames);
-            carAnimation.setPlayMode(Animation.PlayMode.LOOP);
-            cars[0] = new Car(carWidth, carLength, hardcodedSpawnPoints()[0], world, null,
-                    spawnPosRotation, carPower, maxSteerAngle, maxSpeed,this);
-            sprites.addElement(cars[0].pathTrackingSprite);
-            cars[1] = new Car(carWidth, carLength, hardcodedSpawnPoints()[1],world, new Sprite(AssetLoader.carTexture2),
-                    spawnPosRotation, carPower, maxSteerAngle, maxSpeed,this);
-            Gdx.input.setInputProcessor(new InputHandler(cars[0]));
-            //add car to the frontLayer and all wheels to the backLayer
-            for(Wheel tempWheel : cars[0].wheels) {
-                backLayer.addElement(tempWheel.body);
-            }
-
-
-            // Set up particlesystem, smoke.p is created in i build-in software in libgdx
-            // "Smoke.p" is linked together with a sample particle.png that is found in img folder
-
-            effect = new ParticleEffect();
-            effect.load(AssetLoader.particleFile, AssetLoader.particleImg);
-            effect.setPosition(cars[0].getBody().getPosition().x, cars[0].getBody().getPosition().y);
-            effect.scaleEffect(0.01f);
-            effect.start();
-
-
-            */
     }
 
     private Vector2[] hardcodedSpawnPoints() {

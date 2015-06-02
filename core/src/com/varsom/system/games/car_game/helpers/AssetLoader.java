@@ -15,7 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
  */
 public class AssetLoader {
     //car
-    public static Texture carTexture, carTexture1, carTexture2, carTexture3, tireTrackTexture, pathCircleTexture;
+    public static Texture carTextureAmbulance, carTextureTurtle, carTextureOld, carTextureCoffin, carTextureHotdog, tireTrackTexture, pathCircleTexture;
     //obstacles
     public static Texture tireObstacleTexture, wallTexture;
     //backgrounds
@@ -59,22 +59,22 @@ public class AssetLoader {
 
         pathCircleTexture = new Texture(Gdx.files.internal("car_game_assets/img/colorwheel.png"));
         // loading texture for car
-        carTexture = new Texture(Gdx.files.internal("car_game_assets/img/ambulance_animation/1c.png"));
-        carTexture1 = new Texture(Gdx.files.internal("car_game_assets/img/TurtleCar.png"));
-        carTexture2 = new Texture(Gdx.files.internal("car_game_assets/img/car2.png"));
-        carTexture3 = new Texture(Gdx.files.internal("car_game_assets/img/coffinCar.png"));
-        //carTexture = new Texture(Gdx.files.internal("car_game_assets/img/car.png"));
-        //carTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        carTextureAmbulance = new Texture(Gdx.files.internal("car_game_assets/img/ambulance_animation/1c.png"));
+        carTextureTurtle = new Texture(Gdx.files.internal("car_game_assets/img/TurtleCar.png"), true);
+        carTextureOld = new Texture(Gdx.files.internal("car_game_assets/img/car2.png"));
+        carTextureCoffin = new Texture(Gdx.files.internal("car_game_assets/img/coffinCar.png"));
+        carTextureHotdog = new Texture(Gdx.files.internal("car_game_assets/img/hotdogCar.png"));
+        //carTextureAmbulance.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+
+        //carTextureTurtle.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Linear);
 
         tireTrackTexture = new Texture(Gdx.files.internal("car_game_assets/img/tire-tracks.jpg"));
         //tireTrackTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
         tireObstacleTexture = new Texture("car_game_assets/img/tire.png");
-        wallTexture = new Texture("car_game_assets/img/wall.jpg");
+        wallTexture = new Texture("car_game_assets/img/wall.png");
 
-        // Guessing bg is background
-        bgTexture = new Texture(Gdx.files.internal("car_game_assets/img/temp_background.png"));
-        bgTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+       // bgTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
         testTrackTexture = new Texture("car_game_assets/img/tracks/newtrack2.png");
         testTrackMask = new Texture("car_game_assets/img/tracks/trackmask.png");
@@ -82,8 +82,8 @@ public class AssetLoader {
         track2Texture = new Texture("car_game_assets/img/tracks/track2.png");
         track2Mask = new Texture("car_game_assets/img/tracks/track2mask.png");
 
-        bg = new TextureRegion(bgTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        bg.flip(false, true); // Flip the sprite vertically to fit coordinate system Y-down
+        //bg = new TextureRegion(bgTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        //bg.flip(false, true); // Flip the sprite vertically to fit coordinate system Y-down
 
         particleFile = Gdx.files.internal("car_game_assets/effects/smoke_cartoon.p");
         firepitFile = Gdx.files.internal("car_game_assets/effects/firepit.p");
@@ -114,7 +114,7 @@ public class AssetLoader {
         wheelAnimation.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);*/
 
         // Texture size of car.png is 50*74 px
-        //car = new TextureRegion(carTexture, 0, 0, 50, 74);
+        //car = new TextureRegion(carTextureAmbulance, 0, 0, 50, 74);
         //car.flip(false, true);
 
         //    Animate an array of textureRegions to make the sprite object seem to move
@@ -122,11 +122,9 @@ public class AssetLoader {
         //carAnimation = new Animation(0.06f, cars);
         //carAnimation.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
 
-
     }
 
     public static void dispose() {
         // We must dispose of the texture when we are finished.
-        // carTexture.dispose();
     }
 }
