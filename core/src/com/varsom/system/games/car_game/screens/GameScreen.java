@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -15,19 +16,23 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.varsom.system.Commons;
 import com.varsom.system.VarsomSystem;
 import com.varsom.system.games.car_game.gameobjects.Car;
 import com.varsom.system.games.car_game.helpers.AssetLoader;
+import com.varsom.system.games.car_game.helpers.KrazyRazyCommons;
 import com.varsom.system.games.car_game.tracks.Track;
 import com.varsom.system.games.car_game.tracks.Track1;
 import com.varsom.system.games.car_game.tracks.Track2;
 import com.varsom.system.network.NetworkListener;
+import com.varsom.system.screens.VarsomMenu;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -90,6 +95,8 @@ public class GameScreen implements Screen {
     private Image redLight;
     private float stateTime;
 
+    private Image fadeImage;
+
     // constants for screen
     int SCREEN_WIDTH = Gdx.graphics.getWidth();
     int SCREEN_HEIGHT = Gdx.graphics.getHeight();
@@ -110,6 +117,13 @@ public class GameScreen implements Screen {
         this.level = level;
         world = new World(new Vector2(0f, 0f), true);
         debugRenderer = new Box2DDebugRenderer();
+
+        fadeImage = new Image(AssetLoader.blackboxTexture);
+        fadeImage.setWidth(SCREEN_WIDTH);
+        fadeImage.setHeight(SCREEN_HEIGHT);
+        fadeImage.setColor(KrazyRazyCommons.KRAZY_BLUE_BG);
+        fadeImage.addAction(Actions.alpha(0.f));
+        stage.addActor(fadeImage);
 
         NUMBER_OF_PLAYERS = this.varsomSystem.getServer().getConnections().length;
 
@@ -291,7 +305,6 @@ public class GameScreen implements Screen {
             }
 
             String lapText = "Lap " + currentLap + "/" + maxLaps;
-            System.out.println();
             lapsLabel.setText(lapText);
             carsTraveled.setText(temp);
             updateCamera();
@@ -299,6 +312,8 @@ public class GameScreen implements Screen {
 
         //If paused pause menu is displayed, else it is not
         displayPauseMenu(paused);
+
+     ///   System.out.println("in render loop");
 
         stage.act();
         stage.draw();
@@ -414,15 +429,24 @@ public class GameScreen implements Screen {
         if (activeCars.size() == 1) {
             weHaveAWinner();
         }
+
         //TODO ADD LOSE SCREEN TO CONTROLLER
     }
 
     private void weHaveAWinner() {
-        varsomSystem.getMPServer().gameRunning(false);
-        ((Game) Gdx.app.getApplicationListener()).setScreen(new ResultScreen(varsomSystem, sortedCars2String()));
 
-        //new clients can join now when the game is over
-        varsomSystem.getMPServer().setJoinable(true);
+        table.addAction(Actions.alpha(0.f));
+
+        fadeImage.addAction(Actions.sequence(Actions.alpha(1.f, 1.5f), Actions.delay(0.f), Actions.run(new Runnable() {
+            @Override
+            public void run() {
+                varsomSystem.getMPServer().gameRunning(false);
+                ((Game) Gdx.app.getApplicationListener()).setScreen(new ResultScreen(varsomSystem, sortedCars2String()));
+
+                //new clients can join now when the game is over
+                varsomSystem.getMPServer().setJoinable(true);
+            }
+        })));
 
     }
 

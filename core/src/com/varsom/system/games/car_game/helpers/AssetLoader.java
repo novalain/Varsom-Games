@@ -19,6 +19,8 @@ public class AssetLoader {
     // other colors
     public static Texture  carTextureTurtle2, carTextureCoffin2, carTextureHotdog2, carTexturePiggelin2;
 
+    public static Texture blackboxTexture;
+
     //obstacles
     public static Texture tireObstacleTexture, wallTexture;
     //backgrounds
@@ -68,6 +70,8 @@ public class AssetLoader {
         carTextureCoffin = new Texture(Gdx.files.internal("car_game_assets/img/cars/coffinCar.png"));
         carTextureHotdog = new Texture(Gdx.files.internal("car_game_assets/img/cars/hotdogCar.png"));
         carTexturePiggelin = new Texture(Gdx.files.internal("car_game_assets/img/cars/piggelinCar.png"));
+
+        blackboxTexture = new Texture(Gdx.files.internal("car_game_assets/img/blackbox.png"));
 
         // Secondary
         carTextureTurtle2 = new Texture(Gdx.files.internal("car_game_assets/img//cars/TurtleCarFast2.png"));

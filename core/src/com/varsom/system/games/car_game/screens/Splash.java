@@ -91,7 +91,7 @@ public class Splash extends ScaledScreen {
         stage.act(); //update all actors
         stage.draw(); //draw all actors on the Stage.getBatch()
 
-        loading.rotateBy(3);
+        loading.addAction(Actions.rotateBy(5.f));
 
 }
 
