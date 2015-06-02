@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -70,6 +71,20 @@ public class ResultScreen extends ScaledScreen {
 
         }
 
+        winningPlayer.addAction(Actions.sequence(Actions.alpha(1.f)));
+
+        smileyHappy.addAction(Actions.sequence(Actions.delay(0.0f), Actions.alpha(1.f), Actions.rotateTo(360f, 1.5f)));
+        smileyMad.addAction(Actions.sequence(Actions.delay(0.0f), Actions.alpha(1.f)));
+
+        for(int i = 0; i < playerStandings.size(); i++){
+
+            playerStandings.elementAt(i).addAction(Actions.sequence(Actions.delay(1.f + 0.1f*i), Actions.alpha(1.f)));
+
+            if( i == playerStandings.size() - 1)
+                proceed.addAction(Actions.sequence(Actions.delay(1.1f + 0.1f*i), Actions.alpha(1.f)));
+
+        }
+
         Gdx.input.setInputProcessor(stage);
     }
 
@@ -93,7 +108,7 @@ public class ResultScreen extends ScaledScreen {
 
         //Font
         BitmapFont winningFont = Commons.getFont(150, AssetLoader.krazyFontFile, KrazyRazyCommons.KRAZY_GREEN, 3f, KrazyRazyCommons.KRAZY_BLUE);
-        BitmapFont playerStandingFont = Commons.getFont(100, AssetLoader.krazyFontFile,KrazyRazyCommons.KRAZY_BLUE, 3f, KrazyRazyCommons.KRAZY_GREEN);
+        BitmapFont playerStandingFont = Commons.getFont(70, AssetLoader.krazyFontFile,KrazyRazyCommons.KRAZY_BLUE, 3f, KrazyRazyCommons.KRAZY_GREEN);
 
         Label.LabelStyle styleWinning = new Label.LabelStyle(winningFont, Color.WHITE);
         Label.LabelStyle stylePlayerStanding = new Label.LabelStyle(playerStandingFont, Color.WHITE);
@@ -105,15 +120,21 @@ public class ResultScreen extends ScaledScreen {
         //Title
         winningPlayer = new Label(carOrder.get(0) + " is victorious!", styleWinning);
         winningPlayer.setPosition(Commons.WORLD_WIDTH /2 - winningPlayer.getWidth()/2, Commons.WORLD_HEIGHT - winningPlayer.getHeight());
+        winningPlayer.addAction(Actions.alpha(0.f));
 
         smileyHappy.setPosition(winningPlayer.getX() - smileyHappy.getWidth() - 50, winningPlayer.getY() + smileyHappy.getHeight() / 2 - 20);
+        smileyHappy.setOrigin(smileyHappy.getWidth()/2, smileyHappy.getHeight() / 2);
+        smileyMad.setOrigin(smileyMad.getWidth()/2, smileyMad.getHeight() / 2);
+        smileyHappy.addAction(Actions.alpha(0.f));
         smileyMad.setPosition(Commons.WORLD_WIDTH * 0.8f, Commons.WORLD_HEIGHT / 2 - smileyMad.getHeight() / 2);
+        smileyMad.addAction(Actions.alpha(0.f));
 
         for(int i = 1; i < carOrder.size(); i++){
 
             Label playerStanding = new Label( (i + 1) + ". " + carOrder.get(i), stylePlayerStanding ) ;
+            //Label playerStanding = new Label ( (i + 1) + ". " + "Carlbaum", stylePlayerStanding );
             playerStanding.setPosition(Commons.WORLD_WIDTH / 2 - playerStanding.getWidth() / 2, Commons.WORLD_HEIGHT - winningPlayer.getHeight() - playerStanding.getHeight()*i  );
-
+            playerStanding.addAction(Actions.alpha(0.f));
             playerStandings.add(playerStanding);
 
         }
@@ -125,6 +146,7 @@ public class ResultScreen extends ScaledScreen {
         score.setPosition(Commons.WORLD_WIDTH / 2 - score.getWidth() / 2, Commons.WORLD_HEIGHT * 0.6f - score.getHeight());*/
 
         proceed = new Label("Press anywhere to continue", stylePlayerStanding);
+        proceed.addAction(Actions.alpha(0.f));
         proceed.setPosition(Commons.WORLD_WIDTH / 2 - proceed.getWidth() / 2, Commons.WORLD_HEIGHT * 0.2f);
 
       /*  btnOK = new TextButton("OK", skin);

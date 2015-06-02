@@ -15,7 +15,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
  */
 public class AssetLoader {
     //car
-    public static Texture carTextureAmbulance, carTextureTurtle, carTextureOld, carTextureCoffin, carTextureHotdog, tireTrackTexture, pathCircleTexture;
+    public static Texture carTextureAmbulance, carTextureTurtle, carTextureOld, carTextureCoffin, carTextureHotdog, carTexturePiggelin, tireTrackTexture, pathCircleTexture;
+    // other colors
+    public static Texture  carTextureTurtle2, carTextureCoffin2, carTextureHotdog2, carTexturePiggelin2;
+
+    public static Texture blackboxTexture;
+
     //obstacles
     public static Texture tireObstacleTexture, wallTexture;
     //backgrounds
@@ -60,10 +65,19 @@ public class AssetLoader {
         pathCircleTexture = new Texture(Gdx.files.internal("car_game_assets/img/colorwheel.png"));
         // loading texture for car
         carTextureAmbulance = new Texture(Gdx.files.internal("car_game_assets/img/ambulance_animation/1c.png"));
-        carTextureTurtle = new Texture(Gdx.files.internal("car_game_assets/img/TurtleCar.png"), true);
-        carTextureOld = new Texture(Gdx.files.internal("car_game_assets/img/car2.png"));
-        carTextureCoffin = new Texture(Gdx.files.internal("car_game_assets/img/coffinCar.png"));
-        carTextureHotdog = new Texture(Gdx.files.internal("car_game_assets/img/hotdogCar.png"));
+        carTextureOld = new Texture(Gdx.files.internal("car_game_assets/img/cars/car.png"));
+        carTextureTurtle = new Texture(Gdx.files.internal("car_game_assets/img//cars/TurtleCarFast.png"));
+        carTextureCoffin = new Texture(Gdx.files.internal("car_game_assets/img/cars/coffinCar.png"));
+        carTextureHotdog = new Texture(Gdx.files.internal("car_game_assets/img/cars/hotdogCar.png"));
+        carTexturePiggelin = new Texture(Gdx.files.internal("car_game_assets/img/cars/piggelinCar.png"));
+
+        blackboxTexture = new Texture(Gdx.files.internal("car_game_assets/img/blackbox.png"));
+
+        // Secondary
+        carTextureTurtle2 = new Texture(Gdx.files.internal("car_game_assets/img//cars/TurtleCarFast2.png"));
+        carTextureCoffin2 = new Texture(Gdx.files.internal("car_game_assets/img/cars/coffinCar2.png"));
+        carTextureHotdog2 = new Texture(Gdx.files.internal("car_game_assets/img/cars/hotdogCar2.png"));
+        carTexturePiggelin2 = new Texture(Gdx.files.internal("car_game_assets/img/cars/piggelinCar2.png"));
         //carTextureAmbulance.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
         //carTextureTurtle.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Linear);
