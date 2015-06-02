@@ -36,7 +36,7 @@ public class AssetLoader {
     public static Texture krazyTitleTexture,
             krazyPlayTexture, krazyPlayDownTexture,
             krazyExitTexture, krazyExitDownTexture,
-            krazyThingyTexture_1, krazyThingyTexture_2;
+            krazyThingyTexture_1, krazyThingyTexture_2, krazyThingyTexture_mad;
 
     public static Skin skin;
     public static FileHandle krazyFontFile;
@@ -54,6 +54,7 @@ public class AssetLoader {
         krazyExitDownTexture = new Texture(Gdx.files.internal("car_game_assets/menu/krazyRacyMenuExitHover.png"));
         krazyThingyTexture_1 = new Texture(Gdx.files.internal("car_game_assets/menu/crazythingy.png"));
         krazyThingyTexture_2 = new Texture(Gdx.files.internal("car_game_assets/menu/hot-dog.png"));
+        krazyThingyTexture_mad = new Texture(Gdx.files.internal("car_game_assets/menu/crazythingymad.png"));
 
 
         pathCircleTexture = new Texture(Gdx.files.internal("car_game_assets/img/colorwheel.png"));
@@ -96,10 +97,10 @@ public class AssetLoader {
         // For animation of redlights
         redlightTexture = new Texture(Gdx.files.internal("car_game_assets/img/trafficLights.png"));
         redlightsFrames = new TextureRegion[4];
-        redlightsFrames[3] = new TextureRegion(redlightTexture, 0, 0, redlightTexture.getWidth(), redlightTexture.getHeight() / 4);
-        redlightsFrames[2] = new TextureRegion(redlightTexture, 0, redlightTexture.getHeight() / 4, redlightTexture.getWidth(), redlightTexture.getHeight() / 4);
-        redlightsFrames[1] = new TextureRegion(redlightTexture, 0, redlightTexture.getHeight() / 2, redlightTexture.getWidth(), redlightTexture.getHeight() / 4);
-        redlightsFrames[0] = new TextureRegion(redlightTexture, 0, 3 * (redlightTexture.getHeight() / 4), redlightTexture.getWidth(), redlightTexture.getHeight() / 4);
+        redlightsFrames[3] = new TextureRegion(redlightTexture, 0, 0, redlightTexture.getWidth(), (redlightTexture.getHeight() / 4)-1);
+        redlightsFrames[2] = new TextureRegion(redlightTexture, 0, redlightTexture.getHeight() / 4, redlightTexture.getWidth(), (redlightTexture.getHeight() / 4)-1);
+        redlightsFrames[1] = new TextureRegion(redlightTexture, 0, redlightTexture.getHeight() / 2, redlightTexture.getWidth(), (redlightTexture.getHeight() / 4)-1);
+        redlightsFrames[0] = new TextureRegion(redlightTexture, 0, 3 * (redlightTexture.getHeight() / 4), redlightTexture.getWidth(), (redlightTexture.getHeight() / 4)-1);
 
         // Texture size of tire-tracks.jpg is 112*289 px
        /* tracks1 = new TextureRegion(tireTrackTexture, 0,      0, 112, 96f);
