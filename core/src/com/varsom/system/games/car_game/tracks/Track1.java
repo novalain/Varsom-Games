@@ -15,7 +15,7 @@ import com.varsom.system.games.car_game.helpers.KrazyRazyCommons;
 
 public class Track1 extends Track{
 
-    float TURTLE_WIDTH = 1.5f;
+    //float TURTLE_WIDTH = 1.5f;
 
     //Particleeffects..
     // This one is needed if we want to access several layers in our particlesystem
@@ -95,43 +95,44 @@ public class Track1 extends Track{
             switch(i){
                 case 0:
                     carSprite = new Sprite(AssetLoader.carTextureTurtle);
-                    carWidth = TURTLE_WIDTH;
+                    carWidth = 1.2f;
                     carType = KrazyRazyCommons.TURTLE;
                     break;
                 case 1:
                     carSprite = new Sprite(AssetLoader.carTextureHotdog);
                     carWidth = 0.6f;
-                    carType = KrazyRazyCommons.CHEST; // carType doesn't do anything in this case
+                    carType = KrazyRazyCommons.HOTDOG; // carType doesn't do anything in this case
                     break;
                 case 2:
-                    carSprite = new Sprite(AssetLoader.carTextureAmbulance);
+                    carSprite = new Sprite(AssetLoader.carTextureCoffin);
                     carWidth = 0.5f;
-                    carType = KrazyRazyCommons.CAR;
+                    carType = KrazyRazyCommons.COFFIN;
                     break;
                 case 3:
-                    carSprite = new Sprite(AssetLoader.carTextureTurtle);
-                    carWidth = TURTLE_WIDTH;
-                    carType = KrazyRazyCommons.TURTLE;
+                    carSprite = new Sprite(AssetLoader.carTexturePiggelin);
+                    carWidth = 0.6f;
+                    carType = KrazyRazyCommons.AMBULANCE;
                     break;
+                // Other colors
                 case 4:
-                    carSprite = new Sprite(AssetLoader.carTextureOld);
-                    carWidth = 0.5f;
-                    carType = KrazyRazyCommons.CAR;
+                    carSprite = new Sprite(AssetLoader.carTextureTurtle2);
+                    carWidth = 1.2f;
+                    carType = KrazyRazyCommons.TURTLE;
                     break;
                 case 5:
-                    carSprite = new Sprite(AssetLoader.carTextureAmbulance);
-                    carWidth = 0.5f;
-                    carType = KrazyRazyCommons.CAR;
+                    carSprite = new Sprite(AssetLoader.carTextureHotdog2);
+                    carWidth = 0.6f;
+                    carType = KrazyRazyCommons.HOTDOG;
                     break;
                 case 6:
-                    carSprite = new Sprite(AssetLoader.carTextureTurtle);
-                    carWidth = TURTLE_WIDTH;
-                    carType = KrazyRazyCommons.TURTLE;
+                    carSprite = new Sprite(AssetLoader.carTextureCoffin2);
+                    carWidth = 0.5f;
+                    carType = KrazyRazyCommons.COFFIN;
                     break;
                 case 7:
-                    carSprite = new Sprite(AssetLoader.carTextureOld);
-                    carWidth = 0.5f;
-                    carType = KrazyRazyCommons.CAR;
+                    carSprite = new Sprite(AssetLoader.carTexturePiggelin2);
+                    carWidth = 0.6f;
+                    carType = KrazyRazyCommons.PIGGELIN;
                     break;
                 default:
                     System.out.println("Mega Error");
