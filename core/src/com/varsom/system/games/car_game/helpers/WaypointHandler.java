@@ -15,7 +15,7 @@ public class WaypointHandler {
     private Track track;
     private int waypointIndex;
     private final Array<Vector2> path;
-    private int currentLap = 1;
+    private int currentLap = 0;
 
     //CURRENT LINE
     private Vector2 currentLineStartPos, currentLineEndPos, currentLineVec;
@@ -35,12 +35,12 @@ public class WaypointHandler {
     public WaypointHandler(Track t, Vector2 spawnPos){//, Vector2 startLineStart, Vector2 startLineEnd,){
         track = t;
         path = t.getPath(); // should not be able to be changed
-        waypointIndex = 1; // the index in path of the currentLine's end pos
+        waypointIndex = 0; // the index in path of the currentLine's end pos
 
         //Find the current lines start and end positions
         currentLineStartPos = new Vector2();
         currentLineEndPos = new Vector2();
-        assignNewVec(currentLineStartPos,path.get(waypointIndex-1));
+        assignNewVec(currentLineStartPos,path.get(path.size-1/*waypointIndex-1*/));
         assignNewVec(currentLineEndPos,path.get(waypointIndex));
 
         //Find the vector vector for the current line
@@ -62,7 +62,7 @@ public class WaypointHandler {
         assignNewVec(prevProjPoint,projectionPoint);
 
         //calculate the distance between the starting point of the current line and the projtion point
-        traveledDistance = lengthOfVector2(projectionPoint, currentLineStartPos);
+        traveledDistance = -lengthOfVector2(projectionPoint, currentLineEndPos);
     }
 
 

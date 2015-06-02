@@ -4,10 +4,8 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -33,7 +31,6 @@ import com.varsom.system.games.car_game.tracks.Track;
 import com.varsom.system.games.car_game.tracks.Track1;
 import com.varsom.system.games.car_game.tracks.Track2;
 import com.varsom.system.network.NetworkListener;
-import com.varsom.system.screens.VarsomMenu;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -77,14 +74,16 @@ public class GameScreen implements Screen {
 
     //TODO Load files from AssetLoader
     private Skin skin = AssetLoader.skin;
-    private BitmapFont font;
+
+    //HUD, (head-up-display)
+    private BitmapFont fontBig, fontSmall;
+    private Label.LabelStyle styleBig, styleSmall;
 
     private TextButton buttonLeave = new TextButton("Win screen", skin);
     private Label labelPause;
     private String pauseMessage = "Paused";
 
-    // Only for development - carlbaum
-    private Label carsTraveled;
+    private Label standingsLabel;
     private Label lapsLabel;
     private int maxLaps = 2, currentLap = 1;
 
@@ -149,8 +148,11 @@ public class GameScreen implements Screen {
         varsomSystem.getActiveGame().setGameScreen(this);
         varsomSystem.getMPServer().gameRunning(true);
 
-        font = Commons.getFont(52, AssetLoader.krazyFontFile, KrazyRazyCommons.KRAZY_BLUE, 3f, KrazyRazyCommons.KRAZY_GREEN);
-        Label.LabelStyle style = new Label.LabelStyle(font, Color.WHITE);
+        fontBig = Commons.getFont(62, AssetLoader.krazyFontFile, KrazyRazyCommons.KRAZY_BLUE, 3f, KrazyRazyCommons.KRAZY_GREEN);
+        styleBig = new Label.LabelStyle(fontBig, Color.WHITE);
+
+        fontSmall = Commons.getFont(32, AssetLoader.krazyFontFile, KrazyRazyCommons.KRAZY_BLUE, 3f, KrazyRazyCommons.KRAZY_GREEN);
+        styleSmall = new Label.LabelStyle(fontSmall, Color.WHITE);
 
         trackLength = track.getTrackLength();
 
@@ -177,15 +179,9 @@ public class GameScreen implements Screen {
         table.top().left();
         table.add(buttonLeave).size(400, 75).row();
         // connected devices text things....
-        lapsLabel = new Label("Lap:\n", style);
-        lapsLabel.setWrap(true);
-        lapsLabel.setPosition(20,SCREEN_HEIGHT-lapsLabel.getHeight()*1.5f);
-        stage.addActor(lapsLabel);
 
-        carsTraveled = new Label("Standings:       \n", style);
-        carsTraveled.setWrap(true);
-        carsTraveled.setPosition(20,carsTraveled.getHeight());
-        stage.addActor(carsTraveled);
+        //
+        initHUD();
 
         table.setFillParent(true);
         stage.addActor(table);
@@ -197,7 +193,7 @@ public class GameScreen implements Screen {
         labelPause = new Label(pauseMessage, skin);
         labelPause.setPosition(SCREEN_WIDTH / 2 - labelPause.getWidth() / 2, SCREEN_HEIGHT / 2 - labelPause.getHeight() / 2);
 
-        labelPlayerName = new Label("Player name", skin);
+        labelPlayerName = new Label("Player name", styleBig);
         labelPlayerName.setPosition(SCREEN_WIDTH / 2 - labelPlayerName.getWidth() / 2, SCREEN_HEIGHT / 2 + labelPlayerName.getHeight());
 
         stage.addActor(labelPause);
@@ -279,7 +275,7 @@ public class GameScreen implements Screen {
 
             world.step(TIMESTEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 
-            String temp = "Standings:\n";
+            String temp = "";
 
             // Check if cars is inside the boundaries of the camera
             //but not if the start sequence is playing
@@ -298,7 +294,7 @@ public class GameScreen implements Screen {
                     sortedCars.get(i).update(delta);
                 }
                 sortCars();
-                temp += sortedCars2String();
+                temp += sortedCars2String(true);
             }
 
 
@@ -314,7 +310,7 @@ public class GameScreen implements Screen {
 
             String lapText = "Lap " + currentLap + "/" + maxLaps;
             lapsLabel.setText(lapText);
-            carsTraveled.setText(temp);
+            standingsLabel.setText(temp);
             updateCamera();
         }
 
@@ -450,7 +446,7 @@ public class GameScreen implements Screen {
             @Override
             public void run() {
                 varsomSystem.getMPServer().gameRunning(false);
-                ((Game) Gdx.app.getApplicationListener()).setScreen(new ResultScreen(varsomSystem, sortedCars2String()));
+                ((Game) Gdx.app.getApplicationListener()).setScreen(new ResultScreen(varsomSystem, sortedCars2String(false)));
 
                 //new clients can join now when the game is over
                 varsomSystem.getMPServer().setJoinable(true);
@@ -476,14 +472,20 @@ public class GameScreen implements Screen {
         //    System.out.println(a);
     }
 
-    private String sortedCars2String() {
+    private String sortedCars2String(boolean addNumbers) {
         String temp = "";
         for (int i = 0; i < sortedCars.size(); i++) {
             try {
-                temp += i+1 + ". " + sortedCars.get(i).getConnectionName() + "\n";
+                if(addNumbers) {
+                    temp += i + 1 + ". ";
+                }
+                temp += sortedCars.get(i).getConnectionName() + "\n";
 
             } catch (Exception e) {
-                temp += i+1 + ". *NoConnection*\n";
+                if(addNumbers) {
+                    temp += i + 1 + ". ";
+                }
+                temp += "*NoConnection*\n";
             }
         }
         return temp;
@@ -564,5 +566,18 @@ public class GameScreen implements Screen {
                 }
             }
         }
+    }
+
+    private void initHUD() {
+        lapsLabel = new Label("Lap: XX/XX\n", styleBig);
+        lapsLabel.setWrap(true);
+        lapsLabel.setPosition(20,SCREEN_HEIGHT-lapsLabel.getHeight());
+
+        standingsLabel = new Label(sortedCars2String(true) + "DETTA ÄR EN FULLÖSNING", styleSmall);
+        standingsLabel.setWrap(true);
+        standingsLabel.setPosition(20, 20);
+
+        stage.addActor(standingsLabel);
+        stage.addActor(lapsLabel);
     }
 }

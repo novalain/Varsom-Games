@@ -208,7 +208,7 @@ public abstract class Track {
 
         // Set shape renderer to be drawn in world, not on screen
         //shapeRenderer.setProjectionMatrix(camera.combined);
-        //drawWayPoints();
+       // drawWayPoints();
 
         inBatch.end();
     }
