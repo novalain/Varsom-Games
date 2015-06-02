@@ -93,15 +93,6 @@ public class Splash extends ScaledScreen {
 
         loading.rotateBy(3);
 
-        //spriteBatch.begin();
-
-//        TextureRegion region = anim.getKeyFrame(frameCounter, true);
-
-  //      spriteBatch.draw(anim.getKeyFrame(frameCounter, true), Commons.WORLD_WIDTH / 2 - new Texture(Gdx.files.internal("system/img/loading_krazy.gif")).getWidth() / 2, loadingText.getY() - new Texture(Gdx.files.internal("system/img/loading_krazy.gif")).getHeight());
-
-      //  spriteBatch.end();
-
-        //Gdx.app.log("Splash", "splashing");
 }
 
     @Override

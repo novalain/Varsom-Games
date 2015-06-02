@@ -280,7 +280,7 @@ public class Car extends DynamicObject implements Comparable<Car> {
             //System.out.println("offTrack");
             this.setSpeed(this.getSpeedKMH() * track.getOffTrackSpeed());
             if(getSpeedKMH() != 0){
-                track.getVarsomSystem().getMPServer().vibrateClient(50,connectionID);
+                track.getVarsomSystem().getMPServer().vibrateClient(10,connectionID);
             }
         }
 
