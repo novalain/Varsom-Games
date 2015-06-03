@@ -460,7 +460,7 @@ public class GameScreen implements Screen {
             activeCars.add(car);
             sortedCars.add(car);
         }
-        System.out.println("activeCars contains " + activeCars.size() + " items");
+        //System.out.println("activeCars contains " + activeCars.size() + " items");
     }
 
     private void sortCars() {
@@ -500,7 +500,7 @@ public class GameScreen implements Screen {
             }
             diePulse += " 5 " + pauseInt;
         }
-        System.out.println("PULSE: = " + diePulse);
+        //System.out.println("PULSE: = " + diePulse);
     }
 
     public void handleExit() {
