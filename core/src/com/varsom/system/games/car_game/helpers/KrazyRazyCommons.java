@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 public interface KrazyRazyCommons {
 
     //Type of vehicle
-    public final static int CAR = 0, TURTLE = 1, COFFIN = 2, HOTDOG = 3, AMBULANCE = 4, PIGGELIN = 5;
+    public final static int CAR = 0, TURTLE = 1, COFFIN = 2, HOTDOG = 3, AMBULANCE = 4, PIGGELIN = 5, TURTLE_COPY = 6, COFFIN_COPY = 7, HOTDOG_COPY = 8, PIGGELIN_COPY = 9;
 
     //COLORS
     public final static Color KRAZY_GREEN = new Color(152.0f/255.0f, 205.0f/255.0f, 121.0f/255.0f, 1);

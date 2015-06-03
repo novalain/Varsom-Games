@@ -5,13 +5,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.varsom.system.Commons;
 import com.varsom.system.VarsomSystem;
 import com.varsom.system.games.car_game.helpers.AssetLoader;
@@ -34,13 +31,16 @@ public class ResultScreen extends ScaledScreen {
    // private TextButton btnOK;
     private Label result, winningPlayer, score, proceed;
     private Vector<Label> playerStandings;
-    private Image smileyMad, smileyHappy;
+    private Image smileyMad, winningCarImage;
     private float frameCounter = 0;
+    private int winnerCar = 0;
 
     //private String playerScores;
 
-    public ResultScreen(VarsomSystem varsomSystem, String names) {
+    public ResultScreen(VarsomSystem varsomSystem, String names, int carType) {
+
         this.varsomSystem = varsomSystem;
+        this.winnerCar = carType;
         carOrder = new ArrayList<String>();
         StringTokenizer st = new StringTokenizer(names, "\n");
         while(st.hasMoreTokens()){
@@ -62,7 +62,7 @@ public class ResultScreen extends ScaledScreen {
        // stage.addActor(result);
         //stage.addActor(score);
         stage.addActor(proceed);
-        stage.addActor(smileyHappy);
+        stage.addActor(winningCarImage);
         stage.addActor(smileyMad);
 
         for(int i = 0; i < playerStandings.size(); i++){
@@ -73,7 +73,7 @@ public class ResultScreen extends ScaledScreen {
 
         winningPlayer.addAction(Actions.sequence(Actions.alpha(1.f)));
 
-        smileyHappy.addAction(Actions.sequence(Actions.delay(0.0f), Actions.alpha(1.f), Actions.rotateTo(360f, 1.5f)));
+        winningCarImage.addAction(Actions.sequence(Actions.delay(0.0f), Actions.alpha(1.f), Actions.rotateTo(360f, 1.5f)));
         smileyMad.addAction(Actions.sequence(Actions.delay(0.0f), Actions.alpha(1.f)));
 
         for(int i = 0; i < playerStandings.size(); i++){
@@ -104,28 +104,85 @@ public class ResultScreen extends ScaledScreen {
         stage.draw();
     }
 
+    private void setWinningCar(Label.LabelStyle styleWinning){
+
+        //Title
+        switch(winnerCar){
+
+            case KrazyRazyCommons.TURTLE:
+                winningPlayer = new Label("Turtely Awesome, " + carOrder.get(0), styleWinning);
+                winningCarImage = new Image(AssetLoader.carTextureTurtle);
+                break;
+
+            case KrazyRazyCommons.COFFIN:
+                winningPlayer = new Label(carOrder.get(0) + " Killed it!", styleWinning);
+                winningCarImage = new Image(AssetLoader.carTextureCoffin);
+                break;
+
+            case KrazyRazyCommons.HOTDOG:
+                winningPlayer = new Label(carOrder.get(0) + ", is the weiner!", styleWinning);
+                winningCarImage = new Image(AssetLoader.carTextureHotdog);
+                break;
+
+            case KrazyRazyCommons.PIGGELIN:
+                winningPlayer = new Label("ICE COLD, " + carOrder.get(0), styleWinning);
+                winningCarImage = new Image(AssetLoader.carTexturePiggelin);
+                break;
+            case KrazyRazyCommons.TURTLE_COPY:
+                winningPlayer = new Label("Turtely Awesome, " + carOrder.get(0), styleWinning);
+                winningCarImage = new Image(AssetLoader.carTextureTurtle2);
+                break;
+
+            case KrazyRazyCommons.COFFIN_COPY:
+                winningPlayer = new Label(carOrder.get(0) + " Killed it!", styleWinning);
+                winningCarImage = new Image(AssetLoader.carTextureCoffin2);
+                break;
+
+            case KrazyRazyCommons.HOTDOG_COPY:
+                winningPlayer = new Label(carOrder.get(0) + ", is the weiner!", styleWinning);
+                winningCarImage = new Image(AssetLoader.carTextureHotdog2);
+                break;
+
+            case KrazyRazyCommons.PIGGELIN_COPY:
+                winningPlayer = new Label("ICE COLD, " + carOrder.get(0), styleWinning);
+                winningCarImage = new Image(AssetLoader.carTexturePiggelin2);
+                break;
+
+            default:
+                System.out.println("Uh oh some random car is in the game.. ");
+                winningPlayer = new Label(carOrder.get(0) + " is victorious!", styleWinning);
+
+        }
+
+
+    }
+
     public void generateUI(){
 
         //Font
         BitmapFont winningFont = Commons.getFont(150, AssetLoader.krazyFontFile, KrazyRazyCommons.KRAZY_GREEN, 3f, KrazyRazyCommons.KRAZY_BLUE);
         BitmapFont playerStandingFont = Commons.getFont(70, AssetLoader.krazyFontFile,KrazyRazyCommons.KRAZY_BLUE, 3f, KrazyRazyCommons.KRAZY_GREEN);
+        BitmapFont continueFont = Commons.getFont(80, AssetLoader.krazyFontFile, KrazyRazyCommons.KRAZY_GREEN, 3f, KrazyRazyCommons.KRAZY_BLUE);
 
         Label.LabelStyle styleWinning = new Label.LabelStyle(winningFont, Color.WHITE);
         Label.LabelStyle stylePlayerStanding = new Label.LabelStyle(playerStandingFont, Color.WHITE);
+        Label.LabelStyle styleContinue = new Label.LabelStyle(continueFont, Color.WHITE);
 
-        smileyHappy = new Image(AssetLoader.krazyThingyTexture_1);
         smileyMad = new Image(AssetLoader.krazyThingyTexture_mad);
         smileyMad.setScale(1.5f, 1.5f);
 
-        //Title
-        winningPlayer = new Label(carOrder.get(0) + " is victorious!", styleWinning);
+        setWinningCar(styleWinning);
+
+        winningCarImage.setWidth(winningCarImage.getWidth() / 3);
+        winningCarImage.setHeight(winningCarImage.getHeight() / 3);
+
         winningPlayer.setPosition(Commons.WORLD_WIDTH /2 - winningPlayer.getWidth()/2, Commons.WORLD_HEIGHT - winningPlayer.getHeight());
         winningPlayer.addAction(Actions.alpha(0.f));
 
-        smileyHappy.setPosition(winningPlayer.getX() - smileyHappy.getWidth() - 50, winningPlayer.getY() + smileyHappy.getHeight() / 2 - 20);
-        smileyHappy.setOrigin(smileyHappy.getWidth()/2, smileyHappy.getHeight() / 2);
-        smileyMad.setOrigin(smileyMad.getWidth()/2, smileyMad.getHeight() / 2);
-        smileyHappy.addAction(Actions.alpha(0.f));
+        winningCarImage.setPosition(winningPlayer.getX() - winningCarImage.getWidth() - 50, winningPlayer.getY() );
+        winningCarImage.setOrigin(winningCarImage.getWidth() / 2, winningCarImage.getHeight() / 2);
+        smileyMad.setOrigin(smileyMad.getWidth() / 2, smileyMad.getHeight() / 2);
+        winningCarImage.addAction(Actions.alpha(0.f));
         smileyMad.setPosition(Commons.WORLD_WIDTH * 0.8f, Commons.WORLD_HEIGHT / 2 - smileyMad.getHeight() / 2);
         smileyMad.addAction(Actions.alpha(0.f));
 
@@ -145,7 +202,7 @@ public class ResultScreen extends ScaledScreen {
         score = new Label(playerScores, skin);
         score.setPosition(Commons.WORLD_WIDTH / 2 - score.getWidth() / 2, Commons.WORLD_HEIGHT * 0.6f - score.getHeight());*/
 
-        proceed = new Label("Press anywhere to continue", stylePlayerStanding);
+        proceed = new Label("Press anywhere to continue", styleContinue);
         proceed.addAction(Actions.alpha(0.f));
         proceed.setPosition(Commons.WORLD_WIDTH / 2 - proceed.getWidth() / 2, Commons.WORLD_HEIGHT * 0.2f);
 

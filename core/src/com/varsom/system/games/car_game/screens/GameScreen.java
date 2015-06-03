@@ -130,7 +130,7 @@ public class GameScreen implements Screen {
 
         //TODO THIS IS ONLY TEMPORARY.. DURING DEVELOPMENT
         if (NUMBER_OF_PLAYERS < 2) {
-            NUMBER_OF_PLAYERS = 8;
+            NUMBER_OF_PLAYERS = 2;
         }
 
         // Create objects and select level
@@ -446,7 +446,7 @@ public class GameScreen implements Screen {
             @Override
             public void run() {
                 varsomSystem.getMPServer().gameRunning(false);
-                ((Game) Gdx.app.getApplicationListener()).setScreen(new ResultScreen(varsomSystem, sortedCars2String(false)));
+                ((Game) Gdx.app.getApplicationListener()).setScreen(new ResultScreen(varsomSystem, sortedCars2String(false), leaderCar.getCarType()));
 
                 //new clients can join now when the game is over
                 varsomSystem.getMPServer().setJoinable(true);

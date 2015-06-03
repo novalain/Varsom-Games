@@ -117,22 +117,22 @@ public class Track1 extends Track{
                 case 4:
                     carSprite = new Sprite(AssetLoader.carTextureTurtle2);
                     carWidth = 1.2f;
-                    carType = KrazyRazyCommons.TURTLE;
+                    carType = KrazyRazyCommons.TURTLE_COPY;
                     break;
                 case 5:
                     carSprite = new Sprite(AssetLoader.carTextureHotdog2);
                     carWidth = 0.6f;
-                    carType = KrazyRazyCommons.HOTDOG;
+                    carType = KrazyRazyCommons.HOTDOG_COPY;
                     break;
                 case 6:
                     carSprite = new Sprite(AssetLoader.carTextureCoffin2);
                     carWidth = 0.5f;
-                    carType = KrazyRazyCommons.COFFIN;
+                    carType = KrazyRazyCommons.COFFIN_COPY;
                     break;
                 case 7:
                     carSprite = new Sprite(AssetLoader.carTexturePiggelin2);
                     carWidth = 0.6f;
-                    carType = KrazyRazyCommons.PIGGELIN;
+                    carType = KrazyRazyCommons.PIGGELIN_COPY;
                     break;
                 default:
                     System.out.println("Mega Error");
