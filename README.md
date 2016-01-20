@@ -14,5 +14,5 @@ For detailed instructions on how to use the gradle file, see [this](https://gith
 
 ![GitHub Logo](/images/varsom-menu.jpg)
 
-This project was made by Michael Novén, Oskar Carlbaum, Sandra Tråvén, Alice Lundin and Adam Tellia in the course TNM094, Media Technology - Bachelor Project. 
+This project was made by Michael Novén, Oskar Carlbaum, Sandra Tråvén, Alice Lundin, Adam Tellia, Christoffer Engelbrektsson and Marcus Lilja in the course TNM094, Media Technology - Bachelor Project. 
 Visit us on [Google Play](https://play.google.com/store/apps/details?id=com.varsom.system.android&hl=sv) :beers:
